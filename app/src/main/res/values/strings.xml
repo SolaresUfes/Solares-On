@@ -1,0 +1,129 @@
+<resources>
+    <string name="app_name">Calculadora Solar</string>
+    <string name="informe_a_sua_conta_de_energia_em_reais">Informe a sua conta de energia em reais:</string>
+    <string name="kwh_consumido">Consumo mensal de energia:</string>
+    <string name="pot_necessaria">Potência Necessária:</string>
+    <string name="button_calc">Calcular</string>
+    <string name="informe_um_numero">Informe um número real com um ponto\nseparando a parte inteira da real.</string>
+    <string name="placa_solar_escolhida">Placas Solares Escolhidas:</string>
+    <string name="area_necessaria">Área Necessária:</string>
+    <string name="inversores_escolhidos">Inversores Escolhidos</string>
+    <string name="custo_parcial_inversores_paineis">Custo Parcial (Inversores + Paineis):</string>
+    <string name="custo_total_de_instalacao">Custo total de instalação:</string>
+    <string name="geracao_anual_de_energia">Geração anual de energia estimada:</string>
+    <string name="lucro_payback">Lucro (payback em 25 anos):</string>
+    <string name="taxa_de_retorno_de_investimento">Taxa de Retorno de Investimento:</string>
+    <string name="indice_de_lucratividade">Índice de Lucratividade:</string>
+    <string name="lcoe">Custo da Energia por KWh (LCOE):</string>
+    <string name="simulacao_fotovoltaica">SIMULAÇÃO FOTOVOLTAICA</string>
+    <string name="_0_0">0.0</string>
+    <string name="dados">Dados</string>
+    <string name="instala_o">Instalação</string>
+    <string name="an_lise_econ_mica">Análise Econômica</string>
+    <string name="indices_economicos">Índices Econômicos</string>
+    <string name="finalizar">Finalizar</string>
+    <string name="voltar">Voltar</string>
+    <string name="valor_conta_de_luz">Conta de Luz (R$)</string>
+    <string name="nome">Nome</string>
+    <string name="e_mail">E-mail</string>
+    <string name="resultado">Resultado</string>
+    <string name="resultados_warning">Os resultados alcançados nessa simulação são aproximações feitas por integrantes do Solares. Diversas variáveis podem alterar o valor real do projeto.</string>
+    <string name="consumo_mensal_de_energia_em_reais">Consumo mensal de energia (em reais):</string>
+    <string name="consumo_mensal_de_energia">Consumo mensal de energia:</string>
+    <string name="hora_solar_da_cidade_escolhida">Horas de Sol Pleno da Cidade:</string>
+    <string name="resultado_por_e_mail">Resultado por E-mail</string>
+    <string name="retomar_calculo">Retomar Cálculo</string>
+    <string name="sair">Sair</string>
+    <string name="pretensao">Qual a sua pretensão de instalar esse tipo de sistema?</string>
+    <string name="telefone">Telefone</string>
+    <string name="economia_em_25_anos_valor_presente">Economia em 25 anos (Valor presente):</string>
+    <string name="taxa_de_retorno_do_investimento">Taxa de Retorno do Investimento:</string>
+    <string name="ndice_de_lucratividade">Índice de Lucratividade:</string>
+    <string name="custo_da_energia_solar_lcoe">Custo da energia solar (LCOE):</string>
+    <string name="tempo_para_retorno_do_investimento">Tempo para Retorno do Investimento:</string>
+    <string name="button_ajustar_area">Ajustar Área</string>
+    <string name="deseja_receber_os_resultados">Deseja receber os resultados por e-mail?</string>
+    <string name="sim">SIM</string>
+    <string name="nao">NÃO</string>
+    <string name="confirmar">Confirmar</string>
+    <string-array name="cidades">
+        <item>Águia Branca</item>
+        <item>Afonso Cláudio</item>
+        <item>Água Doce do Norte</item>
+        <item>Alegre</item>
+        <item>Alfredo Chaves</item>
+        <item>Alto Rio Novo</item>
+        <item>Anchieta</item>
+        <item>Apiacá</item>
+        <item>Aracruz</item>
+        <item>Atilio Vivacqua</item>
+        <item>Baixo Guandu</item>
+        <item>Barra de São Francisco</item>
+        <item>Boa Esperança</item>
+        <item>Bom Jesus do Norte</item>
+        <item>Brejetuba</item>
+        <item>Cachoeiro de Itapemirim</item>
+        <item>Cariacica</item>
+        <item>Castelo</item>
+        <item>Colatina</item>
+        <item>Conceição da Barra</item>
+        <item>Conceição do Castelo</item>
+        <item>Divino São Lourenço</item>
+        <item>Domingos Martins</item>
+        <item>Dores do Rio Preto</item>
+        <item>Ecoporanga</item>
+        <item>Fundão</item>
+        <item>Governador Lindenberg</item>
+        <item>Guaçui</item>
+        <item>Guarapari</item>
+        <item>Ibatiba</item>
+        <item>Ibiraçu</item>
+        <item>Ibitirama</item>
+        <item>Iconha</item>
+        <item>Irupi</item>
+        <item>Itaguaçu</item>
+        <item>Itapemirim</item>
+        <item>Itarana</item>
+        <item>Iúna</item>
+        <item>Jaguarpe</item>
+        <item>Jeronimo Monteiro</item>
+        <item>João Neiva</item>
+        <item>Laranja da Terra</item>
+        <item>Linhares</item>
+        <item>Mantenópolis</item>
+        <item>Marataízes</item>
+        <item>Marechal Floriano</item>
+        <item>Marilândia</item>
+        <item>Mimoso do Sul</item>
+        <item>Montanha</item>
+        <item>Mucurici</item>
+        <item>Muniz Freire</item>
+        <item>Muqui</item>
+        <item>Nova Venécia</item>
+        <item>Pancas</item>
+        <item>Pedro Canário</item>
+        <item>Pinheiros</item>
+        <item>Piúma</item>
+        <item>Ponto Belo</item>
+        <item>Presidente Kennedy</item>
+        <item>Rio Bananal</item>
+        <item>Rio Novo do Sul</item>
+        <item>Santa Leopoldina</item>
+        <item>Santa Maria de Jetibá</item>
+        <item>Santa Teresa</item>
+        <item>São Mateus</item>
+        <item>São Domingos do Norte</item>
+        <item>São Gabriel da Palha</item>
+        <item>São José do Calcado</item>
+        <item>São Roque do Canaã</item>
+        <item>Serra</item>
+        <item>Sooretama</item>
+        <item>Vargem Alta</item>
+        <item>Venda Nova do Imigrante</item>
+        <item>Viana</item>
+        <item>Vila Pavão</item>
+        <item>Vila Valério</item>
+        <item>Vila Velha</item>
+        <item>Vitória</item>
+    </string-array>
+</resources>

@@ -2,18 +2,18 @@ package com.solares.calculadorasolar.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.solares.calculadorasolar.R;
+import com.solares.calculadorasolar.classes.AutoSizeText;
 import com.solares.calculadorasolar.classes.Constants;
 
 public class ResultadoActivity extends AppCompatActivity{
 
-    public ConstraintLayout layoutResultBackground;
-
+    public float porcent = 3f;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,14 +38,21 @@ public class ResultadoActivity extends AppCompatActivity{
         final int tempoRetorno = intent.getIntExtra(Constants.EXTRA_TEMPO_RETORNO, 0);
         final double horaSolar = intent.getDoubleExtra(Constants.EXTRA_HORA_SOLAR, 0.0);
 
+        TextView textTituloResultado = findViewById(R.id.text_titulo_resultado);
+        AutoSizeText.AutoSizeTextView(textTituloResultado, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 5f);
+
         Button buttonDados = findViewById(R.id.button_dados);
+        AutoSizeText.AutoSizeButton(buttonDados, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
         Button buttonInstalacao = findViewById(R.id.button_instalacao);
+        AutoSizeText.AutoSizeButton(buttonInstalacao, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
         Button buttonAnalise = findViewById(R.id.button_analise);
+        AutoSizeText.AutoSizeButton(buttonAnalise, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
         Button buttonIndicesEconomicos = findViewById(R.id.button_indices_economicos);
+        AutoSizeText.AutoSizeButton(buttonIndicesEconomicos, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
         Button buttonFinalizar = findViewById(R.id.button_finalizar);
+        AutoSizeText.AutoSizeButton(buttonFinalizar, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 5f);
         Button buttonAjustarArea = findViewById(R.id.button_ajustar_area);
-        layoutResultBackground = findViewById(R.id.layout_result_background);
-        layoutResultBackground.setAlpha(1f);
+        AutoSizeText.AutoSizeButton(buttonAjustarArea, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
 
 
         buttonDados.setOnClickListener(new View.OnClickListener() {
@@ -83,27 +90,10 @@ public class ResultadoActivity extends AppCompatActivity{
             }
         });
 
-        final Intent intentForward = new Intent(this, PopActivity.class);
-        intentForward.putExtra(Constants.EXTRA_CIDADE, NomeCidade);
-        intentForward.putExtra(Constants.EXTRA_CUSTO_REAIS, custoReais);
-        intentForward.putExtra(Constants.EXTRA_CONSUMO, consumokWh);
-        intentForward.putExtra(Constants.EXTRA_POTENCIA, potenciaNecessaria);
-        intentForward.putExtra(Constants.EXTRA_PLACAS, placaEscolhida);
-        intentForward.putExtra(Constants.EXTRA_AREA, area);
-        intentForward.putExtra(Constants.EXTRA_INVERSORES, inversor);
-        intentForward.putExtra(Constants.EXTRA_CUSTO_PARCIAL, custoParcial);
-        intentForward.putExtra(Constants.EXTRA_CUSTO_TOTAL, custoTotal);
-        intentForward.putExtra(Constants.EXTRA_GERACAO, geracaoAnual);
-        intentForward.putExtra(Constants.EXTRA_LUCRO, lucro);
-        intentForward.putExtra(Constants.EXTRA_TAXA_DE_RETORNO, taxaRetornoInvestimento);
-        intentForward.putExtra(Constants.EXTRA_INDICE_LUCRATICVIDADE, indiceLucratividade);
-        intentForward.putExtra(Constants.EXTRA_LCOE, LCOE);
-        intentForward.putExtra(Constants.EXTRA_TEMPO_RETORNO, tempoRetorno);
-
         buttonFinalizar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FinalizarCalculo(intentForward, layoutResultBackground);
+                FinalizarCalculo();
             }
         });
     }
@@ -152,16 +142,11 @@ public class ResultadoActivity extends AppCompatActivity{
         startActivity(intent);
     }
 
-    public void FinalizarCalculo(Intent intent, ConstraintLayout layoutBackground){
-        layoutBackground.setAlpha(0.4f);
+    public void FinalizarCalculo(){
+        Intent intent = new Intent(this, CalculoActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
-
-    protected void onResume () {
-        super.onResume();
-        layoutResultBackground.setAlpha(1f);
-    }
-
 }
 
 

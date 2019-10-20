@@ -10,16 +10,29 @@
     android:background="@drawable/background_resultados"
     android:id="@+id/layout_area">
 
+    <TextView
+        android:id="@+id/text_titulo_area"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/background_resultado_text"
+        android:gravity="center"
+        android:text="Área"
+        android:textColor="@color/colorSolaresBlue"
+        app:layout_constraintBottom_toTopOf="@+id/guideline2"
+        app:layout_constraintEnd_toStartOf="@+id/guideline91"
+        app:layout_constraintStart_toStartOf="@+id/guideline90"
+        app:layout_constraintTop_toTopOf="@+id/guideline18" />
+
     <Button
         android:id="@+id/button_recalcular_area"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/background_button_resultado_center"
         android:padding="5dp"
+        android:gravity="center"
         android:text="Recalcular"
         android:textAllCaps="false"
         android:textColor="@color/colorWhite"
-        android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline92"
         app:layout_constraintEnd_toStartOf="@+id/guideline91"
         app:layout_constraintHorizontal_bias="0.49"
@@ -34,11 +47,94 @@
         android:text="@string/voltar"
         android:textAllCaps="false"
         android:textColor="@color/colorWhite"
-        android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline89"
         app:layout_constraintEnd_toStartOf="@+id/guideline91"
         app:layout_constraintStart_toStartOf="@+id/guideline90"
         app:layout_constraintTop_toTopOf="@+id/guideline88" />
+
+    <TextView
+        android:id="@+id/text_area_atual"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Área Atual: 23 m²"
+        app:layout_constraintBottom_toTopOf="@+id/guideline95"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/text_nova_area"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Nova Área"
+        app:layout_constraintBottom_toTopOf="@+id/guideline94"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline95" />
+
+    <EditText
+        android:id="@+id/editText_area"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        android:text=""
+        android:theme="@style/MyEditTextStyleArea"
+        android:textCursorDrawable="@null"
+        app:layout_constraintBottom_toTopOf="@+id/guideline94"
+        app:layout_constraintEnd_toStartOf="@+id/text_unidade"
+        app:layout_constraintStart_toEndOf="@+id/text_nova_area"
+        app:layout_constraintTop_toTopOf="@+id/guideline95" />
+
+    <TextView
+        android:id="@+id/text_unidade"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="m²"
+        app:layout_constraintBottom_toTopOf="@+id/guideline94"
+        app:layout_constraintStart_toStartOf="@+id/guideline91"
+        app:layout_constraintTop_toTopOf="@+id/guideline95" />
+
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline92"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.65" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline93"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.57" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline94"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.4870041" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline95"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.3871409" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline88"
@@ -68,88 +164,17 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.75" />
 
-    <TextView
-        android:id="@+id/textView_area_atual"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="Área Atual: 23 m²"
-        android:textSize="25sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline95"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/textView_nova_area"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="Nova Área"
-        android:textSize="25sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline94"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline95" />
-
-    <EditText
-        android:id="@+id/editText_area"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:ems="10"
-        android:inputType="numberDecimal"
-        android:text=""
-        android:textSize="25sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline94"
-        app:layout_constraintEnd_toStartOf="@+id/textView_unidade"
-        app:layout_constraintStart_toEndOf="@+id/textView_nova_area"
-        app:layout_constraintTop_toTopOf="@+id/guideline95" />
-
-    <TextView
-        android:id="@+id/textView_unidade"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="m²"
-        android:textSize="25sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline94"
-        app:layout_constraintStart_toStartOf="@+id/guideline91"
-        app:layout_constraintTop_toTopOf="@+id/guideline95" />
-
     <android.support.constraint.Guideline
-        android:id="@+id/guideline92"
+        android:id="@+id/guideline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.6429549" />
+        app:layout_constraintGuide_percent="0.12" />
 
     <android.support.constraint.Guideline
-        android:id="@+id/guideline93"
+        android:id="@+id/guideline18"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5731874" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline94"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.4870041" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline95"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.3871409" />
+        app:layout_constraintGuide_percent="0.05" />
 </android.support.constraint.ConstraintLayout>

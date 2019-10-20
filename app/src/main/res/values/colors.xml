@@ -11,6 +11,8 @@
     <color name="colorBlack">#000000</color>
     <color name="colorSuperWhite">#FFFFFF</color>
     <color name="colorLightBlue">#0292B5</color>
+    <color name="colorTransparentBlue">#9202436B</color>
+    <color name="colorTransparentLightBlue">#990292B5</color>
     <color name="colorWordWhite">#F3F4F4</color>
     <color name="colorGrey">#D3D2D2</color>
 </resources>

@@ -22,4 +22,9 @@
         <item name="android:windowCloseOnTouchOutside">true</item>
     </style>
 
+    <style name="MyEditTextStyleArea" parent="Widget.AppCompat.EditText">
+        <item name="colorControlActivated">@color/colorGrey</item>
+        <item name="colorControlNormal">@color/colorGrey</item>
+    </style>
+
 </resources>

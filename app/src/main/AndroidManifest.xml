@@ -3,9 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.solares.calculadorasolar">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -15,13 +12,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".activity.PopActivity"
-            android:theme="@style/AppTheme.PopUpPergunta"/>
-        <activity
             android:name=".activity.AreaActivity" />
-        <activity
-            android:name=".activity.FinalActivity"
-            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.AnaliseActivity"
             android:parentActivityName=".activity.ResultadoActivity"

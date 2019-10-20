@@ -12,24 +12,41 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.solares.calculadorasolar.R;
+import com.solares.calculadorasolar.classes.AutoSizeText;
 import com.solares.calculadorasolar.classes.CSVRead;
 import com.solares.calculadorasolar.classes.Constants;
-import com.solares.calculadorasolar.classes.fileWriter;
 
 import java.io.InputStream;
 import java.util.Locale;
 
 public class AreaActivity extends AppCompatActivity {
 
+    public static float porcent = 3f;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_area);
 
+        TextView textTituloArea = findViewById(R.id.text_titulo_area);
+        AutoSizeText.AutoSizeTextView(textTituloArea, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 5f);
+
         Button buttonRecalcArea = findViewById(R.id.button_recalcular_area);
+        AutoSizeText.AutoSizeButton(buttonRecalcArea, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 5f);
+
         Button buttonVoltar = findViewById(R.id.button_voltar);
-        TextView textAreaAtual = findViewById(R.id.textView_area_atual);
+        AutoSizeText.AutoSizeButton(buttonVoltar, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 5f);
+
+        TextView textAreaAtual = findViewById(R.id.text_area_atual);
+        AutoSizeText.AutoSizeTextView(textAreaAtual, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
+
+        TextView textNovaArea = findViewById(R.id.text_nova_area);
+        AutoSizeText.AutoSizeTextView(textNovaArea, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
+
         final EditText editArea = findViewById(R.id.editText_area);
+        AutoSizeText.AutoSizeEditText(editArea, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
+
+        TextView textUnidadeArea = findViewById(R.id.text_unidade);
+        AutoSizeText.AutoSizeTextView(textUnidadeArea, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
         ConstraintLayout layout = findViewById(R.id.layout_area);
 
         Intent intent = getIntent();
@@ -99,12 +116,6 @@ public class AreaActivity extends AppCompatActivity {
                 //Definindo os inversores
                 is = getResources().openRawResource(R.raw.banco_inversores);
                 String[] invertor = CSVRead.DefineInvertor(is, solarPanel);
-                String singPlur;
-                if(invertor[Constants.iINV_QTD] == "1"){
-                    singPlur = "Inversor";
-                } else {
-                    singPlur = "Inversores";
-                }
 
                 //Definindo os custos
                 double[] costs = CalculoActivity.DefineCosts(solarPanel, invertor);

@@ -69,7 +69,7 @@ public class CSVRead {
                     currentPanel[Constants.iPANEL_QTD] = String.valueOf((int)Math.floor(AreaAlvo / Double.parseDouble(currentPanel[Constants.iPANEL_AREA])));
                 }
 
-                //O custo aqui é em dinheiro mesmo (perdão pelo vacilo)
+                //O custo aqui é em dinheiro mesmo
                 precoTotal = Double.parseDouble(currentPanel[Constants.iPANEL_QTD]) * Double.parseDouble(currentPanel[Constants.iPANEL_PRECO]);
                 currentPanel[Constants.iPANEL_CUSTO_TOTAL] = String.valueOf(precoTotal);
                 if(currentCost<cheaperCost){

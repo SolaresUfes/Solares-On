@@ -1,9 +1,11 @@
 package com.solares.calculadorasolar.activity;
 
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Display;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -11,9 +13,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.solares.calculadorasolar.R;
+import com.solares.calculadorasolar.classes.AutoSizeText;
 import com.solares.calculadorasolar.classes.CSVRead;
 import com.solares.calculadorasolar.classes.Constants;
 import com.solares.calculadorasolar.classes.IRR;
@@ -33,18 +37,35 @@ public class CalculoActivity extends AppCompatActivity {
     public static double Ppayback;
     public static double PindiceLucratividade;
     public static int PTempoRetorno;
+    /////
+    public static int larguraTela;
+    public static int alturaTela;
+    public float porcent = 5f;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calculo);
 
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        larguraTela = size.x;
+        alturaTela = size.y;
+
+        this.mViewHolder.textSimulacao = findViewById(R.id.text_simulacao);
+        AutoSizeText.AutoSizeTextView(this.mViewHolder.textSimulacao, alturaTela, larguraTela, 4f);
         this.mViewHolder.buttonCalc = findViewById(R.id.button_calc);
+        AutoSizeText.AutoSizeButton(this.mViewHolder.buttonCalc, alturaTela, larguraTela, porcent);
         this.mViewHolder.editCostMonth = findViewById(R.id.edit_cost);
+        AutoSizeText.AutoSizeEditText(this.mViewHolder.editCostMonth, alturaTela, larguraTela, porcent-2);
+
         this.mViewHolder.spinnerCities = findViewById(R.id.spinner_cities);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.cidades, R.layout.spinner_item);
         this.mViewHolder.spinnerCities.setAdapter(adapter);
         this.mViewHolder.spinnerCities.setSelection(77);
+
         this.mViewHolder.layout = findViewById(R.id.layout_calculo);
 
         final float AreaAlvo = -1f;
@@ -70,7 +91,6 @@ public class CalculoActivity extends AppCompatActivity {
         String city;
 
         try {
-
             mViewHolder.editCostMonth.onEditorAction(EditorInfo.IME_ACTION_DONE);
             idCity = this.mViewHolder.spinnerCities.getSelectedItemPosition();
             city = this.mViewHolder.spinnerCities.getItemAtPosition(idCity).toString();
@@ -340,6 +360,7 @@ public class CalculoActivity extends AppCompatActivity {
     }
 
     public static class ViewHolder{
+        TextView textSimulacao;
         EditText editCostMonth;
         Button buttonCalc;
         Spinner spinnerCities;

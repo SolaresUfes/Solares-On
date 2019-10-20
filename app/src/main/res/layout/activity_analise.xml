@@ -8,14 +8,13 @@
     android:background="@drawable/background_resultados">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/text_resultado_analise"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/background_resultado_text"
         android:gravity="center"
-        android:text="@string/resultado"
+        android:text="Análise"
         android:textColor="@color/colorSolaresBlue"
-        android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline66"
         app:layout_constraintEnd_toStartOf="@+id/guideline7"
         app:layout_constraintStart_toStartOf="@+id/guideline6"
@@ -24,59 +23,90 @@
     <TextView
         android:id="@+id/text_custo_parcial_1"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:gravity="bottom"
         android:text="Custo Parcial (Placas + Inversores): "
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline69"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline8" />
+
     <TextView
         android:id="@+id/text_custo_parcial"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline74"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:gravity="top"
+        android:textColor="@color/colorSolaresBlue"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline69" />
+        app:layout_constraintTop_toBottomOf="@+id/text_custo_parcial_1" />
 
     <TextView
         android:id="@+id/text_custo_total_1"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:gravity="bottom"
         android:text="Custo Total (Instalação e equipamentos): "
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline70"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline67" />
+        app:layout_constraintTop_toBottomOf="@+id/text_custo_parcial" />
 
     <TextView
         android:id="@+id/text_custo_total"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline75"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:gravity="top"
+        android:textColor="@color/colorSolaresBlue"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline70" />
+        app:layout_constraintTop_toBottomOf="@+id/text_custo_total_1" />
+
+    <TextView
+        android:id="@+id/text_geracao_anual_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:gravity="bottom"
+        android:text="Estimativa da geração anual de energia: "
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_custo_total" />
 
     <TextView
         android:id="@+id/text_geracao_anual"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:text="Estimativa da geração anual de energia: "
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline71"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:gravity="top"
+        android:text=""
+        android:textColor="@color/colorSolaresBlue"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline68" />
+        app:layout_constraintTop_toBottomOf="@+id/text_geracao_anual_1" />
 
     <Button
         android:id="@+id/button_voltar"
@@ -88,9 +118,10 @@
         android:textColor="@color/colorWhite"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline73"
-        app:layout_constraintEnd_toEndOf="@+id/textView"
-        app:layout_constraintStart_toStartOf="@+id/textView"
+        app:layout_constraintEnd_toStartOf="@+id/guideline7"
+        app:layout_constraintStart_toStartOf="@+id/guideline6"
         app:layout_constraintTop_toTopOf="@+id/guideline72" />
+
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline6"
@@ -135,41 +166,6 @@
         app:layout_constraintGuide_percent="0.12" />
 
     <android.support.constraint.Guideline
-        android:id="@+id/guideline67"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.4" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline68"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.59" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline69"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.29" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline70"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.44" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline71"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.69" />
-
-    <android.support.constraint.Guideline
         android:id="@+id/guideline72"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -182,22 +178,5 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.88" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline74"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.33" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline75"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.48" />
-
-
-
 
 </android.support.constraint.ConstraintLayout>

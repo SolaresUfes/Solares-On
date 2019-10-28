@@ -51,7 +51,7 @@ public class AreaActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         final double area = intent.getDoubleExtra(Constants.EXTRA_AREA, 0.0);
-        final int idCidade = intent.getIntExtra(Constants.EXTRA_ID_CIDADE, 77);
+        final String[] cityVec = intent.getStringArrayExtra(Constants.EXTRA_VETOR_CIDADE);
         final String NomeCidade = intent.getStringExtra(Constants.EXTRA_CIDADE);
         final double custoReais = intent.getDoubleExtra(Constants.EXTRA_CUSTO_REAIS, 0.0);
 
@@ -66,7 +66,7 @@ public class AreaActivity extends AppCompatActivity {
                      if (AreaAlvo <= 0f) {
                          Toast.makeText(AreaActivity.this, "Insira uma nova área!", Toast.LENGTH_LONG).show();
                      } else {
-                         ReCalculate(AreaAlvo, idCidade, NomeCidade, custoReais);
+                         ReCalculate(AreaAlvo, cityVec, NomeCidade, custoReais);
                      }
                  } catch (Exception e){
                      Toast.makeText(AreaActivity.this, "Insira uma nova área!", Toast.LENGTH_LONG).show();
@@ -93,12 +93,9 @@ public class AreaActivity extends AppCompatActivity {
 
 
 
-    public void ReCalculate(float AreaAlvo, int idCity, String cityName, double custoReais) {
-        String city = cityName;
-
+    public void ReCalculate(float AreaAlvo, String[] cityVec, String cityName, double custoReais) {
         try {
-            InputStream is = getResources().openRawResource(R.raw.banco_irradiancia);
-            String[] cityVec = CSVRead.getCity(idCity, is);
+            InputStream is;
             double solarHour = CalculoActivity.MeanSolarHour(cityVec);
 
             CalculoActivity.costReais = CalculoActivity.ValueWithoutTaxes(custoReais);
@@ -119,16 +116,24 @@ public class AreaActivity extends AppCompatActivity {
 
                 //Definindo os custos
                 double[] costs = CalculoActivity.DefineCosts(solarPanel, invertor);
+                //Pega o estado
+                is = getResources().openRawResource(R.raw.banco_estados);
+                String[] stateVec;
+                if(cityVec != null){
+                    stateVec = CSVRead.getState(cityVec, is);
+                } else {
+                    throw new Exception("Cidade não foi encontrada");
+                }
                 //Calculo da energia produzida em um ano
-                double anualGeneration = CalculoActivity.EstimateAnualGeneration(solarPanel, cityVec);
+                double anualGeneration = CalculoActivity.EstimateAnualGeneration(solarPanel, stateVec, cityVec);
 
                 CalculoActivity.GetEconomicInformation(anualGeneration, invertor, energyConsumed, costs[Constants.iCOSTS_TOTAL]);
 
                 //Mudar para próxima activity
                 Intent intent = new Intent(this, ResultadoActivity.class);
                 //extras e guardar
-                intent.putExtra(Constants.EXTRA_ID_CIDADE, idCity);
-                intent.putExtra(Constants.EXTRA_CIDADE, city);
+                intent.putExtra(Constants.EXTRA_VETOR_CIDADE, cityVec);
+                intent.putExtra(Constants.EXTRA_CIDADE, cityName);
                 intent.putExtra(Constants.EXTRA_CUSTO_REAIS, custoReais);
                 intent.putExtra(Constants.EXTRA_CONSUMO, energyConsumed);
                 intent.putExtra(Constants.EXTRA_POTENCIA, capacityWp);

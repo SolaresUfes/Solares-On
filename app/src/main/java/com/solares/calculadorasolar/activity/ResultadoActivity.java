@@ -20,7 +20,7 @@ public class ResultadoActivity extends AppCompatActivity{
         setContentView(R.layout.activity_resultado);
 
         Intent intent = getIntent();
-        final int idCidade = intent.getIntExtra(Constants.EXTRA_ID_CIDADE, 77);
+        final String[] cityVec = intent.getStringArrayExtra(Constants.EXTRA_VETOR_CIDADE);
         final String NomeCidade = intent.getStringExtra(Constants.EXTRA_CIDADE);
         final double custoReais = intent.getDoubleExtra(Constants.EXTRA_CUSTO_REAIS, 0.0);
         final double consumokWh = intent.getDoubleExtra(Constants.EXTRA_CONSUMO, 0.0);
@@ -86,7 +86,7 @@ public class ResultadoActivity extends AppCompatActivity{
         buttonAjustarArea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AbrirActivityArea(idCidade, NomeCidade, custoReais, area);
+                AbrirActivityArea(cityVec, NomeCidade, custoReais, area);
             }
         });
 
@@ -133,9 +133,9 @@ public class ResultadoActivity extends AppCompatActivity{
         startActivity(intent);
     }
 
-    public void AbrirActivityArea(int idCidade, String NomeCidade, double custoReais, double area){
+    public void AbrirActivityArea(String[] cityVec, String NomeCidade, double custoReais, double area){
         Intent intent = new Intent(this, AreaActivity.class);
-        intent.putExtra(Constants.EXTRA_ID_CIDADE, idCidade);
+        intent.putExtra(Constants.EXTRA_VETOR_CIDADE, cityVec);
         intent.putExtra(Constants.EXTRA_CIDADE, NomeCidade);
         intent.putExtra(Constants.EXTRA_CUSTO_REAIS, custoReais);
         intent.putExtra(Constants.EXTRA_AREA, area);

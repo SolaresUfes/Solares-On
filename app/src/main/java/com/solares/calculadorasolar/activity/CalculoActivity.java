@@ -9,6 +9,7 @@ import android.view.Display;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -48,12 +49,14 @@ public class CalculoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calculo);
 
+        //Pegando informações sobre o dispositivo, para regular o tamanho da letra (fonte)
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
         larguraTela = size.x;
         alturaTela = size.y;
 
+        //Identificando os componentes do layout
         this.mViewHolder.textSimulacao = findViewById(R.id.text_simulacao);
         AutoSizeText.AutoSizeTextView(this.mViewHolder.textSimulacao, alturaTela, larguraTela, 4f);
         this.mViewHolder.buttonCalc = findViewById(R.id.button_calc);
@@ -61,15 +64,37 @@ public class CalculoActivity extends AppCompatActivity {
         this.mViewHolder.editCostMonth = findViewById(R.id.edit_cost);
         AutoSizeText.AutoSizeEditText(this.mViewHolder.editCostMonth, alturaTela, larguraTela, porcent-2);
 
+        //Criando spinners (dos estados e das cidades)
+        this.mViewHolder.spinnerStates = findViewById(R.id.spinner_states);
+        //Aqui, coloca o vetor de strings que será exibido no spinner
+        ArrayAdapter<CharSequence> adapterS = ArrayAdapter.createFromResource(this, R.array.Estados, R.layout.spinner_item);
+        this.mViewHolder.spinnerStates.setAdapter(adapterS);
+        this.mViewHolder.spinnerStates.setSelection(7);
+
         this.mViewHolder.spinnerCities = findViewById(R.id.spinner_cities);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.cidades, R.layout.spinner_item);
-        this.mViewHolder.spinnerCities.setAdapter(adapter);
-        this.mViewHolder.spinnerCities.setSelection(77);
+        ArrayAdapter<CharSequence> adapterC = ArrayAdapter.createFromResource(this, R.array.ES, R.layout.spinner_item);
+        this.mViewHolder.spinnerCities.setAdapter(adapterC);
+        this.mViewHolder.spinnerCities.setSelection(33);
 
         this.mViewHolder.layout = findViewById(R.id.layout_calculo);
 
+        //Isso indica para não se preocupar com a área no primeiro cálculo
         final float AreaAlvo = -1f;
 
+        //Se o spinner de estado for selecionado, muda o spinner de cidades de acordo
+        this.mViewHolder.spinnerStates.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                //Muda o spinner de cidades para o estado correspondente
+                ChangeSpinner(position);
+            }
+
+            //O ide reclama se eu tirar esse metodo, então deixei ele aí, mas sem nada
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        //Se o usuário clicar no fundo do app, o teclado se fecha
         this.mViewHolder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,6 +102,7 @@ public class CalculoActivity extends AppCompatActivity {
             }
         });
 
+        //Se o usuário clicar no botão calcular, o cálculo é feito e muda-se para a próxima activity
         this.mViewHolder.buttonCalc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,17 +112,26 @@ public class CalculoActivity extends AppCompatActivity {
 
     }
 
+
+    /*
+     * Esse método faz todos os cálculos, passando para a proxima activity os resultados
+     */
     public void Calculate(float AreaAlvo) {
         int idCity;
         String city;
 
         try {
+            //Fecha teclado
             mViewHolder.editCostMonth.onEditorAction(EditorInfo.IME_ACTION_DONE);
+            //Identifica a cidade escolhida e pega suas informações
+            String stateName = this.mViewHolder.spinnerStates.getSelectedItem().toString();
             idCity = this.mViewHolder.spinnerCities.getSelectedItemPosition();
             city = this.mViewHolder.spinnerCities.getItemAtPosition(idCity).toString();
             InputStream is = getResources().openRawResource(R.raw.banco_irradiancia);
-            String[] cityVec = CSVRead.getCity(idCity, is);
-            double solarHour = MeanSolarHour(cityVec);//Double.parseDouble(cityVec[13])/1000.0;
+            String[] cityVec = CSVRead.getCity(idCity, stateName, is);
+
+            //Calcula a média anual da hora solar da cidade escolhida
+            double solarHour = MeanSolarHour(cityVec);
             double custoReais;
 
             String cost = this.mViewHolder.editCostMonth.getText().toString();
@@ -119,15 +154,23 @@ public class CalculoActivity extends AppCompatActivity {
 
                 //Definindo os custos
                 double[] costs = DefineCosts(solarPanel, invertor);
+                //Pegando as informações do estado
+                is = getResources().openRawResource(R.raw.banco_estados);
+                String[] stateVec;
+                if(cityVec != null){
+                    stateVec = CSVRead.getState(cityVec, is);
+                } else {
+                    throw new Exception("Cidade não foi encontrada");
+                }
                 //Calculo da energia produzida em um ano
-                double anualGeneration = EstimateAnualGeneration(solarPanel, cityVec);
+                double anualGeneration = EstimateAnualGeneration(solarPanel, stateVec, cityVec);
 
                 GetEconomicInformation(anualGeneration, invertor, energyConsumed, costs[Constants.iCOSTS_TOTAL]);
 
-                //Mudar para próxima activity
+                //Preparação para mudar para próxima activity
                 Intent intent = new Intent(this, ResultadoActivity.class);
-                //extras e guardar
-                intent.putExtra(Constants.EXTRA_ID_CIDADE, idCity);
+                //Esses extras são usados para se enviar informações entre activities
+                intent.putExtra(Constants.EXTRA_VETOR_CIDADE, cityVec);
                 intent.putExtra(Constants.EXTRA_CIDADE, city);
                 intent.putExtra(Constants.EXTRA_CUSTO_REAIS, custoReais);
                 intent.putExtra(Constants.EXTRA_CONSUMO, energyConsumed);
@@ -144,14 +187,11 @@ public class CalculoActivity extends AppCompatActivity {
                 intent.putExtra(Constants.EXTRA_LCOE, PLCOE);
                 intent.putExtra(Constants.EXTRA_TEMPO_RETORNO, PTempoRetorno);
                 intent.putExtra(Constants.EXTRA_HORA_SOLAR, solarHour);
-                //Mudar
+                //Mudar de activity
                 startActivity(intent);
-
-
             }
-
-
         } catch (Exception e){
+            //Se algum erro ocorrer, pede para o usuário informar um número real
             Toast.makeText(this, R.string.informe_um_numero, Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
@@ -204,8 +244,8 @@ public class CalculoActivity extends AppCompatActivity {
         return costs;
     }
 
-    public static double EstimateAnualGeneration(String[] solarPanel, String[] cityVec){
-        //Consultar o manual de engenharia FV p. 149 a 153
+    public static double EstimateAnualGeneration(String[] solarPanel, String[] stateVec, String[] cityVec){
+        //Calculos retirados do manual de engenharia FV p. 149 a 153
         double anualGeneration=0.0, dailyGen=0.0, monthlyGen=0.0;
         int month;
         double tempAboveLimit;
@@ -213,12 +253,18 @@ public class CalculoActivity extends AppCompatActivity {
         double efficiency, irradiance = 1000.0, ambientTemp;
 
         for(month=1; month<=12; month++){
-            ambientTemp = Integer.parseInt(cityVec[13+month]);
+            //Pega a temperatura média do estado no mês
+            ambientTemp = Double.parseDouble(stateVec[month]);
+            //Temperatura estimada do módulo acima de 25°C (se a temperatura do módulo for 50°C, tempAboveLimit será 25)
             tempAboveLimit = ambientTemp + ((Integer.parseInt(solarPanel[Constants.PANEL_NOCT]) - 20)*0.00125*irradiance) - 25;
+            //Esse valor será negativo devido ao coeficiente de temperatura
             correctionTemp = (tempAboveLimit * Double.parseDouble(solarPanel[Constants.iPANEL_COEFTEMP]) *
                                 Double.parseDouble(solarPanel[Constants.iPANEL_POTENCIA])) / 100;
-            efficiency = (Double.parseDouble(solarPanel[Constants.iPANEL_POTENCIA]) + correctionTemp)/(Double.parseDouble(solarPanel[Constants.iPANEL_AREA])*1000);
+            //Eficiencia do sistema (qual a porcentagem de energia captada em 1m²)
+            efficiency = (Double.parseDouble(solarPanel[Constants.iPANEL_POTENCIA]) + correctionTemp)/
+                        (Double.parseDouble(solarPanel[Constants.iPANEL_AREA])*1000);
 
+            //Horas de sol pico do mês * eficiencia * area total
             dailyGen = (Double.parseDouble(cityVec[month])/1000.0) * efficiency *
                     Double.parseDouble(solarPanel[Constants.iPANEL_AREA]) * Double.parseDouble(solarPanel[Constants.iPANEL_QTD]);
             monthlyGen = dailyGen * GetNumberOfDays(month);
@@ -271,45 +317,60 @@ public class CalculoActivity extends AppCompatActivity {
         double LCOEcost, LCOEGeneration, LCOEcrf=0.0, LCOE, LCOEDivisor;
         double LCOESumCost=0.0, LCOESumGeneration=0.0;
         PTempoRetorno = 30;
-        for(year = 0; year < 26; year++) {
+        for(year = 0; year <= 25; year++) { //Até 25 anos, que é a estimativa da vida útil dos paineis
             tariff = Constants.TARIFF*Math.pow(1 + Constants.TARIFF_CHANGE/100.0, year);
             LCOEDivisor = Math.pow(1 + Constants.SELIC, year);
 
+            //Depreciação do painel a cada ano (diminuição de rendimento)
             geracaoComDepreciacao = anualGeneration * (1 - (Constants.DEPREC_PANELS) * year);
+            //Perdas com o inversor
             geracaoComAsPerdas = geracaoComDepreciacao * Double.parseDouble(invertor[Constants.iINV_RENDIMENTO_MAXIMO]);
+            //Somando o total de energia produzida para calcular o custo de cada KWh
             LCOEGeneration = geracaoComAsPerdas/LCOEDivisor;
             LCOESumGeneration += LCOEGeneration;
+            //Encontra quantos KWh o usuário ganhou de créditos esse ano (créditos têm o sinal negativo) ou se ele gastou mais do que produziu
             if (consumoMedioAnual < geracaoComAsPerdas) {
-                saldoDoConsumoAnual[year] = 0.0;
-            } else {
+                //Se ele produziu mais do que gastou, aumenta os créditos
                 saldoDoConsumoAnual[year] = consumoMedioAnual - geracaoComAsPerdas;
+                consumoAcimaDaGeracao = 0.0;
+            } else {
+                //Se ele consumiu mais do que produziu, não ganha créditos e tem que pagar a diferença
+                saldoDoConsumoAnual[year] = 0.0;
+                consumoAcimaDaGeracao = consumoMedioAnual - geracaoComAsPerdas;
             }
+
+            //Os créditos duram apenas por cinco anos, então, se não foram usados, descarta o mais antigo
             saldoDoConsumoCincoAnos += saldoDoConsumoAnual[year];
             if (year > 4) {
                 saldoDoConsumoCincoAnos -= saldoDoConsumoAnual[year - 5];
             }
-            if (consumoMedioAnual > geracaoComAsPerdas) {
-                consumoAcimaDaGeracao = consumoMedioAnual - geracaoComAsPerdas;
-            } else {
-                consumoAcimaDaGeracao = 0.0;
-            }
 
+            //Se o consumo que ele tem que pagar for maior do que os créditos que ele tem...
             if (consumoAcimaDaGeracao + saldoDoConsumoCincoAnos > 0.0) {
+                //Verifica de fato quanto ele deve pagar, descontando os créditos ainda restantes
                 ConsumoAPagarNoAno = consumoAcimaDaGeracao + saldoDoConsumoCincoAnos;
+                //Zera os créditos
                 saldoDoConsumoCincoAnos = 0;
             } else {
+                //Se os créditos suprirem a demanda, ele não paga "nada"
                 ConsumoAPagarNoAno = 0;
                 saldoDoConsumoCincoAnos += consumoAcimaDaGeracao;
             }
 
+            //Se o que ele deve pagar for menor do que o custo de disponibilidade, ele paga o custo de disponibilidade
             if (ConsumoAPagarNoAno < 12.0 * Constants.COST_DISP) {
                 ConsumoAPagarNoAno = 12.0 * Constants.COST_DISP;
             }
+            //Acha o valor em reais que ele pagará para a concessionária no ano
             valorAPagar = ConsumoAPagarNoAno * tariff;
+            //Coloca os roubos... Quero dizer, impostos
             custoComImposto = valorAPagar / (1 - (Constants.PIS + Constants.COFINS + Constants.ICMS)) + Constants.CIP;
+            //Quanto ele pagaria sem o sistema fotovoltaico, também com roubo (imposto)
             custoAtualComImposto = (12.0 * energyConsumedMonthly)*tariff / (1 - (Constants.PIS + Constants.COFINS + Constants.ICMS)) + Constants.CIP;
+            //Acha a diferença que o sistema causou no custo (isso será o lucro ou a economia do ano)
             diferençaDeCusto = custoAtualComImposto - custoComImposto;
 
+            //Verifica se nesse ano deve-se trocar o inversor (de 10 em 10 anos)
             if (year % Constants.INVERTOR_TIME == 0 && year > 0) {
                 custoInversor = Double.parseDouble(invertor[Constants.iINV_PRECO]) *
                                     Math.pow(1 + Constants.IPCA, year) * Double.parseDouble(invertor[Constants.iINV_QTD]);
@@ -317,30 +378,41 @@ public class CalculoActivity extends AppCompatActivity {
                 custoInversor = 0;
             }
 
+            //Considerando que os custos de manutenção são relativos ao investimento inicial, que esses custos sobem em 2 vezes a inflação
+            // e que o custo de instalação do inversor é um décimo de seu preço
             custoManutEInstal = (custoTotalInstal * Constants.MAINTENANCE_COST) * Math.pow(1 + (2 * Constants.IPCA), year) + custoInversor * 0.1;
             gastosTotais = custoManutEInstal + custoInversor;
+            //Esses são os custos coniderados no LCOE, os custos de energia (da concessionária) não entram no cálculo
             LCOEcost = gastosTotais/LCOEDivisor;
             LCOESumCost += LCOEcost;
 
 
-            if (year == 0) {
+            if (year == 0) { //Se for o primeiro ano, considera os custos de instalação
+                //A economia (ou lucro) do sistema no ano foi:
                 cashFlow[year] = -custoTotalInstal + diferençaDeCusto - gastosTotais;
             } else {
+                //Lembrando que a diferença de custo é o quanto o usuário economiza com a concessionária depois de instalar o sistema
                 cashFlow[year] = diferençaDeCusto - gastosTotais;
             }
 
+            //Diminui o valor economizado, trazendo para valores atuais
             cashFlowCurrentCurrency = cashFlow[year] / Math.pow(1 + Constants.SELIC, year);
+            //O payback, que inicialmente é zero, armazena isso
             payback+=cashFlowCurrentCurrency;
+
+            //Se ainda não foi definido tempo de retorno, e o payback for maior que zero, quer dizer que o investimento foi pago nesse ano
             if(PTempoRetorno == 30 && payback>=0){
                 PTempoRetorno = year;
             }
         }
+        //Colocando os valores encontrados em variáveis públicas
         Ppayback = payback;
 
-        double indiceLucratividade = (payback+custoTotalInstal)/custoTotalInstal;
-        PindiceLucratividade = indiceLucratividade;
+        PindiceLucratividade = (payback+custoTotalInstal)/custoTotalInstal;
 
+        //Usei uma função que achei na internet para calcular o irr. Não tenho ideia de como funciona, mas funciona
         double internalRateOfReturn = IRR.getIRR(cashFlow);
+        //Se o payback for negativo, o irr dá um valor extremamente alto, então eu boto zero
         if(internalRateOfReturn > 1000000.0){
             PInternalRateOfReturn = 0.0;
         } else {
@@ -350,6 +422,7 @@ public class CalculoActivity extends AppCompatActivity {
 
         LCOEcrf = (Constants.COST_OF_CAPITAL * Math.pow(1 + Constants.COST_OF_CAPITAL, Constants.PANEL_LIFE)/
                 (Math.pow(1 + Constants.COST_OF_CAPITAL, Constants.PANEL_LIFE) - 1))*custoTotalInstal;
+        //Divide os todos os custos por toda energia produzida
         LCOE = (LCOESumCost + LCOEcrf)/LCOESumGeneration;
         PLCOE = LCOE;
     }
@@ -359,11 +432,21 @@ public class CalculoActivity extends AppCompatActivity {
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
+    public void ChangeSpinner(int statePos){
+        int[] statesPositions = {R.array.AC, R.array.AL, R.array.AP, R.array.AM, R.array.BA, R.array.CE, R.array.DF,
+                R.array.ES, R.array.GO, R.array.MA, R.array.MT, R.array.MS, R.array.MG, R.array.PA, R.array.PB,
+                R.array.PR, R.array.PE, R.array.PI, R.array.RJ, R.array.RN, R.array.RS, R.array.RO, R.array.RR,
+                R.array.SC, R.array.SP, R.array.SE, R.array.TO};
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, statesPositions[statePos], R.layout.spinner_item);
+        this.mViewHolder.spinnerCities.setAdapter(adapter);
+    }
+
     public static class ViewHolder{
         TextView textSimulacao;
         EditText editCostMonth;
         Button buttonCalc;
         Spinner spinnerCities;
+        Spinner spinnerStates;
         ConstraintLayout layout;
     }
 }

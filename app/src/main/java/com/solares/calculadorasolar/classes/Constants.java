@@ -1,15 +1,6 @@
 package com.solares.calculadorasolar.classes;
 
-import android.Manifest;
-
 public class Constants {
-
-    // Storage Permissions
-    public static final int REQUEST_EXTERNAL_STORAGE = 1;
-    public static String[] PERMISSIONS_STORAGE = {
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-    };
 
     // Constantes para cálculo
     public static double ICMS = 0.25;
@@ -20,8 +11,8 @@ public class Constants {
     public static double TD = 0.8;
     public static double COST_DISP = 50.0;
     public static double PERCENTUAL_COST_INSTALATION = 0.35;
-    public static double LOSS_DIRT = 0.01;
-    public static double DEPREC_PANELS = 0.007;
+    public static double LOSS_DIRT = 0.01; //Perda de geração devido a sujeira
+    public static double DEPREC_PANELS = 0.007; //Perda de eficiência a cada ano
     public static double INVERTOR_TIME = 10;
     public static double IPCA = 0.03;
     public static double MAINTENANCE_COST = 0.01;
@@ -48,6 +39,7 @@ public class Constants {
     public static final String EXTRA_HORA_SOLAR = "com.solares.com.solares.calculadorasolar.EXTRA_HORA_SOLAR";
     public static final String EXTRA_ID_CIDADE = "com.solares.com.solares.calculadorasolar.EXTRA_ID_CIDADE";
     public static final String EXTRA_CIDADE = "com.solares.com.solares.calculadorasolar.EXTRA_CIDADE";
+    public static final String EXTRA_VETOR_CIDADE = "com.solares.com.solares.calculadorasolar.EXTRA_VETOR_CIDADE";
 
     //Indices Paineis
     public static final int iPANEL_NOME = 0;
@@ -67,6 +59,9 @@ public class Constants {
     public static final int iINV_QTD = 3;
     public static final int iINV_PRECO_TOTAL = 4;
     public static final int iINV_RENDIMENTO_MAXIMO = 5;
+
+    //Indices Cidades
+    public static final int iCID_ESTADO = 0;
 
     //Indices costs[]
     public static final int iCOSTS_PARCIAL = 0;

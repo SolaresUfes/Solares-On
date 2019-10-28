@@ -12,25 +12,35 @@ public class CSVRead {
 
     private static String divider = ",";
 
-    public static String[] getCity(int idCity, InputStream is){
+    public static String[] getCity(int idCity, String stateName, InputStream is){
         String[] values = new String[0];
         int currentLine=0;
         try {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
             String line = "";
-            bufferedReader.readLine(); //Ignora a primeira linha
+            bufferedReader.readLine(); //Ignora a primeira linha (cabeçário)
             while ((line = bufferedReader.readLine()) != null) {
                 values = line.split(divider);
-                if (idCity == currentLine) {
-                    break;
+                if (stateName.equals(values[0])){ //Se essa linha for a primeira linha do estado correto
+                    currentLine = 0;
+                    if (idCity == currentLine) { //Se for igual a zero (primeira cidade)
+                        return values;
+                    }
+                    currentLine++;
+                    while ((line = bufferedReader.readLine()) != null) {
+                        values = line.split(divider);
+                        if (idCity == currentLine) {
+                            return values;
+                        }
+                        currentLine++;
+                    }
                 }
-                currentLine++;
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return values;
+        return null;
     }
 
 
@@ -102,6 +112,25 @@ public class CSVRead {
 
             return precoTotal/potenciaTotal;
         }
+    }
+
+    public static String[] getState(String[] cityVec, InputStream is){
+        String stateName = cityVec[0];
+        String[] values;
+        String line;
+        try{
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
+            while ((line = bufferedReader.readLine()) != null) {
+                values = line.split(divider);
+                if (stateName.equals(values[0])){ //Se essa linha for a do estado correto
+                    return values;
+                }
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     public static String[] DefineInvertor(InputStream is, String[] solarPanel){

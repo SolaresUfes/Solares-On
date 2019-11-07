@@ -130,15 +130,31 @@ public class CalculoActivity extends AppCompatActivity {
             InputStream is = getResources().openRawResource(R.raw.banco_irradiancia);
             String[] cityVec = CSVRead.getCity(idCity, stateName, is);
 
+            //Pegando as informações do estado
+            is = getResources().openRawResource(R.raw.banco_estados);
+            String[] stateVec;
+            if(cityVec != null){
+                stateVec = CSVRead.getState(cityVec, is);
+            } else {
+                throw new Exception("Cidade não foi encontrada");
+            }
+
             //Calcula a média anual da hora solar da cidade escolhida
             double solarHour = MeanSolarHour(cityVec);
             double custoReais;
 
+            //Calcula o consumo mensal em KWh
             String cost = this.mViewHolder.editCostMonth.getText().toString();
             custoReais = Double.valueOf(cost);
             costReais = ValueWithoutTaxes(custoReais);
-            double energyConsumed = ConvertToKWh(costReais);
+            double energyConsumed;
+            if(stateVec != null){
+                energyConsumed = ConvertToKWh(costReais, stateVec);
+            } else {
+                throw new Exception("Estado não foi encontrado");
+            }
 
+            //Acha a potêcia necessária
             double capacityWp = FindCapacity(energyConsumed, solarHour);
             if(capacityWp < 0.0){
                 Toast.makeText(this, "O seu consumo de energia é muito baixo!", Toast.LENGTH_LONG).show();
@@ -154,18 +170,11 @@ public class CalculoActivity extends AppCompatActivity {
 
                 //Definindo os custos
                 double[] costs = DefineCosts(solarPanel, invertor);
-                //Pegando as informações do estado
-                is = getResources().openRawResource(R.raw.banco_estados);
-                String[] stateVec;
-                if(cityVec != null){
-                    stateVec = CSVRead.getState(cityVec, is);
-                } else {
-                    throw new Exception("Cidade não foi encontrada");
-                }
+
                 //Calculo da energia produzida em um ano
                 double anualGeneration = EstimateAnualGeneration(solarPanel, stateVec, cityVec);
 
-                GetEconomicInformation(anualGeneration, invertor, energyConsumed, costs[Constants.iCOSTS_TOTAL]);
+                GetEconomicInformation(anualGeneration, invertor, energyConsumed, costs[Constants.iCOSTS_TOTAL], stateVec);
 
                 //Preparação para mudar para próxima activity
                 Intent intent = new Intent(this, ResultadoActivity.class);
@@ -204,8 +213,8 @@ public class CalculoActivity extends AppCompatActivity {
         return (costReais*(1-(Constants.ICMS + Constants.PIS + Constants.COFINS)));
     }
 
-    public static double ConvertToKWh(double costReais){
-        return costReais/Constants.TARIFF;
+    public static double ConvertToKWh(double costReais, String[] stateVec){
+        return costReais/Double.parseDouble(stateVec[Constants.iEST_TARIFA]);
     }
 
     public static double MeanSolarHour(String[] cityVec){
@@ -229,8 +238,7 @@ public class CalculoActivity extends AppCompatActivity {
     }
 
     public static double DefineArea(String[] solarPanel){
-        double area = Integer.parseInt(solarPanel[Constants.iPANEL_QTD]) * Double.parseDouble(solarPanel[Constants.iPANEL_AREA]);
-        return area;
+        return Integer.parseInt(solarPanel[Constants.iPANEL_QTD]) * Double.parseDouble(solarPanel[Constants.iPANEL_AREA]);
     }
 
     public static double[] DefineCosts(String[] solarPanel, String[] invertor){
@@ -305,20 +313,20 @@ public class CalculoActivity extends AppCompatActivity {
     }
 
     public static void GetEconomicInformation(double anualGeneration, String[] invertor,
-                                                  double energyConsumedMonthly, double custoTotalInstal){
+                                                  double energyConsumedMonthly, double custoTotalInstal, String[] stateVec){
         int year;
         anualGeneration = anualGeneration * (1 - Constants.LOSS_DIRT);
         double geracaoComDepreciacao, geracaoComAsPerdas, consumoMedioAnual=energyConsumedMonthly*12;
         double saldoDoConsumoCincoAnos=0, consumoAcimaDaGeracao=0, valorAPagar=0;
         double gastosTotais, ConsumoAPagarNoAno; //Quanto tem que pagar no ano
-        double custoComImposto, custoAtualComImposto, diferençaDeCusto, custoInversor=0.0, custoManutEInstal=0.0;
+        double custoComImposto, custoAtualComImposto, diferencaDeCusto, custoInversor=0.0, custoManutEInstal=0.0;
         double[] saldoDoConsumoAnual = new double[30], cashFlow=new double[26];
         double cashFlowCurrentCurrency=0, payback = 0.0, tariff;
         double LCOEcost, LCOEGeneration, LCOEcrf=0.0, LCOE, LCOEDivisor;
         double LCOESumCost=0.0, LCOESumGeneration=0.0;
         PTempoRetorno = 30;
         for(year = 0; year <= 25; year++) { //Até 25 anos, que é a estimativa da vida útil dos paineis
-            tariff = Constants.TARIFF*Math.pow(1 + Constants.TARIFF_CHANGE/100.0, year);
+            tariff = Double.parseDouble(stateVec[Constants.iEST_TARIFA])*Math.pow(1 + Constants.TARIFF_CHANGE/100.0, year);
             LCOEDivisor = Math.pow(1 + Constants.SELIC, year);
 
             //Depreciação do painel a cada ano (diminuição de rendimento)
@@ -368,7 +376,7 @@ public class CalculoActivity extends AppCompatActivity {
             //Quanto ele pagaria sem o sistema fotovoltaico, também com roubo (imposto)
             custoAtualComImposto = (12.0 * energyConsumedMonthly)*tariff / (1 - (Constants.PIS + Constants.COFINS + Constants.ICMS)) + Constants.CIP;
             //Acha a diferença que o sistema causou no custo (isso será o lucro ou a economia do ano)
-            diferençaDeCusto = custoAtualComImposto - custoComImposto;
+            diferencaDeCusto = custoAtualComImposto - custoComImposto;
 
             //Verifica se nesse ano deve-se trocar o inversor (de 10 em 10 anos)
             if (year % Constants.INVERTOR_TIME == 0 && year > 0) {
@@ -389,10 +397,10 @@ public class CalculoActivity extends AppCompatActivity {
 
             if (year == 0) { //Se for o primeiro ano, considera os custos de instalação
                 //A economia (ou lucro) do sistema no ano foi:
-                cashFlow[year] = -custoTotalInstal + diferençaDeCusto - gastosTotais;
+                cashFlow[year] = -custoTotalInstal + diferencaDeCusto - gastosTotais;
             } else {
                 //Lembrando que a diferença de custo é o quanto o usuário economiza com a concessionária depois de instalar o sistema
-                cashFlow[year] = diferençaDeCusto - gastosTotais;
+                cashFlow[year] = diferencaDeCusto - gastosTotais;
             }
 
             //Diminui o valor economizado, trazendo para valores atuais

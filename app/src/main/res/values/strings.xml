@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Solares On - Calculadora Solar</string>
+    <string name="app_name">Solares On</string>
     <string name="informe_a_sua_conta_de_energia_em_reais">Informe a sua conta de energia em reais:</string>
     <string name="kwh_consumido">Consumo mensal de energia:</string>
     <string name="pot_necessaria">Potência Necessária:</string>

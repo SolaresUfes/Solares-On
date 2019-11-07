@@ -115,7 +115,7 @@ public class CSVRead {
     }
 
     public static String[] getState(String[] cityVec, InputStream is){
-        String stateName = cityVec[0];
+        String stateName = cityVec[Constants.iCID_ESTADO];
         String[] values;
         String line;
         try{

@@ -3,11 +3,11 @@ package com.solares.calculadorasolar.classes;
 public class Constants {
 
     // Constantes para cálculo
-    public static double ICMS = 0.25;
+    public static double ICMS = 0.25; //É o valor usado pela maioria dos estados
     public static double PIS = 0.0165;
     public static double COFINS = 0.0434;
     public static double CIP = 50;
-    public static double TARIFF = 0.56228;
+    //public static double TARIFF = 0.56228;
     public static double TD = 0.8;
     public static double COST_DISP = 50.0;
     public static double PERCENTUAL_COST_INSTALATION = 0.35;
@@ -62,6 +62,8 @@ public class Constants {
 
     //Indices Cidades
     public static final int iCID_ESTADO = 0;
+    //Indices Estados
+    public static final int iEST_TARIFA = 13;
 
     //Indices costs[]
     public static final int iCOSTS_PARCIAL = 0;

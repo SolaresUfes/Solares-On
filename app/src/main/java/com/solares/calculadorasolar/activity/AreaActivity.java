@@ -98,8 +98,23 @@ public class AreaActivity extends AppCompatActivity {
             InputStream is;
             double solarHour = CalculoActivity.MeanSolarHour(cityVec);
 
+            //Pega informações do estado
+            is = getResources().openRawResource(R.raw.banco_estados);
+            String[] stateVec;
+            if(cityVec != null){
+                stateVec = CSVRead.getState(cityVec, is);
+            } else {
+                throw new Exception("Cidade não foi encontrada");
+            }
+
+            //Calcula o consumo mensal em KWh
             CalculoActivity.costReais = CalculoActivity.ValueWithoutTaxes(custoReais);
-            double energyConsumed = CalculoActivity.ConvertToKWh(CalculoActivity.costReais);
+            double energyConsumed;
+            if(stateVec != null){
+                energyConsumed = CalculoActivity.ConvertToKWh(CalculoActivity.costReais, stateVec);
+            } else {
+                throw new Exception("Estado não foi encontrado");
+            }
 
             double capacityWp = CalculoActivity.FindCapacity(energyConsumed, solarHour);
             if(capacityWp < 0.0){
@@ -118,16 +133,11 @@ public class AreaActivity extends AppCompatActivity {
                 double[] costs = CalculoActivity.DefineCosts(solarPanel, invertor);
                 //Pega o estado
                 is = getResources().openRawResource(R.raw.banco_estados);
-                String[] stateVec;
-                if(cityVec != null){
-                    stateVec = CSVRead.getState(cityVec, is);
-                } else {
-                    throw new Exception("Cidade não foi encontrada");
-                }
+
                 //Calculo da energia produzida em um ano
                 double anualGeneration = CalculoActivity.EstimateAnualGeneration(solarPanel, stateVec, cityVec);
 
-                CalculoActivity.GetEconomicInformation(anualGeneration, invertor, energyConsumed, costs[Constants.iCOSTS_TOTAL]);
+                CalculoActivity.GetEconomicInformation(anualGeneration, invertor, energyConsumed, costs[Constants.iCOSTS_TOTAL], stateVec);
 
                 //Mudar para próxima activity
                 Intent intent = new Intent(this, ResultadoActivity.class);

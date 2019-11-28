@@ -39,7 +39,7 @@ public class ResultadoActivity extends AppCompatActivity{
         final double horaSolar = intent.getDoubleExtra(Constants.EXTRA_HORA_SOLAR, 0.0);
 
         TextView textTituloResultado = findViewById(R.id.text_titulo_resultado);
-        AutoSizeText.AutoSizeTextView(textTituloResultado, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 5f);
+        AutoSizeText.AutoSizeTextView(textTituloResultado, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 4f);
 
         Button buttonDados = findViewById(R.id.button_dados);
         AutoSizeText.AutoSizeButton(buttonDados, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
@@ -50,7 +50,7 @@ public class ResultadoActivity extends AppCompatActivity{
         Button buttonIndicesEconomicos = findViewById(R.id.button_indices_economicos);
         AutoSizeText.AutoSizeButton(buttonIndicesEconomicos, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
         Button buttonFinalizar = findViewById(R.id.button_finalizar);
-        AutoSizeText.AutoSizeButton(buttonFinalizar, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 5f);
+        AutoSizeText.AutoSizeButton(buttonFinalizar, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 4f);
         Button buttonAjustarArea = findViewById(R.id.button_ajustar_area);
         AutoSizeText.AutoSizeButton(buttonAjustarArea, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
 

@@ -28,7 +28,7 @@ public class DadosActivity extends AppCompatActivity {
         final double consumokWh = intent.getDoubleExtra(Constants.EXTRA_CONSUMO, 0.0);
 
         TextView textTituloDados = findViewById(R.id.text_titulo_dados);
-        AutoSizeText.AutoSizeTextView(textTituloDados, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 5f);
+        AutoSizeText.AutoSizeTextView(textTituloDados, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 4f);
 
         TextView textEstaticoCustoReais = findViewById(R.id.text_consumo_reais_1);
         AutoSizeText.AutoSizeTextView(textEstaticoCustoReais, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
@@ -49,7 +49,7 @@ public class DadosActivity extends AppCompatActivity {
         AutoSizeText.AutoSizeTextView(textHoraSolar, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
 
         Button buttonVoltar = findViewById(R.id.button_voltar);
-        AutoSizeText.AutoSizeButton(buttonVoltar, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 5f);
+        AutoSizeText.AutoSizeButton(buttonVoltar, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 4f);
 
         buttonVoltar.setOnClickListener(new View.OnClickListener() {
             @Override

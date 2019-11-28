@@ -31,7 +31,7 @@ public class IndicesEconomicosActivity extends AppCompatActivity {
         final int tempoRetorno = intent.getIntExtra(Constants.EXTRA_TEMPO_RETORNO, 0);
 
         TextView textTituloIndices = findViewById(R.id.text_titulo_indices);
-        AutoSizeText.AutoSizeTextView(textTituloIndices, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 5f);
+        AutoSizeText.AutoSizeTextView(textTituloIndices, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 4f);
 
         TextView textEstaticoLucro = findViewById(R.id.text_lucro_1);
         AutoSizeText.AutoSizeTextView(textEstaticoLucro, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
@@ -68,7 +68,7 @@ public class IndicesEconomicosActivity extends AppCompatActivity {
         }
 
         Button buttonVoltar = findViewById(R.id.button_voltar);
-        AutoSizeText.AutoSizeButton(buttonVoltar, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 5f);
+        AutoSizeText.AutoSizeButton(buttonVoltar, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 4f);
         buttonVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

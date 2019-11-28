@@ -29,7 +29,7 @@ public class InstalacaoActivity extends AppCompatActivity {
         final String[] inversor = intent.getStringArrayExtra(Constants.EXTRA_INVERSORES);
 
         TextView textTituloInstal = findViewById(R.id.text_titulo_intalacao);
-        AutoSizeText.AutoSizeTextView(textTituloInstal, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 5f);
+        AutoSizeText.AutoSizeTextView(textTituloInstal, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 4f);
 
         TextView textEstaticoPotencia = findViewById(R.id.text_potencia_1);
         AutoSizeText.AutoSizeTextView(textEstaticoPotencia, CalculoActivity.alturaTela, CalculoActivity.larguraTela, percent);
@@ -70,7 +70,7 @@ public class InstalacaoActivity extends AppCompatActivity {
 
 
         Button buttonVoltar = findViewById(R.id.button_voltar);
-        AutoSizeText.AutoSizeButton(buttonVoltar, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 5f);
+        AutoSizeText.AutoSizeButton(buttonVoltar, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 4f);
         buttonVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

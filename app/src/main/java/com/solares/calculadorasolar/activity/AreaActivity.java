@@ -28,13 +28,13 @@ public class AreaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_area);
 
         TextView textTituloArea = findViewById(R.id.text_titulo_area);
-        AutoSizeText.AutoSizeTextView(textTituloArea, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 5f);
+        AutoSizeText.AutoSizeTextView(textTituloArea, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 4f);
 
         Button buttonRecalcArea = findViewById(R.id.button_recalcular_area);
-        AutoSizeText.AutoSizeButton(buttonRecalcArea, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 5f);
+        AutoSizeText.AutoSizeButton(buttonRecalcArea, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 4f);
 
         Button buttonVoltar = findViewById(R.id.button_voltar);
-        AutoSizeText.AutoSizeButton(buttonVoltar, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 5f);
+        AutoSizeText.AutoSizeButton(buttonVoltar, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 4f);
 
         TextView textAreaAtual = findViewById(R.id.text_area_atual);
         AutoSizeText.AutoSizeTextView(textAreaAtual, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);

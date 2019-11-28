@@ -27,7 +27,7 @@ public class AnaliseActivity extends AppCompatActivity {
         final double geracaoAnual = intent.getDoubleExtra(Constants.EXTRA_GERACAO, 0.0);
 
         TextView textResultado = findViewById(R.id.text_resultado_analise);
-        AutoSizeText.AutoSizeTextView(textResultado, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 5f);
+        AutoSizeText.AutoSizeTextView(textResultado, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 4f);
 
         TextView textEstaticoCustoParcial = findViewById(R.id.text_custo_parcial_1);
         TextView textCustoParcial = findViewById(R.id.text_custo_parcial);
@@ -48,7 +48,7 @@ public class AnaliseActivity extends AppCompatActivity {
         AutoSizeText.AutoSizeTextView(textGeracao, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
 
         Button buttonVoltar = findViewById(R.id.button_voltar);
-        AutoSizeText.AutoSizeButton(buttonVoltar, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 5f);
+        AutoSizeText.AutoSizeButton(buttonVoltar, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 4f);
         buttonVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

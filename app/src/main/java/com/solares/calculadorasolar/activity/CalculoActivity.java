@@ -41,7 +41,7 @@ public class CalculoActivity extends AppCompatActivity {
     /////
     public static int larguraTela;
     public static int alturaTela;
-    public float porcent = 5f;
+    public float porcent = 4f;
 
 
     @Override
@@ -58,11 +58,11 @@ public class CalculoActivity extends AppCompatActivity {
 
         //Identificando os componentes do layout
         this.mViewHolder.textSimulacao = findViewById(R.id.text_simulacao);
-        AutoSizeText.AutoSizeTextView(this.mViewHolder.textSimulacao, alturaTela, larguraTela, 4f);
+        AutoSizeText.AutoSizeTextView(this.mViewHolder.textSimulacao, alturaTela, larguraTela, 3f);
         this.mViewHolder.buttonCalc = findViewById(R.id.button_calc);
         AutoSizeText.AutoSizeButton(this.mViewHolder.buttonCalc, alturaTela, larguraTela, porcent);
         this.mViewHolder.editCostMonth = findViewById(R.id.edit_cost);
-        AutoSizeText.AutoSizeEditText(this.mViewHolder.editCostMonth, alturaTela, larguraTela, porcent-2);
+        AutoSizeText.AutoSizeEditText(this.mViewHolder.editCostMonth, alturaTela, larguraTela, 3f);
 
         //Criando spinners (dos estados e das cidades)
         this.mViewHolder.spinnerStates = findViewById(R.id.spinner_states);

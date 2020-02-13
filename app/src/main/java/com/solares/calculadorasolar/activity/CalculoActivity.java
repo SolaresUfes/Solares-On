@@ -3,8 +3,9 @@ package com.solares.calculadorasolar.activity;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import android.view.Display;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -17,6 +18,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.solares.calculadorasolar.R;
 import com.solares.calculadorasolar.classes.AutoSizeText;
 import com.solares.calculadorasolar.classes.CSVRead;
@@ -48,6 +50,16 @@ public class CalculoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calculo);
+
+        //Inicializando Firebase
+        // Obtain the FirebaseAnalytics instance.
+        FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        //      Exemplo de uso
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "1");
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "testeee");
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "image");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
         //Pegando informações sobre o dispositivo, para regular o tamanho da letra (fonte)
         Display display = getWindowManager().getDefaultDisplay();
@@ -111,6 +123,8 @@ public class CalculoActivity extends AppCompatActivity {
         });
 
     }
+
+
 
 
     /*

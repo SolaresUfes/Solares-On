@@ -2,8 +2,9 @@ package com.solares.calculadorasolar.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;

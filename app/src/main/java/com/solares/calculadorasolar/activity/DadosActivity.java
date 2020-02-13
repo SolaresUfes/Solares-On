@@ -1,12 +1,12 @@
 package com.solares.calculadorasolar.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
+import androidx.appcompat.app.AppCompatActivity;
 import com.solares.calculadorasolar.R;
 import com.solares.calculadorasolar.classes.AutoSizeText;
 import com.solares.calculadorasolar.classes.Constants;

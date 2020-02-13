@@ -46,6 +46,7 @@
     <string name="sim">SIM</string>
     <string name="nao">NÃO</string>
     <string name="confirmar">Confirmar</string>
+    <string name="tarifa_de_energia_da_cidade">Tarifa de energia da cidade:</string>
     <string-array name="Estados">
         <item>AC</item>
         <item>AL</item>

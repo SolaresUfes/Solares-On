@@ -86,7 +86,7 @@ public class CalculoActivity extends AppCompatActivity {
         this.mViewHolder.spinnerCities = findViewById(R.id.spinner_cities);
         ArrayAdapter<CharSequence> adapterC = ArrayAdapter.createFromResource(this, R.array.ES, R.layout.spinner_item);
         this.mViewHolder.spinnerCities.setAdapter(adapterC);
-        this.mViewHolder.spinnerCities.setSelection(33);
+        this.mViewHolder.spinnerCities.setSelection(77);
 
         this.mViewHolder.layout = findViewById(R.id.layout_calculo);
 
@@ -210,6 +210,7 @@ public class CalculoActivity extends AppCompatActivity {
                 intent.putExtra(Constants.EXTRA_LCOE, PLCOE);
                 intent.putExtra(Constants.EXTRA_TEMPO_RETORNO, PTempoRetorno);
                 intent.putExtra(Constants.EXTRA_HORA_SOLAR, solarHour);
+                intent.putExtra(Constants.EXTRA_TARIFA, Double.parseDouble(stateVec[Constants.iEST_TARIFA]));
                 //Mudar de activity
                 startActivity(intent);
             }
@@ -461,6 +462,10 @@ public class CalculoActivity extends AppCompatActivity {
                 R.array.SC, R.array.SP, R.array.SE, R.array.TO};
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, statesPositions[statePos], R.layout.spinner_item);
         this.mViewHolder.spinnerCities.setAdapter(adapter);
+        //Se for ES, começa com vitória (vou puxar pro meu lado mesmo :P)
+        if(statePos == 7){
+            this.mViewHolder.spinnerCities.setSelection(77);
+        }
     }
 
     public static class ViewHolder{

@@ -37,6 +37,7 @@ public class ResultadoActivity extends AppCompatActivity{
         final double LCOE = intent.getDoubleExtra(Constants.EXTRA_LCOE, 0.0);
         final int tempoRetorno = intent.getIntExtra(Constants.EXTRA_TEMPO_RETORNO, 0);
         final double horaSolar = intent.getDoubleExtra(Constants.EXTRA_HORA_SOLAR, 0.0);
+        final double tarifaMensal = intent.getDoubleExtra(Constants.EXTRA_TARIFA, 0.0);
 
         TextView textTituloResultado = findViewById(R.id.text_titulo_resultado);
         AutoSizeText.AutoSizeTextView(textTituloResultado, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 4f);
@@ -58,7 +59,7 @@ public class ResultadoActivity extends AppCompatActivity{
         buttonDados.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AbrirActivityDados(custoReais, consumokWh, horaSolar);
+                AbrirActivityDados(custoReais, consumokWh, horaSolar, tarifaMensal);
             }
         });
 
@@ -98,11 +99,12 @@ public class ResultadoActivity extends AppCompatActivity{
         });
     }
 
-    public void AbrirActivityDados(double custoReais, double consumokWh, double horaSolar){
+    public void AbrirActivityDados(double custoReais, double consumokWh, double horaSolar, double tarifaMensal){
         Intent intent = new Intent(this, DadosActivity.class);
         intent.putExtra(Constants.EXTRA_HORA_SOLAR, horaSolar);
         intent.putExtra(Constants.EXTRA_CUSTO_REAIS, custoReais);
         intent.putExtra(Constants.EXTRA_CONSUMO, consumokWh);
+        intent.putExtra(Constants.EXTRA_TARIFA, tarifaMensal);
         startActivity(intent);
     }
 

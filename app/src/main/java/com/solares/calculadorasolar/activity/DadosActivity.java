@@ -66,7 +66,7 @@ public class DadosActivity extends AppCompatActivity {
         AutoSizeText.AutoSizeTextView(textEstaticoTarifa, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
         //Pega a view que será usada para escrever a informação, escreve a informação e ajusta o tamanho da fonte
         TextView textTarifa = findViewById(R.id.text_tarifa);
-        textTarifa.setText(String.format(Locale.ITALY, "R$%.2f", tarifaMensal));
+        textTarifa.setText(String.format(Locale.ITALY, "R$ %.2f / kWh", tarifaMensal));
         AutoSizeText.AutoSizeTextView(textTarifa, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
 
 

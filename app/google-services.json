@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "530403648881",
+    "firebase_url": "https://solares-on-611ac.firebaseio.com",
+    "project_id": "solares-on-611ac",
+    "storage_bucket": "solares-on-611ac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:530403648881:android:0095bcd7802c7651fdc2d0",
+        "android_client_info": {
+          "package_name": "com.solares.calculadorasolar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "530403648881-0vmp5fqv8ef2nebaj9kjjcb1ndlspfjj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.solares.calculadorasolar",
+            "certificate_hash": "a4016fc8823b67a4dbdbfad929dc95f4bb3a334a"
+          }
+        },
+        {
+          "client_id": "530403648881-dsm2kmrn23vvhgbefk5ilen3u5n3l9ri.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtaM3fNBmQOG4tGREYTc7ghXt-4mme85g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "530403648881-dsm2kmrn23vvhgbefk5ilen3u5n3l9ri.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

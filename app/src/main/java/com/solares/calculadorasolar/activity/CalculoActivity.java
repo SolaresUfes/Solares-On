@@ -3,8 +3,9 @@ package com.solares.calculadorasolar.activity;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import android.view.Display;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -17,6 +18,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.solares.calculadorasolar.R;
 import com.solares.calculadorasolar.classes.AutoSizeText;
 import com.solares.calculadorasolar.classes.CSVRead;
@@ -49,6 +51,16 @@ public class CalculoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calculo);
 
+        //Inicializando Firebase
+        // Obtain the FirebaseAnalytics instance.
+        FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        //      Exemplo de uso
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "1");
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "testeee");
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "image");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
         //Pegando informações sobre o dispositivo, para regular o tamanho da letra (fonte)
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -74,7 +86,7 @@ public class CalculoActivity extends AppCompatActivity {
         this.mViewHolder.spinnerCities = findViewById(R.id.spinner_cities);
         ArrayAdapter<CharSequence> adapterC = ArrayAdapter.createFromResource(this, R.array.ES, R.layout.spinner_item);
         this.mViewHolder.spinnerCities.setAdapter(adapterC);
-        this.mViewHolder.spinnerCities.setSelection(33);
+        this.mViewHolder.spinnerCities.setSelection(77);
 
         this.mViewHolder.layout = findViewById(R.id.layout_calculo);
 
@@ -111,6 +123,8 @@ public class CalculoActivity extends AppCompatActivity {
         });
 
     }
+
+
 
 
     /*
@@ -196,6 +210,7 @@ public class CalculoActivity extends AppCompatActivity {
                 intent.putExtra(Constants.EXTRA_LCOE, PLCOE);
                 intent.putExtra(Constants.EXTRA_TEMPO_RETORNO, PTempoRetorno);
                 intent.putExtra(Constants.EXTRA_HORA_SOLAR, solarHour);
+                intent.putExtra(Constants.EXTRA_TARIFA, Double.parseDouble(stateVec[Constants.iEST_TARIFA]));
                 //Mudar de activity
                 startActivity(intent);
             }
@@ -447,6 +462,10 @@ public class CalculoActivity extends AppCompatActivity {
                 R.array.SC, R.array.SP, R.array.SE, R.array.TO};
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, statesPositions[statePos], R.layout.spinner_item);
         this.mViewHolder.spinnerCities.setAdapter(adapter);
+        //Se for ES, começa com vitória (vou puxar pro meu lado mesmo :P)
+        if(statePos == 7){
+            this.mViewHolder.spinnerCities.setSelection(77);
+        }
     }
 
     public static class ViewHolder{

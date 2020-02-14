@@ -40,6 +40,7 @@ public class Constants {
     public static final String EXTRA_ID_CIDADE = "com.solares.com.solares.calculadorasolar.EXTRA_ID_CIDADE";
     public static final String EXTRA_CIDADE = "com.solares.com.solares.calculadorasolar.EXTRA_CIDADE";
     public static final String EXTRA_VETOR_CIDADE = "com.solares.com.solares.calculadorasolar.EXTRA_VETOR_CIDADE";
+    public static final String EXTRA_TARIFA = "com.solares.com.solares.calculadorasolar.EXTRA_TARIFA";
 
     //Indices Paineis
     public static final int iPANEL_NOME = 0;

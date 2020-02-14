@@ -46,6 +46,7 @@
     <string name="sim">SIM</string>
     <string name="nao">NÃO</string>
     <string name="confirmar">Confirmar</string>
+    <string name="tarifa_de_energia_da_cidade">Tarifa de energia da cidade:</string>
     <string-array name="Estados">
         <item>AC</item>
         <item>AL</item>
@@ -3927,7 +3928,6 @@
         <item>Pilões</item>
         <item>Poço Branco</item>
         <item>Portalegre</item>
-        <item>Porto Alegre</item>
         <item>Porto do Mangue</item>
         <item>Pureza</item>
         <item>Rafael Fernandes</item>
@@ -4314,6 +4314,7 @@
         <item>Pontão</item>
         <item>Ponte Preta</item>
         <item>Portão</item>
+        <item>Porto Alegre</item>
         <item>Porto Lucena</item>
         <item>Porto Mauá</item>
         <item>Porto Vera Cruz</item>

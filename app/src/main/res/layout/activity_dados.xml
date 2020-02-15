@@ -129,28 +129,26 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:text=""
         android:textColor="@color/colorSolaresBlue"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline20"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_tarifa_1" />
 
     <Button
         android:id="@+id/button_modificar_tarifa"
+        style="?android:attr/borderlessButtonStyle"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/background_button_resultado_center"
+        android:layout_height="wrap_content"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:text="@string/modificar_tarifa"
         android:textAllCaps="false"
-        android:textColor="@color/colorWhite"
-        app:layout_constraintBottom_toTopOf="@+id/guideline19"
-        app:layout_constraintEnd_toStartOf="@+id/guideline7"
-        app:layout_constraintStart_toStartOf="@+id/guideline6"
-        app:layout_constraintTop_toTopOf="@+id/guideline21" />
+        android:textColor="@color/colorSolaresBlue"
+        app:layout_constraintBottom_toBottomOf="@+id/text_tarifa"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/text_tarifa"
+        app:layout_constraintTop_toBottomOf="@+id/text_tarifa_1" />
 
     <Button
         android:id="@+id/button_voltar"

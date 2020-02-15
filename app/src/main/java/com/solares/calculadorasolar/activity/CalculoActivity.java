@@ -44,6 +44,7 @@ public class CalculoActivity extends AppCompatActivity {
     public static int larguraTela;
     public static int alturaTela;
     public float porcent = 4f;
+    public static double PtarifaPassada = 0.0;
 
 
     @Override
@@ -129,6 +130,8 @@ public class CalculoActivity extends AppCompatActivity {
 
     /*
      * Esse método faz todos os cálculos, passando para a proxima activity os resultados
+     * Se tarifaPassada == 0.0, pega a tarifa média do estado
+     * Se AreaAlvo == -1, não vai se preocupar com a área
      */
     public void Calculate(float AreaAlvo) {
         int idCity;
@@ -210,7 +213,13 @@ public class CalculoActivity extends AppCompatActivity {
                 intent.putExtra(Constants.EXTRA_LCOE, PLCOE);
                 intent.putExtra(Constants.EXTRA_TEMPO_RETORNO, PTempoRetorno);
                 intent.putExtra(Constants.EXTRA_HORA_SOLAR, solarHour);
-                intent.putExtra(Constants.EXTRA_TARIFA, Double.parseDouble(stateVec[Constants.iEST_TARIFA]));
+                //Se o usuário modificou a tarifa, ela será passada assim pra próxima activity
+                if(PtarifaPassada != 0.0){
+                    intent.putExtra(Constants.EXTRA_TARIFA, PtarifaPassada);
+                } else {
+                    intent.putExtra(Constants.EXTRA_TARIFA, Double.parseDouble(stateVec[Constants.iEST_TARIFA]));
+                }
+
                 //Mudar de activity
                 startActivity(intent);
             }
@@ -229,7 +238,13 @@ public class CalculoActivity extends AppCompatActivity {
     }
 
     public static double ConvertToKWh(double costReais, String[] stateVec){
-        return costReais/Double.parseDouble(stateVec[Constants.iEST_TARIFA]);
+        //Se o usuário não alterou a tarifa (se for igual a zero), pega a tarifa média do estado
+        if(PtarifaPassada == 0.0){
+            return costReais/Double.parseDouble(stateVec[Constants.iEST_TARIFA]);
+        } else {
+            return costReais/PtarifaPassada;
+        }
+
     }
 
     public static double MeanSolarHour(String[] cityVec){

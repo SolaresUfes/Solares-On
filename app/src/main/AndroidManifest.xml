@@ -10,10 +10,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="GoogleAppIndexingWarning"
-        >
-        <activity
-            android:name=".activity.AreaActivity" />
+        tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".activity.TarifaActivity"></activity>
+        <activity android:name=".activity.AreaActivity" />
         <activity
             android:name=".activity.AnaliseActivity"
             android:parentActivityName=".activity.ResultadoActivity"

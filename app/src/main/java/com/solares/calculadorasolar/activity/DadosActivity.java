@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import com.solares.calculadorasolar.R;
 import com.solares.calculadorasolar.classes.AutoSizeText;
@@ -28,6 +29,8 @@ public class DadosActivity extends AppCompatActivity {
         final double custoReais = intent.getDoubleExtra(Constants.EXTRA_CUSTO_REAIS, 0.0);
         final double consumokWh = intent.getDoubleExtra(Constants.EXTRA_CONSUMO, 0.0);
         final double tarifaMensal = intent.getDoubleExtra(Constants.EXTRA_TARIFA, 0.0);
+        final String[] cityVec = intent.getStringArrayExtra(Constants.EXTRA_VETOR_CIDADE);
+        final String cityName = intent.getStringExtra(Constants.EXTRA_CIDADE);
 
         //Configurar o título
         TextView textTituloDados = findViewById(R.id.text_titulo_dados);
@@ -48,7 +51,7 @@ public class DadosActivity extends AppCompatActivity {
         AutoSizeText.AutoSizeTextView(textEstaticoConsumoEnergia, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
         //Pega a view que será usada para escrever a informação, escreve a informação e ajusta o tamanho da fonte
         TextView textConsumoEnergia = findViewById(R.id.text_consumo_energia);
-        textConsumoEnergia.setText(String.format(Locale.ENGLISH, "%.2f kWh", consumokWh));
+        textConsumoEnergia.setText(String.format(Locale.ITALY, "%.2f kWh", consumokWh));
         AutoSizeText.AutoSizeTextView(textConsumoEnergia, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
 
         ////////////Configurar o textView de horas de sol pleno////////////////
@@ -57,7 +60,7 @@ public class DadosActivity extends AppCompatActivity {
         AutoSizeText.AutoSizeTextView(textEstaticoHoraSolar, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
         //Pega a view que será usada para escrever a informação, escreve a informação e ajusta o tamanho da fonte
         TextView textHoraSolar = findViewById(R.id.text_hora_solar);
-        textHoraSolar.setText(String.format(Locale.ENGLISH, "%.2f kWh/m²dia", horaSolar));
+        textHoraSolar.setText(String.format(Locale.ITALY, "%.2f kWh/m²dia", horaSolar));
         AutoSizeText.AutoSizeTextView(textHoraSolar, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
 
         ////////////Configurar o textView da tarifa de energia////////////////
@@ -69,17 +72,37 @@ public class DadosActivity extends AppCompatActivity {
         textTarifa.setText(String.format(Locale.ITALY, "R$ %.2f / kWh", tarifaMensal));
         AutoSizeText.AutoSizeTextView(textTarifa, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
 
+        ////////////Configurar o botão de modificar a tarifa////////////////
+        Button buttonTarifa = findViewById(R.id.button_modificar_tarifa);
+        AutoSizeText.AutoSizeButton(buttonTarifa, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
 
         ////////////Configurar o botão de voltar////////////////
         Button buttonVoltar = findViewById(R.id.button_voltar);
         AutoSizeText.AutoSizeButton(buttonVoltar, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 4f);
 
-        //Listener do botão, se ele for clicado, realiza a ação de voltar pra última activity
+        //Listener do botão modificar a tarifa, se ele for clicado, abre uma pop activity
+        buttonTarifa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AbrirActivityTarifa(cityVec, cityName, custoReais, tarifaMensal);
+            }
+        });
+
+        //Listener do botão voltar, se ele for clicado, realiza a ação de voltar pra última activity
         buttonVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
+    }
+
+    public void AbrirActivityTarifa(String[] cityVec, String cityName, double custoReais, double tarifaMensal){
+        Intent intent = new Intent(this, TarifaActivity.class);
+        intent.putExtra(Constants.EXTRA_VETOR_CIDADE, cityVec);
+        intent.putExtra(Constants.EXTRA_CIDADE, cityName);
+        intent.putExtra(Constants.EXTRA_CUSTO_REAIS, custoReais);
+        intent.putExtra(Constants.EXTRA_TARIFA, tarifaMensal);
+        startActivity(intent);
     }
 }

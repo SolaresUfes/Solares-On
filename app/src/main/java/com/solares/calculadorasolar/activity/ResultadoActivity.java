@@ -59,7 +59,7 @@ public class ResultadoActivity extends AppCompatActivity{
         buttonDados.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AbrirActivityDados(custoReais, consumokWh, horaSolar, tarifaMensal);
+                AbrirActivityDados(custoReais, consumokWh, horaSolar, tarifaMensal, cityVec, NomeCidade);
             }
         });
 
@@ -99,12 +99,14 @@ public class ResultadoActivity extends AppCompatActivity{
         });
     }
 
-    public void AbrirActivityDados(double custoReais, double consumokWh, double horaSolar, double tarifaMensal){
+    public void AbrirActivityDados(double custoReais, double consumokWh, double horaSolar, double tarifaMensal, String[] cityVec, String NomeCidade){
         Intent intent = new Intent(this, DadosActivity.class);
         intent.putExtra(Constants.EXTRA_HORA_SOLAR, horaSolar);
         intent.putExtra(Constants.EXTRA_CUSTO_REAIS, custoReais);
         intent.putExtra(Constants.EXTRA_CONSUMO, consumokWh);
         intent.putExtra(Constants.EXTRA_TARIFA, tarifaMensal);
+        intent.putExtra(Constants.EXTRA_VETOR_CIDADE, cityVec);
+        intent.putExtra(Constants.EXTRA_CIDADE, NomeCidade);
         startActivity(intent);
     }
 
@@ -145,6 +147,9 @@ public class ResultadoActivity extends AppCompatActivity{
     }
 
     public void FinalizarCalculo(){
+        //Limpa tarifa inserida
+        CalculoActivity.PtarifaPassada = 0.0;
+
         Intent intent = new Intent(this, CalculoActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);

@@ -34,7 +34,7 @@ public class InstalacaoActivity extends AppCompatActivity {
         TextView textEstaticoPotencia = findViewById(R.id.text_potencia_1);
         AutoSizeText.AutoSizeTextView(textEstaticoPotencia, CalculoActivity.alturaTela, CalculoActivity.larguraTela, percent);
         TextView textPotencia = findViewById(R.id.text_potencia);
-        textPotencia.setText(String.format(Locale.ENGLISH,"%.2f Wp", potenciaNecessaria));
+        textPotencia.setText(String.format(Locale.ITALY,"%.2f Wp", potenciaNecessaria));
         AutoSizeText.AutoSizeTextView(textPotencia, CalculoActivity.alturaTela, CalculoActivity.larguraTela, percent);
 
         TextView textEstaticoPlaca = findViewById(R.id.text_placa_1);
@@ -47,13 +47,13 @@ public class InstalacaoActivity extends AppCompatActivity {
         } else {
             singplur = "Placa";
         }
-        textPlaca.setText(String.format(Locale.ENGLISH, "%d %s de %.0f W",
+        textPlaca.setText(String.format(Locale.ITALY, "%d %s de %.0f W",
                 Integer.parseInt(placaEscolhida[Constants.iPANEL_QTD]), singplur, Double.parseDouble(placaEscolhida[Constants.iPANEL_POTENCIA])));
 
         TextView textEstaticoArea = findViewById(R.id.text_area_1);
         AutoSizeText.AutoSizeTextView(textEstaticoArea, CalculoActivity.alturaTela, CalculoActivity.larguraTela, percent);
         TextView textArea = findViewById(R.id.text_area);
-        textArea.setText(String.format(Locale.ENGLISH, "%.2f m²", area));
+        textArea.setText(String.format(Locale.ITALY, "%.2f m²", area));
         AutoSizeText.AutoSizeTextView(textArea, CalculoActivity.alturaTela, CalculoActivity.larguraTela, percent);
 
         TextView textEstaticoInversor = findViewById(R.id.text_inversor_1);
@@ -65,7 +65,7 @@ public class InstalacaoActivity extends AppCompatActivity {
         } else {
             singplur = "Inversor";
         }
-        textInversor.setText(String.format(Locale.ENGLISH, "%d %s de %.0f W",
+        textInversor.setText(String.format(Locale.ITALY, "%d %s de %.0f W",
                 Integer.parseInt(inversor[Constants.iINV_QTD]), singplur, Double.parseDouble(inversor[Constants.iINV_POTENCIA])));
 
 

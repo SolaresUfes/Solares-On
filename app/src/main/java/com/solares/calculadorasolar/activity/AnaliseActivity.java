@@ -29,6 +29,7 @@ public class AnaliseActivity extends AppCompatActivity {
         TextView textResultado = findViewById(R.id.text_resultado_analise);
         AutoSizeText.AutoSizeTextView(textResultado, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 4f);
 
+        // Essas variáveis são as referências para os textos que aparecem no layout.
         TextView textEstaticoCustoParcial = findViewById(R.id.text_custo_parcial_1);
         TextView textCustoParcial = findViewById(R.id.text_custo_parcial);
         textCustoParcial.setText(String.format(Locale.ITALY,"R$ %.2f", custoParcial));

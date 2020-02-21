@@ -34,7 +34,7 @@ public class CalculoActivity extends AppCompatActivity {
     public ViewHolder mViewHolder = new ViewHolder();
     public static double costReais;
 
-    /////
+    ///// Essas são as variáveis de índices econômicos
     public static double PLCOE;
     public static double PInternalRateOfReturn;
     public static double Ppayback;

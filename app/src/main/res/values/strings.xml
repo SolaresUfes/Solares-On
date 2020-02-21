@@ -52,6 +52,8 @@
     <string name="tarifa_atual">Tarifa Atual: </string>
     <string name="nova_tarifa">Nova Tarifa: R$</string>
     <string name="kwh">/ kWh</string>
+    <string name="texto_creditos">Nós somos um projeto de extensão da UFES.</string>
+    <string name="texto_creditos_2">Conheça outras das nossas iniciativas</string>
     <string-array name="Estados">
         <item>AC</item>
         <item>AL</item>

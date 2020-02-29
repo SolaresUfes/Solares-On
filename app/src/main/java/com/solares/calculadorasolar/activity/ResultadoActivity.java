@@ -151,8 +151,6 @@ public class ResultadoActivity extends AppCompatActivity{
         CalculoActivity.PtarifaPassada = 0.0;
 
         Intent intent = new Intent(this, CreditoActivity.class);
-        //Isso limpa as activities já abertas
-        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 }

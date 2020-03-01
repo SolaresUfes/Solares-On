@@ -350,12 +350,12 @@ public class CalculoActivity extends AppCompatActivity {
         double saldoDoConsumoCincoAnos=0, consumoAcimaDaGeracao=0, valorAPagar=0;
         double gastosTotais, ConsumoAPagarNoAno; //Quanto tem que pagar no ano
         double custoComImposto, custoAtualComImposto, diferencaDeCusto, custoInversor=0.0, custoManutEInstal=0.0;
-        double[] saldoDoConsumoAnual = new double[30], cashFlow=new double[26];
+        double[] saldoDoConsumoAnual = new double[30], cashFlow=new double[25];
         double cashFlowCurrentCurrency=0, payback = 0.0, tariff;
         double LCOEcost, LCOEGeneration, LCOEcrf=0.0, LCOE, LCOEDivisor;
         double LCOESumCost=0.0, LCOESumGeneration=0.0;
         PTempoRetorno = 30;
-        for(year = 0; year <= 25; year++) { //Até 25 anos, que é a estimativa da vida útil dos paineis
+        for(year = 0; year < 25; year++) { //Até 25 anos, que é a estimativa da vida útil dos paineis
             tariff = Double.parseDouble(stateVec[Constants.iEST_TARIFA])*Math.pow(1 + Constants.TARIFF_CHANGE/100.0, year);
             LCOEDivisor = Math.pow(1 + Constants.SELIC, year);
 
@@ -440,7 +440,8 @@ public class CalculoActivity extends AppCompatActivity {
 
             //Se ainda não foi definido tempo de retorno, e o payback for maior que zero, quer dizer que o investimento foi pago nesse ano
             if(PTempoRetorno == 30 && payback>=0){
-                PTempoRetorno = year;
+                //Como year é um índice de um vetor, temos que adicionar 1 para se ter o valor correto
+                PTempoRetorno = year+1;
             }
         }
         //Colocando os valores encontrados em variáveis públicas

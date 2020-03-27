@@ -34,7 +34,7 @@ public class CalculoActivity extends AppCompatActivity {
     public ViewHolder mViewHolder = new ViewHolder();
     public static double costReais;
 
-    /////
+    ///// Essas são as variáveis de índices econômicos
     public static double PLCOE;
     public static double PInternalRateOfReturn;
     public static double Ppayback;
@@ -44,6 +44,7 @@ public class CalculoActivity extends AppCompatActivity {
     public static int larguraTela;
     public static int alturaTela;
     public float porcent = 4f;
+    public static double PtarifaPassada = 0.0;
 
 
     @Override
@@ -129,10 +130,13 @@ public class CalculoActivity extends AppCompatActivity {
 
     /*
      * Esse método faz todos os cálculos, passando para a proxima activity os resultados
+     * Se tarifaPassada == 0.0, pega a tarifa média do estado
+     * Se AreaAlvo == -1, não vai se preocupar com a área
      */
     public void Calculate(float AreaAlvo) {
         int idCity;
         String city;
+        InputStream is=null;
 
         try {
             //Fecha teclado
@@ -141,7 +145,8 @@ public class CalculoActivity extends AppCompatActivity {
             String stateName = this.mViewHolder.spinnerStates.getSelectedItem().toString();
             idCity = this.mViewHolder.spinnerCities.getSelectedItemPosition();
             city = this.mViewHolder.spinnerCities.getItemAtPosition(idCity).toString();
-            InputStream is = getResources().openRawResource(R.raw.banco_irradiancia);
+            //Pega as informações da cidade escolhida
+            is = getResources().openRawResource(R.raw.banco_irradiancia);
             String[] cityVec = CSVRead.getCity(idCity, stateName, is);
 
             //Pegando as informações do estado
@@ -210,7 +215,20 @@ public class CalculoActivity extends AppCompatActivity {
                 intent.putExtra(Constants.EXTRA_LCOE, PLCOE);
                 intent.putExtra(Constants.EXTRA_TEMPO_RETORNO, PTempoRetorno);
                 intent.putExtra(Constants.EXTRA_HORA_SOLAR, solarHour);
-                intent.putExtra(Constants.EXTRA_TARIFA, Double.parseDouble(stateVec[Constants.iEST_TARIFA]));
+                //Se o usuário modificou a tarifa, ela será passada assim pra próxima activity
+                if(PtarifaPassada != 0.0){
+                    intent.putExtra(Constants.EXTRA_TARIFA, PtarifaPassada);
+                } else {
+                    intent.putExtra(Constants.EXTRA_TARIFA, Double.parseDouble(stateVec[Constants.iEST_TARIFA]));
+                }
+
+                //Fechar o InputStream
+                try {
+                    is.close();
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+
                 //Mudar de activity
                 startActivity(intent);
             }
@@ -218,6 +236,15 @@ public class CalculoActivity extends AppCompatActivity {
             //Se algum erro ocorrer, pede para o usuário informar um número real
             Toast.makeText(this, R.string.informe_um_numero, Toast.LENGTH_LONG).show();
             e.printStackTrace();
+        } finally {
+            //Fechar o InputStream, se ocorreu algum erro
+            try {
+                if(is!=null){
+                    is.close();
+                }
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 
@@ -229,7 +256,13 @@ public class CalculoActivity extends AppCompatActivity {
     }
 
     public static double ConvertToKWh(double costReais, String[] stateVec){
-        return costReais/Double.parseDouble(stateVec[Constants.iEST_TARIFA]);
+        //Se o usuário não alterou a tarifa (se for igual a zero), pega a tarifa média do estado
+        if(PtarifaPassada == 0.0){
+            return costReais/Double.parseDouble(stateVec[Constants.iEST_TARIFA]);
+        } else {
+            return costReais/PtarifaPassada;
+        }
+
     }
 
     public static double MeanSolarHour(String[] cityVec){
@@ -335,12 +368,12 @@ public class CalculoActivity extends AppCompatActivity {
         double saldoDoConsumoCincoAnos=0, consumoAcimaDaGeracao=0, valorAPagar=0;
         double gastosTotais, ConsumoAPagarNoAno; //Quanto tem que pagar no ano
         double custoComImposto, custoAtualComImposto, diferencaDeCusto, custoInversor=0.0, custoManutEInstal=0.0;
-        double[] saldoDoConsumoAnual = new double[30], cashFlow=new double[26];
+        double[] saldoDoConsumoAnual = new double[30], cashFlow=new double[25];
         double cashFlowCurrentCurrency=0, payback = 0.0, tariff;
         double LCOEcost, LCOEGeneration, LCOEcrf=0.0, LCOE, LCOEDivisor;
         double LCOESumCost=0.0, LCOESumGeneration=0.0;
         PTempoRetorno = 30;
-        for(year = 0; year <= 25; year++) { //Até 25 anos, que é a estimativa da vida útil dos paineis
+        for(year = 0; year < 25; year++) { //Até 25 anos, que é a estimativa da vida útil dos paineis
             tariff = Double.parseDouble(stateVec[Constants.iEST_TARIFA])*Math.pow(1 + Constants.TARIFF_CHANGE/100.0, year);
             LCOEDivisor = Math.pow(1 + Constants.SELIC, year);
 
@@ -425,7 +458,8 @@ public class CalculoActivity extends AppCompatActivity {
 
             //Se ainda não foi definido tempo de retorno, e o payback for maior que zero, quer dizer que o investimento foi pago nesse ano
             if(PTempoRetorno == 30 && payback>=0){
-                PTempoRetorno = year;
+                //Como year é um índice de um vetor, temos que adicionar 1 para se ter o valor correto
+                PTempoRetorno = year+1;
             }
         }
         //Colocando os valores encontrados em variáveis públicas

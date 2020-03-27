@@ -47,6 +47,18 @@
     <string name="nao">NÃO</string>
     <string name="confirmar">Confirmar</string>
     <string name="tarifa_de_energia_da_cidade">Tarifa de energia da cidade:</string>
+    <string name="modificar_tarifa"><u>Modificar Tarifa</u></string>
+    <string name="tarifa">Tarifa</string>
+    <string name="tarifa_atual">Tarifa Atual: </string>
+    <string name="nova_tarifa">Nova Tarifa: R$</string>
+    <string name="kwh">/ kWh</string>
+    <string name="texto_creditos">Conheça outras iniciativas do\nProjeto Solares!</string>
+    <string name="instagram_projeto_solares">\@projeto.solares</string>
+    <string name="recalcular">Recalcular</string>
+    <string name="descricao_logo_do_projeto_solares">Logo do projeto Solares</string>
+    <string name="descricao_logo_do_instagram">Logo do instagram</string>
+    <string name="descricao_poente">Barco movido a energia solar</string>
+    <string name="descricao_girassol">Ação do projeto Girassol, uma das áreas do Solares</string>
     <string-array name="Estados">
         <item>AC</item>
         <item>AL</item>

@@ -58,6 +58,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline5" />
 
 
+
     <EditText
         android:id="@+id/edit_cost"
         android:layout_width="0dp"

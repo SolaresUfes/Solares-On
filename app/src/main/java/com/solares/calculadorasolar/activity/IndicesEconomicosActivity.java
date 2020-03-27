@@ -41,7 +41,7 @@ public class IndicesEconomicosActivity extends AppCompatActivity {
         TextView textEstaticoTaxaRetorno = findViewById(R.id.text_taxa_retorno_1);
         AutoSizeText.AutoSizeTextView(textEstaticoTaxaRetorno, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
         TextView textTaxaRetorno = findViewById(R.id.text_taxa_retorno);
-        textTaxaRetorno.setText(String.format(Locale.ENGLISH, "%.2f%%", taxaRetornoInvestimento));
+        textTaxaRetorno.setText(String.format(Locale.ITALY, "%.2f%%", taxaRetornoInvestimento));
         AutoSizeText.AutoSizeTextView(textTaxaRetorno, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
 
         TextView textEstaticoIndiceLucratividade = findViewById(R.id.text_indice_lucratividade_1);
@@ -63,7 +63,7 @@ public class IndicesEconomicosActivity extends AppCompatActivity {
         if(tempoRetorno>25){
             textTempo.setText("Nunca");
         } else {
-            textTempo.setText(String.format(Locale.ENGLISH, "%d anos", tempoRetorno));
+            textTempo.setText(String.format(Locale.ITALY, "%d anos", tempoRetorno));
         }
 
         Button buttonVoltar = findViewById(R.id.button_voltar);

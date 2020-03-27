@@ -29,6 +29,7 @@ public class AnaliseActivity extends AppCompatActivity {
         TextView textResultado = findViewById(R.id.text_resultado_analise);
         AutoSizeText.AutoSizeTextView(textResultado, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 4f);
 
+        // Essas variáveis são as referências para os textos que aparecem no layout.
         TextView textEstaticoCustoParcial = findViewById(R.id.text_custo_parcial_1);
         TextView textCustoParcial = findViewById(R.id.text_custo_parcial);
         textCustoParcial.setText(String.format(Locale.ITALY,"R$ %.2f", custoParcial));
@@ -44,7 +45,7 @@ public class AnaliseActivity extends AppCompatActivity {
         TextView textEstaticoGeracao = findViewById(R.id.text_geracao_anual_1);
         AutoSizeText.AutoSizeTextView(textEstaticoGeracao, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
         TextView textGeracao = findViewById(R.id.text_geracao_anual);
-        textGeracao.setText(String.format(Locale.ENGLISH,"%.2f kWh", geracaoAnual));
+        textGeracao.setText(String.format(Locale.ITALY,"%.2f kWh", geracaoAnual));
         AutoSizeText.AutoSizeTextView(textGeracao, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
 
         Button buttonVoltar = findViewById(R.id.button_voltar);

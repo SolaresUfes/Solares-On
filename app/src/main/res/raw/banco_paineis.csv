@@ -1,17 +1,10 @@
 Nome da Placa,Potencia,Preco,Area[m2],qtd,custoTotal,Coef Temp p/ Pot,NOCT 
-Painel Solar Fotovoltaico Sinosola SA10-36P (10Wp),10,69,0.0882, , ,-0.423,45
-Painel Solar Fotovoltaico Sinosola SA30-36P (30Wp),30,149,0.20304, , ,-0.423,45
-Painel Solar Fotovoltaico Sinosola SA60-36P (60Wp),60,239,0.39546, , ,-0.423,45
-Painel Solar Fotovoltaico Sinosola SA90-64P (90Wp),90,309,0.611104, , ,-0.423,45
-Painel Solar 150W Risen Solar - RSM36-6-150,150,379,1.0064, , ,-0.44,45
-Painel Solar de 260W Policristalino Globo Brasil - GBR-260P,260,799,1.6236, , ,-0.43,45
-Painel Solar Fotovoltaico Sinosola SA275-60P (275Wp),275,549,1.62688, , ,-0.423,45
-Painel Solar 275W Canadian Solar - CS6K-275P,275,599,1.6368, , ,-0.41,45
-Painel Solar 275W Risen Solar - RSM60-6-275P,275,579,1.6368, , ,-0.39,45
-Painel Solar Fotovoltaico Yingli YL280P-29b (280Wp),280,639,1.6368, , ,-0.42,46
-Painel Solar 305W Monocristalino Canadian Solar - CS6K-305M,305,689,1.6368, , ,-0.39,45
-Painel Solar Fotovoltaico Sinosola SA330-72P (330Wp),330,649,1.940352, , ,-0.423,45
-Painel Solar Fotovoltaico GCL-P6/72 330Wp,330,749,1.93644, , ,-0.41,45
-Painel Solar 330W Canadian Solar - CS6U-330P,330,739,1.94432, , ,-0.4,45
-Painel Solar 345W Monocristalino Risen Solar - RSM72-6-345M,345,739,1.940352, , ,-0.39,45
-Painel Solar 395W Canadian Solar - CS3W-395P,395,919,2.209184, , ,-0.37,42
+Painel Solar 305W Monocristalino Canadian Solar - CS6K-305M,305,631.48,1.6368, , ,-0.39,45
+Painel Solar 285W Canadian Solar Policristalino - CS6K-285P,285,491.97,1.6368, , ,-0.39,43
+Painel Solar Fotovoltaico 155W - Upsolar UP-M155P,155,329.00,0.99026, , ,-0.43,45
+Painel Solar Fotovoltaico 335W - Upsolar UP-M335P,335,579.00,1.93936, , ,-0.4,45
+Painel Solar Fotovoltaico 280W - Sinosola SA280-60P,280,519.00,1.62688, , ,-0.42,45
+Painel Solar Fotovoltaico 285W - Upsolar UP-M285P,285,479.00,1.62688, , ,-0.42,45
+Painel Solar 330W Dah Solar Policristalino - DHP72-330W,330,538.47,1.938396, , ,-0.41,45
+Painel Solar 405W Canadian Solar - Placa Solar Half Cell,405,780.47,2.209184, , ,-0.37,42
+Painel Solar Fotovoltaico 380W Monocristalino - DAH Sola,380,696.57,1.940352, , ,-0.37,45

@@ -80,8 +80,6 @@ public class AreaActivity extends AppCompatActivity {
                          isEstado = getResources().openRawResource(R.raw.banco_estados);
                          isPaineis = getResources().openRawResource(R.raw.banco_paineis);
                          isInversores = getResources().openRawResource(R.raw.banco_inversores);
-                         //Cria o intent para resultado activity
-                         //Intent intentCru = new Intent(AreaActivity.this, ResultadoActivity.class);
                          //Refaz o cálculo com a nova área e inicia a ResultadoActivity
                          Intent intent = ReCalculate(AreaAlvo, cityVec, NomeCidade, custoReais, isEstado, isPaineis, isInversores, getApplicationContext());
                          startActivity(intent);
@@ -153,6 +151,23 @@ public class AreaActivity extends AppCompatActivity {
 
                 CalculoActivity.GetEconomicInformation(anualGeneration, invertor, energyConsumed, costs[Constants.iCOSTS_TOTAL], stateVec);
 
+                //Fechar as inputStreams //É necessário criar 3 try-catch porque se houver uma falha em um is, os outros ainda são fechados normalmente
+                try {
+                    isPaineis.close();
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+                try {
+                    isEstado.close();
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+                try {
+                    isInversores.close();
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+
                 //Cria o intent para mudar para ResultadoActivity
                 Intent intent = new Intent(MyContext, ResultadoActivity.class);
                 //extras e guardar
@@ -184,6 +199,30 @@ public class AreaActivity extends AppCompatActivity {
             }
         } catch (Exception e){
             e.printStackTrace();
+        } finally {
+            //Se ocorreu algum erro, fechar os inputStreams
+            //Fechar as inputStreams //É necessário criar 3 try-catch porque se houver uma falha em um is, os outros ainda são fechados normalmente
+            try {
+                if(isPaineis!=null){
+                    isPaineis.close();
+                }
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+            try {
+                if(isPaineis!=null){
+                    isEstado.close();
+                }
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+            try {
+                if(isPaineis!=null){
+                    isInversores.close();
+                }
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         }
         return null;
     }

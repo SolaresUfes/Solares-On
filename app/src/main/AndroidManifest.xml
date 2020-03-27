@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activity.CreditoActivity"></activity>
+        <activity android:name=".activity.CreditoActivity" />
         <activity android:name=".activity.TarifaActivity" />
         <activity android:name=".activity.AreaActivity" />
         <activity

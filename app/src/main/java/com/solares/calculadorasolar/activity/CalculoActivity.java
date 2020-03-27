@@ -136,6 +136,7 @@ public class CalculoActivity extends AppCompatActivity {
     public void Calculate(float AreaAlvo) {
         int idCity;
         String city;
+        InputStream is=null;
 
         try {
             //Fecha teclado
@@ -144,7 +145,8 @@ public class CalculoActivity extends AppCompatActivity {
             String stateName = this.mViewHolder.spinnerStates.getSelectedItem().toString();
             idCity = this.mViewHolder.spinnerCities.getSelectedItemPosition();
             city = this.mViewHolder.spinnerCities.getItemAtPosition(idCity).toString();
-            InputStream is = getResources().openRawResource(R.raw.banco_irradiancia);
+            //Pega as informações da cidade escolhida
+            is = getResources().openRawResource(R.raw.banco_irradiancia);
             String[] cityVec = CSVRead.getCity(idCity, stateName, is);
 
             //Pegando as informações do estado
@@ -220,6 +222,13 @@ public class CalculoActivity extends AppCompatActivity {
                     intent.putExtra(Constants.EXTRA_TARIFA, Double.parseDouble(stateVec[Constants.iEST_TARIFA]));
                 }
 
+                //Fechar o InputStream
+                try {
+                    is.close();
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+
                 //Mudar de activity
                 startActivity(intent);
             }
@@ -227,6 +236,15 @@ public class CalculoActivity extends AppCompatActivity {
             //Se algum erro ocorrer, pede para o usuário informar um número real
             Toast.makeText(this, R.string.informe_um_numero, Toast.LENGTH_LONG).show();
             e.printStackTrace();
+        } finally {
+            //Fechar o InputStream, se ocorreu algum erro
+            try {
+                if(is!=null){
+                    is.close();
+                }
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 

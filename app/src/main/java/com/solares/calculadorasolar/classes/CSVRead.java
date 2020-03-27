@@ -14,9 +14,11 @@ public class CSVRead {
 
     public static String[] getCity(int idCity, String stateName, InputStream is){
         String[] values = new String[0];
+        BufferedReader bufferedReader=null;
         int currentLine=0;
+
         try {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
+            bufferedReader = new BufferedReader(new InputStreamReader(is));
             String line = "";
             bufferedReader.readLine(); //Ignora a primeira linha (cabeçário)
             while ((line = bufferedReader.readLine()) != null) {
@@ -24,12 +26,26 @@ public class CSVRead {
                 if (stateName.equals(values[0])){ //Se essa linha for a primeira linha do estado correto
                     currentLine = 0;
                     if (idCity == currentLine) { //Se for igual a zero (primeira cidade)
+                        //Fechar o bufferedReader
+                        try {
+                            bufferedReader.close();
+                        } catch (IOException ioex){
+                            ioex.printStackTrace();
+                        }
+
                         return values;
                     }
                     currentLine++;
                     while ((line = bufferedReader.readLine()) != null) {
                         values = line.split(divider);
                         if (idCity == currentLine) {
+                            //Fechar o bufferedReader
+                            try {
+                                bufferedReader.close();
+                            } catch (IOException ioex){
+                                ioex.printStackTrace();
+                            }
+
                             return values;
                         }
                         currentLine++;
@@ -38,20 +54,29 @@ public class CSVRead {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            //Fechar o bufferedReader
+            try {
+                if(bufferedReader!=null){
+                    bufferedReader.close();
+                }
+            } catch (IOException ioex){
+                ioex.printStackTrace();
+            }
         }
 
         return null;
     }
-
 
     public static String[] DefineSolarPanel(InputStream is, double WpNeeded, float AreaAlvo){
         String[] cheaperPanel;
         String[] currentPanel;
         String line;
         double currentCost, cheaperCost, precoTotal;
+        BufferedReader bufferedReader=null;
 
         try{
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
+            bufferedReader = new BufferedReader(new InputStreamReader(is));
             bufferedReader.readLine();
             line = bufferedReader.readLine();
             cheaperPanel = line.split(divider);
@@ -87,10 +112,28 @@ public class CSVRead {
                     cheaperPanel = currentPanel;
                 }
             }
+            //Fechar o bufferedReader
+            try {
+                bufferedReader.close();
+            } catch (IOException ioex){
+                ioex.printStackTrace();
+            }
+
             return cheaperPanel;
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            //Fechar o bufferedReader se ocorreu algum erro
+            try {
+                if(bufferedReader!=null){
+                    bufferedReader.close();
+                }
+            } catch (IOException ioex){
+                ioex.printStackTrace();
+            }
         }
+
+        //Se der algum erro, retorna uma string vazia
         String[] error = {""};
         return error;
 
@@ -118,16 +161,37 @@ public class CSVRead {
         String stateName = cityVec[Constants.iCID_ESTADO];
         String[] values;
         String line;
+        BufferedReader bufferedReader=null;
+
         try{
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
+            bufferedReader = new BufferedReader(new InputStreamReader(is));
+            //Passar por todas as linhas do arquivo de estados
             while ((line = bufferedReader.readLine()) != null) {
                 values = line.split(divider);
                 if (stateName.equals(values[0])){ //Se essa linha for a do estado correto
+
+                    //Fechar o bufferedReader
+                    try {
+                        bufferedReader.close();
+                    } catch (IOException ioex){
+                        ioex.printStackTrace();
+                    }
+
+                    //Retorna as informações do estado em um array de Strings
                     return values;
                 }
             }
         } catch (Exception e){
             e.printStackTrace();
+        } finally {
+            //Fechar o bufferedReader, se houve algum erro
+            try {
+                if(bufferedReader!=null){
+                    bufferedReader.close();
+                }
+            } catch (IOException ioex){
+                ioex.printStackTrace();
+            }
         }
 
         return null;
@@ -138,9 +202,10 @@ public class CSVRead {
         String line;
         double currentCost, cheaperCost, WpGenerated;
         int numberInvertors;
+        BufferedReader bufferedReader = null;
         WpGenerated = Double.parseDouble(solarPanel[Constants.iPANEL_QTD]) * Double.parseDouble(solarPanel[Constants.iPANEL_POTENCIA]);
         try{
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
+            bufferedReader = new BufferedReader(new InputStreamReader(is));
             bufferedReader.readLine(); //Joga fora a primeira
             line = bufferedReader.readLine();
             cheaperInvertor = line.split(divider);
@@ -162,9 +227,25 @@ public class CSVRead {
                 }
             }
 
+            //Fechar o bufferedReader
+            try {
+                bufferedReader.close();
+            } catch (IOException ioex){
+                ioex.printStackTrace();
+            }
+
             return cheaperInvertor;
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            //Fechar o bufferedReader, se houve algum erro
+            try {
+                if(bufferedReader!=null){
+                    bufferedReader.close();
+                }
+            } catch (IOException ioex){
+                ioex.printStackTrace();
+            }
         }
 
         String[] error = {""};

@@ -3,6 +3,8 @@ package com.solares.calculadorasolar.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -10,6 +12,8 @@ import android.widget.TextView;
 import com.solares.calculadorasolar.R;
 import com.solares.calculadorasolar.classes.AutoSizeText;
 import com.solares.calculadorasolar.classes.Constants;
+
+import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensionsAndSetTariff;
 
 public class ResultadoActivity extends AppCompatActivity{
 
@@ -19,84 +23,93 @@ public class ResultadoActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_resultado);
 
-        Intent intent = getIntent();
-        final String[] cityVec = intent.getStringArrayExtra(Constants.EXTRA_VETOR_CIDADE);
-        final String NomeCidade = intent.getStringExtra(Constants.EXTRA_CIDADE);
-        final double custoReais = intent.getDoubleExtra(Constants.EXTRA_CUSTO_REAIS, 0.0);
-        final double consumokWh = intent.getDoubleExtra(Constants.EXTRA_CONSUMO, 0.0);
-        final double potenciaNecessaria = intent.getDoubleExtra(Constants.EXTRA_POTENCIA, 0.0);
-        final String[] placaEscolhida = intent.getStringArrayExtra(Constants.EXTRA_PLACAS);
-        final double area = intent.getDoubleExtra(Constants.EXTRA_AREA, 0.0);
-        final String[] inversor = intent.getStringArrayExtra(Constants.EXTRA_INVERSORES);
-        final double custoParcial = intent.getDoubleExtra(Constants.EXTRA_CUSTO_PARCIAL, 0.0);
-        final double custoTotal = intent.getDoubleExtra(Constants.EXTRA_CUSTO_TOTAL, 0.0);
-        final double geracaoAnual = intent.getDoubleExtra(Constants.EXTRA_GERACAO, 0.0);
-        final double lucro = intent.getDoubleExtra(Constants.EXTRA_LUCRO, 0.0);
-        final double taxaRetornoInvestimento = intent.getDoubleExtra(Constants.EXTRA_TAXA_DE_RETORNO, 0.0);
-        final double indiceLucratividade = intent.getDoubleExtra(Constants.EXTRA_INDICE_LUCRATICVIDADE, 0.0);
-        final double LCOE = intent.getDoubleExtra(Constants.EXTRA_LCOE, 0.0);
-        final int tempoRetorno = intent.getIntExtra(Constants.EXTRA_TEMPO_RETORNO, 0);
-        final double horaSolar = intent.getDoubleExtra(Constants.EXTRA_HORA_SOLAR, 0.0);
-        final double tarifaMensal = intent.getDoubleExtra(Constants.EXTRA_TARIFA, 0.0);
+        try {
 
-        TextView textTituloResultado = findViewById(R.id.text_titulo_resultado);
-        AutoSizeText.AutoSizeTextView(textTituloResultado, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 4f);
+            Intent intent = getIntent();
+            final String[] cityVec = intent.getStringArrayExtra(Constants.EXTRA_VETOR_CIDADE);
+            final String NomeCidade = intent.getStringExtra(Constants.EXTRA_CIDADE);
+            final double custoReais = intent.getDoubleExtra(Constants.EXTRA_CUSTO_REAIS, 0.0);
+            final double consumokWh = intent.getDoubleExtra(Constants.EXTRA_CONSUMO, 0.0);
+            final double potenciaNecessaria = intent.getDoubleExtra(Constants.EXTRA_POTENCIA, 0.0);
+            final String[] placaEscolhida = intent.getStringArrayExtra(Constants.EXTRA_PLACAS);
+            final double area = intent.getDoubleExtra(Constants.EXTRA_AREA, 0.0);
+            final String[] inversor = intent.getStringArrayExtra(Constants.EXTRA_INVERSORES);
+            final double custoParcial = intent.getDoubleExtra(Constants.EXTRA_CUSTO_PARCIAL, 0.0);
+            final double custoTotal = intent.getDoubleExtra(Constants.EXTRA_CUSTO_TOTAL, 0.0);
+            final double geracaoAnual = intent.getDoubleExtra(Constants.EXTRA_GERACAO, 0.0);
+            final double lucro = intent.getDoubleExtra(Constants.EXTRA_LUCRO, 0.0);
+            final double taxaRetornoInvestimento = intent.getDoubleExtra(Constants.EXTRA_TAXA_DE_RETORNO, 0.0);
+            final double indiceLucratividade = intent.getDoubleExtra(Constants.EXTRA_INDICE_LUCRATICVIDADE, 0.0);
+            final double LCOE = intent.getDoubleExtra(Constants.EXTRA_LCOE, 0.0);
+            final int tempoRetorno = intent.getIntExtra(Constants.EXTRA_TEMPO_RETORNO, 0);
+            final double horaSolar = intent.getDoubleExtra(Constants.EXTRA_HORA_SOLAR, 0.0);
+            final double tarifaMensal = intent.getDoubleExtra(Constants.EXTRA_TARIFA, 0.0);
 
-        Button buttonDados = findViewById(R.id.button_dados);
-        AutoSizeText.AutoSizeButton(buttonDados, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
-        Button buttonInstalacao = findViewById(R.id.button_instalacao);
-        AutoSizeText.AutoSizeButton(buttonInstalacao, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
-        Button buttonAnalise = findViewById(R.id.button_analise);
-        AutoSizeText.AutoSizeButton(buttonAnalise, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
-        Button buttonIndicesEconomicos = findViewById(R.id.button_indices_economicos);
-        AutoSizeText.AutoSizeButton(buttonIndicesEconomicos, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
-        Button buttonFinalizar = findViewById(R.id.button_finalizar);
-        AutoSizeText.AutoSizeButton(buttonFinalizar, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 4f);
-        Button buttonAjustarArea = findViewById(R.id.button_ajustar_area);
-        AutoSizeText.AutoSizeButton(buttonAjustarArea, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
+            //Pegando informações sobre o dispositivo, para regular o tamanho da letra (fonte)
+            //Essa função pega as dimensões e as coloca em váriaveis globais
+            GetPhoneDimensionsAndSetTariff(this, tarifaMensal);
+
+            TextView textTituloResultado = findViewById(R.id.text_titulo_resultado);
+            AutoSizeText.AutoSizeTextView(textTituloResultado, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
+            Button buttonDados = findViewById(R.id.button_dados);
+            AutoSizeText.AutoSizeButton(buttonDados, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
+            Button buttonInstalacao = findViewById(R.id.button_instalacao);
+            AutoSizeText.AutoSizeButton(buttonInstalacao, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
+            Button buttonAnalise = findViewById(R.id.button_analise);
+            AutoSizeText.AutoSizeButton(buttonAnalise, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
+            Button buttonIndicesEconomicos = findViewById(R.id.button_indices_economicos);
+            AutoSizeText.AutoSizeButton(buttonIndicesEconomicos, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
+            Button buttonFinalizar = findViewById(R.id.button_finalizar);
+            AutoSizeText.AutoSizeButton(buttonFinalizar, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
+            Button buttonAjustarArea = findViewById(R.id.button_ajustar_area);
+            AutoSizeText.AutoSizeButton(buttonAjustarArea, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
 
-        buttonDados.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AbrirActivityDados(custoReais, consumokWh, horaSolar, tarifaMensal, cityVec, NomeCidade);
-            }
-        });
+            buttonDados.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AbrirActivityDados(custoReais, consumokWh, horaSolar, tarifaMensal, cityVec, NomeCidade);
+                }
+            });
 
-        buttonInstalacao.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AbrirActivityInstalacao(potenciaNecessaria, placaEscolhida, area, inversor);
-            }
-        });
+            buttonInstalacao.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AbrirActivityInstalacao(potenciaNecessaria, placaEscolhida, area, inversor);
+                }
+            });
 
-        buttonAnalise.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AbrirActivityAnalise(custoParcial, custoTotal, geracaoAnual);
-            }
-        });
+            buttonAnalise.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AbrirActivityAnalise(custoParcial, custoTotal, geracaoAnual);
+                }
+            });
 
-        buttonIndicesEconomicos.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AbrirActivityIndices(lucro, taxaRetornoInvestimento, indiceLucratividade, LCOE, tempoRetorno);
-            }
-        });
+            buttonIndicesEconomicos.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AbrirActivityIndices(lucro, taxaRetornoInvestimento, indiceLucratividade, LCOE, tempoRetorno);
+                }
+            });
 
-        buttonAjustarArea.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AbrirActivityArea(cityVec, NomeCidade, custoReais, area);
-            }
-        });
+            buttonAjustarArea.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AbrirActivityArea(cityVec, NomeCidade, custoReais, area);
+                }
+            });
 
-        buttonFinalizar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FinalizarCalculo();
-            }
-        });
+            buttonFinalizar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FinalizarCalculo();
+                }
+            });
+
+        } catch (Exception e){
+            Log.i("ResultadoActivity", "Erro na captura de intents");
+        }
     }
 
     public void AbrirActivityDados(double custoReais, double consumokWh, double horaSolar, double tarifaMensal, String[] cityVec, String NomeCidade){
@@ -148,7 +161,7 @@ public class ResultadoActivity extends AppCompatActivity{
 
     public void FinalizarCalculo(){
         //Limpa tarifa inserida
-        CalculoActivity.PtarifaPassada = 0.0;
+        MainActivity.PtarifaPassada = 0.0;
 
         Intent intent = new Intent(this, CreditoActivity.class);
         startActivity(intent);

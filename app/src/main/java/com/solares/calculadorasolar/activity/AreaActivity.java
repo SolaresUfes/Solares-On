@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -21,6 +23,9 @@ import com.solares.calculadorasolar.classes.Constants;
 import java.io.InputStream;
 import java.util.Locale;
 
+import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensionsAndSetTariff;
+import static com.solares.calculadorasolar.activity.MainActivity.PtarifaPassada;
+
 public class AreaActivity extends AppCompatActivity {
 
     public static float porcent = 3f;
@@ -33,26 +38,30 @@ public class AreaActivity extends AppCompatActivity {
 
         context = getApplicationContext();
 
+        //Pegando informações sobre o dispositivo, para regular o tamanho da letra (fonte)
+        //Essa função pega as dimensões e as coloca em váriaveis globais
+        GetPhoneDimensionsAndSetTariff(this, PtarifaPassada);
+
         TextView textTituloArea = findViewById(R.id.text_titulo_area);
-        AutoSizeText.AutoSizeTextView(textTituloArea, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 4f);
+        AutoSizeText.AutoSizeTextView(textTituloArea, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
 
         Button buttonRecalcArea = findViewById(R.id.button_recalcular_area);
-        AutoSizeText.AutoSizeButton(buttonRecalcArea, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 4f);
+        AutoSizeText.AutoSizeButton(buttonRecalcArea, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
 
         Button buttonVoltar = findViewById(R.id.button_voltar);
-        AutoSizeText.AutoSizeButton(buttonVoltar, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 4f);
+        AutoSizeText.AutoSizeButton(buttonVoltar, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
 
         TextView textAreaAtual = findViewById(R.id.text_area_atual);
-        AutoSizeText.AutoSizeTextView(textAreaAtual, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
+        AutoSizeText.AutoSizeTextView(textAreaAtual, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
         TextView textNovaArea = findViewById(R.id.text_nova_area);
-        AutoSizeText.AutoSizeTextView(textNovaArea, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
+        AutoSizeText.AutoSizeTextView(textNovaArea, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
         final EditText editArea = findViewById(R.id.editText_area);
-        AutoSizeText.AutoSizeEditText(editArea, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
+        AutoSizeText.AutoSizeEditText(editArea, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
         TextView textUnidadeArea = findViewById(R.id.text_unidade);
-        AutoSizeText.AutoSizeTextView(textUnidadeArea, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
+        AutoSizeText.AutoSizeTextView(textUnidadeArea, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
         ConstraintLayout layout = findViewById(R.id.layout_area);
 
@@ -69,20 +78,26 @@ public class AreaActivity extends AppCompatActivity {
             public void onClick(View v) {
                  try {
                      //Pega a área digitada no edit text
-                     float AreaAlvo = Float.parseFloat(editArea.getText().toString());
+                     final float AreaAlvo = Float.parseFloat(editArea.getText().toString());
 
                      //Se a área for menor ou igual a zero, pede pro usuário inserir novamente
                      if (AreaAlvo <= 0f) {
                          Toast.makeText(AreaActivity.this, "Insira uma nova área!", Toast.LENGTH_LONG).show();
                      } else {
                          //Cria os input streams, de onde vai-se ler os arquivos .csv e pegar as informações necessárias
-                         InputStream isEstado, isPaineis, isInversores;
-                         isEstado = getResources().openRawResource(R.raw.banco_estados);
-                         isPaineis = getResources().openRawResource(R.raw.banco_paineis);
-                         isInversores = getResources().openRawResource(R.raw.banco_inversores);
+                         final InputStream isEstado = getResources().openRawResource(R.raw.banco_estados);
+                         final InputStream isPaineis = getResources().openRawResource(R.raw.banco_paineis);
+                         final InputStream isInversores = getResources().openRawResource(R.raw.banco_inversores);
                          //Refaz o cálculo com a nova área e inicia a ResultadoActivity
-                         Intent intent = ReCalculate(AreaAlvo, cityVec, NomeCidade, custoReais, isEstado, isPaineis, isInversores, getApplicationContext());
-                         startActivity(intent);
+                         //Criar uma thread para fazer o cálculo pois é um processamento demorado
+                         Thread thread = new Thread(){
+                             public void run(){
+                                 Intent intent;
+                                 intent = ReCalculate(AreaAlvo, cityVec, NomeCidade, custoReais, isEstado, isPaineis, isInversores, getApplicationContext());
+                                 startActivity(intent);
+                             }
+                         };
+                         thread.start();
                      }
                  } catch (Exception e){
                      Toast.makeText(AreaActivity.this, "Insira uma nova área!", Toast.LENGTH_LONG).show();
@@ -113,43 +128,50 @@ public class AreaActivity extends AppCompatActivity {
                                      InputStream isEstado, InputStream isPaineis, InputStream isInversores,
                                      Context MyContext) {
         try {
-            double solarHour = CalculoActivity.MeanSolarHour(cityVec);
+            double solarHour = MainActivity.MeanSolarHour(cityVec);
 
             //Pega informações do estado
             String[] stateVec;
             if(cityVec != null){
                 stateVec = CSVRead.getState(cityVec, isEstado);
+                //Verifica se foi passada alguma tarifa pelo usuário:
+                if(PtarifaPassada != 0.0){
+                    if(stateVec != null) {
+                        //Se foi passada uma tarifa, ela é colocada no lugar da do estado
+                        stateVec[Constants.iEST_TARIFA] = Double.toString(PtarifaPassada);
+                    }
+                }
             } else {
                 throw new Exception("Cidade não foi encontrada");
             }
 
             //Calcula o consumo mensal em KWh
-            CalculoActivity.costReais = CalculoActivity.ValueWithoutTaxes(custoReais);
+            MainActivity.costReais = MainActivity.ValueWithoutTaxes(custoReais);
             double energyConsumed;
             if(stateVec != null){
-                energyConsumed = CalculoActivity.ConvertToKWh(CalculoActivity.costReais, stateVec);
+                energyConsumed = MainActivity.ConvertToKWh(MainActivity.costReais, stateVec);
             } else {
                 throw new Exception("Estado não foi encontrado");
             }
 
-            double capacityWp = CalculoActivity.FindCapacity(energyConsumed, solarHour);
+            double capacityWp = MainActivity.FindCapacity(energyConsumed, solarHour);
             if(capacityWp < 0.0){
                 Toast.makeText(MyContext, "O seu consumo de energia é muito baixo!", Toast.LENGTH_LONG).show();
             } else {
                 //Definindo as placas
                 String[] solarPanel = CSVRead.DefineSolarPanel(isPaineis, capacityWp, AreaAlvo);
-                double area = CalculoActivity.DefineArea(solarPanel);
+                double area = MainActivity.DefineArea(solarPanel);
 
                 //Definindo os inversores
                 String[] invertor = CSVRead.DefineInvertor(isInversores, solarPanel);
 
                 //Definindo os custos
-                double[] costs = CalculoActivity.DefineCosts(solarPanel, invertor);
+                double[] costs = MainActivity.DefineCosts(solarPanel, invertor);
 
                 //Calculo da energia produzida em um ano
-                double anualGeneration = CalculoActivity.EstimateAnualGeneration(solarPanel, stateVec, cityVec);
+                double anualGeneration = MainActivity.EstimateAnualGeneration(solarPanel, stateVec, cityVec);
 
-                CalculoActivity.GetEconomicInformation(anualGeneration, invertor, energyConsumed, costs[Constants.iCOSTS_TOTAL], stateVec);
+                MainActivity.GetEconomicInformation(anualGeneration, invertor, energyConsumed, costs[Constants.iCOSTS_TOTAL], stateVec);
 
                 //Fechar as inputStreams //É necessário criar 3 try-catch porque se houver uma falha em um is, os outros ainda são fechados normalmente
                 try {
@@ -182,15 +204,15 @@ public class AreaActivity extends AppCompatActivity {
                 intent.putExtra(Constants.EXTRA_CUSTO_PARCIAL, costs[Constants.iCOSTS_PARCIAL]);
                 intent.putExtra(Constants.EXTRA_CUSTO_TOTAL, costs[Constants.iCOSTS_TOTAL]);
                 intent.putExtra(Constants.EXTRA_GERACAO, anualGeneration);
-                intent.putExtra(Constants.EXTRA_LUCRO, CalculoActivity.Ppayback);
-                intent.putExtra(Constants.EXTRA_TAXA_DE_RETORNO, CalculoActivity.PInternalRateOfReturn);
-                intent.putExtra(Constants.EXTRA_INDICE_LUCRATICVIDADE, CalculoActivity.PindiceLucratividade);
-                intent.putExtra(Constants.EXTRA_LCOE, CalculoActivity.PLCOE);
-                intent.putExtra(Constants.EXTRA_TEMPO_RETORNO, CalculoActivity.PTempoRetorno);
+                intent.putExtra(Constants.EXTRA_LUCRO, MainActivity.Ppayback);
+                intent.putExtra(Constants.EXTRA_TAXA_DE_RETORNO, MainActivity.PInternalRateOfReturn);
+                intent.putExtra(Constants.EXTRA_INDICE_LUCRATICVIDADE, MainActivity.PindiceLucratividade);
+                intent.putExtra(Constants.EXTRA_LCOE, MainActivity.PLCOE);
+                intent.putExtra(Constants.EXTRA_TEMPO_RETORNO, MainActivity.PTempoRetorno);
                 intent.putExtra(Constants.EXTRA_HORA_SOLAR, solarHour);
                 //Se o usuário modificou a tarifa, ela será passada assim pra próxima activity
-                if(CalculoActivity.PtarifaPassada != 0.0){
-                    intent.putExtra(Constants.EXTRA_TARIFA, CalculoActivity.PtarifaPassada);
+                if(MainActivity.PtarifaPassada != 0.0){
+                    intent.putExtra(Constants.EXTRA_TARIFA, MainActivity.PtarifaPassada);
                 } else {
                     intent.putExtra(Constants.EXTRA_TARIFA, Double.parseDouble(stateVec[Constants.iEST_TARIFA]));
                 }
@@ -228,7 +250,11 @@ public class AreaActivity extends AppCompatActivity {
     }
 
     public void hideKeyboard(View view) {
-        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(CalculoActivity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(MainActivity.INPUT_METHOD_SERVICE);
+        if(inputMethodManager != null){
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        } else {
+            Log.i("AreaActivity", "Error while hiding keyboard");
+        }
     }
 }

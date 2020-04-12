@@ -13,6 +13,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensionsAndSetTariff;
+import static com.solares.calculadorasolar.activity.MainActivity.PtarifaPassada;
+
 public class CreditoActivity extends AppCompatActivity {
 
     @Override
@@ -20,14 +23,18 @@ public class CreditoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_credito);
 
+        //Pegando informações sobre o dispositivo, para regular o tamanho da letra (fonte)
+        //Essa função pega as dimensões e as coloca em váriaveis globais
+        GetPhoneDimensionsAndSetTariff(this, PtarifaPassada);
+
         Button buttonInstagram = findViewById(R.id.button_instagram);
-        AutoSizeText.AutoSizeButton(buttonInstagram, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 3f);
+        AutoSizeText.AutoSizeButton(buttonInstagram, MainActivity.alturaTela, MainActivity.larguraTela, 3f);
 
         Button buttonRecalcular = findViewById(R.id.button_recalcular);
-        AutoSizeText.AutoSizeButton(buttonRecalcular, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 3f);
+        AutoSizeText.AutoSizeButton(buttonRecalcular, MainActivity.alturaTela, MainActivity.larguraTela, 3f);
 
         TextView textConheca = findViewById(R.id.text_conheca);
-        AutoSizeText.AutoSizeTextView(textConheca, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 3f);
+        AutoSizeText.AutoSizeTextView(textConheca, MainActivity.alturaTela, MainActivity.larguraTela, 3f);
 
         ImageView imageInstagram = findViewById(R.id.imageViewInstagram);
 
@@ -47,7 +54,7 @@ public class CreditoActivity extends AppCompatActivity {
             }
         });
 
-        //Se o usuário clicar no botão recalcular, limpa-se todas as activities e volta à activity CalculoActivity
+        //Se o usuário clicar no botão recalcular, limpa-se todas as activities e volta à activity MainActivity
         buttonRecalcular.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,9 +65,9 @@ public class CreditoActivity extends AppCompatActivity {
 
     public void FinalizarActivity(){
         //Limpa tarifa inserida
-        CalculoActivity.PtarifaPassada = 0.0;
+        MainActivity.PtarifaPassada = 0.0;
 
-        Intent intent = new Intent(this, CalculoActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         //Isso limpa as activities já abertas
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);

@@ -14,6 +14,9 @@ import com.solares.calculadorasolar.classes.Constants;
 
 import java.util.Locale;
 
+import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensionsAndSetTariff;
+import static com.solares.calculadorasolar.activity.MainActivity.PtarifaPassada;
+
 public class DadosActivity extends AppCompatActivity {
 
     public float porcent = 3f;
@@ -32,53 +35,57 @@ public class DadosActivity extends AppCompatActivity {
         final String[] cityVec = intent.getStringArrayExtra(Constants.EXTRA_VETOR_CIDADE);
         final String cityName = intent.getStringExtra(Constants.EXTRA_CIDADE);
 
+        //Pegando informações sobre o dispositivo, para regular o tamanho da letra (fonte)
+        //Essa função pega as dimensões e as coloca em váriaveis globais
+        GetPhoneDimensionsAndSetTariff(this, tarifaMensal);
+
         //Configurar o título
         TextView textTituloDados = findViewById(R.id.text_titulo_dados);
-        AutoSizeText.AutoSizeTextView(textTituloDados, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 4f);
+        AutoSizeText.AutoSizeTextView(textTituloDados, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
 
         ////////////Configurar o textView de consumo em reais////////////////
         //Pega a view que não muda (diz qual é a informação) e ajusta o tamanho da fonte
         TextView textEstaticoCustoReais = findViewById(R.id.text_consumo_reais_1);
-        AutoSizeText.AutoSizeTextView(textEstaticoCustoReais, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
+        AutoSizeText.AutoSizeTextView(textEstaticoCustoReais, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
         //Pega a view que será usada para escrever a informação, escreve a informação e ajusta o tamanho da fonte
         TextView textCustoReais = findViewById(R.id.text_consumo_reais);
         textCustoReais.setText(String.format(Locale.ITALY,"R$ %.2f", custoReais));
-        AutoSizeText.AutoSizeTextView(textCustoReais, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
+        AutoSizeText.AutoSizeTextView(textCustoReais, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
         ////////////Configurar o textView de consumo em kWh////////////////
         //Pega a view que não muda (diz qual é a informação) e ajusta o tamanho da fonte
         TextView textEstaticoConsumoEnergia = findViewById(R.id.text_consumo_energia_1);
-        AutoSizeText.AutoSizeTextView(textEstaticoConsumoEnergia, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
+        AutoSizeText.AutoSizeTextView(textEstaticoConsumoEnergia, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
         //Pega a view que será usada para escrever a informação, escreve a informação e ajusta o tamanho da fonte
         TextView textConsumoEnergia = findViewById(R.id.text_consumo_energia);
         textConsumoEnergia.setText(String.format(Locale.ITALY, "%.2f kWh", consumokWh));
-        AutoSizeText.AutoSizeTextView(textConsumoEnergia, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
+        AutoSizeText.AutoSizeTextView(textConsumoEnergia, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
         ////////////Configurar o textView de horas de sol pleno////////////////
         //Pega a view que não muda (diz qual é a informação) e ajusta o tamanho da fonte
         TextView textEstaticoHoraSolar = findViewById(R.id.text_hora_solar_1);
-        AutoSizeText.AutoSizeTextView(textEstaticoHoraSolar, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
+        AutoSizeText.AutoSizeTextView(textEstaticoHoraSolar, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
         //Pega a view que será usada para escrever a informação, escreve a informação e ajusta o tamanho da fonte
         TextView textHoraSolar = findViewById(R.id.text_hora_solar);
         textHoraSolar.setText(String.format(Locale.ITALY, "%.2f kWh/m²dia", horaSolar));
-        AutoSizeText.AutoSizeTextView(textHoraSolar, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
+        AutoSizeText.AutoSizeTextView(textHoraSolar, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
         ////////////Configurar o textView da tarifa de energia////////////////
         //Pega a view que não muda (diz qual é a informação) e ajusta o tamanho da fonte
         TextView textEstaticoTarifa = findViewById(R.id.text_tarifa_1);
-        AutoSizeText.AutoSizeTextView(textEstaticoTarifa, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
+        AutoSizeText.AutoSizeTextView(textEstaticoTarifa, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
         //Pega a view que será usada para escrever a informação, escreve a informação e ajusta o tamanho da fonte
         TextView textTarifa = findViewById(R.id.text_tarifa);
         textTarifa.setText(String.format(Locale.ITALY, "R$ %.2f / kWh", tarifaMensal));
-        AutoSizeText.AutoSizeTextView(textTarifa, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
+        AutoSizeText.AutoSizeTextView(textTarifa, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
         ////////////Configurar o botão de modificar a tarifa////////////////
         Button buttonTarifa = findViewById(R.id.button_modificar_tarifa);
-        AutoSizeText.AutoSizeButton(buttonTarifa, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
+        AutoSizeText.AutoSizeButton(buttonTarifa, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
         ////////////Configurar o botão de voltar////////////////
         Button buttonVoltar = findViewById(R.id.button_voltar);
-        AutoSizeText.AutoSizeButton(buttonVoltar, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 4f);
+        AutoSizeText.AutoSizeButton(buttonVoltar, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
 
         //Listener do botão modificar a tarifa, se ele for clicado, abre uma pop activity
         buttonTarifa.setOnClickListener(new View.OnClickListener() {

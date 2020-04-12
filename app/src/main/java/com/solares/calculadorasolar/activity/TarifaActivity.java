@@ -9,6 +9,7 @@ import com.solares.calculadorasolar.classes.Constants;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -19,6 +20,9 @@ import android.widget.Toast;
 import java.io.InputStream;
 import java.util.Locale;
 
+import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensionsAndSetTariff;
+import static com.solares.calculadorasolar.activity.MainActivity.PtarifaPassada;
+
 public class TarifaActivity extends AppCompatActivity {
 
     public static float porcent = 3f;
@@ -28,36 +32,40 @@ public class TarifaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tarifa);
 
+        //Pegando informações sobre o dispositivo, para regular o tamanho da letra (fonte)
+        //Essa função pega as dimensões e as coloca em váriaveis globais
+        GetPhoneDimensionsAndSetTariff(this, PtarifaPassada);
+
         //Pega o layout para poder colocar um listener nele (esconder o teclado)
         ConstraintLayout layout = findViewById(R.id.layout_tarifa);
 
         //Pega o view do título e ajusta o tamanho da fonte
         TextView textTituloTarifa = findViewById(R.id.text_titulo_tarifa);
-        AutoSizeText.AutoSizeTextView(textTituloTarifa, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 4f);
+        AutoSizeText.AutoSizeTextView(textTituloTarifa, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
 
         //Pega o view da tarifa atual e ajusta o tamanho da fonte
         TextView textTarifaAtual = findViewById(R.id.text_tarifa_atual);
-        AutoSizeText.AutoSizeTextView(textTarifaAtual, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
+        AutoSizeText.AutoSizeTextView(textTarifaAtual, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
         //Pega o view da nova tarifa e ajusta o tamanho da fonte
         TextView textNovaTarifa = findViewById(R.id.text_nova_tarifa);
-        AutoSizeText.AutoSizeTextView(textNovaTarifa, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
+        AutoSizeText.AutoSizeTextView(textNovaTarifa, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
         //Pega o view do edit text para a nova tarifa e ajusta o tamanho da fonte
         final EditText editTarifa = findViewById(R.id.editText_tarifa);
-        AutoSizeText.AutoSizeEditText(editTarifa, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
+        AutoSizeText.AutoSizeEditText(editTarifa, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
         //Pega o view da unidade e ajusta o tamanho da fonte
         TextView textUnidadeTarifa = findViewById(R.id.text_unidade_tarifa);
-        AutoSizeText.AutoSizeTextView(textUnidadeTarifa, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
+        AutoSizeText.AutoSizeTextView(textUnidadeTarifa, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
         //Pega o view do botão pra recalcular e ajusta o tamanho da fonte
         Button buttonRecalcTarifa = findViewById(R.id.button_recalcular_tarifa);
-        AutoSizeText.AutoSizeButton(buttonRecalcTarifa, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 4f);
+        AutoSizeText.AutoSizeButton(buttonRecalcTarifa, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
 
         //Pega o view do botão para voltar e ajusta o tamanho da fonte
         Button buttonVoltar = findViewById(R.id.button_voltar);
-        AutoSizeText.AutoSizeButton(buttonVoltar, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 4f);
+        AutoSizeText.AutoSizeButton(buttonVoltar, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
 
 
         //pegar os intents
@@ -98,29 +106,41 @@ public class TarifaActivity extends AppCompatActivity {
 
 
     public void hideKeyboard(View view) {
-        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(CalculoActivity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(MainActivity.INPUT_METHOD_SERVICE);
+        if(inputMethodManager != null){
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        } else {
+            Log.i("TarifaActivity", "Error while hiding keyboard");
+        }
     }
 
-    public void AtualizarTarifa(double custoReais, String[] cityVec, String cityName, EditText editTarifa){
+    public void AtualizarTarifa(final double custoReais, final String[] cityVec, final String cityName, final EditText editTarifa){
         try {
             //Pega a tarifa digitada no edit text
             double NovaTarifa = Double.parseDouble(editTarifa.getText().toString());
 
             //Se a tarifa for menor ou igual a zero, pede pro usuário inserir novamente
             if (NovaTarifa <= 0.0) {
-                Toast.makeText(this, "Insira uma nova tarifa!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Insira uma nova tarifa! Valor menor ou igual a zero!", Toast.LENGTH_LONG).show();
+            } else if (NovaTarifa > custoReais/Constants.COST_DISP){  //Se a tarifa for muito grande
+                Toast.makeText(this, "Insira uma nova tarifa! Valor muito alto!", Toast.LENGTH_LONG).show();
             } else {
                 //Atualiza a tarifa passada
-                CalculoActivity.PtarifaPassada = NovaTarifa;
+                MainActivity.PtarifaPassada = NovaTarifa;
                 //Cria os input streams, de onde vai-se ler os arquivos .csv e pegar as informações necessárias
-                InputStream isEstado, isPaineis, isInversores;
-                isEstado = getResources().openRawResource(R.raw.banco_estados);
-                isPaineis = getResources().openRawResource(R.raw.banco_paineis);
-                isInversores = getResources().openRawResource(R.raw.banco_inversores);
+                final InputStream isEstado = getResources().openRawResource(R.raw.banco_estados);
+                final InputStream isPaineis = getResources().openRawResource(R.raw.banco_paineis);
+                final InputStream isInversores = getResources().openRawResource(R.raw.banco_inversores);
                 //Refaz o cálculo com a nova área e inicia a ResultadoActivity
-                Intent intent = AreaActivity.ReCalculate(-1, cityVec, cityName, custoReais, isEstado, isPaineis, isInversores, getApplicationContext());
-                startActivity(intent);
+                //Criar uma thread para fazer o cálculo pois é um processamento demorado
+                Thread thread = new Thread(){
+                    public void run(){
+                        Intent intent = AreaActivity.ReCalculate(-1, cityVec, cityName, custoReais, isEstado, isPaineis, isInversores, getApplicationContext());
+                        startActivity(intent);
+                    }
+                };
+                thread.start();
+
             }
         } catch (Exception e){
             Toast.makeText(this, "Insira uma nova tarifa, com um ponto separando a parte real da inteira", Toast.LENGTH_LONG).show();

@@ -14,6 +14,9 @@ import com.solares.calculadorasolar.classes.Constants;
 
 import java.util.Locale;
 
+import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensionsAndSetTariff;
+import static com.solares.calculadorasolar.activity.MainActivity.PtarifaPassada;
+
 public class IndicesEconomicosActivity extends AppCompatActivity {
 
     public float porcent = 3f;
@@ -29,37 +32,41 @@ public class IndicesEconomicosActivity extends AppCompatActivity {
         final double LCOE = intent.getDoubleExtra(Constants.EXTRA_LCOE, 0.0);
         final int tempoRetorno = intent.getIntExtra(Constants.EXTRA_TEMPO_RETORNO, 0);
 
+        //Pegando informações sobre o dispositivo, para regular o tamanho da letra (fonte)
+        //Essa função pega as dimensões e as coloca em váriaveis globais
+        GetPhoneDimensionsAndSetTariff(this, PtarifaPassada);
+
         TextView textTituloIndices = findViewById(R.id.text_titulo_indices);
-        AutoSizeText.AutoSizeTextView(textTituloIndices, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 4f);
+        AutoSizeText.AutoSizeTextView(textTituloIndices, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
 
         TextView textEstaticoLucro = findViewById(R.id.text_lucro_1);
-        AutoSizeText.AutoSizeTextView(textEstaticoLucro, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
+        AutoSizeText.AutoSizeTextView(textEstaticoLucro, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
         TextView textLucro = findViewById(R.id.text_lucro);
         textLucro.setText(String.format(Locale.ITALY,"R$ %.2f", lucro));
-        AutoSizeText.AutoSizeTextView(textLucro, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
+        AutoSizeText.AutoSizeTextView(textLucro, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
         TextView textEstaticoTaxaRetorno = findViewById(R.id.text_taxa_retorno_1);
-        AutoSizeText.AutoSizeTextView(textEstaticoTaxaRetorno, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
+        AutoSizeText.AutoSizeTextView(textEstaticoTaxaRetorno, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
         TextView textTaxaRetorno = findViewById(R.id.text_taxa_retorno);
         textTaxaRetorno.setText(String.format(Locale.ITALY, "%.2f%%", taxaRetornoInvestimento));
-        AutoSizeText.AutoSizeTextView(textTaxaRetorno, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
+        AutoSizeText.AutoSizeTextView(textTaxaRetorno, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
         TextView textEstaticoIndiceLucratividade = findViewById(R.id.text_indice_lucratividade_1);
-        AutoSizeText.AutoSizeTextView(textEstaticoIndiceLucratividade, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
+        AutoSizeText.AutoSizeTextView(textEstaticoIndiceLucratividade, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
         TextView textIndiceLucratividade = findViewById(R.id.text_indice_lucratividade);
         textIndiceLucratividade.setText(String.format(Locale.ITALY, "R$ %.2f", indiceLucratividade));
-        AutoSizeText.AutoSizeTextView(textIndiceLucratividade, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
+        AutoSizeText.AutoSizeTextView(textIndiceLucratividade, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
         TextView textEstaticoLCOE = findViewById(R.id.text_LCOE_1);
-        AutoSizeText.AutoSizeTextView(textEstaticoLCOE, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
+        AutoSizeText.AutoSizeTextView(textEstaticoLCOE, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
         TextView textLCOE = findViewById(R.id.text_LCOE);
         textLCOE.setText(String.format(Locale.ITALY, "R$ %.2f", LCOE));
-        AutoSizeText.AutoSizeTextView(textLCOE, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
+        AutoSizeText.AutoSizeTextView(textLCOE, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
         TextView textEstaticoTempo = findViewById(R.id.text_tempo_retorno_1);
-        AutoSizeText.AutoSizeTextView(textEstaticoTempo, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
+        AutoSizeText.AutoSizeTextView(textEstaticoTempo, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
         TextView textTempo = findViewById(R.id.text_tempo_retorno);
-        AutoSizeText.AutoSizeTextView(textTempo, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
+        AutoSizeText.AutoSizeTextView(textTempo, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
         if(tempoRetorno>25){
             textTempo.setText("Nunca");
         } else {
@@ -67,7 +74,7 @@ public class IndicesEconomicosActivity extends AppCompatActivity {
         }
 
         Button buttonVoltar = findViewById(R.id.button_voltar);
-        AutoSizeText.AutoSizeButton(buttonVoltar, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 4f);
+        AutoSizeText.AutoSizeButton(buttonVoltar, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
         buttonVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

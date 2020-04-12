@@ -11,32 +11,49 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activity.CreditoActivity" />
-        <activity android:name=".activity.TarifaActivity" />
-        <activity android:name=".activity.AreaActivity" />
-        <activity
-            android:name=".activity.AnaliseActivity"
+        <activity android:name=".activity.CreditoActivity"
             android:parentActivityName=".activity.ResultadoActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.InstalacaoActivity"
-            android:parentActivityName=".activity.ResultadoActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.DadosActivity"
-            android:parentActivityName=".activity.ResultadoActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.IndicesEconomicosActivity"
-            android:parentActivityName=".activity.ResultadoActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.ResultadoActivity"
-            android:parentActivityName=".activity.CalculoActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.MainActivity"
             android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"/>
+
+        <activity android:name=".activity.TarifaActivity"
+            android:parentActivityName=".activity.DadosActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"/>
+
+        <activity android:name=".activity.AreaActivity"
+            android:parentActivityName=".activity.ResultadoActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"/>
+
+        <activity android:name=".activity.AnaliseActivity"
+            android:parentActivityName=".activity.ResultadoActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+
+        <activity android:name=".activity.InstalacaoActivity"
+            android:parentActivityName=".activity.ResultadoActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"/>
+
+        <activity android:name=".activity.DadosActivity"
+            android:parentActivityName=".activity.ResultadoActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"/>
+
+        <activity android:name=".activity.IndicesEconomicosActivity"
+            android:parentActivityName=".activity.ResultadoActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"/>
+
+        <activity android:name=".activity.ResultadoActivity"
+            android:parentActivityName=".activity.MainActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"/>
+
+        <activity android:name=".activity.MainActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"
             android:windowSoftInputMode="adjustPan|stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -44,11 +61,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activity.CalculoActivity"
-            android:parentActivityName=".activity.MainActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan|stateHidden" />
     </application>
 
 </manifest>

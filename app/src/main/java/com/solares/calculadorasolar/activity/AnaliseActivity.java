@@ -13,6 +13,9 @@ import com.solares.calculadorasolar.classes.Constants;
 
 import java.util.Locale;
 
+import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensionsAndSetTariff;
+import static com.solares.calculadorasolar.activity.MainActivity.PtarifaPassada;
+
 public class AnaliseActivity extends AppCompatActivity {
 
     public final float porcent = 3f;
@@ -26,30 +29,34 @@ public class AnaliseActivity extends AppCompatActivity {
         final double custoTotal = intent.getDoubleExtra(Constants.EXTRA_CUSTO_TOTAL, 0.0);
         final double geracaoAnual = intent.getDoubleExtra(Constants.EXTRA_GERACAO, 0.0);
 
+        //Pegando informações sobre o dispositivo, para regular o tamanho da letra (fonte)
+        //Essa função pega as dimensões e as coloca em váriaveis globais
+        GetPhoneDimensionsAndSetTariff(this, PtarifaPassada);
+
         TextView textResultado = findViewById(R.id.text_resultado_analise);
-        AutoSizeText.AutoSizeTextView(textResultado, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 4f);
+        AutoSizeText.AutoSizeTextView(textResultado, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
 
         // Essas variáveis são as referências para os textos que aparecem no layout.
         TextView textEstaticoCustoParcial = findViewById(R.id.text_custo_parcial_1);
         TextView textCustoParcial = findViewById(R.id.text_custo_parcial);
         textCustoParcial.setText(String.format(Locale.ITALY,"R$ %.2f", custoParcial));
-        AutoSizeText.AutoSizeTextView(textEstaticoCustoParcial, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
-        AutoSizeText.AutoSizeTextView(textCustoParcial, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
+        AutoSizeText.AutoSizeTextView(textEstaticoCustoParcial, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
+        AutoSizeText.AutoSizeTextView(textCustoParcial, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
         TextView textEstaticoCustoTotal = findViewById(R.id.text_custo_total_1);
         TextView textCustoTotal = findViewById(R.id.text_custo_total);
         textCustoTotal.setText(String.format(Locale.ITALY,"R$ %.2f", custoTotal));
-        AutoSizeText.AutoSizeTextView(textEstaticoCustoTotal, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
-        AutoSizeText.AutoSizeTextView(textCustoTotal, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
+        AutoSizeText.AutoSizeTextView(textEstaticoCustoTotal, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
+        AutoSizeText.AutoSizeTextView(textCustoTotal, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
         TextView textEstaticoGeracao = findViewById(R.id.text_geracao_anual_1);
-        AutoSizeText.AutoSizeTextView(textEstaticoGeracao, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
+        AutoSizeText.AutoSizeTextView(textEstaticoGeracao, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
         TextView textGeracao = findViewById(R.id.text_geracao_anual);
         textGeracao.setText(String.format(Locale.ITALY,"%.2f kWh", geracaoAnual));
-        AutoSizeText.AutoSizeTextView(textGeracao, CalculoActivity.alturaTela, CalculoActivity.larguraTela, porcent);
+        AutoSizeText.AutoSizeTextView(textGeracao, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
         Button buttonVoltar = findViewById(R.id.button_voltar);
-        AutoSizeText.AutoSizeButton(buttonVoltar, CalculoActivity.alturaTela, CalculoActivity.larguraTela, 4f);
+        AutoSizeText.AutoSizeButton(buttonVoltar, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
         buttonVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -110,18 +110,26 @@ public class MainActivity extends AppCompatActivity {
         this.mViewHolder.buttonCalc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Verifica se o valor inserido não é muito baixo
-                if(Double.parseDouble(mViewHolder.editCostMonth.getText().toString()) < Constants.COST_DISP/3.0){
-                    Toast.makeText(MainActivity.this, "Valor muito baixo!", Toast.LENGTH_LONG).show();
-                } else {
-                    //Criar uma thread para fazer o cálculo pois é um processamento demorado
-                    Thread thread = new Thread(){
-                        public void run(){
-                            Calculate(AreaAlvo);
-                        }
-                    };
-                    thread.start();
+                double entry;
+                //Verifica se o valor inserido é válido
+                try{
+                    entry = Double.parseDouble(mViewHolder.editCostMonth.getText().toString());
+                    //Verifica se o valor inserido não é muito baixo
+                    if(entry < Constants.COST_DISP/3.0){
+                        Toast.makeText(MainActivity.this, "Valor muito baixo!", Toast.LENGTH_LONG).show();
+                    } else {
+                        //Criar uma thread para fazer o cálculo pois é um processamento demorado
+                        Thread thread = new Thread(){
+                            public void run(){
+                                Calculate(AreaAlvo);
+                            }
+                        };
+                        thread.start();
+                    }
+                } catch (Exception e){
+                    Toast.makeText(MainActivity.this, "Insira um número positivo!", Toast.LENGTH_LONG).show();
                 }
+
             }
         });
 

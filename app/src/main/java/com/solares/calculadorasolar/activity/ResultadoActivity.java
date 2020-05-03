@@ -2,7 +2,9 @@ package com.solares.calculadorasolar.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.util.Log;
 import android.view.View;
@@ -18,6 +20,10 @@ import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensi
 public class ResultadoActivity extends AppCompatActivity{
 
     public float porcent = 3f;
+
+    //Layout usado para deixar o background do pop activity trasnparente
+    public ConstraintLayout layoutResultBackground;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,10 +106,33 @@ public class ResultadoActivity extends AppCompatActivity{
                 }
             });
 
+            //Passar as informações para a activity que os salvara em um .csv
+            final Intent intentForward = new Intent(this, PopActivity.class);
+            intentForward.putExtra(Constants.EXTRA_CIDADE, NomeCidade);
+            intentForward.putExtra(Constants.EXTRA_CUSTO_REAIS, custoReais);
+            intentForward.putExtra(Constants.EXTRA_CONSUMO, consumokWh);
+            intentForward.putExtra(Constants.EXTRA_POTENCIA, potenciaNecessaria);
+            intentForward.putExtra(Constants.EXTRA_PLACAS, placaEscolhida);
+            intentForward.putExtra(Constants.EXTRA_AREA, area);
+            intentForward.putExtra(Constants.EXTRA_INVERSORES, inversor);
+            intentForward.putExtra(Constants.EXTRA_CUSTO_PARCIAL, custoParcial);
+            intentForward.putExtra(Constants.EXTRA_CUSTO_TOTAL, custoTotal);
+            intentForward.putExtra(Constants.EXTRA_GERACAO, geracaoAnual);
+            intentForward.putExtra(Constants.EXTRA_LUCRO, lucro);
+            intentForward.putExtra(Constants.EXTRA_TAXA_DE_RETORNO, taxaRetornoInvestimento);
+            intentForward.putExtra(Constants.EXTRA_INDICE_LUCRATICVIDADE, indiceLucratividade);
+            intentForward.putExtra(Constants.EXTRA_LCOE, LCOE);
+            intentForward.putExtra(Constants.EXTRA_TEMPO_RETORNO, tempoRetorno);
+
+            //Criação do background para o pop activity (que ficará transparente)
+            layoutResultBackground = findViewById(R.id.layout_result_background);
+            layoutResultBackground.setAlpha(1f);
+
+            //Listener do botão finalizar
             buttonFinalizar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FinalizarCalculo();
+                    IniciarPopActivity(intentForward, layoutResultBackground);
                 }
             });
 
@@ -159,11 +188,13 @@ public class ResultadoActivity extends AppCompatActivity{
         startActivity(intent);
     }
 
-    public void FinalizarCalculo(){
-        //Limpa tarifa inserida
-        MainActivity.PtarifaPassada = 0.0;
+    protected void onResume () {
+        super.onResume();
+        layoutResultBackground.setAlpha(1f);
+    }
 
-        Intent intent = new Intent(this, CreditoActivity.class);
+    public void IniciarPopActivity(Intent intent, ConstraintLayout layoutBackground){
+        layoutBackground.setAlpha(0.4f);
         startActivity(intent);
     }
 }

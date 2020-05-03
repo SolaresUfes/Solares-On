@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.solares.calculadorasolar">
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,50 +14,57 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activity.CreditoActivity"
+        <activity
+            android:name=".activity.FinalActivity"
             android:parentActivityName=".activity.ResultadoActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity"/>
-
-        <activity android:name=".activity.TarifaActivity"
+        <activity
+            android:name=".activity.PopActivity"
+            android:theme="@style/AppTheme.PopUpPergunta"
+            android:parentActivityName=".activity.ResultadoActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"/>
+        <activity
+            android:name=".activity.TarifaActivity"
             android:parentActivityName=".activity.DadosActivity"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"/>
-
-        <activity android:name=".activity.AreaActivity"
-            android:parentActivityName=".activity.ResultadoActivity"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"/>
-
-        <activity android:name=".activity.AnaliseActivity"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".activity.AreaActivity"
             android:parentActivityName=".activity.ResultadoActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
-
-        <activity android:name=".activity.InstalacaoActivity"
+        <activity
+            android:name=".activity.AnaliseActivity"
             android:parentActivityName=".activity.ResultadoActivity"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"/>
-
-        <activity android:name=".activity.DadosActivity"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".activity.InstalacaoActivity"
             android:parentActivityName=".activity.ResultadoActivity"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"/>
-
-        <activity android:name=".activity.IndicesEconomicosActivity"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".activity.DadosActivity"
             android:parentActivityName=".activity.ResultadoActivity"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"/>
-
-        <activity android:name=".activity.ResultadoActivity"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".activity.IndicesEconomicosActivity"
+            android:parentActivityName=".activity.ResultadoActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".activity.ResultadoActivity"
             android:parentActivityName=".activity.MainActivity"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"/>
-
-        <activity android:name=".activity.MainActivity"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".activity.MainActivity"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"
-            android:windowSoftInputMode="adjustPan|stateHidden">
+            android:windowSoftInputMode="adjustPan|stateHidden"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

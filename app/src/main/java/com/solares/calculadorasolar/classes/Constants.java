@@ -1,6 +1,15 @@
 package com.solares.calculadorasolar.classes;
 
+import android.Manifest;
+
 public class Constants {
+
+    // Storage Permissions
+    public static final int REQUEST_EXTERNAL_STORAGE = 1;
+    public static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
 
     // Constantes para cálculo
     public static double ICMS = 0.25; //É o valor usado pela maioria dos estados

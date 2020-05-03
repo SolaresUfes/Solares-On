@@ -1,13 +1,17 @@
 package com.solares.calculadorasolar.activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
 
+import android.os.Environment;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -21,7 +25,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.solares.calculadorasolar.R;
 import com.solares.calculadorasolar.classes.AutoSizeText;
 import com.solares.calculadorasolar.classes.CSVRead;
@@ -29,6 +32,8 @@ import com.solares.calculadorasolar.classes.Constants;
 import com.solares.calculadorasolar.classes.IRR;
 
 import java.io.InputStream;
+import java.io.File;
+
 
 
 
@@ -36,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
     public ViewHolder mViewHolder = new ViewHolder();
     public static double costReais;
+    public static File file;
 
     ///// Essas são as variáveis de índices econômicos
     public static double PLCOE;
@@ -59,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         //Essa função pega as dimensões e as coloca em váriaveis globais
         GetPhoneDimensionsAndSetTariff(this, 0.0);
 
-        //Identificando os componentes do layout
+        //Identificando os componentes do layout e ajustando seu tamanho
         this.mViewHolder.textSimulacao = findViewById(R.id.text_simulacao);
         AutoSizeText.AutoSizeTextView(this.mViewHolder.textSimulacao, alturaTela, larguraTela, 3f);
         this.mViewHolder.buttonCalc = findViewById(R.id.button_calc);
@@ -83,6 +89,23 @@ public class MainActivity extends AppCompatActivity {
 
         //Isso indica para não se preocupar com a área no primeiro cálculo
         final float AreaAlvo = -1f;
+
+        /*
+         * Verifica se há algum problema relacionado ao arquivo e cria o arquivo
+         */
+        //Aqui verifica as permissões para escrita na memória, se não tiver a permissão, pede para o usuário
+        verifyStoragePermissions(this);
+        //Verifica se a memória externa esta montada
+        if (!isExternalStorageWritable()) {
+            Toast.makeText(this, "Espaço de armazenamento não encontrado!", Toast.LENGTH_LONG).show();
+        } else {
+            String baseDir = Environment.getExternalStorageDirectory().getAbsolutePath();
+            String fileDir = baseDir + "/SolaresCalc";
+            File dir = new File(fileDir);
+            //o mkdirs retorna um boolean dizendo se o diretório foi criado, mas não precisamos dessa informação
+            dir.mkdirs();
+            file = new File(fileDir + "/dadosEmails.csv");
+        }
 
         //Se o spinner de estado for selecionado, muda o spinner de cidades de acordo
         this.mViewHolder.spinnerStates.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -528,6 +551,31 @@ public class MainActivity extends AppCompatActivity {
         if(tarifa != PtarifaPassada){
             PtarifaPassada = tarifa;
         }
+    }
+
+    /**
+     * Checks if the app has permission to write to device storage
+     *
+     * If the app does not has permission then the user will be prompted to grant permissions
+     */
+    public static void verifyStoragePermissions(Activity activity) {
+        // Check if we have write permission
+        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(
+                    activity,
+                    Constants.PERMISSIONS_STORAGE,
+                    Constants.REQUEST_EXTERNAL_STORAGE
+            );
+        }
+    }
+
+    //Verifica se a memória externa está montada (pode-se ler e escrever nela)
+    public boolean isExternalStorageWritable () {
+        String state = Environment.getExternalStorageState();
+        return Environment.MEDIA_MOUNTED.equals(state);
     }
 
     public static class ViewHolder{

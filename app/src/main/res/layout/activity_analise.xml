@@ -29,7 +29,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:gravity="bottom"
-        android:text="Custo Parcial (Placas + Inversores): "
+        android:text="@string/custo_parcial_placas_inversores"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline8" />
@@ -58,7 +58,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:gravity="bottom"
-        android:text="Custo Total (Instalação e equipamentos): "
+        android:text="@string/custo_total"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_custo_parcial" />
@@ -87,7 +87,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:gravity="bottom"
-        android:text="Estimativa da geração anual de energia: "
+        android:text="@string/estimativa_da_geracao_anual_de_energia"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

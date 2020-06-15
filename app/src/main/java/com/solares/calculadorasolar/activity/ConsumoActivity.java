@@ -23,45 +23,49 @@ import java.util.Locale;
 import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensionsAndSetTariff;
 import static com.solares.calculadorasolar.activity.MainActivity.PtarifaPassada;
 
-public class TarifaActivity extends AppCompatActivity {
+public class ConsumoActivity extends AppCompatActivity {
 
     public static float porcent = 3f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tarifa);
+        setContentView(R.layout.activity_consumo);
 
         //Pegando informações sobre o dispositivo, para regular o tamanho da letra (fonte)
         //Essa função pega as dimensões e as coloca em váriaveis globais
         GetPhoneDimensionsAndSetTariff(this, PtarifaPassada);
 
         //Pega o layout para poder colocar um listener nele (esconder o teclado)
-        ConstraintLayout layout = findViewById(R.id.layout_tarifa);
+        ConstraintLayout layout = findViewById(R.id.layout_consumo);
 
         //Pega o view do título e ajusta o tamanho da fonte
-        TextView textTituloTarifa = findViewById(R.id.text_titulo_tarifa);
-        AutoSizeText.AutoSizeTextView(textTituloTarifa, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
+        TextView textTituloConsumo = findViewById(R.id.text_titulo_consumo);
+        AutoSizeText.AutoSizeTextView(textTituloConsumo, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
+
+        //Pega o view da explicação e ajusta o tamanho da fonte
+        TextView textExplicacaoConsumo = findViewById(R.id.text_explicacao);
+        AutoSizeText.AutoSizeTextView(textExplicacaoConsumo, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
         //Pega o view da tarifa atual e ajusta o tamanho da fonte
-        TextView textTarifaAtual = findViewById(R.id.text_tarifa_atual);
-        AutoSizeText.AutoSizeTextView(textTarifaAtual, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
+        TextView textConsumoAtual = findViewById(R.id.text_consumo_atual);
+        AutoSizeText.AutoSizeTextView(textConsumoAtual, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
         //Pega o view da nova tarifa e ajusta o tamanho da fonte
-        TextView textNovaTarifa = findViewById(R.id.text_nova_tarifa);
-        AutoSizeText.AutoSizeTextView(textNovaTarifa, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
+        TextView textNovoConsumo = findViewById(R.id.text_novo_consumo);
+        AutoSizeText.AutoSizeTextView(textNovoConsumo, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
         //Pega o view do edit text para a nova tarifa e ajusta o tamanho da fonte
-        final EditText editTarifa = findViewById(R.id.editText_tarifa);
-        AutoSizeText.AutoSizeEditText(editTarifa, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
+        final EditText editConsumo = findViewById(R.id.editText_consumo);
+        AutoSizeText.AutoSizeEditText(editConsumo, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
         //Pega o view da unidade e ajusta o tamanho da fonte
-        TextView textUnidadeTarifa = findViewById(R.id.text_unidade_tarifa);
+        TextView textUnidadeTarifa = findViewById(R.id.text_unidade_consumo);
         AutoSizeText.AutoSizeTextView(textUnidadeTarifa, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
         //Pega o view do botão pra recalcular e ajusta o tamanho da fonte
-        Button buttonRecalcTarifa = findViewById(R.id.button_recalcular_tarifa);
-        AutoSizeText.AutoSizeButton(buttonRecalcTarifa, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
+        Button buttonRecalcConsumo = findViewById(R.id.button_recalcular_consumo);
+        AutoSizeText.AutoSizeButton(buttonRecalcConsumo, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
 
         //Pega o view do botão para voltar e ajusta o tamanho da fonte
         Button buttonVoltar = findViewById(R.id.button_voltar);
@@ -73,16 +77,16 @@ public class TarifaActivity extends AppCompatActivity {
         final double custoReais = intent.getDoubleExtra(Constants.EXTRA_CUSTO_REAIS, 0.0);
         final String[] cityVec = intent.getStringArrayExtra(Constants.EXTRA_VETOR_CIDADE);
         final String cityName = intent.getStringExtra(Constants.EXTRA_CIDADE);
-        final double tarifaMensal = intent.getDoubleExtra(Constants.EXTRA_TARIFA, 0.0);
+        final double consumoAtualKWh = intent.getDoubleExtra(Constants.EXTRA_CONSUMO, 0.0);
 
         //atualizar o tarifa atual
-        textTarifaAtual.setText(String.format(Locale.ITALY, "Tarifa Atual: R$ %.2f / kWh", tarifaMensal));
+        textConsumoAtual.setText(String.format(Locale.ITALY, "Consumo atual: %.2f kWh", consumoAtualKWh));
 
         //Listener do botão de recalcular
-        buttonRecalcTarifa.setOnClickListener(new View.OnClickListener() {
+        buttonRecalcConsumo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AtualizarTarifa(custoReais, cityVec, cityName, editTarifa);
+                AtualizarTarifa(custoReais, cityVec, cityName, editConsumo);
             }
         });
 
@@ -99,7 +103,7 @@ public class TarifaActivity extends AppCompatActivity {
         layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hideKeyboard(editTarifa);
+                hideKeyboard(editConsumo);
             }
         });
     }
@@ -114,31 +118,35 @@ public class TarifaActivity extends AppCompatActivity {
         }
     }
 
-    public void AtualizarTarifa(final double custoReais, final String[] cityVec, final String cityName, final EditText editTarifa){
+    public void AtualizarTarifa(final double custoReais, final String[] cityVec, final String cityName, final EditText editConsumo){
         try {
-            //Pega a tarifa digitada no edit text
-            double NovaTarifa = Double.parseDouble(editTarifa.getText().toString());
+            //Pega o consumo digitada no edit text
+            double novoConsumo = Double.parseDouble(editConsumo.getText().toString());
+            double novaTarifa, consumoSemImpostos;
 
-            //Se a tarifa for menor ou igual a zero, pede pro usuário inserir novamente
-            if (NovaTarifa <= 0.0) {
-                Toast.makeText(this, "Insira uma nova tarifa! Valor menor ou igual a zero!", Toast.LENGTH_LONG).show();
-            } else if (NovaTarifa > custoReais/Constants.COST_DISP){  //Se a tarifa for muito grande
-                Toast.makeText(this, "Insira uma nova tarifa! Valor muito alto!", Toast.LENGTH_LONG).show();
+            //Se o consumo for menor ou igual a CIP, pede pro usuário inserir novamente
+            if (novoConsumo <= Constants.CIP) {
+                Toast.makeText(this, "O valor para o consumo está muito baixo!", Toast.LENGTH_LONG).show();
             } else {
+                ///////Descobre a nova tarifa baseada no consumo em KWh
+                //Tira os impostos do custo em reais
+                consumoSemImpostos = MainActivity.ValueWithoutTaxes(custoReais);
+                //Descobre a tarifa
+                novaTarifa = consumoSemImpostos/novoConsumo;
                 //Atualiza a tarifa passada
-                MainActivity.PtarifaPassada = NovaTarifa;
-                //Refaz o cálculo com a nova área e inicia a ResultadoActivity
+                MainActivity.PtarifaPassada = novaTarifa;
+                //Refaz o cálculo com a nova tarifa/consumo e inicia a ResultadoActivity
                 //Criar uma thread para fazer o cálculo pois é um processamento demorado
                 Thread thread = new Thread(){
                     public void run(){
-                        MainActivity.Calculate(-1, cityVec, cityName, -1, custoReais, null, TarifaActivity.this);
+                        MainActivity.Calculate(-1, cityVec, cityName, -1, custoReais, null, ConsumoActivity.this);
                     }
                 };
                 thread.start();
 
             }
         } catch (Exception e){
-            Toast.makeText(this, "Insira uma nova tarifa, com um ponto separando a parte real da inteira", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Insira um novo consumo, com um ponto separando a parte real da inteira", Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
     }

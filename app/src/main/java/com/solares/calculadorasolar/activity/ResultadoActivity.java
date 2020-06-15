@@ -39,7 +39,7 @@ public class ResultadoActivity extends AppCompatActivity{
             final double geracaoAnual = intent.getDoubleExtra(Constants.EXTRA_GERACAO, 0.0);
             final double lucro = intent.getDoubleExtra(Constants.EXTRA_LUCRO, 0.0);
             final double taxaRetornoInvestimento = intent.getDoubleExtra(Constants.EXTRA_TAXA_DE_RETORNO, 0.0);
-            final double indiceLucratividade = intent.getDoubleExtra(Constants.EXTRA_INDICE_LUCRATICVIDADE, 0.0);
+            final double economiaMensal = intent.getDoubleExtra(Constants.EXTRA_ECONOMIA_MENSAL, 0.0);
             final double LCOE = intent.getDoubleExtra(Constants.EXTRA_LCOE, 0.0);
             final int tempoRetorno = intent.getIntExtra(Constants.EXTRA_TEMPO_RETORNO, 0);
             final double horaSolar = intent.getDoubleExtra(Constants.EXTRA_HORA_SOLAR, 0.0);
@@ -89,7 +89,7 @@ public class ResultadoActivity extends AppCompatActivity{
             buttonIndicesEconomicos.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AbrirActivityIndices(lucro, taxaRetornoInvestimento, indiceLucratividade, LCOE, tempoRetorno);
+                    AbrirActivityIndices(lucro, taxaRetornoInvestimento, economiaMensal, LCOE, tempoRetorno);
                 }
             });
 
@@ -140,11 +140,11 @@ public class ResultadoActivity extends AppCompatActivity{
         startActivity(intent);
     }
 
-    public void AbrirActivityIndices(double lucro, double taxaRetornoInvestimento, double indiceLucratividade, double LCOE, int tempoRetorno){
+    public void AbrirActivityIndices(double lucro, double taxaRetornoInvestimento, double economiaMensal, double LCOE, int tempoRetorno){
         Intent intent = new Intent(this, IndicesEconomicosActivity.class);
         intent.putExtra(Constants.EXTRA_LUCRO, lucro);
         intent.putExtra(Constants.EXTRA_TAXA_DE_RETORNO, taxaRetornoInvestimento);
-        intent.putExtra(Constants.EXTRA_INDICE_LUCRATICVIDADE, indiceLucratividade);
+        intent.putExtra(Constants.EXTRA_ECONOMIA_MENSAL, economiaMensal);
         intent.putExtra(Constants.EXTRA_LCOE, LCOE);
         intent.putExtra(Constants.EXTRA_TEMPO_RETORNO, tempoRetorno);
         startActivity(intent);

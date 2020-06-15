@@ -81,17 +81,30 @@ public class DadosActivity extends AppCompatActivity {
 
         ////////////Configurar o botão de modificar a tarifa////////////////
         Button buttonTarifa = findViewById(R.id.button_modificar_tarifa);
-        AutoSizeText.AutoSizeButton(buttonTarifa, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
+        AutoSizeText.AutoSizeButton(buttonTarifa, MainActivity.alturaTela, MainActivity.larguraTela, porcent - 0.5f);
+
+        ////////////Configurar o botão de modificar o consumo////////////////
+        Button buttonConsumo = findViewById(R.id.button_modificar_consumo);
+        AutoSizeText.AutoSizeButton(buttonConsumo, MainActivity.alturaTela, MainActivity.larguraTela, porcent - 0.5f);
+
 
         ////////////Configurar o botão de voltar////////////////
         Button buttonVoltar = findViewById(R.id.button_voltar);
         AutoSizeText.AutoSizeButton(buttonVoltar, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
 
-        //Listener do botão modificar a tarifa, se ele for clicado, abre uma pop activity
+        //Listener do botão modificar a tarifa, se ele for clicado, abre uma activity
         buttonTarifa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AbrirActivityTarifa(cityVec, cityName, custoReais, tarifaMensal);
+            }
+        });
+
+        //Listener do botão para modificar o consumo, se ele for clicado, abre uma activity
+        buttonConsumo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AbrirActivityConsumo(cityVec, cityName, custoReais, consumokWh);
             }
         });
 
@@ -110,6 +123,15 @@ public class DadosActivity extends AppCompatActivity {
         intent.putExtra(Constants.EXTRA_CIDADE, cityName);
         intent.putExtra(Constants.EXTRA_CUSTO_REAIS, custoReais);
         intent.putExtra(Constants.EXTRA_TARIFA, tarifaMensal);
+        startActivity(intent);
+    }
+
+    public void AbrirActivityConsumo(String[] cityVec, String cityName, double custoReais, double consumokWh){
+        Intent intent = new Intent(this, ConsumoActivity.class);
+        intent.putExtra(Constants.EXTRA_VETOR_CIDADE, cityVec);
+        intent.putExtra(Constants.EXTRA_CIDADE, cityName);
+        intent.putExtra(Constants.EXTRA_CUSTO_REAIS, custoReais);
+        intent.putExtra(Constants.EXTRA_CONSUMO, consumokWh);
         startActivity(intent);
     }
 }

@@ -28,7 +28,7 @@ public class IndicesEconomicosActivity extends AppCompatActivity {
         Intent intent = getIntent();
         final double lucro = intent.getDoubleExtra(Constants.EXTRA_LUCRO, 0.0);
         final double taxaRetornoInvestimento = intent.getDoubleExtra(Constants.EXTRA_TAXA_DE_RETORNO, 0.0);
-        final double indiceLucratividade = intent.getDoubleExtra(Constants.EXTRA_INDICE_LUCRATICVIDADE, 0.0);
+        final double economiaMensal = intent.getDoubleExtra(Constants.EXTRA_ECONOMIA_MENSAL, 0.0);
         final double LCOE = intent.getDoubleExtra(Constants.EXTRA_LCOE, 0.0);
         final int tempoRetorno = intent.getIntExtra(Constants.EXTRA_TEMPO_RETORNO, 0);
 
@@ -51,16 +51,16 @@ public class IndicesEconomicosActivity extends AppCompatActivity {
         textTaxaRetorno.setText(String.format(Locale.ITALY, "%.2f%%", taxaRetornoInvestimento));
         AutoSizeText.AutoSizeTextView(textTaxaRetorno, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
-        TextView textEstaticoIndiceLucratividade = findViewById(R.id.text_indice_lucratividade_1);
-        AutoSizeText.AutoSizeTextView(textEstaticoIndiceLucratividade, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
-        TextView textIndiceLucratividade = findViewById(R.id.text_indice_lucratividade);
-        textIndiceLucratividade.setText(String.format(Locale.ITALY, "R$ %.2f", indiceLucratividade));
-        AutoSizeText.AutoSizeTextView(textIndiceLucratividade, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
+        TextView textEstaticoEconomiaMensal = findViewById(R.id.text_economia_mensal_1);
+        AutoSizeText.AutoSizeTextView(textEstaticoEconomiaMensal, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
+        TextView textEconomiaMensal = findViewById(R.id.text_economia_mensal);
+        textEconomiaMensal.setText(String.format(Locale.ITALY, "R$ %.2f", economiaMensal));
+        AutoSizeText.AutoSizeTextView(textEconomiaMensal, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
         TextView textEstaticoLCOE = findViewById(R.id.text_LCOE_1);
         AutoSizeText.AutoSizeTextView(textEstaticoLCOE, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
         TextView textLCOE = findViewById(R.id.text_LCOE);
-        textLCOE.setText(String.format(Locale.ITALY, "R$ %.2f", LCOE));
+        textLCOE.setText(String.format(Locale.ITALY, "R$ %.2f / kWh", LCOE));
         AutoSizeText.AutoSizeTextView(textLCOE, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
         TextView textEstaticoTempo = findViewById(R.id.text_tempo_retorno_1);

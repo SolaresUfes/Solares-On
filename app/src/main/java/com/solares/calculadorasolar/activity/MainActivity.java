@@ -2,6 +2,7 @@ package com.solares.calculadorasolar.activity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
@@ -47,8 +48,9 @@ public class MainActivity extends AppCompatActivity {
     public static double PLCOE;
     public static double PInternalRateOfReturn;
     public static double Ppayback;
-    public static double PindiceLucratividade;
+    public static double PindiceLucratividade; //Não está sendo exibido mais
     public static int PTempoRetorno;
+    public static double PeconomiaMensalMedia;
     /////
     public static int larguraTela;
     public static int alturaTela;
@@ -141,10 +143,20 @@ public class MainActivity extends AppCompatActivity {
                     if(entry < Constants.COST_DISP/3.0){
                         Toast.makeText(MainActivity.this, "Valor muito baixo!", Toast.LENGTH_LONG).show();
                     } else {
+                        //Fecha teclado
+                        mViewHolder.editCostMonth.onEditorAction(EditorInfo.IME_ACTION_DONE);
+                        /////Pega as informações inseridas pelo usuário
+                        //Identifica a cidade escolhida e pega suas informações
+                        final String stateName = mViewHolder.spinnerStates.getSelectedItem().toString();
+                        final int idCity = mViewHolder.spinnerCities.getSelectedItemPosition();
+                        final String cityName = mViewHolder.spinnerCities.getItemAtPosition(idCity).toString();
+                        //Guarda o custo mensal inserido pelo usuário
+                        final double custoReais = Double.parseDouble( mViewHolder.editCostMonth.getText().toString() );
+
                         //Criar uma thread para fazer o cálculo pois é um processamento demorado
                         Thread thread = new Thread(){
                             public void run(){
-                                Calculate(AreaAlvo);
+                                Calculate(-1, null, cityName, idCity, custoReais, stateName, MainActivity.this);
                             }
                         };
                         thread.start();
@@ -155,7 +167,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
 
@@ -166,24 +177,19 @@ public class MainActivity extends AppCompatActivity {
      * Se tarifaPassada == 0.0, pega a tarifa média do estado
      * Se AreaAlvo == -1, não vai se preocupar com a área
      */
-    public void Calculate(float AreaAlvo) {
-        int idCity;
-        String city;
+    public static void Calculate(float AreaAlvo, String[] cityVec, String cityName, int idCity, double custoReais, String stateName, Context MyContext) {
         InputStream is=null;
 
         try {
-            //Fecha teclado
-            mViewHolder.editCostMonth.onEditorAction(EditorInfo.IME_ACTION_DONE);
-            //Identifica a cidade escolhida e pega suas informações
-            String stateName = this.mViewHolder.spinnerStates.getSelectedItem().toString();
-            idCity = this.mViewHolder.spinnerCities.getSelectedItemPosition();
-            city = this.mViewHolder.spinnerCities.getItemAtPosition(idCity).toString();
             //Pega as informações da cidade escolhida
-            is = getResources().openRawResource(R.raw.banco_irradiancia);
-            String[] cityVec = CSVRead.getCity(idCity, stateName, is);
+            is = MyContext.getResources().openRawResource(R.raw.banco_irradiancia);
+            //Verifica se foi passado uma cidade como parâmetro da função, então pega os dados da cidade se não foi passada
+            if(cityVec == null) {
+                cityVec = CSVRead.getCity(idCity, stateName, is);
+            }
 
             //Pegando as informações do estado
-            is = getResources().openRawResource(R.raw.banco_estados);
+            is = MyContext.getResources().openRawResource(R.raw.banco_estados);
             String[] stateVec;
             if(cityVec != null){
                 stateVec = CSVRead.getState(cityVec, is);
@@ -200,11 +206,10 @@ public class MainActivity extends AppCompatActivity {
 
             //Calcula a média anual da hora solar da cidade escolhida
             double solarHour = MeanSolarHour(cityVec);
-            double custoReais;
+
+            /////////////////double custoReais;
 
             //Calcula o consumo mensal em KWh
-            String cost = this.mViewHolder.editCostMonth.getText().toString();
-            custoReais = Double.parseDouble(cost);
             costReais = ValueWithoutTaxes(custoReais);
             double energyConsumed;
             if(stateVec != null){
@@ -216,15 +221,15 @@ public class MainActivity extends AppCompatActivity {
             //Acha a potêcia necessária
             double capacityWp = FindCapacity(energyConsumed, solarHour);
             if(capacityWp < 0.0){
-                Toast.makeText(this, "O seu consumo de energia é muito baixo!", Toast.LENGTH_LONG).show();
+                Toast.makeText(MyContext, "O seu consumo de energia é muito baixo!", Toast.LENGTH_LONG).show();
             } else {
                 //Definindo as placas
-                is = getResources().openRawResource(R.raw.banco_paineis);
+                is = MyContext.getResources().openRawResource(R.raw.banco_paineis);
                 String[] solarPanel = CSVRead.DefineSolarPanel(is, capacityWp, AreaAlvo);
                 double area = DefineArea(solarPanel);
 
                 //Definindo os inversores
-                is = getResources().openRawResource(R.raw.banco_inversores);
+                is = MyContext.getResources().openRawResource(R.raw.banco_inversores);
                 String[] invertor = CSVRead.DefineInvertor(is, solarPanel);
 
                 //Definindo os custos
@@ -236,10 +241,10 @@ public class MainActivity extends AppCompatActivity {
                 GetEconomicInformation(anualGeneration, invertor, energyConsumed, costs[Constants.iCOSTS_TOTAL], stateVec);
 
                 //Preparação para mudar para próxima activity
-                Intent intent = new Intent(this, ResultadoActivity.class);
+                Intent intent = new Intent(MyContext, ResultadoActivity.class);
                 //Esses extras são usados para se enviar informações entre activities
                 intent.putExtra(Constants.EXTRA_VETOR_CIDADE, cityVec);
-                intent.putExtra(Constants.EXTRA_CIDADE, city);
+                intent.putExtra(Constants.EXTRA_CIDADE, cityName);
                 intent.putExtra(Constants.EXTRA_CUSTO_REAIS, custoReais);
                 intent.putExtra(Constants.EXTRA_CONSUMO, energyConsumed);
                 intent.putExtra(Constants.EXTRA_POTENCIA, capacityWp);
@@ -251,7 +256,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra(Constants.EXTRA_GERACAO, anualGeneration);
                 intent.putExtra(Constants.EXTRA_LUCRO, Ppayback);
                 intent.putExtra(Constants.EXTRA_TAXA_DE_RETORNO, PInternalRateOfReturn);
-                intent.putExtra(Constants.EXTRA_INDICE_LUCRATICVIDADE, PindiceLucratividade);
+                intent.putExtra(Constants.EXTRA_ECONOMIA_MENSAL, PeconomiaMensalMedia);
                 intent.putExtra(Constants.EXTRA_LCOE, PLCOE);
                 intent.putExtra(Constants.EXTRA_TEMPO_RETORNO, PTempoRetorno);
                 intent.putExtra(Constants.EXTRA_HORA_SOLAR, solarHour);
@@ -270,12 +275,12 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 //Mudar de activity
-                startActivity(intent);
+                MyContext.startActivity(intent);
             }
         } catch (Exception e){
             Log.i("Calculate", "Erro no Cálculo");
             //Se algum erro ocorrer, pede para o usuário informar um número real
-            Toast.makeText(this, R.string.informe_um_numero, Toast.LENGTH_LONG).show();
+            Toast.makeText(MyContext, R.string.informe_um_numero, Toast.LENGTH_LONG).show();
             e.printStackTrace();
         } finally {
             //Fechar o InputStream, se ocorreu algum erro
@@ -341,7 +346,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static double EstimateAnualGeneration(String[] solarPanel, String[] stateVec, String[] cityVec){
         //Calculos retirados do manual de engenharia FV p. 149 a 153
-        double anualGeneration=0.0, dailyGen=0.0, monthlyGen=0.0;
+        double anualGeneration=0.0, dailyGen, monthlyGen;
         int month;
         double tempAboveLimit;
         double correctionTemp;
@@ -455,6 +460,9 @@ public class MainActivity extends AppCompatActivity {
             custoAtualComImposto = (12.0 * energyConsumedMonthly)*tariff / (1 - (Constants.PIS + Constants.COFINS + Constants.ICMS)) + Constants.CIP;
             //Acha a diferença que o sistema causou no custo (isso será o lucro ou a economia do ano)
             diferencaDeCusto = custoAtualComImposto - custoComImposto;
+            if(year == 0){
+                PeconomiaMensalMedia = diferencaDeCusto/12;
+            }
 
             //Verifica se nesse ano deve-se trocar o inversor (de 10 em 10 anos)
             if (year % Constants.INVERTOR_TIME == 0 && year > 0) {

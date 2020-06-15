@@ -76,7 +76,7 @@
         app:layout_constraintTop_toBottomOf="@+id/text_taxa_retorno_1" />
 
     <TextView
-        android:id="@+id/text_indice_lucratividade_1"
+        android:id="@+id/text_economia_mensal_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -84,12 +84,12 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:text="@string/ndice_de_lucratividade"
+        android:text="@string/economia_mensal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_taxa_retorno" />
     <TextView
-        android:id="@+id/text_indice_lucratividade"
+        android:id="@+id/text_economia_mensal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -99,7 +99,7 @@
         android:textColor="@color/colorSolaresBlue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_indice_lucratividade_1" />
+        app:layout_constraintTop_toBottomOf="@+id/text_economia_mensal_1" />
 
     <TextView
         android:id="@+id/text_LCOE_1"
@@ -113,7 +113,7 @@
         android:text="@string/custo_da_energia_solar_lcoe"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_indice_lucratividade" />
+        app:layout_constraintTop_toBottomOf="@+id/text_economia_mensal" />
     <TextView
         android:id="@+id/text_LCOE"
         android:layout_width="match_parent"

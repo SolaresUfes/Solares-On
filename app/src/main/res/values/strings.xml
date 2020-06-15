@@ -48,7 +48,7 @@
     <string name="confirmar">Confirmar</string>
     <string name="tarifa_de_energia_da_cidade">Tarifa de energia da cidade</string>
     <string name="modificar_tarifa"><u>Modificar Tarifa</u></string>
-    <string name="modificar_consumo"><u>Modificar Consumo</u></string>
+    <string name="modificar_consumo"><u>Alterar Consumo</u></string>
     <string name="tarifa">Tarifa</string>
     <string name="tarifa_atual">Tarifa Atual: </string>
     <string name="nova_tarifa">Nova Tarifa: R$</string>

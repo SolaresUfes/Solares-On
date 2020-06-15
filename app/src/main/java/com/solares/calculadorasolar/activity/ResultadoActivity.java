@@ -120,7 +120,7 @@ public class ResultadoActivity extends AppCompatActivity{
             intentForward.putExtra(Constants.EXTRA_GERACAO, geracaoAnual);
             intentForward.putExtra(Constants.EXTRA_LUCRO, lucro);
             intentForward.putExtra(Constants.EXTRA_TAXA_DE_RETORNO, taxaRetornoInvestimento);
-            intentForward.putExtra(Constants.EXTRA_INDICE_LUCRATICVIDADE, indiceLucratividade);
+            intentForward.putExtra(Constants.EXTRA_ECONOMIA_MENSAL, economiaMensal);
             intentForward.putExtra(Constants.EXTRA_LCOE, LCOE);
             intentForward.putExtra(Constants.EXTRA_TEMPO_RETORNO, tempoRetorno);
 

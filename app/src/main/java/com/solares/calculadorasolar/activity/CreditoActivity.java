@@ -6,6 +6,7 @@ import com.solares.calculadorasolar.R;
 import com.solares.calculadorasolar.classes.AutoSizeText;
 
 import android.content.Intent;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -36,7 +37,22 @@ public class CreditoActivity extends AppCompatActivity {
         TextView textConheca = findViewById(R.id.text_conheca);
         AutoSizeText.AutoSizeTextView(textConheca, MainActivity.alturaTela, MainActivity.larguraTela, 3f);
 
+        //Colocando as imagens nos image views
+        //Imagem do instagram
         ImageView imageInstagram = findViewById(R.id.imageViewInstagram);
+        imageInstagram.setImageDrawable(getResources().getDrawable(R.drawable.instagram_icon));
+
+        //Imagem com o nome do Solares
+        ImageView imageTitulo = findViewById(R.id.imageViewCredito);
+        imageTitulo.setImageDrawable(getResources().getDrawable(R.drawable.retangulo_logo_solares));
+
+        //Imagem do Social
+        ImageView imageSocial = findViewById(R.id.imageViewCirculoSocial);
+        imageSocial.setImageDrawable(getResources().getDrawable(R.drawable.circulo_social));
+
+        //Imagem do Barco
+        ImageView imageBarco = findViewById(R.id.imageViewCirculoBarco);
+        imageBarco.setImageDrawable(getResources().getDrawable(R.drawable.circulo_barco));
 
         //Se o usuário clicar no ícone do instagram ou no botão com o @, ele é redirecionado para o instagram do solares
         imageInstagram.setOnClickListener(new View.OnClickListener() {

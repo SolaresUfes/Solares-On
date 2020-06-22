@@ -26,8 +26,7 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline31"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/retangulo_logo_solares" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <ImageView
@@ -46,8 +45,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/button_instagram"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/instagram_icon" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <ImageView
         android:id="@+id/imageViewCirculoBarco"
@@ -61,8 +59,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline32"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/circulo_barco" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <ImageView
         android:id="@+id/imageViewCirculoSocial"
@@ -76,8 +73,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline34"
         app:layout_constraintTop_toTopOf="@+id/guideline40"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/circulo_social" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline31"

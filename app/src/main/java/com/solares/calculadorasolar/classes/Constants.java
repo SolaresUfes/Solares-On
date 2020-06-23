@@ -4,8 +4,8 @@ public class Constants {
 
     // Constantes para cálculo
     public static double ICMS = 0.25; //É o valor usado pela maioria dos estados
-    public static double PIS = 0.0165;
-    public static double COFINS = 0.0434;
+    public static double PIS = 0.0120;
+    public static double COFINS = 0.0553;
     public static double CIP = 50;
     //public static double TARIFF = 0.56228;
     public static double TD = 0.8;

@@ -271,7 +271,7 @@ public class MainActivity extends AppCompatActivity {
 
     @org.jetbrains.annotations.Contract(pure = true)
     public static double ValueWithoutTaxes(double costReais){
-        return (costReais*(1-(Constants.ICMS + Constants.PIS + Constants.COFINS)));
+        return (costReais - (Constants.CIP))*(1 - Constants.ICMS)*(1 - Constants.PIS - Constants.COFINS);
     }
 
     //Converte a conta de reais para kWh
@@ -428,9 +428,9 @@ public class MainActivity extends AppCompatActivity {
             //Acha o valor em reais que ele pagará para a concessionária no ano
             valorAPagar = ConsumoAPagarNoAno * tariff;
             //Coloca os roubos... Quero dizer, impostos
-            custoComImposto = valorAPagar / (1 - (Constants.PIS + Constants.COFINS + Constants.ICMS)) + Constants.CIP;
+            custoComImposto = (valorAPagar / (1 - (Constants.PIS + Constants.COFINS))) / (1 - Constants.ICMS) + Constants.CIP;
             //Quanto ele pagaria sem o sistema fotovoltaico, também com roubo (imposto)
-            custoAtualComImposto = (12.0 * energyConsumedMonthly)*tariff / (1 - (Constants.PIS + Constants.COFINS + Constants.ICMS)) + Constants.CIP;
+            custoAtualComImposto = ((12.0 * energyConsumedMonthly)*tariff / (1 - (Constants.PIS + Constants.COFINS))) / (1 - Constants.ICMS) + Constants.CIP;
             //Acha a diferença que o sistema causou no custo (isso será o lucro ou a economia do ano)
             diferencaDeCusto = custoAtualComImposto - custoComImposto;
             if(year == 0){

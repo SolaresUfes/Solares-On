@@ -82,7 +82,11 @@ public class AreaActivity extends AppCompatActivity {
 
                      //Se a área for menor ou igual a zero, pede pro usuário inserir novamente
                      if (AreaAlvo <= 0f) {
-                         Toast.makeText(AreaActivity.this, "Insira uma nova área!", Toast.LENGTH_LONG).show();
+                         try {
+                             Toast.makeText(AreaActivity.this, "Insira uma nova área!", Toast.LENGTH_LONG).show();
+                         } catch (Exception etoast1){
+                             etoast1.printStackTrace();
+                         }
                      } else {
                          //Refaz o cálculo com a nova área e inicia a ResultadoActivity
                          //Criar uma thread para fazer o cálculo pois é um processamento demorado
@@ -95,7 +99,11 @@ public class AreaActivity extends AppCompatActivity {
                          thread.start();
                      }
                  } catch (Exception e){
-                     Toast.makeText(AreaActivity.this, "Insira uma nova área!", Toast.LENGTH_LONG).show();
+                     try {
+                         Toast.makeText(AreaActivity.this, "Insira uma nova área!", Toast.LENGTH_LONG).show();
+                     } catch (Exception etoast2){
+                         etoast2.printStackTrace();
+                     }
                      e.printStackTrace();
                  }
             }

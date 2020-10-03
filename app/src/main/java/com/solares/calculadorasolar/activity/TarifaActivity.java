@@ -121,9 +121,17 @@ public class TarifaActivity extends AppCompatActivity {
 
             //Se a tarifa for menor ou igual a zero, pede pro usuário inserir novamente
             if (NovaTarifa <= 0.0) {
-                Toast.makeText(this, "Insira uma nova tarifa! Valor menor ou igual a zero!", Toast.LENGTH_LONG).show();
+                try {
+                    Toast.makeText(this, "Insira uma nova tarifa! Valor menor ou igual a zero!", Toast.LENGTH_LONG).show();
+                } catch (Exception etoast1){
+                    etoast1.printStackTrace();
+                }
             } else if (NovaTarifa > custoReais/Constants.COST_DISP){  //Se a tarifa for muito grande
-                Toast.makeText(this, "Insira uma nova tarifa! Valor muito alto!", Toast.LENGTH_LONG).show();
+                try {
+                    Toast.makeText(this, "Insira uma nova tarifa! Valor muito alto!", Toast.LENGTH_LONG).show();
+                } catch (Exception etoast2){
+                    etoast2.printStackTrace();
+                }
             } else {
                 //Atualiza a tarifa passada
                 MainActivity.PtarifaPassada = NovaTarifa;
@@ -138,7 +146,11 @@ public class TarifaActivity extends AppCompatActivity {
 
             }
         } catch (Exception e){
-            Toast.makeText(this, "Insira uma nova tarifa, com um ponto separando a parte real da inteira", Toast.LENGTH_LONG).show();
+            try {
+                Toast.makeText(this, "Insira uma nova tarifa, com um ponto separando a parte real da inteira", Toast.LENGTH_LONG).show();
+            } catch (Exception etoast3){
+                etoast3.printStackTrace();
+            }
             e.printStackTrace();
         }
     }

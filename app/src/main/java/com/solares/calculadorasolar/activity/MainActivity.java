@@ -31,7 +31,6 @@ import com.solares.calculadorasolar.classes.IRR;
 import java.io.InputStream;
 
 
-
 public class MainActivity extends AppCompatActivity {
 
     public ViewHolder mViewHolder = new ViewHolder();
@@ -114,7 +113,11 @@ public class MainActivity extends AppCompatActivity {
                     entry = Double.parseDouble(mViewHolder.editCostMonth.getText().toString());
                     //Verifica se o valor inserido não é muito baixo
                     if(entry < Constants.COST_DISP/3.0){
-                        Toast.makeText(MainActivity.this, "Valor muito baixo!", Toast.LENGTH_LONG).show();
+                        try{
+                            Toast.makeText(MainActivity.this, "Valor muito baixo!", Toast.LENGTH_LONG).show();
+                        } catch (Exception e){
+                            e.printStackTrace();
+                        }
                     } else {
                         //Fecha teclado
                         mViewHolder.editCostMonth.onEditorAction(EditorInfo.IME_ACTION_DONE);
@@ -135,9 +138,12 @@ public class MainActivity extends AppCompatActivity {
                         thread.start();
                     }
                 } catch (Exception e){
-                    Toast.makeText(MainActivity.this, "Insira um número positivo!", Toast.LENGTH_LONG).show();
+                    try {
+                        Toast.makeText(MainActivity.this, "Insira um número positivo!", Toast.LENGTH_LONG).show();
+                    } catch (Exception ee){
+                        ee.printStackTrace();
+                    }
                 }
-
             }
         });
     }
@@ -194,7 +200,11 @@ public class MainActivity extends AppCompatActivity {
             //Acha a potêcia necessária
             double capacityWp = FindCapacity(energyConsumed, solarHour);
             if(capacityWp < 0.0){
-                Toast.makeText(MyContext, "O seu consumo de energia é muito baixo!", Toast.LENGTH_LONG).show();
+                try{
+                    Toast.makeText(MyContext, "O seu consumo de energia é muito baixo!", Toast.LENGTH_LONG).show();
+                } catch (Exception etoast){
+                    etoast.printStackTrace();
+                }
             } else {
                 //Definindo as placas
                 is = MyContext.getResources().openRawResource(R.raw.banco_paineis);
@@ -253,7 +263,11 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e){
             Log.i("Calculate", "Erro no Cálculo");
             //Se algum erro ocorrer, pede para o usuário informar um número real
-            Toast.makeText(MyContext, R.string.informe_um_numero, Toast.LENGTH_LONG).show();
+            try {
+                Toast.makeText(MyContext, R.string.informe_um_numero, Toast.LENGTH_LONG).show();
+            } catch (Exception ee){
+                ee.printStackTrace();
+            }
             e.printStackTrace();
         } finally {
             //Fechar o InputStream, se ocorreu algum erro
@@ -271,7 +285,7 @@ public class MainActivity extends AppCompatActivity {
 
     @org.jetbrains.annotations.Contract(pure = true)
     public static double ValueWithoutTaxes(double costReais){
-        return (costReais*(1-(Constants.ICMS + Constants.PIS + Constants.COFINS)));
+        return (costReais - (Constants.CIP))*(1 - Constants.ICMS - Constants.PIS - Constants.COFINS);
     }
 
     //Converte a conta de reais para kWh
@@ -335,7 +349,7 @@ public class MainActivity extends AppCompatActivity {
                                 Double.parseDouble(solarPanel[Constants.iPANEL_POTENCIA])) / 100;
             //Eficiencia do sistema (qual a porcentagem de energia captada em 1m²)
             efficiency = (Double.parseDouble(solarPanel[Constants.iPANEL_POTENCIA]) + correctionTemp)/
-                        (Double.parseDouble(solarPanel[Constants.iPANEL_AREA])*1000);
+                        (Double.parseDouble(solarPanel[Constants.iPANEL_AREA])*1000); //O 1000 é a quantidade de W/m² que estamos considerando
 
             //Horas de sol pico do mês * eficiencia * area total
             dailyGen = (Double.parseDouble(cityVec[month])/1000.0) * efficiency *
@@ -428,9 +442,9 @@ public class MainActivity extends AppCompatActivity {
             //Acha o valor em reais que ele pagará para a concessionária no ano
             valorAPagar = ConsumoAPagarNoAno * tariff;
             //Coloca os roubos... Quero dizer, impostos
-            custoComImposto = valorAPagar / (1 - (Constants.PIS + Constants.COFINS + Constants.ICMS)) + Constants.CIP;
+            custoComImposto = (valorAPagar / (1 - (Constants.PIS + Constants.COFINS + Constants.ICMS))) + Constants.CIP;
             //Quanto ele pagaria sem o sistema fotovoltaico, também com roubo (imposto)
-            custoAtualComImposto = (12.0 * energyConsumedMonthly)*tariff / (1 - (Constants.PIS + Constants.COFINS + Constants.ICMS)) + Constants.CIP;
+            custoAtualComImposto = ((12.0 * energyConsumedMonthly)*tariff / (1 - (Constants.PIS + Constants.COFINS + Constants.ICMS))) + Constants.CIP;
             //Acha a diferença que o sistema causou no custo (isso será o lucro ou a economia do ano)
             diferencaDeCusto = custoAtualComImposto - custoComImposto;
             if(year == 0){

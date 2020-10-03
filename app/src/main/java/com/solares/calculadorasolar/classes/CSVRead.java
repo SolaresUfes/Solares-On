@@ -142,19 +142,15 @@ public class CSVRead {
     private static double FindPanelCost(double WpNeeded, @NotNull String[] dataPanel, float AreaAlvo){
         int qtd;
         double precoTotal, potenciaTotal;
-        if(AreaAlvo == -1f){
+
+        if(AreaAlvo == -1f){ //Se não precisa se preocupar com a área:
             qtd = (int)Math.floor(WpNeeded/Double.parseDouble(dataPanel[Constants.iPANEL_POTENCIA]));
-            precoTotal = qtd*Double.parseDouble(dataPanel[Constants.iPANEL_PRECO]);
-            potenciaTotal = qtd*Double.parseDouble(dataPanel[Constants.iPANEL_POTENCIA]);
-
-            return precoTotal/potenciaTotal;
-        } else {
+        } else { //Se a área máxima for definida
             qtd = (int)Math.floor(AreaAlvo / Double.parseDouble(dataPanel[Constants.iPANEL_AREA]));
-            precoTotal = qtd*Double.parseDouble(dataPanel[Constants.iPANEL_PRECO]);
-            potenciaTotal = qtd*Double.parseDouble(dataPanel[Constants.iPANEL_POTENCIA]);
-
-            return precoTotal/potenciaTotal;
         }
+        precoTotal = qtd*Double.parseDouble(dataPanel[Constants.iPANEL_PRECO]);
+        potenciaTotal = qtd*Double.parseDouble(dataPanel[Constants.iPANEL_POTENCIA]);
+        return precoTotal/potenciaTotal;
     }
 
     public static String[] getState(String[] cityVec, InputStream is){
@@ -209,14 +205,14 @@ public class CSVRead {
             bufferedReader.readLine(); //Joga fora a primeira
             line = bufferedReader.readLine();
             cheaperInvertor = line.split(divider);
-            numberInvertors = (int)Math.ceil((1.15*WpGenerated)/Double.parseDouble(cheaperInvertor[Constants.iINV_POTENCIA]));//Qtd de inversores
+            numberInvertors = (int)Math.ceil((0.8*WpGenerated)/Double.parseDouble(cheaperInvertor[Constants.iINV_POTENCIA]));//Qtd de inversores
             cheaperCost = numberInvertors * Double.parseDouble(cheaperInvertor[Constants.iINV_PRECO]);
             cheaperInvertor[Constants.iINV_QTD] = String.valueOf(numberInvertors);
             cheaperInvertor[Constants.iINV_PRECO_TOTAL] = String.valueOf(cheaperCost);
 
             while ((line = bufferedReader.readLine()) != null){
                 currentInvertor = line.split(divider);
-                numberInvertors = (int)Math.ceil((1.15*WpGenerated)/Double.parseDouble(currentInvertor[Constants.iINV_POTENCIA]));//Qtd de inversores
+                numberInvertors = (int)Math.ceil((0.8*WpGenerated)/Double.parseDouble(currentInvertor[Constants.iINV_POTENCIA]));//Qtd de inversores
                 currentCost = numberInvertors * Double.parseDouble(currentInvertor[Constants.iINV_PRECO]);
                 currentInvertor[Constants.iINV_QTD] = String.valueOf(numberInvertors);
                 currentInvertor[Constants.iINV_PRECO_TOTAL] = String.valueOf(currentCost);

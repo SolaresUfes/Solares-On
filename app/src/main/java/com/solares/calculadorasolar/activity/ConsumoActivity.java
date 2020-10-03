@@ -126,7 +126,11 @@ public class ConsumoActivity extends AppCompatActivity {
 
             //Se o consumo for menor ou igual a CIP, pede pro usuário inserir novamente
             if (novoConsumo <= Constants.CIP) {
-                Toast.makeText(this, "O valor para o consumo está muito baixo!", Toast.LENGTH_LONG).show();
+                try {
+                    Toast.makeText(this, "O valor para o consumo está muito baixo!", Toast.LENGTH_LONG).show();
+                } catch (Exception etoast){
+                    etoast.printStackTrace();
+                }
             } else {
                 ///////Descobre a nova tarifa baseada no consumo em KWh
                 //Tira os impostos do custo em reais
@@ -146,7 +150,11 @@ public class ConsumoActivity extends AppCompatActivity {
 
             }
         } catch (Exception e){
-            Toast.makeText(this, "Insira um novo consumo, com um ponto separando a parte real da inteira", Toast.LENGTH_LONG).show();
+            try {
+                Toast.makeText(this, "Insira um novo consumo, com um ponto separando a parte real da inteira", Toast.LENGTH_LONG).show();
+            } catch (Exception etoast2){
+                etoast2.printStackTrace();
+            }
             e.printStackTrace();
         }
     }

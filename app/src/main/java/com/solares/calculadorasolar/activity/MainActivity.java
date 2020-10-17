@@ -30,6 +30,8 @@ import com.solares.calculadorasolar.classes.IRR;
 
 import java.io.InputStream;
 
+import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -184,21 +186,21 @@ public class MainActivity extends AppCompatActivity {
             }
 
             //Calcula a média anual da hora solar da cidade escolhida
-            double solarHour = MeanSolarHour(cityVec);
+            double solarHour = CalculadoraOnGrid.MeanSolarHour(cityVec);
 
             /////////////////double custoReais;
 
             //Calcula o consumo mensal em KWh
-            costReais = ValueWithoutTaxes(custoReais);
+            costReais = CalculadoraOnGrid.ValueWithoutTaxes(custoReais);
             double energyConsumed;
             if(stateVec != null){
-                energyConsumed = ConvertToKWh(costReais, stateVec);
+                energyConsumed = CalculadoraOnGrid.ConvertToKWh(costReais, stateVec);
             } else {
                 throw new Exception("Estado não foi encontrado");
             }
 
             //Acha a potêcia necessária
-            double capacityWp = FindCapacity(energyConsumed, solarHour);
+            double capacityWp = CalculadoraOnGrid.FindTargetCapacity(energyConsumed, solarHour);
             if(capacityWp < 0.0){
                 try{
                     Toast.makeText(MyContext, "O seu consumo de energia é muito baixo!", Toast.LENGTH_LONG).show();
@@ -209,17 +211,17 @@ public class MainActivity extends AppCompatActivity {
                 //Definindo as placas
                 is = MyContext.getResources().openRawResource(R.raw.banco_paineis);
                 String[] solarPanel = CSVRead.DefineSolarPanel(is, capacityWp, AreaAlvo);
-                double area = DefineArea(solarPanel);
+                double area = CalculadoraOnGrid.DefineArea(solarPanel);
 
                 //Definindo os inversores
                 is = MyContext.getResources().openRawResource(R.raw.banco_inversores);
                 String[] invertor = CSVRead.DefineInvertor(is, solarPanel);
 
                 //Definindo os custos
-                double[] costs = DefineCosts(solarPanel, invertor);
+                double[] costs = CalculadoraOnGrid.DefineCosts(solarPanel, invertor);
 
                 //Calculo da energia produzida em um ano
-                double anualGeneration = EstimateAnualGeneration(solarPanel, stateVec, cityVec);
+                double anualGeneration = CalculadoraOnGrid.EstimateAnualGeneration(solarPanel, stateVec, cityVec);
 
                 GetEconomicInformation(anualGeneration, invertor, energyConsumed, costs[Constants.iCOSTS_TOTAL], stateVec);
 
@@ -281,106 +283,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
-    @org.jetbrains.annotations.Contract(pure = true)
-    public static double ValueWithoutTaxes(double costReais){
-        return (costReais - (Constants.CIP))*(1 - Constants.ICMS - Constants.PIS - Constants.COFINS);
-    }
-
-    //Converte a conta de reais para kWh
-    public static double ConvertToKWh(double costReais, String[] stateVec){
-        return costReais/Double.parseDouble(stateVec[Constants.iEST_TARIFA]);
-    }
-
-    public static double MeanSolarHour(String[] cityVec){
-        int i;
-        double solarHour = 0.0;
-        for(i=1; i<=12; i++){
-            solarHour += Double.parseDouble(cityVec[i])/1000.0;
-        }
-        solarHour = solarHour/12.0;
-
-
-        return solarHour;
-    }
-
-    public static double FindCapacity(double energyConsumed, double solarHour){
-        energyConsumed -= Constants.COST_DISP; //O Custo de disponibilidade é o mínimo que alguém pode pagar
-        if(energyConsumed < 0.0){
-            return 0;
-        }
-        // Ou seja, se a pessoa consumir 400KWh, e produzir 375KWh, ela irá pagar 50KWh à concessionária, se esse for o custo de disponibilidade.
-        energyConsumed = (energyConsumed*1000)/30.0; //Energia consumida por dia
-        energyConsumed = energyConsumed / (Constants.TD * solarHour); //TD é a constante de segurança
-        return energyConsumed;
-    }
-
-    public static double DefineArea(String[] solarPanel){
-        return Integer.parseInt(solarPanel[Constants.iPANEL_QTD]) * Double.parseDouble(solarPanel[Constants.iPANEL_AREA]);
-    }
-
-    public static double[] DefineCosts(String[] solarPanel, String[] invertor){
-        double[] costs = {0.0, 0.0};
-        //Definido custo parcial
-        costs[Constants.iCOSTS_PARCIAL] = Double.parseDouble(invertor[Constants.iINV_PRECO_TOTAL]) +
-                                        Double.parseDouble(solarPanel[Constants.iPANEL_CUSTO_TOTAL]);
-        //Definindo o custo total
-        costs[Constants.iCOSTS_TOTAL] = costs[Constants.iCOSTS_PARCIAL]*(1 + Constants.PERCENTUAL_COST_INSTALATION);
-
-        return costs;
-    }
-
-    public static double EstimateAnualGeneration(String[] solarPanel, String[] stateVec, String[] cityVec){
-        //Calculos retirados do manual de engenharia FV p. 149 a 153
-        double anualGeneration=0.0, dailyGen, monthlyGen;
-        int month;
-        double tempAboveLimit;
-        double correctionTemp;
-        double efficiency, irradiance = 1000.0, ambientTemp;
-
-        for(month=1; month<=12; month++){
-            //Pega a temperatura média do estado no mês
-            ambientTemp = Double.parseDouble(stateVec[month]);
-            //Temperatura estimada do módulo acima de 25°C (se a temperatura do módulo for 50°C, tempAboveLimit será 25)
-            tempAboveLimit = ambientTemp + ((Integer.parseInt(solarPanel[Constants.PANEL_NOCT]) - 20)*0.00125*irradiance) - 25;
-            //Esse valor será negativo devido ao coeficiente de temperatura
-            correctionTemp = (tempAboveLimit * Double.parseDouble(solarPanel[Constants.iPANEL_COEFTEMP]) *
-                                Double.parseDouble(solarPanel[Constants.iPANEL_POTENCIA])) / 100;
-            //Eficiencia do sistema (qual a porcentagem de energia captada em 1m²)
-            efficiency = (Double.parseDouble(solarPanel[Constants.iPANEL_POTENCIA]) + correctionTemp)/
-                        (Double.parseDouble(solarPanel[Constants.iPANEL_AREA])*1000); //O 1000 é a quantidade de W/m² que estamos considerando
-
-            //Horas de sol pico do mês * eficiencia * area total
-            dailyGen = (Double.parseDouble(cityVec[month])/1000.0) * efficiency *
-                    Double.parseDouble(solarPanel[Constants.iPANEL_AREA]) * Double.parseDouble(solarPanel[Constants.iPANEL_QTD]);
-            monthlyGen = dailyGen * GetNumberOfDays(month);
-            anualGeneration += monthlyGen;
-        }
-
-        return anualGeneration;
-    }
-
-    public static int GetNumberOfDays(int month){
-        switch (month){
-            case 1:
-            case 3:
-            case 5:
-            case 7:
-            case 8:
-            case 10:
-            case 12:
-                return 31;
-            case 2:
-                return 28;
-            case 4:
-            case 6:
-            case 9:
-            case 11:
-                return 30;
-        }
-        return 0;
-    }
 
     public static void GetEconomicInformation(double anualGeneration, String[] invertor,
                                                   double energyConsumedMonthly, double custoTotalInstal, String[] stateVec){
@@ -509,6 +411,11 @@ public class MainActivity extends AppCompatActivity {
         PLCOE = LCOE;
     }
 
+
+
+
+    ///////////////////// Funções de utilidade para a Main Activity
+
     public void hideKeyboard(View view) {
         InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(MainActivity.INPUT_METHOD_SERVICE);
         if(inputMethodManager != null){
@@ -518,6 +425,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //Muda o spinner de cidades para as cidades do estado selecionado
     public void ChangeSpinner(int statePos){
         int[] statesPositions = {R.array.AC, R.array.AL, R.array.AP, R.array.AM, R.array.BA, R.array.CE, R.array.DF,
                 R.array.ES, R.array.GO, R.array.MA, R.array.MT, R.array.MS, R.array.MG, R.array.PA, R.array.PB,

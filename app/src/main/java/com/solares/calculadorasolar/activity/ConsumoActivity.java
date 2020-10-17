@@ -5,6 +5,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.solares.calculadorasolar.R;
 import com.solares.calculadorasolar.classes.AutoSizeText;
+import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
 import com.solares.calculadorasolar.classes.Constants;
 
 import android.content.Intent;
@@ -17,7 +18,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.InputStream;
 import java.util.Locale;
 
 import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensionsAndSetTariff;
@@ -134,7 +134,7 @@ public class ConsumoActivity extends AppCompatActivity {
             } else {
                 ///////Descobre a nova tarifa baseada no consumo em KWh
                 //Tira os impostos do custo em reais
-                consumoSemImpostos = MainActivity.ValueWithoutTaxes(custoReais);
+                consumoSemImpostos = CalculadoraOnGrid.ValueWithoutTaxes(custoReais);
                 //Descobre a tarifa
                 novaTarifa = consumoSemImpostos/novoConsumo;
                 //Atualiza a tarifa passada

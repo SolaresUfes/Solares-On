@@ -298,7 +298,10 @@ public class MainActivity extends AppCompatActivity {
         double LCOESumCost=0.0, LCOESumGeneration=0.0;
         PTempoRetorno = 30;
         for(year = 0; year < 25; year++) { //Até 25 anos, que é a estimativa da vida útil dos paineis
+            //Atualiza a tarifa com uma estimativa anual de incremento de preço (inflação tarifária)
             tariff = Double.parseDouble(stateVec[Constants.iEST_TARIFA])*Math.pow(1 + Constants.TARIFF_CHANGE/100.0, year);
+
+            //Um ajuste do Custo nivelado de energia
             LCOEDivisor = Math.pow(1 + Constants.SELIC, year);
 
             //Depreciação do painel a cada ano (diminuição de rendimento)

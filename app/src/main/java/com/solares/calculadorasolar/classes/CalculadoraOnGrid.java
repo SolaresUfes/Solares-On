@@ -1,6 +1,28 @@
 package com.solares.calculadorasolar.classes;
 
 public class CalculadoraOnGrid {
+    //Variáveis da Classe
+    String[] cityVec;
+    String NomeCidade;
+    String[] placaEscolhida;
+    double custoReais;
+    double consumokWh;
+    double potenciaNecessaria;
+    double area;
+    String[] inversor;
+    double custoParcial;
+    double custoTotal;
+    double geracaoAnual;
+    double lucro;
+    double taxaRetornoInvestimento;
+    double economiaMensal;
+    double LCOE;
+    int tempoRetorno;
+    double horaSolar;
+    double tarifaMensal;
+
+
+    
 
     /* Descrição: Recebe a conta de energia em reais e retorna o valor, também em reais, retirando os impostos
      * Parâmetros de Entrada: costReais - Valor em reais da conta de luz média mensal, com impostos

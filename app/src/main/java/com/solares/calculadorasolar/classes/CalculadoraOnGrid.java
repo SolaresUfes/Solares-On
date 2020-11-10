@@ -2,8 +2,8 @@ package com.solares.calculadorasolar.classes;
 
 public class CalculadoraOnGrid {
     //Variáveis da Classe
-    String[] cityVec;
-    String NomeCidade;
+    String[] vetorCidade;
+    String nomeCidade;
     String[] placaEscolhida;
     double custoReais;
     double consumokWh;
@@ -18,11 +18,49 @@ public class CalculadoraOnGrid {
     double economiaMensal;
     double LCOE;
     int tempoRetorno;
-    double horaSolar;
+    double horasDeSolPleno;
     double tarifaMensal;
 
 
-    
+    /* Descrição: Construtor do Objeto CalculadoraOnGrid
+     * Parâmetros de Entrada: -;
+     * Saída: -;
+     * Pré Condições: -;
+     * Pós Condições: O objeto foi construido;
+     */
+    public CalculadoraOnGrid(){}
+
+    //////////////////////////
+    ////  Funções getters ////
+    //////////////////////////
+    public String[] pegaVetorCidade(){ return vetorCidade; }
+    public String pegaNomeCidade(){ return nomeCidade; }
+    public String[] pegaPlacaEscolhida(){ return placaEscolhida; }
+    public double pegaCustoReais(){ return custoReais; }
+    public double pegaConsumokWhs(){ return consumokWh; }
+    public double pegaPotenciaNecessaria(){ return potenciaNecessaria; }
+    public double pegaArea(){ return area; }
+    public String[] pegaInversor(){ return inversor; }
+    public double pegaCustoParcial(){ return custoParcial; }
+    public double pegaCustoTotal(){ return custoTotal; }
+    public double pegaGeracaoAnual(){ return geracaoAnual; }
+    public double pegaLucro(){ return lucro; }
+    public double pegaTaxaRetornoInvestimento(){ return taxaRetornoInvestimento; }
+    public double pegaEconomiaMensal(){ return economiaMensal; }
+    public double pegaLCOE(){ return LCOE; }
+    public int pegaTempoRetorno(){ return tempoRetorno; }
+    public double pegaHorasDeSolPleno(){ return horasDeSolPleno; }
+    public double pegaTarifaMensal(){ return tarifaMensal; }
+
+
+
+
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////        Funções Auxiliares       ////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     /* Descrição: Recebe a conta de energia em reais e retorna o valor, também em reais, retirando os impostos
      * Parâmetros de Entrada: costReais - Valor em reais da conta de luz média mensal, com impostos

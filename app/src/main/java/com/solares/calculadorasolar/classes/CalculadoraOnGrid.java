@@ -91,9 +91,13 @@ public class CalculadoraOnGrid implements Serializable {
     ////////////////////////////////////////        Funções Principais       ////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    /*
-     * Esse método faz todos os cálculos, passando para a proxima activity os resultados
-     * Se AreaAlvo == -1, não vai se preocupar com a área
+
+    /* Descrição: Realiza todos os cálculos relazionados ao On Grid e iniciam o ResultadoActivity. Deve ser chamado com um objeto (calculadora.Calcular())
+     * Parâmetros de Entrada: AreaAlvo - A área que terá o sistema final. Se AreaAlvo for -1, calcula a área ideal para a pessoa.
+     * MyContext - Contexto da activity chamando o calcular.
+     * Saída: -;
+     * Pré Condições: O objeto deve ter seus campos de vetorCidade, vetorEstado, tarifaMensal, nomeCidade e custoReais preenchidos;
+     * Pós Condições: O objeto tem seus valores altlerados, com os resultados do cálculo e passa o intent Serializable e inicia a ResultadoActivity;
      */
     public void Calcular(float AreaAlvo, Context MyContext) {
         InputStream is=null;
@@ -175,6 +179,12 @@ public class CalculadoraOnGrid implements Serializable {
     }
 
 
+    /* Descrição: Realiza os cálculos relacionados aos índices econômicos e altera as variáveis do objeto
+     * Parâmetros de Entrada: -;
+     * Saída: -;
+     * Pré Condições: O objeto deve ter passado pela função Calcular, não é recomendado chamar essa função sozinha;
+     * Pós Condições: O objeto tem seus valores altlerados, com os resultados do cálculo;
+     */
     public void GetEconomicInformation(){
         int year;
         double geracaoComDepreciacao, consumoMedioAnual=consumokWh*12;

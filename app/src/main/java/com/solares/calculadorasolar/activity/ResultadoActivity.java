@@ -14,7 +14,7 @@ import com.solares.calculadorasolar.classes.AutoSizeText;
 import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
 import com.solares.calculadorasolar.classes.Constants;
 
-import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensionsAndSetTariff;
+import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensions;
 
 public class ResultadoActivity extends AppCompatActivity{
 
@@ -31,7 +31,7 @@ public class ResultadoActivity extends AppCompatActivity{
 
             //Pegando informações sobre o dispositivo, para regular o tamanho da letra (fonte)
             //Essa função pega as dimensões e as coloca em váriaveis globais
-            GetPhoneDimensionsAndSetTariff(this, tarifaMensal);
+            GetPhoneDimensions(this);
 
             TextView textTituloResultado = findViewById(R.id.text_titulo_resultado);
             AutoSizeText.AutoSizeTextView(textTituloResultado, MainActivity.alturaTela, MainActivity.larguraTela, 4f);

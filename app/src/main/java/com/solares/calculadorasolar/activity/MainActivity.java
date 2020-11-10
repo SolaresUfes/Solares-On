@@ -36,20 +36,11 @@ import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
 public class MainActivity extends AppCompatActivity {
 
     public ViewHolder mViewHolder = new ViewHolder();
-    public static double costReais;
 
-    ///// Essas são as variáveis de índices econômicos
-    public static double PLCOE;
-    public static double PInternalRateOfReturn;
-    public static double Ppayback;
-    public static double PindiceLucratividade; //Não está sendo exibido mais
-    public static int PTempoRetorno;
-    public static double PeconomiaMensalMedia;
     /////
     public static int larguraTela;
     public static int alturaTela;
     public float porcent = 4f;
-    public static double PtarifaPassada = 0.0;
 
 
     @Override
@@ -59,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Pegando informações sobre o dispositivo, para regular o tamanho da letra (fonte)
         //Essa função pega as dimensões e as coloca em váriaveis globais
-        GetPhoneDimensionsAndSetTariff(this, 0.0);
+        GetPhoneDimensions(this);
 
         //Identificando os componentes do layout
         this.mViewHolder.textSimulacao = findViewById(R.id.text_simulacao);
@@ -142,9 +133,7 @@ public class MainActivity extends AppCompatActivity {
                         calculadora.setVetorEstado(CreateVetorEstado(calculadora.pegaVetorCidade()));
                         // Colocar Tarifa inicial
                         calculadora.setTarifaMensal(Double.parseDouble(calculadora.pegaVetorEstado()[Constants.iEST_TARIFA]));
-                        int retorno = calculadora.Calculate(-1, MainActivity.this);
-
-
+                        calculadora.Calcular(-1, MainActivity.this);
                     }
                 } catch (Exception e){
                     try {
@@ -166,22 +155,9 @@ public class MainActivity extends AppCompatActivity {
         is = this.getResources().openRawResource(R.raw.banco_irradiancia);
         vetorCidade = CSVRead.getCity(idCity, stateName, is);
 
-
         //Pegando as informações do estado
         is = this.getResources().openRawResource(R.raw.banco_estados);
         String[] stateVec;
-        if(vetorCidade != null){
-            stateVec = CSVRead.getState(vetorCidade, is);
-            //Verifica se foi passada alguma tarifa pelo usuário:
-            if(PtarifaPassada != 0.0){
-                if(stateVec != null) {
-                    //Se foi passada uma tarifa, ela é colocada no lugar da do estado
-                    stateVec[Constants.iEST_TARIFA] = Double.toString(PtarifaPassada);
-                }
-            }
-        } else {
-            Toast.makeText(this, "Cidade não foi encontrada", Toast.LENGTH_LONG).show();
-        }
 
         return vetorCidade;
     }
@@ -492,18 +468,13 @@ public class MainActivity extends AppCompatActivity {
     /*Essa função pega a largura e altura da tela do celular em números inteiros e coloca essa informação nas váriaveis públicas larguraTela e alturaTela
      *Ela também define o PtarifaPassada (uma variável pública que condiz com a tarifa escolhida pelo usuário) como um valor passado
      */
-    public static void GetPhoneDimensionsAndSetTariff(Activity activity, double tarifa){
+    public static void GetPhoneDimensions(Activity activity){
         //Pegar dimensões
         Display display = activity.getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
         larguraTela = size.x;
         alturaTela = size.y;
-
-        //Definir tarifa pública
-        if(tarifa != PtarifaPassada){
-            PtarifaPassada = tarifa;
-        }
     }
 
     public static class ViewHolder{

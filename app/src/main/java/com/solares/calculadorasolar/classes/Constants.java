@@ -22,6 +22,7 @@ public class Constants {
     public static double PANEL_LIFE = 25;
 
     // Strings para passagem de parâmetros para outras activities
+    public static final String EXTRA_CALCULADORAON = "com.solares.com.solares.calculadorasolar.EXTRA_CALCULADORAON";
     public static final String EXTRA_CUSTO_REAIS = "com.solares.com.solares.calculadorasolar.EXTRA_CUSTO_REAIS";
     public static final String EXTRA_CONSUMO = "com.solares.com.solares.calculadorasolar.EXTRA_CONSUMO";
     public static final String EXTRA_POTENCIA = "com.solares.com.solares.calculadorasolar.EXTRA_POTENCIA";

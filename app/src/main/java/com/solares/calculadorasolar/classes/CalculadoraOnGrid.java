@@ -1,8 +1,20 @@
 package com.solares.calculadorasolar.classes;
 
-public class CalculadoraOnGrid {
+import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
+import android.widget.Toast;
+
+import com.solares.calculadorasolar.R;
+import com.solares.calculadorasolar.activity.ResultadoActivity;
+
+import java.io.InputStream;
+import java.io.Serializable;
+
+public class CalculadoraOnGrid implements Serializable {
     //Variáveis da Classe
     String[] vetorCidade;
+    String[] vetorEstado;
     String nomeCidade;
     String[] placaEscolhida;
     double custoReais;
@@ -34,6 +46,7 @@ public class CalculadoraOnGrid {
     ////  Funções getters ////
     //////////////////////////
     public String[] pegaVetorCidade(){ return vetorCidade; }
+    public String[] pegaVetorEstado(){ return vetorEstado; }
     public String pegaNomeCidade(){ return nomeCidade; }
     public String[] pegaPlacaEscolhida(){ return placaEscolhida; }
     public double pegaCustoReais(){ return custoReais; }
@@ -52,7 +65,244 @@ public class CalculadoraOnGrid {
     public double pegaHorasDeSolPleno(){ return horasDeSolPleno; }
     public double pegaTarifaMensal(){ return tarifaMensal; }
 
+    //////////////////////////
+    ////  Funções setters ////
+    //////////////////////////
+    public void setVetorCidade(String[] vetorCidade){
+        this.vetorCidade = vetorCidade;
+    }
+    public void setVetorEstado(String[] vetorEstado){
+        this.vetorEstado = vetorEstado;
+    }
+    public void setTarifaMensal(double tarifa){
+        this.tarifaMensal = tarifa;
+    }
+    public void setNomeCidade(String nomeCidade){
+        this.nomeCidade = nomeCidade;
+    }
+    public void setCustoReais(double custoReais){
+        this.custoReais = custoReais;
+    }
 
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////        Funções Principais       ////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*
+     * Esse método faz todos os cálculos, passando para a proxima activity os resultados
+     * Se tarifaPassada == 0.0, pega a tarifa média do estado
+     * Se AreaAlvo == -1, não vai se preocupar com a área
+     */
+    public int Calculate(float AreaAlvo, Context MyContext) {
+        InputStream is=null;
+
+        try {
+            //Calcula a média anual da hora solar da cidade escolhida
+            horasDeSolPleno = CalculadoraOnGrid.MeanSolarHour(vetorCidade);
+
+            /////////////////double custoReais;
+
+            //Calcula o consumo mensal em KWh
+            double custoSemImpostos = CalculadoraOnGrid.ValueWithoutTaxes(custoReais);
+            if(vetorEstado != null){
+                consumokWh = CalculadoraOnGrid.ConvertToKWh(custoSemImpostos, vetorEstado);
+            } else {
+                throw new Exception("Estado não foi encontrado");
+            }
+
+            //Acha a potêcia necessária
+            potenciaNecessaria = CalculadoraOnGrid.FindTargetCapacity(consumokWh, horasDeSolPleno);
+            if(potenciaNecessaria < 0.0){
+                try{
+                    Toast.makeText(MyContext, "O seu consumo de energia é muito baixo!", Toast.LENGTH_LONG).show();
+                } catch (Exception etoast){
+                    etoast.printStackTrace();
+                }
+            } else {
+                //Definindo as placas
+                is = MyContext.getResources().openRawResource(R.raw.banco_paineis);
+                placaEscolhida = CSVRead.DefineSolarPanel(is, potenciaNecessaria, AreaAlvo);
+                area = CalculadoraOnGrid.DefineArea(placaEscolhida);
+
+                //Definindo os inversores
+                is = MyContext.getResources().openRawResource(R.raw.banco_inversores);
+                inversor = CSVRead.DefineInvertor(is, placaEscolhida);
+
+                //Definindo os custos
+                double[] custos = CalculadoraOnGrid.DefineCosts(placaEscolhida, inversor);
+                custoParcial = custos[Constants.iCOSTS_PARCIAL];
+                custoTotal = custos[Constants.iCOSTS_TOTAL];
+
+                //Calculo da energia produzida em um ano
+                geracaoAnual = CalculadoraOnGrid.EstimateAnualGeneration(placaEscolhida, vetorEstado, vetorCidade);
+
+                GetEconomicInformation();
+
+                //Preparação para mudar para próxima activity
+                Intent intent = new Intent(MyContext, ResultadoActivity.class);
+
+                //Fechar o InputStream
+                try {
+                    is.close();
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+
+                //Mudar de activity
+                MyContext.startActivity(intent);
+            }
+        } catch (Exception e){
+            Log.i("Calculate", "Erro no Cálculo");
+            //Se algum erro ocorrer, pede para o usuário informar um número real
+            try {
+                Toast.makeText(MyContext, R.string.informe_um_numero, Toast.LENGTH_LONG).show();
+            } catch (Exception ee){
+                ee.printStackTrace();
+            }
+            e.printStackTrace();
+        } finally {
+            //Fechar o InputStream, se ocorreu algum erro
+            try {
+                if(is!=null){
+                    is.close();
+                }
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public void GetEconomicInformation(){
+        int year;
+        anualGeneration = anualGeneration * (1 - Constants.LOSS_DIRT);
+        double geracaoComDepreciacao, geracaoComAsPerdas, consumoMedioAnual=energyConsumedMonthly*12;
+        double saldoDoConsumoCincoAnos=0, consumoAcimaDaGeracao=0, valorAPagar=0;
+        double gastosTotais, ConsumoAPagarNoAno; //Quanto tem que pagar no ano
+        double custoComImposto, custoAtualComImposto, diferencaDeCusto, custoInversor=0.0, custoManutEInstal=0.0;
+        double[] saldoDoConsumoAnual = new double[30], cashFlow=new double[25];
+        double cashFlowCurrentCurrency=0, payback = 0.0, tariff;
+        double LCOEcost, LCOEGeneration, LCOEcrf=0.0, LCOE, LCOEDivisor;
+        double LCOESumCost=0.0, LCOESumGeneration=0.0;
+        PTempoRetorno = 30;
+        for(year = 0; year < 25; year++) { //Até 25 anos, que é a estimativa da vida útil dos paineis
+            //Atualiza a tarifa com uma estimativa anual de incremento de preço (inflação tarifária)
+            tariff = Double.parseDouble(stateVec[Constants.iEST_TARIFA])*Math.pow(1 + Constants.TARIFF_CHANGE/100.0, year);
+
+            //Um ajuste do Custo nivelado de energia
+            LCOEDivisor = Math.pow(1 + Constants.SELIC, year);
+
+            //Depreciação do painel a cada ano (diminuição de rendimento)
+            geracaoComDepreciacao = anualGeneration * (1 - (Constants.DEPREC_PANELS) * year);
+            //Perdas com o inversor
+            geracaoComAsPerdas = geracaoComDepreciacao * Double.parseDouble(invertor[Constants.iINV_RENDIMENTO_MAXIMO]);
+            //Somando o total de energia produzida para calcular o custo de cada KWh
+            LCOEGeneration = geracaoComAsPerdas/LCOEDivisor;
+            LCOESumGeneration += LCOEGeneration;
+            //Encontra quantos KWh o usuário ganhou de créditos esse ano (créditos têm o sinal negativo) ou se ele gastou mais do que produziu
+            if (consumoMedioAnual < geracaoComAsPerdas) {
+                //Se ele produziu mais do que gastou, aumenta os créditos
+                saldoDoConsumoAnual[year] = consumoMedioAnual - geracaoComAsPerdas;
+                consumoAcimaDaGeracao = 0.0;
+            } else {
+                //Se ele consumiu mais do que produziu, não ganha créditos e tem que pagar a diferença
+                saldoDoConsumoAnual[year] = 0.0;
+                consumoAcimaDaGeracao = consumoMedioAnual - geracaoComAsPerdas;
+            }
+
+            //Os créditos duram apenas por cinco anos, então, se não foram usados, descarta o mais antigo
+            saldoDoConsumoCincoAnos += saldoDoConsumoAnual[year];
+            if (year > 4) {
+                saldoDoConsumoCincoAnos -= saldoDoConsumoAnual[year - 5];
+            }
+
+            //Se o consumo que ele tem que pagar for maior do que os créditos que ele tem...
+            if (consumoAcimaDaGeracao + saldoDoConsumoCincoAnos > 0.0) {
+                //Verifica de fato quanto ele deve pagar, descontando os créditos ainda restantes
+                ConsumoAPagarNoAno = consumoAcimaDaGeracao + saldoDoConsumoCincoAnos;
+                //Zera os créditos
+                saldoDoConsumoCincoAnos = 0;
+            } else {
+                //Se os créditos suprirem a demanda, ele não paga "nada"
+                ConsumoAPagarNoAno = 0;
+                saldoDoConsumoCincoAnos += consumoAcimaDaGeracao;
+            }
+
+            //Se o que ele deve pagar for menor do que o custo de disponibilidade, ele paga o custo de disponibilidade
+            if (ConsumoAPagarNoAno < 12.0 * Constants.COST_DISP) {
+                ConsumoAPagarNoAno = 12.0 * Constants.COST_DISP;
+            }
+            //Acha o valor em reais que ele pagará para a concessionária no ano
+            valorAPagar = ConsumoAPagarNoAno * tariff;
+            //Coloca os roubos... Quero dizer, impostos
+            custoComImposto = (valorAPagar / (1 - (Constants.PIS + Constants.COFINS + Constants.ICMS))) + Constants.CIP;
+            //Quanto ele pagaria sem o sistema fotovoltaico, também com roubo (imposto)
+            custoAtualComImposto = ((12.0 * energyConsumedMonthly)*tariff / (1 - (Constants.PIS + Constants.COFINS + Constants.ICMS))) + Constants.CIP;
+            //Acha a diferença que o sistema causou no custo (isso será o lucro ou a economia do ano)
+            diferencaDeCusto = custoAtualComImposto - custoComImposto;
+            if(year == 0){
+                PeconomiaMensalMedia = diferencaDeCusto/12;
+            }
+
+            //Verifica se nesse ano deve-se trocar o inversor (de 10 em 10 anos)
+            if (year % Constants.INVERTOR_TIME == 0 && year > 0) {
+                custoInversor = Double.parseDouble(invertor[Constants.iINV_PRECO]) *
+                        Math.pow(1 + Constants.IPCA, year) * Double.parseDouble(invertor[Constants.iINV_QTD]);
+            } else {
+                custoInversor = 0;
+            }
+
+            //Considerando que os custos de manutenção são relativos ao investimento inicial, que esses custos sobem em 2 vezes a inflação
+            // e que o custo de instalação do inversor é um décimo de seu preço
+            custoManutEInstal = (custoTotalInstal * Constants.MAINTENANCE_COST) * Math.pow(1 + (2 * Constants.IPCA), year) + custoInversor * 0.1;
+            gastosTotais = custoManutEInstal + custoInversor;
+            //Esses são os custos coniderados no LCOE, os custos de energia (da concessionária) não entram no cálculo
+            LCOEcost = gastosTotais/LCOEDivisor;
+            LCOESumCost += LCOEcost;
+
+
+            if (year == 0) { //Se for o primeiro ano, considera os custos de instalação
+                //A economia (ou lucro) do sistema no ano foi:
+                cashFlow[year] = -custoTotalInstal + diferencaDeCusto - gastosTotais;
+            } else {
+                //Lembrando que a diferença de custo é o quanto o usuário economiza com a concessionária depois de instalar o sistema
+                cashFlow[year] = diferencaDeCusto - gastosTotais;
+            }
+
+            //Diminui o valor economizado, trazendo para valores atuais
+            cashFlowCurrentCurrency = cashFlow[year] / Math.pow(1 + Constants.SELIC, year);
+            //O payback, que inicialmente é zero, armazena isso
+            payback+=cashFlowCurrentCurrency;
+
+            //Se ainda não foi definido tempo de retorno, e o payback for maior que zero, quer dizer que o investimento foi pago nesse ano
+            if(PTempoRetorno == 30 && payback>=0){
+                //Como year é um índice de um vetor, temos que adicionar 1 para se ter o valor correto
+                PTempoRetorno = year+1;
+            }
+        }
+        //Colocando os valores encontrados em variáveis públicas
+        Ppayback = payback;
+
+        PindiceLucratividade = (payback+custoTotalInstal)/custoTotalInstal;
+
+        //Usei uma função que achei na internet para calcular o irr. Não tenho ideia de como funciona, mas funciona
+        double internalRateOfReturn = IRR.getIRR(cashFlow);
+        //Se o payback for negativo, o irr dá um valor extremamente alto, então eu boto zero
+        if(internalRateOfReturn > 1000000.0){
+            PInternalRateOfReturn = 0.0;
+        } else {
+            PInternalRateOfReturn = internalRateOfReturn;
+        }
+
+
+        LCOEcrf = (Constants.COST_OF_CAPITAL * Math.pow(1 + Constants.COST_OF_CAPITAL, Constants.PANEL_LIFE)/
+                (Math.pow(1 + Constants.COST_OF_CAPITAL, Constants.PANEL_LIFE) - 1))*custoTotalInstal;
+        //Divide os todos os custos por toda energia produzida
+        LCOE = (LCOESumCost + LCOEcrf)/LCOESumGeneration;
+        PLCOE = LCOE;
+    }
 
 
 

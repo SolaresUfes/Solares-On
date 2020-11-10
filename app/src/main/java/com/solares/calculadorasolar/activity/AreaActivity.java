@@ -93,7 +93,7 @@ public class AreaActivity extends AppCompatActivity {
                          Thread thread = new Thread(){
                              public void run(){
                                  Intent intent;
-                                 MainActivity.Calculate(AreaAlvo, cityVec, NomeCidade, -1, custoReais, null, AreaActivity.this);
+                                 //MainActivity.Calculate(AreaAlvo, cityVec, NomeCidade, -1, custoReais, null, AreaActivity.this);
                              }
                          };
                          thread.start();

@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.solares.calculadorasolar.R;
 import com.solares.calculadorasolar.classes.AutoSizeText;
+import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
 import com.solares.calculadorasolar.classes.Constants;
 
 import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensionsAndSetTariff;
@@ -26,24 +27,7 @@ public class ResultadoActivity extends AppCompatActivity{
         try {
 
             Intent intent = getIntent();
-            final String[] cityVec = intent.getStringArrayExtra(Constants.EXTRA_VETOR_CIDADE);
-            final String NomeCidade = intent.getStringExtra(Constants.EXTRA_CIDADE);
-            final double custoReais = intent.getDoubleExtra(Constants.EXTRA_CUSTO_REAIS, 0.0);
-            final double consumokWh = intent.getDoubleExtra(Constants.EXTRA_CONSUMO, 0.0);
-            final double potenciaNecessaria = intent.getDoubleExtra(Constants.EXTRA_POTENCIA, 0.0);
-            final String[] placaEscolhida = intent.getStringArrayExtra(Constants.EXTRA_PLACAS);
-            final double area = intent.getDoubleExtra(Constants.EXTRA_AREA, 0.0);
-            final String[] inversor = intent.getStringArrayExtra(Constants.EXTRA_INVERSORES);
-            final double custoParcial = intent.getDoubleExtra(Constants.EXTRA_CUSTO_PARCIAL, 0.0);
-            final double custoTotal = intent.getDoubleExtra(Constants.EXTRA_CUSTO_TOTAL, 0.0);
-            final double geracaoAnual = intent.getDoubleExtra(Constants.EXTRA_GERACAO, 0.0);
-            final double lucro = intent.getDoubleExtra(Constants.EXTRA_LUCRO, 0.0);
-            final double taxaRetornoInvestimento = intent.getDoubleExtra(Constants.EXTRA_TAXA_DE_RETORNO, 0.0);
-            final double economiaMensal = intent.getDoubleExtra(Constants.EXTRA_ECONOMIA_MENSAL, 0.0);
-            final double LCOE = intent.getDoubleExtra(Constants.EXTRA_LCOE, 0.0);
-            final int tempoRetorno = intent.getIntExtra(Constants.EXTRA_TEMPO_RETORNO, 0);
-            final double horaSolar = intent.getDoubleExtra(Constants.EXTRA_HORA_SOLAR, 0.0);
-            final double tarifaMensal = intent.getDoubleExtra(Constants.EXTRA_TARIFA, 0.0);
+            CalculadoraOnGrid calculadora = (CalculadoraOnGrid) intent.getSerializableExtra(Constants.EXTRA_CALCULADORAON);
 
             //Pegando informações sobre o dispositivo, para regular o tamanho da letra (fonte)
             //Essa função pega as dimensões e as coloca em váriaveis globais

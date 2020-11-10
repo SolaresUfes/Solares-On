@@ -143,7 +143,7 @@ public class ConsumoActivity extends AppCompatActivity {
                 //Criar uma thread para fazer o cálculo pois é um processamento demorado
                 Thread thread = new Thread(){
                     public void run(){
-                        MainActivity.Calculate(-1, cityVec, cityName, -1, custoReais, null, ConsumoActivity.this);
+                        //MainActivity.Calculate(-1, cityVec, cityName, -1, custoReais, null, ConsumoActivity.this);
                     }
                 };
                 thread.start();

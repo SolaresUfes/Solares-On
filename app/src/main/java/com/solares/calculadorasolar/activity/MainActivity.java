@@ -1,14 +1,8 @@
 package com.solares.calculadorasolar.activity;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -22,14 +16,16 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.solares.calculadorasolar.R;
 import com.solares.calculadorasolar.classes.AutoSizeText;
 import com.solares.calculadorasolar.classes.CSVRead;
+import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
 import com.solares.calculadorasolar.classes.Constants;
 
 import java.io.InputStream;
-
-import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
 
 
 public class MainActivity extends AppCompatActivity {

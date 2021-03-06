@@ -33,14 +33,18 @@ public class CalculadoraOnGrid implements Serializable {
     double horasDeSolPleno;
     double tarifaMensal;
 
+    float areaAlvo;
+
 
     /* Descrição: Construtor do Objeto CalculadoraOnGrid
      * Parâmetros de Entrada: -;
      * Saída: -;
      * Pré Condições: -;
-     * Pós Condições: O objeto foi construido;
+     * Pós Condições: O objeto foi construido com a área alvo como -1f;
      */
-    public CalculadoraOnGrid(){}
+    public CalculadoraOnGrid(){
+        this.areaAlvo = -1f;
+    }
 
     //////////////////////////
     ////  Funções getters ////
@@ -91,7 +95,6 @@ public class CalculadoraOnGrid implements Serializable {
     ////////////////////////////////////////        Funções Principais       ////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
     /* Descrição: Realiza todos os cálculos relazionados ao On Grid e iniciam o ResultadoActivity. Deve ser chamado com um objeto (calculadora.Calcular())
      * Parâmetros de Entrada: AreaAlvo - A área que terá o sistema final. Se AreaAlvo for -1, calcula a área ideal para a pessoa.
      * MyContext - Contexto da activity chamando o calcular.
@@ -101,6 +104,10 @@ public class CalculadoraOnGrid implements Serializable {
      */
     public void Calcular(float AreaAlvo, Context MyContext) {
         InputStream is=null;
+
+        if (AreaAlvo != -1){
+            this.areaAlvo = AreaAlvo;
+        }
 
         try {
             //Calcula a média anual da hora solar da cidade escolhida
@@ -127,7 +134,7 @@ public class CalculadoraOnGrid implements Serializable {
             } else {
                 //Definindo as placas
                 is = MyContext.getResources().openRawResource(R.raw.banco_paineis);
-                placaEscolhida = CSVRead.DefineSolarPanel(is, potenciaNecessaria, AreaAlvo);
+                placaEscolhida = CSVRead.DefineSolarPanel(is, potenciaNecessaria, this.areaAlvo);
                 area = DefineArea(placaEscolhida);
 
                 //Definindo os inversores
@@ -153,6 +160,9 @@ public class CalculadoraOnGrid implements Serializable {
                 } catch (Exception e){
                     e.printStackTrace();
                 }
+
+                //Passar o objeto com as informações calculadas para a próxima Activity (Resultado)
+                intent.putExtra(Constants.EXTRA_CALCULADORAON, this);
 
                 //Mudar de activity
                 MyContext.startActivity(intent);

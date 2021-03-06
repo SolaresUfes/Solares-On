@@ -27,7 +27,7 @@ public class ResultadoActivity extends AppCompatActivity{
         try {
 
             Intent intent = getIntent();
-            CalculadoraOnGrid calculadora = (CalculadoraOnGrid) intent.getSerializableExtra(Constants.EXTRA_CALCULADORAON);
+            final CalculadoraOnGrid calculadora = (CalculadoraOnGrid) intent.getSerializableExtra(Constants.EXTRA_CALCULADORAON);
 
             //Pegando informações sobre o dispositivo, para regular o tamanho da letra (fonte)
             //Essa função pega as dimensões e as coloca em váriaveis globais
@@ -52,42 +52,42 @@ public class ResultadoActivity extends AppCompatActivity{
             buttonDados.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AbrirActivityDados(custoReais, consumokWh, horaSolar, tarifaMensal, cityVec, NomeCidade);
+                    AbrirActivityDados(calculadora);
                 }
             });
 
             buttonInstalacao.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AbrirActivityInstalacao(potenciaNecessaria, placaEscolhida, area, inversor);
+                    AbrirActivityInstalacao(calculadora);
                 }
             });
 
             buttonAnalise.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AbrirActivityAnalise(custoParcial, custoTotal, geracaoAnual);
+                    AbrirActivityAnalise(calculadora);
                 }
             });
 
             buttonIndicesEconomicos.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AbrirActivityIndices(lucro, taxaRetornoInvestimento, economiaMensal, LCOE, tempoRetorno);
+                    AbrirActivityIndices(calculadora);
                 }
             });
 
             buttonAjustarArea.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AbrirActivityArea(cityVec, NomeCidade, custoReais, area);
+                    AbrirActivityArea(calculadora);
                 }
             });
 
             buttonFinalizar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FinalizarCalculo();
+                    FinalizarCalculo(calculadora);
                 }
             });
 
@@ -96,58 +96,40 @@ public class ResultadoActivity extends AppCompatActivity{
         }
     }
 
-    public void AbrirActivityDados(double custoReais, double consumokWh, double horaSolar, double tarifaMensal, String[] cityVec, String NomeCidade){
+    public void AbrirActivityDados(CalculadoraOnGrid calculadora){
         Intent intent = new Intent(this, DadosActivity.class);
-        intent.putExtra(Constants.EXTRA_HORA_SOLAR, horaSolar);
-        intent.putExtra(Constants.EXTRA_CUSTO_REAIS, custoReais);
-        intent.putExtra(Constants.EXTRA_CONSUMO, consumokWh);
-        intent.putExtra(Constants.EXTRA_TARIFA, tarifaMensal);
-        intent.putExtra(Constants.EXTRA_VETOR_CIDADE, cityVec);
-        intent.putExtra(Constants.EXTRA_CIDADE, NomeCidade);
+        intent.putExtra(Constants.EXTRA_CALCULADORAON, calculadora);
+
         startActivity(intent);
     }
 
-    public void AbrirActivityInstalacao(double potenciaNecessaria, String[] placaEscolhida, double area, String[] inversor){
+    public void AbrirActivityInstalacao(CalculadoraOnGrid calculadora){
         Intent intent = new Intent(this, InstalacaoActivity.class);
-        intent.putExtra(Constants.EXTRA_POTENCIA, potenciaNecessaria);
-        intent.putExtra(Constants.EXTRA_PLACAS, placaEscolhida);
-        intent.putExtra(Constants.EXTRA_AREA, area);
-        intent.putExtra(Constants.EXTRA_INVERSORES, inversor);
+        intent.putExtra(Constants.EXTRA_CALCULADORAON, calculadora);
         startActivity(intent);
     }
 
-    public void AbrirActivityAnalise(double custoParcial, double custoTotal, double geracaoAnual){
+    public void AbrirActivityAnalise(CalculadoraOnGrid calculadora){
         Intent intent = new Intent(this, AnaliseActivity.class);
-        intent.putExtra(Constants.EXTRA_CUSTO_PARCIAL, custoParcial);
-        intent.putExtra(Constants.EXTRA_CUSTO_TOTAL, custoTotal);
-        intent.putExtra(Constants.EXTRA_GERACAO, geracaoAnual);
+        intent.putExtra(Constants.EXTRA_CALCULADORAON, calculadora);
         startActivity(intent);
     }
 
-    public void AbrirActivityIndices(double lucro, double taxaRetornoInvestimento, double economiaMensal, double LCOE, int tempoRetorno){
+    public void AbrirActivityIndices(CalculadoraOnGrid calculadora){
         Intent intent = new Intent(this, IndicesEconomicosActivity.class);
-        intent.putExtra(Constants.EXTRA_LUCRO, lucro);
-        intent.putExtra(Constants.EXTRA_TAXA_DE_RETORNO, taxaRetornoInvestimento);
-        intent.putExtra(Constants.EXTRA_ECONOMIA_MENSAL, economiaMensal);
-        intent.putExtra(Constants.EXTRA_LCOE, LCOE);
-        intent.putExtra(Constants.EXTRA_TEMPO_RETORNO, tempoRetorno);
+        intent.putExtra(Constants.EXTRA_CALCULADORAON, calculadora);
         startActivity(intent);
     }
 
-    public void AbrirActivityArea(String[] cityVec, String NomeCidade, double custoReais, double area){
+    public void AbrirActivityArea(CalculadoraOnGrid calculadora){
         Intent intent = new Intent(this, AreaActivity.class);
-        intent.putExtra(Constants.EXTRA_VETOR_CIDADE, cityVec);
-        intent.putExtra(Constants.EXTRA_CIDADE, NomeCidade);
-        intent.putExtra(Constants.EXTRA_CUSTO_REAIS, custoReais);
-        intent.putExtra(Constants.EXTRA_AREA, area);
+        intent.putExtra(Constants.EXTRA_CALCULADORAON, calculadora);
         startActivity(intent);
     }
 
-    public void FinalizarCalculo(){
-        //Limpa tarifa inserida
-        MainActivity.PtarifaPassada = 0.0;
-
+    public void FinalizarCalculo(CalculadoraOnGrid calculadora){
         Intent intent = new Intent(this, CreditoActivity.class);
+        intent.putExtra(Constants.EXTRA_CALCULADORAON, calculadora);
         startActivity(intent);
     }
 }

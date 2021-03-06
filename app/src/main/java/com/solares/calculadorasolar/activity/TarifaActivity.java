@@ -5,6 +5,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.solares.calculadorasolar.R;
 import com.solares.calculadorasolar.classes.AutoSizeText;
+import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
 import com.solares.calculadorasolar.classes.Constants;
 
 import android.content.Intent;
@@ -20,8 +21,7 @@ import android.widget.Toast;
 import java.io.InputStream;
 import java.util.Locale;
 
-import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensionsAndSetTariff;
-import static com.solares.calculadorasolar.activity.MainActivity.PtarifaPassada;
+import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensions;
 
 public class TarifaActivity extends AppCompatActivity {
 
@@ -34,7 +34,7 @@ public class TarifaActivity extends AppCompatActivity {
 
         //Pegando informações sobre o dispositivo, para regular o tamanho da letra (fonte)
         //Essa função pega as dimensões e as coloca em váriaveis globais
-        GetPhoneDimensionsAndSetTariff(this, PtarifaPassada);
+        GetPhoneDimensions(this);
 
         //Pega o layout para poder colocar um listener nele (esconder o teclado)
         ConstraintLayout layout = findViewById(R.id.layout_tarifa);
@@ -70,19 +70,17 @@ public class TarifaActivity extends AppCompatActivity {
 
         //pegar os intents
         Intent intent = getIntent();
-        final double custoReais = intent.getDoubleExtra(Constants.EXTRA_CUSTO_REAIS, 0.0);
-        final String[] cityVec = intent.getStringArrayExtra(Constants.EXTRA_VETOR_CIDADE);
-        final String cityName = intent.getStringExtra(Constants.EXTRA_CIDADE);
-        final double tarifaMensal = intent.getDoubleExtra(Constants.EXTRA_TARIFA, 0.0);
+        final CalculadoraOnGrid calculadora = (CalculadoraOnGrid) intent.getSerializableExtra(Constants.EXTRA_CALCULADORAON);
+
 
         //atualizar o tarifa atual
-        textTarifaAtual.setText(String.format(Locale.ITALY, "Tarifa Atual: R$ %.2f / kWh", tarifaMensal));
+        textTarifaAtual.setText(String.format(Locale.ITALY, "Tarifa Atual: R$ %.2f / kWh", calculadora.pegaTarifaMensal()));
 
         //Listener do botão de recalcular
         buttonRecalcTarifa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AtualizarTarifa(custoReais, cityVec, cityName, editTarifa);
+                AtualizarTarifa(calculadora, editTarifa);
             }
         });
 
@@ -114,7 +112,7 @@ public class TarifaActivity extends AppCompatActivity {
         }
     }
 
-    public void AtualizarTarifa(final double custoReais, final String[] cityVec, final String cityName, final EditText editTarifa){
+    public void AtualizarTarifa(final CalculadoraOnGrid calculadora, final EditText editTarifa){
         try {
             //Pega a tarifa digitada no edit text
             double NovaTarifa = Double.parseDouble(editTarifa.getText().toString());
@@ -126,7 +124,7 @@ public class TarifaActivity extends AppCompatActivity {
                 } catch (Exception etoast1){
                     etoast1.printStackTrace();
                 }
-            } else if (NovaTarifa > custoReais/Constants.COST_DISP){  //Se a tarifa for muito grande
+            } else if (NovaTarifa > calculadora.pegaCustoReais()/Constants.COST_DISP){  //Se a tarifa for muito grande
                 try {
                     Toast.makeText(this, "Insira uma nova tarifa! Valor muito alto!", Toast.LENGTH_LONG).show();
                 } catch (Exception etoast2){
@@ -134,12 +132,12 @@ public class TarifaActivity extends AppCompatActivity {
                 }
             } else {
                 //Atualiza a tarifa passada
-                MainActivity.PtarifaPassada = NovaTarifa;
+                calculadora.setTarifaMensal(NovaTarifa);
                 //Refaz o cálculo com a nova área e inicia a ResultadoActivity
                 //Criar uma thread para fazer o cálculo pois é um processamento demorado
                 Thread thread = new Thread(){
                     public void run(){
-                        //MainActivity.Calculate(-1, cityVec, cityName, -1, custoReais, null, TarifaActivity.this);
+                        calculadora.Calcular(-1f, TarifaActivity.this);
                     }
                 };
                 thread.start();

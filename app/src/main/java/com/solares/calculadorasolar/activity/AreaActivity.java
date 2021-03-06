@@ -18,13 +18,13 @@ import android.widget.Toast;
 import com.solares.calculadorasolar.R;
 import com.solares.calculadorasolar.classes.AutoSizeText;
 import com.solares.calculadorasolar.classes.CSVRead;
+import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
 import com.solares.calculadorasolar.classes.Constants;
 
 import java.io.InputStream;
 import java.util.Locale;
 
-import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensionsAndSetTariff;
-import static com.solares.calculadorasolar.activity.MainActivity.PtarifaPassada;
+import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensions;
 
 public class AreaActivity extends AppCompatActivity {
 
@@ -40,7 +40,7 @@ public class AreaActivity extends AppCompatActivity {
 
         //Pegando informações sobre o dispositivo, para regular o tamanho da letra (fonte)
         //Essa função pega as dimensões e as coloca em váriaveis globais
-        GetPhoneDimensionsAndSetTariff(this, PtarifaPassada);
+        GetPhoneDimensions(this);
 
         TextView textTituloArea = findViewById(R.id.text_titulo_area);
         AutoSizeText.AutoSizeTextView(textTituloArea, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
@@ -66,12 +66,9 @@ public class AreaActivity extends AppCompatActivity {
         ConstraintLayout layout = findViewById(R.id.layout_area);
 
         Intent intent = getIntent();
-        final double area = intent.getDoubleExtra(Constants.EXTRA_AREA, 0.0);
-        final String[] cityVec = intent.getStringArrayExtra(Constants.EXTRA_VETOR_CIDADE);
-        final String NomeCidade = intent.getStringExtra(Constants.EXTRA_CIDADE);
-        final double custoReais = intent.getDoubleExtra(Constants.EXTRA_CUSTO_REAIS, 0.0);
+        final CalculadoraOnGrid calculadora = (CalculadoraOnGrid) intent.getSerializableExtra(Constants.EXTRA_CALCULADORAON);
 
-        textAreaAtual.setText(String.format(Locale.ITALY, "Área Atual: %.2f m²", area));
+        textAreaAtual.setText(String.format(Locale.ITALY, "Área Atual: %.2f m²", calculadora.pegaArea()));
 
         buttonRecalcArea.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,8 +89,7 @@ public class AreaActivity extends AppCompatActivity {
                          //Criar uma thread para fazer o cálculo pois é um processamento demorado
                          Thread thread = new Thread(){
                              public void run(){
-                                 Intent intent;
-                                 //MainActivity.Calculate(AreaAlvo, cityVec, NomeCidade, -1, custoReais, null, AreaActivity.this);
+                                 calculadora.Calcular(AreaAlvo, AreaActivity.this);
                              }
                          };
                          thread.start();

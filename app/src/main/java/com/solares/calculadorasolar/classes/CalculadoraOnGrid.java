@@ -318,7 +318,7 @@ public class CalculadoraOnGrid implements Serializable {
         LCOEcrf = (Constants.COST_OF_CAPITAL * Math.pow(1 + Constants.COST_OF_CAPITAL, Constants.PANEL_LIFE)/
                 (Math.pow(1 + Constants.COST_OF_CAPITAL, Constants.PANEL_LIFE) - 1))*custoTotal;
         //Divide os todos os custos por toda energia produzida
-        LCOE = (LCOESumCost + LCOEcrf)/LCOESumGeneration;
+        LCOE = (LCOESumCost + custoTotal + LCOEcrf)/LCOESumGeneration;
         this.LCOE = LCOE;
     }
 

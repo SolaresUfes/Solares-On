@@ -16,7 +16,7 @@ public class Constants {
     public static double INVERTOR_TIME = 10;
     public static double IPCA = 0.03;
     public static double MAINTENANCE_COST = 0.01;
-    public static double COST_OF_CAPITAL = 0.0715;
+    public static double COST_OF_CAPITAL = 0.221; //Taxa Selic * Retorno Esperado
     public static double SELIC = 0.065;
     public static double TARIFF_CHANGE = 6;
     public static double PANEL_LIFE = 25;
@@ -46,22 +46,25 @@ public class Constants {
 
     //Indices Paineis
     public static final int iPANEL_NOME = 0;
-    public static final int iPANEL_POTENCIA = 1;
-    public static final int iPANEL_PRECO = 2;
-    public static final int iPANEL_AREA = 3;
-    public static final int iPANEL_QTD = 4;
-    public static final int iPANEL_CUSTO_TOTAL = 5;
-    public static final int iPANEL_COEFTEMP = 6;
-    public static final int PANEL_NOCT = 7;
+    public static final int iPANEL_MARCA = 1;
+    public static final int iPANEL_POTENCIA = 2;
+    public static final int iPANEL_PRECO = 3;
+    public static final int iPANEL_AREA = 4;
+    public static final int iPANEL_QTD = 5;
+    public static final int iPANEL_CUSTO_TOTAL = 6;
+    public static final int iPANEL_COEFTEMP = 7;
+    public static final int PANEL_NOCT = 8;
 
 
     //Indices Inversores
-    public static final int iINV_INDICE = 0;
-    public static final int iINV_PRECO = 1;
+    public static final int iINV_NOME = 0;
+    public static final int iINV_MARCA = 1;
     public static final int iINV_POTENCIA = 2;
-    public static final int iINV_QTD = 3;
-    public static final int iINV_PRECO_TOTAL = 4;
-    public static final int iINV_RENDIMENTO_MAXIMO = 5;
+    public static final int iINV_PRECO = 3;
+    public static final int iINV_RENDIMENTO_MAXIMO = 4;
+    public static final int iINV_QTD = 5;
+    public static final int iINV_PRECO_TOTAL = 6;
+
 
     //Indices Cidades
     public static final int iCID_ESTADO = 0;

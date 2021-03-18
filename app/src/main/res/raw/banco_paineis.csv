@@ -1,10 +1,6 @@
-Nome da Placa,Potencia,Preco,Area[m2],qtd,custoTotal,Coef Temp p/ Pot,NOCT 
-Painel Solar 305W Monocristalino Canadian Solar - CS6K-305M,305,631.48,1.6368, , ,-0.39,45
-Painel Solar 285W Canadian Solar Policristalino - CS6K-285P,285,491.97,1.6368, , ,-0.39,43
-Painel Solar Fotovoltaico 155W - Upsolar UP-M155P,155,329.00,0.99026, , ,-0.43,45
-Painel Solar Fotovoltaico 335W - Upsolar UP-M335P,335,579.00,1.93936, , ,-0.4,45
-Painel Solar Fotovoltaico 280W - Sinosola SA280-60P,280,519.00,1.62688, , ,-0.42,45
-Painel Solar Fotovoltaico 285W - Upsolar UP-M285P,285,479.00,1.62688, , ,-0.42,45
-Painel Solar 330W Dah Solar Policristalino - DHP72-330W,330,538.47,1.938396, , ,-0.41,45
-Painel Solar 405W Canadian Solar - Placa Solar Half Cell,405,780.47,2.209184, , ,-0.37,42
-Painel Solar Fotovoltaico 380W Monocristalino - DAH Sola,380,696.57,1.940352, , ,-0.37,45
+Nome da Placa,Marca,Potencia,Preco,Area[m2],qtd,custoTotal,Coef Temp p/ Pot,NOCT 
+335PHK-36 POLI 335W 17% EFIC,BYD Solar,335,798.99,1.946304, , ,-0.39,43
+TSM-DE08MII 375W MONO 20.5% EFIC,Trina Solar,375,868.2,1.754185, , ,-0.34,43
+PS400M1H-24TH 400W MONO 19.9% EFIC,Phono Solar,400,922.03,2.1, , ,-0.38,43
+CS3W-415P POLI 415W 18.8% EFIC,CanadianSolar,415,998.93,2.2155, , ,-0.36,42
+JKM440M-6TL4-V 440W TIGER PRO MONO 20.77% EFIC,Jinko Solar,440,1045.07,2.118312, , ,-0.35,45

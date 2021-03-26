@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 
 public class CSVRead {
 
-    private static String divider = ",";
+    private static final String divider = ",";
 
     public static String[] getCity(int idCity, String stateName, InputStream is){
         String[] values = new String[0];
@@ -72,6 +72,7 @@ public class CSVRead {
         String[] cheaperPanel;
         String[] currentPanel;
         String line;
+        int cont=0;
         double currentCost, cheaperCost, precoTotal;
         BufferedReader bufferedReader=null;
 

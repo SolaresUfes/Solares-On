@@ -2,6 +2,7 @@ package com.solares.calculadorasolar.classes;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.LightingColorFilter;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -329,17 +330,19 @@ Thomas T.D. Tran, Amanda D. Smith
         //Encontrar o Overnight Capital Cost (R$/kW) o investimento inicial por kW
         double overnightCapitalCost = this.custoTotal * 1000 / (potenciaInstalada); //Multiplicando por 1000 para encontrar por kW, em vez de por W
         //Encontrar o CRF (Capital Recovery Factor)
-        double LCOEcrf = (Constants.COST_OF_CAPITAL * Math.pow(1 + Constants.COST_OF_CAPITAL, Constants.PANEL_LIFE)/
-                (Math.pow(1 + Constants.COST_OF_CAPITAL, Constants.PANEL_LIFE) - 1));
+        double numerador = (Constants.COST_OF_CAPITAL * Math.pow(1 + Constants.COST_OF_CAPITAL, Constants.PANEL_LIFE));
+        double denominador = (Math.pow(1 + Constants.COST_OF_CAPITAL, Constants.PANEL_LIFE) - 1);
+        double LCOEcrf = numerador / denominador;
+
         //Encontrar o custo de manutenção por kW
-        double fizxedOnM = LCOESumCost * 1000 / (potenciaInstalada * 365); //Multiplicando por 1000 para encontrar por kW-ano, em vez de por W-ano
+        double fixedOnM = LCOESumCost * 1000 / (potenciaInstalada * Constants.PANEL_LIFE); //Multiplicando por 1000 para encontrar por kW-ano, em vez de por W-ano
 
         //Faz o cálculo do LCOE de acordo com a referência (Documentação deste método)
-        LCOE = (overnightCapitalCost*LCOEcrf + fizxedOnM) /
+        LCOE = (overnightCapitalCost*LCOEcrf + fixedOnM) /
                 (24*365*capacityFactor);
 
+        ////////////Outras possibilidades
         double LCOE2 = (custoTotal + LCOESumCost)/LCOESumGeneration;
-        double LCOE3 = (custoTotal + LCOESumCost)/geracaoTotalVidaUtil;
         int i = 1;
     }
 
@@ -462,7 +465,7 @@ stateVec - Vetor de Strings com as informações do Estado (temperatura); cityVe
             //Pega a temperatura média do estado no mês
             ambientTemp = Double.parseDouble(vetorEstado[month]);
             //Temperatura estimada do módulo acima de 25°C (se a temperatura do módulo for 50°C, tempAboveLimit será 25)
-            tempAboveLimit = ambientTemp + ((Integer.parseInt(placaEscolhida[Constants.PANEL_NOCT]) - 20)*0.00125*irradiance) - 25;
+            tempAboveLimit = ambientTemp + ((Integer.parseInt(placaEscolhida[Constants.iPANEL_NOCT]) - 20)*0.00125*irradiance) - 25;
             //Esse valor será negativo devido ao coeficiente de temperatura
             correctionTemp = (tempAboveLimit * Double.parseDouble(placaEscolhida[Constants.iPANEL_COEFTEMP]) *
                     Double.parseDouble(placaEscolhida[Constants.iPANEL_POTENCIA])) / 100;

@@ -7,21 +7,27 @@
     tools:context=".activity.InstalacaoActivity"
     android:background="@drawable/background_resultados">
 
-    <TextView
-        android:id="@+id/text_titulo_intalacao"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/background_resultado_text"
-        android:gravity="center"
-        android:text="Instalação"
-        android:textColor="@color/colorSolaresBlue"
-        app:layout_constraintBottom_toTopOf="@+id/guideline52"
-        app:layout_constraintEnd_toStartOf="@+id/guideline7"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/guideline6"
-        app:layout_constraintTop_toTopOf="@+id/guideline51" />
 
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <TextView
+            android:id="@+id/text_titulo_intalacao"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/background_resultado_text"
+            android:gravity="center"
+            android:text="Instalação"
+            android:textColor="@color/colorSolaresBlue"
+            app:layout_constraintBottom_toTopOf="@+id/guideline52"
+            app:layout_constraintEnd_toStartOf="@+id/guideline7"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/guideline6"
+            app:layout_constraintTop_toTopOf="@+id/guideline51"
+             />
+
+        <TextView
         android:id="@+id/text_potencia_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -61,15 +67,28 @@
         app:layout_constraintTop_toBottomOf="@+id/text_potencia" />
     <TextView
         android:id="@+id/text_placa"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:textColor="@color/colorSolaresBlue"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline7"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_placa_1" />
+
+    <Button
+        android:id="@+id/button_trocar_modulo"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:background="@drawable/round_blue_button"
+        android:ellipsize="none"
+        android:onClick="ShowPopUpModulos"
+        app:layout_constraintBottom_toBottomOf="@+id/text_placa"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toEndOf="@+id/text_placa"
         app:layout_constraintTop_toBottomOf="@+id/text_placa_1" />
 
     <TextView
@@ -113,16 +132,27 @@
         app:layout_constraintTop_toBottomOf="@+id/text_area" />
     <TextView
         android:id="@+id/text_inversor"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:textColor="@color/colorSolaresBlue"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline7"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_inversor_1" />
+    <Button
+        android:id="@+id/button_trocar_inversor"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:background="@drawable/round_blue_button"
+        android:ellipsize="none"
+        app:layout_constraintBottom_toBottomOf="@+id/text_inversor"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toEndOf="@+id/text_inversor"
+        app:layout_constraintTop_toTopOf="@+id/text_inversor" />
 
     <Button
         android:id="@+id/button_voltar"
@@ -185,7 +215,18 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent=".8" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <LinearLayout
+        android:id="@+id/blackener"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorBlack"
+        android:alpha="0.2"
+        android:visibility="gone"
+        android:orientation="horizontal"
+        android:clickable="true"
+        android:focusable="true" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

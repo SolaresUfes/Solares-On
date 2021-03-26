@@ -73,6 +73,15 @@
     <string name="explicacao_alteracao_consumo">O consumo na sua conta de luz está diferente do que estimamos?\nInsira aqui o valor real para podermos ajustar os cálculos!</string>
     <string name="kwh_consumo">kWh</string>
     <string name="consumo">Consumo</string>
+
+    <string-array name="Modulos">
+        <item>335PHK-36 POLI 335W - BYD Solar</item>
+        <item>TSM-DE08MII 375W MONO - Trina Solar</item>
+        <item>PS400M1H-24TH 400W MONO -	Phono Solar</item>
+        <item>CS3W-415P POLI 415W - CanadianSolar</item>
+        <item>JKM440M-6TL4-V 440W TIGER PRO MONO - Jinko Solar</item>
+    </string-array>
+
     <string-array name="Estados">
         <item>AC</item>
         <item>AL</item>

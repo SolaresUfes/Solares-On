@@ -53,7 +53,9 @@ public class Constants {
     public static final int iPANEL_QTD = 5;
     public static final int iPANEL_CUSTO_TOTAL = 6;
     public static final int iPANEL_COEFTEMP = 7;
-    public static final int PANEL_NOCT = 8;
+    public static final int iPANEL_NOCT = 8;
+    public static final int iPANEL_I = 9;
+
 
 
     //Indices Inversores

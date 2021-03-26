@@ -10,12 +10,12 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.solares.calculadorasolar.R;
 import com.solares.calculadorasolar.classes.AutoSizeText;
+import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
 import com.solares.calculadorasolar.classes.Constants;
 
 import java.util.Locale;
 
-import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensionsAndSetTariff;
-import static com.solares.calculadorasolar.activity.MainActivity.PtarifaPassada;
+import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensions;
 
 public class DadosActivity extends AppCompatActivity {
 
@@ -28,16 +28,11 @@ public class DadosActivity extends AppCompatActivity {
 
         //Pegar informações da última activity (informações que serão exibidas)
         Intent intent = getIntent();
-        final double horaSolar = intent.getDoubleExtra(Constants.EXTRA_HORA_SOLAR, 0.0);
-        final double custoReais = intent.getDoubleExtra(Constants.EXTRA_CUSTO_REAIS, 0.0);
-        final double consumokWh = intent.getDoubleExtra(Constants.EXTRA_CONSUMO, 0.0);
-        final double tarifaMensal = intent.getDoubleExtra(Constants.EXTRA_TARIFA, 0.0);
-        final String[] cityVec = intent.getStringArrayExtra(Constants.EXTRA_VETOR_CIDADE);
-        final String cityName = intent.getStringExtra(Constants.EXTRA_CIDADE);
+        final CalculadoraOnGrid calculadora = (CalculadoraOnGrid) intent.getSerializableExtra(Constants.EXTRA_CALCULADORAON);
 
         //Pegando informações sobre o dispositivo, para regular o tamanho da letra (fonte)
         //Essa função pega as dimensões e as coloca em váriaveis globais
-        GetPhoneDimensionsAndSetTariff(this, tarifaMensal);
+        GetPhoneDimensions(this);
 
         //Configurar o título
         TextView textTituloDados = findViewById(R.id.text_titulo_dados);
@@ -49,7 +44,7 @@ public class DadosActivity extends AppCompatActivity {
         AutoSizeText.AutoSizeTextView(textEstaticoCustoReais, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
         //Pega a view que será usada para escrever a informação, escreve a informação e ajusta o tamanho da fonte
         TextView textCustoReais = findViewById(R.id.text_consumo_reais);
-        textCustoReais.setText(String.format(Locale.ITALY,"R$ %.2f", custoReais));
+        textCustoReais.setText(String.format(Locale.ITALY,"R$ %.2f", calculadora.pegaCustoReais()));
         AutoSizeText.AutoSizeTextView(textCustoReais, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
         ////////////Configurar o textView de consumo em kWh////////////////
@@ -58,7 +53,7 @@ public class DadosActivity extends AppCompatActivity {
         AutoSizeText.AutoSizeTextView(textEstaticoConsumoEnergia, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
         //Pega a view que será usada para escrever a informação, escreve a informação e ajusta o tamanho da fonte
         TextView textConsumoEnergia = findViewById(R.id.text_consumo_energia);
-        textConsumoEnergia.setText(String.format(Locale.ITALY, "%.2f kWh", consumokWh));
+        textConsumoEnergia.setText(String.format(Locale.ITALY, "%.2f kWh", calculadora.pegaConsumokWhs()));
         AutoSizeText.AutoSizeTextView(textConsumoEnergia, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
         ////////////Configurar o textView de horas de sol pleno////////////////
@@ -67,7 +62,7 @@ public class DadosActivity extends AppCompatActivity {
         AutoSizeText.AutoSizeTextView(textEstaticoHoraSolar, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
         //Pega a view que será usada para escrever a informação, escreve a informação e ajusta o tamanho da fonte
         TextView textHoraSolar = findViewById(R.id.text_hora_solar);
-        textHoraSolar.setText(String.format(Locale.ITALY, "%.2f kWh/m²dia", horaSolar));
+        textHoraSolar.setText(String.format(Locale.ITALY, "%.2f kWh/m²dia", calculadora.pegaHorasDeSolPleno()));
         AutoSizeText.AutoSizeTextView(textHoraSolar, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
         ////////////Configurar o textView da tarifa de energia////////////////
@@ -76,7 +71,7 @@ public class DadosActivity extends AppCompatActivity {
         AutoSizeText.AutoSizeTextView(textEstaticoTarifa, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
         //Pega a view que será usada para escrever a informação, escreve a informação e ajusta o tamanho da fonte
         TextView textTarifa = findViewById(R.id.text_tarifa);
-        textTarifa.setText(String.format(Locale.ITALY, "R$ %.2f / kWh", tarifaMensal));
+        textTarifa.setText(String.format(Locale.ITALY, "R$ %.2f / kWh", calculadora.pegaTarifaMensal()));
         AutoSizeText.AutoSizeTextView(textTarifa, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
         ////////////Configurar o botão de modificar a tarifa////////////////
@@ -87,16 +82,17 @@ public class DadosActivity extends AppCompatActivity {
         Button buttonConsumo = findViewById(R.id.button_modificar_consumo);
         AutoSizeText.AutoSizeButton(buttonConsumo, MainActivity.alturaTela, MainActivity.larguraTela, porcent - 0.5f);
 
-
         ////////////Configurar o botão de voltar////////////////
         Button buttonVoltar = findViewById(R.id.button_voltar);
         AutoSizeText.AutoSizeButton(buttonVoltar, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
+
+
 
         //Listener do botão modificar a tarifa, se ele for clicado, abre uma activity
         buttonTarifa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AbrirActivityTarifa(cityVec, cityName, custoReais, tarifaMensal);
+                AbrirActivityTarifa(calculadora);
             }
         });
 
@@ -104,7 +100,7 @@ public class DadosActivity extends AppCompatActivity {
         buttonConsumo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AbrirActivityConsumo(cityVec, cityName, custoReais, consumokWh);
+                AbrirActivityConsumo(calculadora);
             }
         });
 
@@ -117,21 +113,15 @@ public class DadosActivity extends AppCompatActivity {
         });
     }
 
-    public void AbrirActivityTarifa(String[] cityVec, String cityName, double custoReais, double tarifaMensal){
+    public void AbrirActivityTarifa(CalculadoraOnGrid calculadora){
         Intent intent = new Intent(this, TarifaActivity.class);
-        intent.putExtra(Constants.EXTRA_VETOR_CIDADE, cityVec);
-        intent.putExtra(Constants.EXTRA_CIDADE, cityName);
-        intent.putExtra(Constants.EXTRA_CUSTO_REAIS, custoReais);
-        intent.putExtra(Constants.EXTRA_TARIFA, tarifaMensal);
+        intent.putExtra(Constants.EXTRA_CALCULADORAON, calculadora);
         startActivity(intent);
     }
 
-    public void AbrirActivityConsumo(String[] cityVec, String cityName, double custoReais, double consumokWh){
+    public void AbrirActivityConsumo(CalculadoraOnGrid calculadora){
         Intent intent = new Intent(this, ConsumoActivity.class);
-        intent.putExtra(Constants.EXTRA_VETOR_CIDADE, cityVec);
-        intent.putExtra(Constants.EXTRA_CIDADE, cityName);
-        intent.putExtra(Constants.EXTRA_CUSTO_REAIS, custoReais);
-        intent.putExtra(Constants.EXTRA_CONSUMO, consumokWh);
+        intent.putExtra(Constants.EXTRA_CALCULADORAON, calculadora);
         startActivity(intent);
     }
 }

@@ -1,12 +1,5 @@
 package com.solares.calculadorasolar.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
-import com.solares.calculadorasolar.R;
-import com.solares.calculadorasolar.classes.AutoSizeText;
-import com.solares.calculadorasolar.classes.Constants;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,11 +10,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.InputStream;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
+import com.solares.calculadorasolar.R;
+import com.solares.calculadorasolar.classes.AutoSizeText;
+import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
+import com.solares.calculadorasolar.classes.Constants;
+
 import java.util.Locale;
 
-import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensionsAndSetTariff;
-import static com.solares.calculadorasolar.activity.MainActivity.PtarifaPassada;
+import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensions;
 
 public class ConsumoActivity extends AppCompatActivity {
 
@@ -34,7 +33,7 @@ public class ConsumoActivity extends AppCompatActivity {
 
         //Pegando informações sobre o dispositivo, para regular o tamanho da letra (fonte)
         //Essa função pega as dimensões e as coloca em váriaveis globais
-        GetPhoneDimensionsAndSetTariff(this, PtarifaPassada);
+        GetPhoneDimensions(this);
 
         //Pega o layout para poder colocar um listener nele (esconder o teclado)
         ConstraintLayout layout = findViewById(R.id.layout_consumo);
@@ -71,22 +70,20 @@ public class ConsumoActivity extends AppCompatActivity {
         Button buttonVoltar = findViewById(R.id.button_voltar);
         AutoSizeText.AutoSizeButton(buttonVoltar, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
 
+        /////////////////////////////////////
 
         //pegar os intents
         Intent intent = getIntent();
-        final double custoReais = intent.getDoubleExtra(Constants.EXTRA_CUSTO_REAIS, 0.0);
-        final String[] cityVec = intent.getStringArrayExtra(Constants.EXTRA_VETOR_CIDADE);
-        final String cityName = intent.getStringExtra(Constants.EXTRA_CIDADE);
-        final double consumoAtualKWh = intent.getDoubleExtra(Constants.EXTRA_CONSUMO, 0.0);
+        final CalculadoraOnGrid calculadora = (CalculadoraOnGrid) intent.getSerializableExtra(Constants.EXTRA_CALCULADORAON);
 
         //atualizar o tarifa atual
-        textConsumoAtual.setText(String.format(Locale.ITALY, "Consumo atual: %.2f kWh", consumoAtualKWh));
+        textConsumoAtual.setText(String.format(Locale.ITALY, "Consumo atual: %.2f kWh", calculadora.pegaConsumokWhs()));
 
         //Listener do botão de recalcular
         buttonRecalcConsumo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AtualizarTarifa(custoReais, cityVec, cityName, editConsumo);
+                AtualizarTarifa(calculadora, editConsumo);
             }
         });
 
@@ -118,7 +115,7 @@ public class ConsumoActivity extends AppCompatActivity {
         }
     }
 
-    public void AtualizarTarifa(final double custoReais, final String[] cityVec, final String cityName, final EditText editConsumo){
+    public void AtualizarTarifa(final CalculadoraOnGrid calculadora, final EditText editConsumo){
         try {
             //Pega o consumo digitada no edit text
             double novoConsumo = Double.parseDouble(editConsumo.getText().toString());
@@ -134,16 +131,16 @@ public class ConsumoActivity extends AppCompatActivity {
             } else {
                 ///////Descobre a nova tarifa baseada no consumo em KWh
                 //Tira os impostos do custo em reais
-                consumoSemImpostos = MainActivity.ValueWithoutTaxes(custoReais);
+                consumoSemImpostos = CalculadoraOnGrid.ValueWithoutTaxes(calculadora.pegaCustoReais());
                 //Descobre a tarifa
                 novaTarifa = consumoSemImpostos/novoConsumo;
                 //Atualiza a tarifa passada
-                MainActivity.PtarifaPassada = novaTarifa;
+                calculadora.setTarifaMensal(novaTarifa);
                 //Refaz o cálculo com a nova tarifa/consumo e inicia a ResultadoActivity
                 //Criar uma thread para fazer o cálculo pois é um processamento demorado
                 Thread thread = new Thread(){
                     public void run(){
-                        MainActivity.Calculate(-1, cityVec, cityName, -1, custoReais, null, ConsumoActivity.this);
+                        calculadora.Calcular(-1f, ConsumoActivity.this);
                     }
                 };
                 thread.start();

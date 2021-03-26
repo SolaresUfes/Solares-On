@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.solares.calculadorasolar.R;
 import com.solares.calculadorasolar.classes.AutoSizeText;
+import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
+import com.solares.calculadorasolar.classes.Constants;
 
 import android.content.Intent;
 import android.media.Image;
@@ -14,8 +16,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensionsAndSetTariff;
-import static com.solares.calculadorasolar.activity.MainActivity.PtarifaPassada;
+import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensions;
 
 public class CreditoActivity extends AppCompatActivity {
 
@@ -24,9 +25,12 @@ public class CreditoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_credito);
 
+        Intent intent = getIntent();
+        final CalculadoraOnGrid calculadora = (CalculadoraOnGrid) intent.getSerializableExtra(Constants.EXTRA_CALCULADORAON);
+
         //Pegando informações sobre o dispositivo, para regular o tamanho da letra (fonte)
         //Essa função pega as dimensões e as coloca em váriaveis globais
-        GetPhoneDimensionsAndSetTariff(this, PtarifaPassada);
+        GetPhoneDimensions(this);
 
         Button buttonInstagram = findViewById(R.id.button_instagram);
         AutoSizeText.AutoSizeButton(buttonInstagram, MainActivity.alturaTela, MainActivity.larguraTela, 3f);
@@ -74,15 +78,12 @@ public class CreditoActivity extends AppCompatActivity {
         buttonRecalcular.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FinalizarActivity();
+                FinalizarActivity(calculadora);
             }
         });
     }
 
-    public void FinalizarActivity(){
-        //Limpa tarifa inserida
-        MainActivity.PtarifaPassada = 0.0;
-
+    public void FinalizarActivity(CalculadoraOnGrid calculadora){
         Intent intent = new Intent(this, MainActivity.class);
         //Isso limpa as activities já abertas
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

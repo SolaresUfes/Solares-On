@@ -16,7 +16,7 @@ public class Constants {
     public static double INVERTOR_TIME = 10;
     public static double IPCA = 0.03;
     public static double MAINTENANCE_COST = 0.01;
-    public static double COST_OF_CAPITAL = 0.221; //Taxa Selic * Retorno Esperado
+    public static double COST_OF_CAPITAL = 0.065; //Taxa Selic * Retorno Esperado
     public static double SELIC = 0.065;
     public static double TARIFF_CHANGE = 6;
     public static double PANEL_LIFE = 25;

@@ -20,6 +20,7 @@ public class CalculadoraOnGrid implements Serializable {
     double custoReais;
     double consumokWh;
     double potenciaNecessaria;
+    double potenciaInstalada; //nPaineis * potenciaPainel
     double area;
     String[] inversor;
     double custoParcial;
@@ -137,6 +138,9 @@ public class CalculadoraOnGrid implements Serializable {
                 placaEscolhida = CSVRead.DefineSolarPanel(is, potenciaNecessaria, this.areaAlvo);
                 area = DefineArea(placaEscolhida);
 
+                //Encontrando a potenciaInstalada
+                this.potenciaInstalada = Double.parseDouble(placaEscolhida[Constants.iPANEL_POTENCIA]) * Double.parseDouble(placaEscolhida[Constants.iPANEL_QTD]);
+
                 //Definindo os inversores
                 is = MyContext.getResources().openRawResource(R.raw.banco_inversores);
                 inversor = CSVRead.DefineInvertor(is, placaEscolhida);
@@ -194,16 +198,19 @@ public class CalculadoraOnGrid implements Serializable {
      * Saída: -;
      * Pré Condições: O objeto deve ter passado pela função Calcular, não é recomendado chamar essa função sozinha;
      * Pós Condições: O objeto tem seus valores altlerados, com os resultados do cálculo;
+     * Fontes:
+     * LCOE: Incorporating Performance-based Global Sensitivity and Uncertainty Analysis into LCOE Calculations for Emerging Renewable Energy Technologies -
+Thomas T.D. Tran, Amanda D. Smith
      */
     public void GetEconomicInformation(){
         int year;
-        double geracaoComDepreciacao, consumoMedioAnual=consumokWh*12;
+        double geracaoComDepreciacao, consumoMedioAnual=consumokWh*12, geracaoTotalVidaUtil=0.0;
         double saldoDoConsumoCincoAnos=0, consumoAcimaDaGeracao=0, valorAPagar=0;
         double gastosTotais, ConsumoAPagarNoAno; //Quanto tem que pagar no ano
         double custoComImposto, custoAtualComImposto, diferencaDeCusto, custoInversor=0.0, custoManutEInstal=0.0;
         double[] saldoDoConsumoAnual = new double[30], cashFlow=new double[25];
         double cashFlowCurrentCurrency=0, payback = 0.0, tariff;
-        double LCOEcost, LCOEGeneration, LCOEcrf=0.0, LCOE, LCOEDivisor;
+        double LCOEcost, LCOEGeneration, LCOEDivisor;
         double LCOESumCost=0.0, LCOESumGeneration=0.0;
         tempoRetorno = 30;
         for(year = 0; year < 25; year++) { //Até 25 anos, que é a estimativa da vida útil dos paineis
@@ -218,6 +225,7 @@ public class CalculadoraOnGrid implements Serializable {
             //Somando o total de energia produzida para calcular o custo de cada KWh
             LCOEGeneration = geracaoComDepreciacao/LCOEDivisor;
             LCOESumGeneration += LCOEGeneration;
+            geracaoTotalVidaUtil += geracaoComDepreciacao;
             //Encontra quantos KWh o usuário ganhou de créditos esse ano (créditos têm o sinal negativo) ou se ele gastou mais do que produziu
             if (consumoMedioAnual < geracaoComDepreciacao) {
                 //Se ele produziu mais do que gastou, aumenta os créditos
@@ -314,12 +322,25 @@ public class CalculadoraOnGrid implements Serializable {
             this.taxaRetornoInvestimento = internalRateOfReturn;
         }
 
+        /////////////Bora calcular o LCOE!!
+        //Achar o capacity factor da usina (porcentagem de energia real gerada em relação à produção nominal da usina)
+        //Geração real dividido pela geração máxima (capacidade * horas em um dia * dias em um ano * anos de operação)
+        double capacityFactor = geracaoTotalVidaUtil * 1000 /(potenciaInstalada * 24 * 365 * Constants.PANEL_LIFE);
+        //Encontrar o Overnight Capital Cost (R$/kW) o investimento inicial por kW
+        double overnightCapitalCost = this.custoTotal * 1000 / (potenciaInstalada); //Multiplicando por 1000 para encontrar por kW, em vez de por W
+        //Encontrar o CRF (Capital Recovery Factor)
+        double LCOEcrf = (Constants.COST_OF_CAPITAL * Math.pow(1 + Constants.COST_OF_CAPITAL, Constants.PANEL_LIFE)/
+                (Math.pow(1 + Constants.COST_OF_CAPITAL, Constants.PANEL_LIFE) - 1));
+        //Encontrar o custo de manutenção por kW
+        double fizxedOnM = LCOESumCost * 1000 / (potenciaInstalada * 365); //Multiplicando por 1000 para encontrar por kW-ano, em vez de por W-ano
 
-        LCOEcrf = (Constants.COST_OF_CAPITAL * Math.pow(1 + Constants.COST_OF_CAPITAL, Constants.PANEL_LIFE)/
-                (Math.pow(1 + Constants.COST_OF_CAPITAL, Constants.PANEL_LIFE) - 1))*custoTotal;
-        //Divide os todos os custos por toda energia produzida
-        LCOE = (LCOESumCost + custoTotal + LCOEcrf)/LCOESumGeneration;
-        this.LCOE = LCOE;
+        //Faz o cálculo do LCOE de acordo com a referência (Documentação deste método)
+        LCOE = (overnightCapitalCost*LCOEcrf + fizxedOnM) /
+                (24*365*capacityFactor);
+
+        double LCOE2 = (custoTotal + LCOESumCost)/LCOESumGeneration;
+        double LCOE3 = (custoTotal + LCOESumCost)/geracaoTotalVidaUtil;
+        int i = 1;
     }
 
 

@@ -337,10 +337,6 @@ Thomas T.D. Tran, Amanda D. Smith
         //Faz o cálculo do LCOE de acordo com a referência (Documentação deste método)
         LCOE = (overnightCapitalCost*LCOEcrf + fizxedOnM) /
                 (24*365*capacityFactor);
-
-        double LCOE2 = (custoTotal + LCOESumCost)/LCOESumGeneration;
-        double LCOE3 = (custoTotal + LCOESumCost)/geracaoTotalVidaUtil;
-        int i = 1;
     }
 
 

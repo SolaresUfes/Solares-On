@@ -126,51 +126,43 @@ public class CalculadoraOnGrid implements Serializable {
 
             //Acha a potêcia necessária
             potenciaNecessaria = FindTargetCapacity(consumokWh, horasDeSolPleno);
-            if(potenciaNecessaria < 0.0){
-                try{
-                    Toast.makeText(MyContext, "O seu consumo de energia é muito baixo!", Toast.LENGTH_LONG).show();
-                } catch (Exception etoast){
-                    etoast.printStackTrace();
-                }
-            } else {
-                //Definindo as placas
-                is = MyContext.getResources().openRawResource(R.raw.banco_paineis);
-                placaEscolhida = CSVRead.DefineSolarPanel(is, potenciaNecessaria, this.areaAlvo);
-                area = DefineArea(placaEscolhida);
+            //Definindo as placas
+            is = MyContext.getResources().openRawResource(R.raw.banco_paineis);
+            placaEscolhida = CSVRead.DefineSolarPanel(is, potenciaNecessaria, this.areaAlvo);
+            area = DefineArea(placaEscolhida);
 
-                //Encontrando a potenciaInstalada
-                this.potenciaInstalada = Double.parseDouble(placaEscolhida[Constants.iPANEL_POTENCIA]) * Double.parseDouble(placaEscolhida[Constants.iPANEL_QTD]);
+            //Encontrando a potenciaInstalada
+            this.potenciaInstalada = Double.parseDouble(placaEscolhida[Constants.iPANEL_POTENCIA]) * Double.parseDouble(placaEscolhida[Constants.iPANEL_QTD]);
 
-                //Definindo os inversores
-                is = MyContext.getResources().openRawResource(R.raw.banco_inversores);
-                inversor = CSVRead.DefineInvertor(is, placaEscolhida);
+            //Definindo os inversores
+            is = MyContext.getResources().openRawResource(R.raw.banco_inversores);
+            inversor = CSVRead.DefineInvertor(is, placaEscolhida);
 
-                //Definindo os custos
-                double[] custos = DefineCosts(placaEscolhida, inversor);
-                custoParcial = custos[Constants.iCOSTS_PARCIAL];
-                custoTotal = custos[Constants.iCOSTS_TOTAL];
+            //Definindo os custos
+            double[] custos = DefineCosts(placaEscolhida, inversor);
+            custoParcial = custos[Constants.iCOSTS_PARCIAL];
+            custoTotal = custos[Constants.iCOSTS_TOTAL];
 
-                //Calculo da energia produzida em um ano
-                geracaoAnual = EstimateAnualGeneration();
+            //Calculo da energia produzida em um ano
+            geracaoAnual = EstimateAnualGeneration();
 
-                GetEconomicInformation();
+            GetEconomicInformation();
 
-                //Preparação para mudar para próxima activity
-                Intent intent = new Intent(MyContext, ResultadoActivity.class);
+            //Preparação para mudar para próxima activity
+            Intent intent = new Intent(MyContext, ResultadoActivity.class);
 
-                //Fechar o InputStream
-                try {
-                    is.close();
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
-
-                //Passar o objeto com as informações calculadas para a próxima Activity (Resultado)
-                intent.putExtra(Constants.EXTRA_CALCULADORAON, this);
-
-                //Mudar de activity
-                MyContext.startActivity(intent);
+            //Fechar o InputStream
+            try {
+                is.close();
+            } catch (Exception e){
+                e.printStackTrace();
             }
+
+            //Passar o objeto com as informações calculadas para a próxima Activity (Resultado)
+            intent.putExtra(Constants.EXTRA_CALCULADORAON, this);
+
+            //Mudar de activity
+            MyContext.startActivity(intent);
         } catch (Exception e){
             Log.i("Calculate", "Erro no Cálculo");
             //Se algum erro ocorrer, pede para o usuário informar um número real

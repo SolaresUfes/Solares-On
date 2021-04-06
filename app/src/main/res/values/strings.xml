@@ -73,6 +73,11 @@
     <string name="explicacao_alteracao_consumo">O consumo na sua conta de luz está diferente do que estimamos?\nInsira aqui o valor real para podermos ajustar os cálculos!</string>
     <string name="kwh_consumo">kWh</string>
     <string name="consumo">Consumo</string>
+    <string name="explicacao_valor_inserido_baixo">O valor inserido está próximo ou abaixo do custo de disponibilidade, que é o preço mínimo da conta de energia.\n\nPor esse motivo, um sistema solar não seria financeiramente atrativo para você.</string>
+    <string name="saibaa_mais_valor">A Aneel define que todo consumidor de energia elétrica não pode pagar menos do que um valor mínimo na conta mensal,
+        mesmo que tenha consumido pouco, ou até nada, durante o mês. Esse valor representa o custo que a concessionária tem com a infraestrutura ao garantir que o consumidor possa
+        utilizar a energia.\n\nPor causa disso, se o seu consumo for baixo (próximo desse valor), não se pode diminuir a conta de luz o
+        suficiente para o investimento em um sistema fotovoltaico ser economicamente viável.</string>
     <string-array name="Estados">
         <item>AC</item>
         <item>AL</item>

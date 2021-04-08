@@ -39,7 +39,7 @@
     <string name="economia_em_25_anos_valor_presente">Economia em 25 anos (Valor presente)</string>
     <string name="taxa_de_retorno_do_investimento">Taxa de Retorno do Investimento</string>
     <string name="ndice_de_lucratividade">Índice de Lucratividade</string>
-    <string name="custo_da_energia_solar_lcoe">Custo da energia solar (LCOE)</string>
+    <string name="custo_da_energia_solar_lcoe">Custo estimado da energia solar</string>
     <string name="tempo_para_retorno_do_investimento">Tempo para Retorno do Investimento</string>
     <string name="button_ajustar_area">Ajustar Área</string>
     <string name="deseja_receber_os_resultados">Deseja receber os resultados por e-mail?</string>
@@ -62,7 +62,7 @@
     <string name="economia_mensal">Economia Mensal</string>
     <string name="custo_parcial_placas_inversores">Custo Parcial (Placas + Inversores)</string>
     <string name="custo_total">Custo Total (Instalação e equipamentos)</string>
-    <string name="estimativa_da_geracao_anual_de_energia">Estimativa da geração anual de energia</string>
+    <string name="estimativa_da_geracao_mensal_de_energia">Estimativa da geração mensal de energia</string>
     <string name="potencia_necessaria">Potência Necessária</string>
     <string name="sistema_de_placas_escolhido">Sistema de placas escolhido</string>
     <string name="area_necessaria_para_inst">Área necessária para a instalação</string>

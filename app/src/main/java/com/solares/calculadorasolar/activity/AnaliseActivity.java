@@ -51,7 +51,7 @@ public class AnaliseActivity extends AppCompatActivity {
         TextView textEstaticoGeracao = findViewById(R.id.text_geracao_anual_1);
         AutoSizeText.AutoSizeTextView(textEstaticoGeracao, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
         TextView textGeracao = findViewById(R.id.text_geracao_anual);
-        textGeracao.setText(String.format(Locale.ITALY,"%.2f kWh", calculadora.pegaGeracaoAnual()));
+        textGeracao.setText(String.format(Locale.ITALY,"%.2f kWh", calculadora.pegaGeracaoAnual()/12));
         AutoSizeText.AutoSizeTextView(textGeracao, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
         Button buttonVoltar = findViewById(R.id.button_voltar);

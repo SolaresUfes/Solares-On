@@ -9,12 +9,12 @@ import android.widget.TextView;
 
 import com.solares.calculadorasolar.R;
 import com.solares.calculadorasolar.classes.AutoSizeText;
+import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
 import com.solares.calculadorasolar.classes.Constants;
 
 import java.util.Locale;
 
-import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensionsAndSetTariff;
-import static com.solares.calculadorasolar.activity.MainActivity.PtarifaPassada;
+import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensions;
 
 public class InstalacaoActivity extends AppCompatActivity {
 
@@ -26,14 +26,12 @@ public class InstalacaoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_instalacao);
 
         Intent intent = getIntent();
-        final double potenciaNecessaria = intent.getDoubleExtra(Constants.EXTRA_POTENCIA, 0.0);
-        final String[] placaEscolhida = intent.getStringArrayExtra(Constants.EXTRA_PLACAS);
-        final double area = intent.getDoubleExtra(Constants.EXTRA_AREA, 0.0);
-        final String[] inversor = intent.getStringArrayExtra(Constants.EXTRA_INVERSORES);
+        final CalculadoraOnGrid calculadora = (CalculadoraOnGrid) intent.getSerializableExtra(Constants.EXTRA_CALCULADORAON);
+
 
         //Pegando informações sobre o dispositivo, para regular o tamanho da letra (fonte)
         //Essa função pega as dimensões e as coloca em váriaveis globais
-        GetPhoneDimensionsAndSetTariff(this, PtarifaPassada);
+        GetPhoneDimensions(this);
 
         TextView textTituloInstal = findViewById(R.id.text_titulo_intalacao);
         AutoSizeText.AutoSizeTextView(textTituloInstal, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
@@ -41,7 +39,7 @@ public class InstalacaoActivity extends AppCompatActivity {
         TextView textEstaticoPotencia = findViewById(R.id.text_potencia_1);
         AutoSizeText.AutoSizeTextView(textEstaticoPotencia, MainActivity.alturaTela, MainActivity.larguraTela, percent);
         TextView textPotencia = findViewById(R.id.text_potencia);
-        textPotencia.setText(String.format(Locale.ITALY,"%.2f Wp", potenciaNecessaria));
+        textPotencia.setText(String.format(Locale.ITALY,"%.2f kWp", calculadora.pegaPotenciaNecessaria()/1000));
         AutoSizeText.AutoSizeTextView(textPotencia, MainActivity.alturaTela, MainActivity.larguraTela, percent);
 
         TextView textEstaticoPlaca = findViewById(R.id.text_placa_1);
@@ -49,31 +47,31 @@ public class InstalacaoActivity extends AppCompatActivity {
         TextView textPlaca = findViewById(R.id.text_placa);
         AutoSizeText.AutoSizeTextView(textPlaca, MainActivity.alturaTela, MainActivity.larguraTela, percent);
         String singplur;
-        if(Integer.parseInt(placaEscolhida[Constants.iPANEL_QTD]) > 1){
+        if(Integer.parseInt(calculadora.pegaPlacaEscolhida()[Constants.iPANEL_QTD]) > 1){
             singplur = "Placas";
         } else {
             singplur = "Placa";
         }
-        textPlaca.setText(String.format(Locale.ITALY, "%d %s de %.0f W",
-                Integer.parseInt(placaEscolhida[Constants.iPANEL_QTD]), singplur, Double.parseDouble(placaEscolhida[Constants.iPANEL_POTENCIA])));
+        textPlaca.setText(String.format(Locale.ITALY, "%d %s de %.0f Wp",
+                Integer.parseInt(calculadora.pegaPlacaEscolhida()[Constants.iPANEL_QTD]), singplur, Double.parseDouble(calculadora.pegaPlacaEscolhida()[Constants.iPANEL_POTENCIA])));
 
         TextView textEstaticoArea = findViewById(R.id.text_area_1);
         AutoSizeText.AutoSizeTextView(textEstaticoArea, MainActivity.alturaTela, MainActivity.larguraTela, percent);
         TextView textArea = findViewById(R.id.text_area);
-        textArea.setText(String.format(Locale.ITALY, "%.2f m²", area));
+        textArea.setText(String.format(Locale.ITALY, "%.2f m²", calculadora.pegaArea()));
         AutoSizeText.AutoSizeTextView(textArea, MainActivity.alturaTela, MainActivity.larguraTela, percent);
 
         TextView textEstaticoInversor = findViewById(R.id.text_inversor_1);
         AutoSizeText.AutoSizeTextView(textEstaticoInversor, MainActivity.alturaTela, MainActivity.larguraTela, percent);
         TextView textInversor = findViewById(R.id.text_inversor);
         AutoSizeText.AutoSizeTextView(textInversor, MainActivity.alturaTela, MainActivity.larguraTela, percent);
-        if(Integer.parseInt(inversor[Constants.iINV_QTD]) > 1){
+        if(Integer.parseInt(calculadora.pegaInversor()[Constants.iINV_QTD]) > 1){
             singplur = "Inversores";
         } else {
             singplur = "Inversor";
         }
-        textInversor.setText(String.format(Locale.ITALY, "%d %s de %.0f W",
-                Integer.parseInt(inversor[Constants.iINV_QTD]), singplur, Double.parseDouble(inversor[Constants.iINV_POTENCIA])));
+        textInversor.setText(String.format(Locale.ITALY, "%d %s de %.2f kW",
+                Integer.parseInt(calculadora.pegaInversor()[Constants.iINV_QTD]), singplur, Double.parseDouble(calculadora.pegaInversor()[Constants.iINV_POTENCIA])/1000));
 
 
         Button buttonVoltar = findViewById(R.id.button_voltar);

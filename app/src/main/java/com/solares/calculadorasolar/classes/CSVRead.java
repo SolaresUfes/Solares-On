@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 
 public class CSVRead {
 
-    private static String divider = ",";
+    private static final String divider = ",";
 
     public static String[] getCity(int idCity, String stateName, InputStream is){
         String[] values = new String[0];
@@ -85,6 +85,9 @@ public class CSVRead {
 
             if(AreaAlvo == -1f){
                 cheaperPanel[Constants.iPANEL_QTD] = String.valueOf((int)Math.floor(WpNeeded/Double.parseDouble(cheaperPanel[Constants.iPANEL_POTENCIA])));
+                if(cheaperPanel[Constants.iPANEL_QTD].equals("0")){
+                    cheaperPanel[Constants.iPANEL_QTD] = "1";
+                }
             } else {
                 cheaperPanel[Constants.iPANEL_QTD] = String.valueOf((int)Math.floor(AreaAlvo / Double.parseDouble(cheaperPanel[Constants.iPANEL_AREA])));
             }
@@ -100,6 +103,9 @@ public class CSVRead {
 
                 if(AreaAlvo == -1f){
                     currentPanel[Constants.iPANEL_QTD] = String.valueOf((int)Math.floor(WpNeeded/Double.parseDouble(currentPanel[Constants.iPANEL_POTENCIA])));
+                    if(cheaperPanel[Constants.iPANEL_QTD].equals("0")){
+                        cheaperPanel[Constants.iPANEL_QTD] = "1";
+                    }
                 } else {
                     currentPanel[Constants.iPANEL_QTD] = String.valueOf((int)Math.floor(AreaAlvo / Double.parseDouble(currentPanel[Constants.iPANEL_AREA])));
                 }

@@ -66,6 +66,7 @@ public class Constants {
     public static final int iINV_RENDIMENTO_MAXIMO = 4;
     public static final int iINV_QTD = 5;
     public static final int iINV_PRECO_TOTAL = 6;
+    public static final int iINV_ID = 7;
 
 
     //Indices Cidades

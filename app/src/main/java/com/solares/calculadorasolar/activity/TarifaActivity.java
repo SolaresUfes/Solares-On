@@ -133,11 +133,11 @@ public class TarifaActivity extends AppCompatActivity {
             } else {
                 //Atualiza a tarifa passada
                 calculadora.setTarifaMensal(NovaTarifa);
-                //Refaz o cálculo com a nova área e inicia a ResultadoActivity
+                //Refaz o cálculo com a nova tarifa e inicia a ResultadoActivity
                 //Criar uma thread para fazer o cálculo pois é um processamento demorado
                 Thread thread = new Thread(){
                     public void run(){
-                        calculadora.Calcular(-1f, TarifaActivity.this);
+                        calculadora.Calcular(TarifaActivity.this);
                     }
                 };
                 thread.start();

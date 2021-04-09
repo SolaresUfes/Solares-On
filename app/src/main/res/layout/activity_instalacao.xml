@@ -147,6 +147,7 @@
         android:adjustViewBounds="true"
         android:background="@drawable/round_blue_button"
         android:ellipsize="none"
+        android:onClick="ShowPopUpInversores"
         app:layout_constraintBottom_toBottomOf="@+id/text_inversor"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"

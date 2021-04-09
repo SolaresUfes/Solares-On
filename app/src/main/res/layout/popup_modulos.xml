@@ -11,7 +11,7 @@
         android:background="@color/colorLightBlue">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/titulo_escolher_modulo_inversor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Escolher Módulo"
@@ -25,20 +25,20 @@
             app:layout_constraintVertical_bias="0.12" />
 
         <Spinner
-            android:id="@+id/spinner_modulos"
+            android:id="@+id/spinner_modulos_inversores"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@color/colorSuperWhite"
             android:spinnerMode="dropdown"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/textView"
-            app:layout_constraintStart_toStartOf="@+id/textView"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            app:layout_constraintEnd_toEndOf="@+id/titulo_escolher_modulo_inversor"
+            app:layout_constraintStart_toStartOf="@+id/titulo_escolher_modulo_inversor"
+            app:layout_constraintTop_toBottomOf="@+id/titulo_escolher_modulo_inversor" />
 
 
         <Button
-            android:id="@+id/button_recalc_modulos"
+            android:id="@+id/button_recalc_modulos_inversores"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/recalcular"
@@ -47,7 +47,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinner_modulos" />
+            app:layout_constraintTop_toBottomOf="@+id/spinner_modulos_inversores" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

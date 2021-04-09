@@ -140,7 +140,7 @@ public class ConsumoActivity extends AppCompatActivity {
                 //Criar uma thread para fazer o cálculo pois é um processamento demorado
                 Thread thread = new Thread(){
                     public void run(){
-                        calculadora.Calcular(-1f, ConsumoActivity.this);
+                        calculadora.Calcular(ConsumoActivity.this);
                     }
                 };
                 thread.start();

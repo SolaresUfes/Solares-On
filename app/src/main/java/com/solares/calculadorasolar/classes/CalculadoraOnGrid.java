@@ -36,16 +36,20 @@ public class CalculadoraOnGrid implements Serializable {
     double tarifaMensal;
 
     float areaAlvo;
+    int idModuloEscolhido;
+    int idInversorEscolhido;
 
 
     /* Descrição: Construtor do Objeto CalculadoraOnGrid
      * Parâmetros de Entrada: -;
      * Saída: -;
      * Pré Condições: -;
-     * Pós Condições: O objeto foi construido com a área alvo como -1f;
+     * Pós Condições: O objeto foi construido com a área alvo como -1f e sem nenhum módulo ou inversor definido;
      */
     public CalculadoraOnGrid(){
         this.areaAlvo = -1f;
+        this.idModuloEscolhido = -1;
+        this.idInversorEscolhido = -1;
     }
 
     //////////////////////////
@@ -90,6 +94,12 @@ public class CalculadoraOnGrid implements Serializable {
     public void setCustoReais(double custoReais){
         this.custoReais = custoReais;
     }
+    public void setAreaAlvo(float novaAreaAlvo) { this.areaAlvo = novaAreaAlvo; }
+
+    //idModuloEscolhido - Inteiro que representa um modelo de módulo escolhido pelo usuário. Se for -1, escolhe o melhor
+    public void setIdModuloEscolhido(int novoIdModuloEscolhido) { this.idModuloEscolhido = novoIdModuloEscolhido; }
+    //idInversoreEscolhido - Inteiro que representa um modelo de inversor escolhido pelo usuário. Se for -1, escolhe o melhor
+    public void setIdInversorEscolhido(int novoIdInversorEscolhido) { this.idInversorEscolhido = novoIdInversorEscolhido; }
 
 
 
@@ -98,18 +108,13 @@ public class CalculadoraOnGrid implements Serializable {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /* Descrição: Realiza todos os cálculos relazionados ao On Grid e iniciam o ResultadoActivity. Deve ser chamado com um objeto (calculadora.Calcular())
-     * Parâmetros de Entrada: AreaAlvo - A área que terá o sistema final. Se AreaAlvo for -1, calcula a área ideal para a pessoa.
-     * MyContext - Contexto da activity chamando o calcular.
+     * Parâmetros de Entrada: MyContext - Contexto da activity chamando o calcular.
      * Saída: -;
      * Pré Condições: O objeto deve ter seus campos de vetorCidade, vetorEstado, tarifaMensal, nomeCidade e custoReais preenchidos;
-     * Pós Condições: O objeto tem seus valores altlerados, com os resultados do cálculo e passa o intent Serializable e inicia a ResultadoActivity;
+     * Pós Condições: O objeto tem seus valores alterados, com os resultados do cálculo e passa o intent Serializable e inicia a ResultadoActivity;
      */
-    public void Calcular(float AreaAlvo, Context MyContext) {
+    public void Calcular(Context MyContext) {
         InputStream is=null;
-
-        if (AreaAlvo != -1){
-            this.areaAlvo = AreaAlvo;
-        }
 
         try {
             //Calcula a média anual da hora solar da cidade escolhida
@@ -119,11 +124,8 @@ public class CalculadoraOnGrid implements Serializable {
 
             //Calcula o consumo mensal em KWh
             double custoSemImpostos = ValueWithoutTaxes(custoReais);
-            if(vetorEstado != null){
-                consumokWh = ConvertToKWh(custoSemImpostos, vetorEstado);
-            } else {
-                throw new Exception("Estado não foi encontrado");
-            }
+            consumokWh = ConvertToKWh(custoSemImpostos, this.pegaTarifaMensal());
+
 
             //Acha a potêcia necessária
             potenciaNecessaria = FindTargetCapacity(consumokWh, horasDeSolPleno);
@@ -136,7 +138,7 @@ public class CalculadoraOnGrid implements Serializable {
             } else {
                 //Definindo as placas
                 is = MyContext.getResources().openRawResource(R.raw.banco_paineis);
-                placaEscolhida = CSVRead.DefineSolarPanel(is, potenciaNecessaria, this.areaAlvo);
+                placaEscolhida = CSVRead.DefineSolarPanel(is, potenciaNecessaria, this.areaAlvo, this.idModuloEscolhido);
                 area = DefineArea(placaEscolhida);
 
                 //Encontrando a potenciaInstalada
@@ -144,7 +146,7 @@ public class CalculadoraOnGrid implements Serializable {
 
                 //Definindo os inversores
                 is = MyContext.getResources().openRawResource(R.raw.banco_inversores);
-                inversor = CSVRead.DefineInvertor(is, placaEscolhida);
+                inversor = CSVRead.DefineInvertor(is, placaEscolhida, this.idInversorEscolhido);
 
                 //Definindo os custos
                 double[] custos = DefineCosts(placaEscolhida, inversor);
@@ -192,7 +194,6 @@ public class CalculadoraOnGrid implements Serializable {
             }
         }
     }
-
 
     /* Descrição: Realiza os cálculos relacionados aos índices econômicos e altera as variáveis do objeto
      * Parâmetros de Entrada: -;
@@ -368,13 +369,13 @@ Thomas T.D. Tran, Amanda D. Smith
 
     /* Descrição: Converte a conta de energia de reais para kWh
      * Parâmetros de Entrada: costReais - Valor double em reais da conta de luz média mensal, sem impostos;
-stateVec - Vetor de Strings com as informações do estado escolhido
+tarifaMensal - valor da tarifa de energia
      * Saída: Valor de energia em kWh mensal - costReais dividido pela tarifa de energia
      * Pré Condições: costReais é não nulo e não contém os impostos; stateVec - não é nulo e contém as informações do estado
      * Pós Condições: Retorna o valor do consumo de energia mensal
      */
-    public static double ConvertToKWh(double costReais, String[] stateVec){
-        return costReais/Double.parseDouble(stateVec[Constants.iEST_TARIFA]);
+    public static double ConvertToKWh(double costReais, double tarifaMensal){
+        return costReais/tarifaMensal;
     }
 
 

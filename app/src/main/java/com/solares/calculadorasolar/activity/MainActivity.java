@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
                         calculadora.setVetorEstado(CreateVetorEstado(calculadora.pegaVetorCidade()));
                         // Colocar Tarifa inicial
                         calculadora.setTarifaMensal(Double.parseDouble(calculadora.pegaVetorEstado()[Constants.iEST_TARIFA]));
-                        calculadora.Calcular(-1, MainActivity.this);
+                        calculadora.Calcular(MainActivity.this);
                     }
                 } catch (Exception e){
                     try {

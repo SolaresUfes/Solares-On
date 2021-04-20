@@ -54,7 +54,7 @@ public class InstalacaoActivity extends AppCompatActivity {
         TextView textEstaticoPotencia = findViewById(R.id.text_potencia_1);
         AutoSizeText.AutoSizeTextView(textEstaticoPotencia, MainActivity.alturaTela, MainActivity.larguraTela, percent);
         TextView textPotencia = findViewById(R.id.text_potencia);
-        textPotencia.setText(String.format(Locale.ITALY,"%.2f Wp", calculadora.pegaPotenciaNecessaria()));
+        textPotencia.setText(String.format(Locale.ITALY,"%.2f kWp", calculadora.pegaPotenciaNecessaria()/1000));
         AutoSizeText.AutoSizeTextView(textPotencia, MainActivity.alturaTela, MainActivity.larguraTela, percent);
 
         TextView textEstaticoPlaca = findViewById(R.id.text_placa_1);
@@ -67,7 +67,7 @@ public class InstalacaoActivity extends AppCompatActivity {
         } else {
             singplur = "Placa";
         }
-        textPlaca.setText(String.format(Locale.ITALY, "%d %s de %.0f W",
+        textPlaca.setText(String.format(Locale.ITALY, "%d %s de %.0f Wp",
                 Integer.parseInt(calculadora.pegaPlacaEscolhida()[Constants.iPANEL_QTD]), singplur, Double.parseDouble(calculadora.pegaPlacaEscolhida()[Constants.iPANEL_POTENCIA])));
 
         TextView textEstaticoArea = findViewById(R.id.text_area_1);
@@ -85,8 +85,8 @@ public class InstalacaoActivity extends AppCompatActivity {
         } else {
             singplur = "Inversor";
         }
-        textInversor.setText(String.format(Locale.ITALY, "%d %s de %.0f W",
-                Integer.parseInt(calculadora.pegaInversor()[Constants.iINV_QTD]), singplur, Double.parseDouble(calculadora.pegaInversor()[Constants.iINV_POTENCIA])));
+        textInversor.setText(String.format(Locale.ITALY, "%d %s de %.2f kW",
+                Integer.parseInt(calculadora.pegaInversor()[Constants.iINV_QTD]), singplur, Double.parseDouble(calculadora.pegaInversor()[Constants.iINV_POTENCIA])/1000));
 
         //Definição do layout para escurecer a tela
         blackener = findViewById(R.id.blackener);

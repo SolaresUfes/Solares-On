@@ -62,6 +62,7 @@ public class CalculadoraOnGrid implements Serializable {
     public double pegaCustoReais(){ return custoReais; }
     public double pegaConsumokWhs(){ return consumokWh; }
     public double pegaPotenciaNecessaria(){ return potenciaNecessaria; }
+    public double pegaPotenciaInstalada(){ return potenciaInstalada; }
     public double pegaArea(){ return area; }
     public String[] pegaInversor(){ return inversor; }
     public double pegaCustoParcial(){ return custoParcial; }
@@ -129,51 +130,43 @@ public class CalculadoraOnGrid implements Serializable {
 
             //Acha a potêcia necessária
             potenciaNecessaria = FindTargetCapacity(consumokWh, horasDeSolPleno);
-            if(potenciaNecessaria < 0.0){
-                try{
-                    Toast.makeText(MyContext, "O seu consumo de energia é muito baixo!", Toast.LENGTH_LONG).show();
-                } catch (Exception etoast){
-                    etoast.printStackTrace();
-                }
-            } else {
-                //Definindo as placas
-                is = MyContext.getResources().openRawResource(R.raw.banco_paineis);
-                placaEscolhida = CSVRead.DefineSolarPanel(is, potenciaNecessaria, this.areaAlvo, this.idModuloEscolhido);
-                area = DefineArea(placaEscolhida);
+            //Definindo as placas
+            is = MyContext.getResources().openRawResource(R.raw.banco_paineis);
+            placaEscolhida = CSVRead.DefineSolarPanel(is, potenciaNecessaria, this.areaAlvo, this.idModuloEscolhido);
+            area = DefineArea(placaEscolhida);
 
-                //Encontrando a potenciaInstalada
-                this.potenciaInstalada = Double.parseDouble(placaEscolhida[Constants.iPANEL_POTENCIA]) * Double.parseDouble(placaEscolhida[Constants.iPANEL_QTD]);
+            //Encontrando a potenciaInstalada
+            this.potenciaInstalada = Double.parseDouble(placaEscolhida[Constants.iPANEL_POTENCIA]) * Double.parseDouble(placaEscolhida[Constants.iPANEL_QTD]);
 
-                //Definindo os inversores
-                is = MyContext.getResources().openRawResource(R.raw.banco_inversores);
-                inversor = CSVRead.DefineInvertor(is, placaEscolhida, this.idInversorEscolhido);
+            //Definindo os inversores
+            is = MyContext.getResources().openRawResource(R.raw.banco_inversores);
+            inversor = CSVRead.DefineInvertor(is, placaEscolhida, this.idInversorEscolhido);
 
-                //Definindo os custos
-                double[] custos = DefineCosts(placaEscolhida, inversor);
-                custoParcial = custos[Constants.iCOSTS_PARCIAL];
-                custoTotal = custos[Constants.iCOSTS_TOTAL];
+            //Definindo os custos
+            double[] custos = this.DefineCosts(placaEscolhida, inversor);
+            custoParcial = custos[Constants.iCOSTS_PARCIAL];
+            custoTotal = custos[Constants.iCOSTS_TOTAL];
 
-                //Calculo da energia produzida em um ano
-                geracaoAnual = EstimateAnualGeneration();
+            //Calculo da energia produzida em um ano
+            geracaoAnual = EstimateAnualGeneration();
 
-                GetEconomicInformation();
+            GetEconomicInformation();
 
-                //Preparação para mudar para próxima activity
-                Intent intent = new Intent(MyContext, ResultadoActivity.class);
+            //Preparação para mudar para próxima activity
+            Intent intent = new Intent(MyContext, ResultadoActivity.class);
 
-                //Fechar o InputStream
-                try {
-                    is.close();
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
-
-                //Passar o objeto com as informações calculadas para a próxima Activity (Resultado)
-                intent.putExtra(Constants.EXTRA_CALCULADORAON, this);
-
-                //Mudar de activity
-                MyContext.startActivity(intent);
+            //Fechar o InputStream
+            try {
+                is.close();
+            } catch (Exception e){
+                e.printStackTrace();
             }
+
+            //Passar o objeto com as informações calculadas para a próxima Activity (Resultado)
+            intent.putExtra(Constants.EXTRA_CALCULADORAON, this);
+
+            //Mudar de activity
+            MyContext.startActivity(intent);
         } catch (Exception e){
             Log.i("Calculate", "Erro no Cálculo");
             //Se algum erro ocorrer, pede para o usuário informar um número real
@@ -201,8 +194,9 @@ public class CalculadoraOnGrid implements Serializable {
      * Pré Condições: O objeto deve ter passado pela função Calcular, não é recomendado chamar essa função sozinha;
      * Pós Condições: O objeto tem seus valores altlerados, com os resultados do cálculo;
      * Fontes:
-     * LCOE: Incorporating Performance-based Global Sensitivity and Uncertainty Analysis into LCOE Calculations for Emerging Renewable Energy Technologies -
+     * LCOE (Antigo): Incorporating Performance-based Global Sensitivity and Uncertainty Analysis into LCOE Calculations for Emerging Renewable Energy Technologies -
 Thomas T.D. Tran, Amanda D. Smith
+     * Custos de mão de obra e afins: https://www.greener.com.br/estudo/estudo-estrategico-mercado-fotovoltaico-de-geracao-distribuida-2-semestre-de-2020/
      */
     public void GetEconomicInformation(){
         int year;
@@ -225,7 +219,8 @@ Thomas T.D. Tran, Amanda D. Smith
             //Depreciação do painel a cada ano (diminuição de rendimento)
             geracaoComDepreciacao = this.geracaoAnual * (1 - (Constants.DEPREC_PANELS) * year);
             //Somando o total de energia produzida para calcular o custo de cada KWh
-            LCOEGeneration = geracaoComDepreciacao/LCOEDivisor;
+            //LCOEGeneration = geracaoComDepreciacao/LCOEDivisor; //CÁLCULO DO OUTRO LCOE
+            LCOEGeneration = geracaoComDepreciacao; //Cálculo mais simples do custo da energia
             LCOESumGeneration += LCOEGeneration;
             geracaoTotalVidaUtil += geracaoComDepreciacao;
             //Encontra quantos KWh o usuário ganhou de créditos esse ano (créditos têm o sinal negativo) ou se ele gastou mais do que produziu
@@ -324,6 +319,7 @@ Thomas T.D. Tran, Amanda D. Smith
             this.taxaRetornoInvestimento = internalRateOfReturn;
         }
 
+        /* CÁLCULO DO LCOE NO MÉTODO MAIS COMPLEXO (NÃO USADO PELO MERCADO DE ENERGIA SOLAR)
         /////////////Bora calcular o LCOE!!
         //Achar o capacity factor da usina (porcentagem de energia real gerada em relação à produção nominal da usina)
         //Geração real dividido pela geração máxima (capacidade * horas em um dia * dias em um ano * anos de operação)
@@ -341,10 +337,10 @@ Thomas T.D. Tran, Amanda D. Smith
         //Faz o cálculo do LCOE de acordo com a referência (Documentação deste método)
         LCOE = (overnightCapitalCost*LCOEcrf + fixedOnM) /
                 (24*365*capacityFactor);
+         */
 
-        ////////////Outras possibilidades
-        double LCOE2 = (custoTotal + LCOESumCost)/LCOESumGeneration;
-        int i = 1;
+        //Cálculo do LCOE feito no mercado atualmente
+        LCOE = (LCOESumCost + this.custoTotal) / LCOESumGeneration;
     }
 
 
@@ -435,13 +431,28 @@ O custo parcial é apenas o custos dos módulos e dos inversores. O custo total 
      * Pré Condições: solarPanel e invertor - Vetores não nulos com as informações do sistema
      * Pós Condições: Retorna o vetor de custos
      */
-    public static double[] DefineCosts(String[] solarPanel, String[] invertor){
+    public double[] DefineCosts(String[] solarPanel, String[] invertor){
         double[] costs = {0.0, 0.0};
+        double porcentagemCustosIntegrador;
+
         //Definido custo parcial
         costs[Constants.iCOSTS_PARCIAL] = Double.parseDouble(invertor[Constants.iINV_PRECO_TOTAL]) +
                 Double.parseDouble(solarPanel[Constants.iPANEL_CUSTO_TOTAL]);
-        //Definindo o custo total
-        costs[Constants.iCOSTS_TOTAL] = costs[Constants.iCOSTS_PARCIAL]*(1 + Constants.PERCENTUAL_COST_INSTALATION);
+        ////Definindo o custo total
+        //Porcentagem do custo parcial para custos com mão de obra, outros componentes etc... Segundo Estudo estratégico da Greener de 2020
+        //Nesse estudo, chegamos na equação y = 1.65-0.032x para descrever a porcentagem do custo do kit que representa o custo final para o consumidor
+        //Isso desde 1kWp até 8kWp, além desses limites, usamos o valor do limite
+        if(this.pegaPotenciaInstalada() < 1000){
+            porcentagemCustosIntegrador = 1.65 - 0.032*1;
+        } else if(this.pegaPotenciaInstalada() > 8000) {
+            porcentagemCustosIntegrador = 1.65 - 0.032 * 8;
+        } else {
+            porcentagemCustosIntegrador = 1.65 - 0.032*this.pegaPotenciaInstalada()/1000; // /1000 para ter a potencia em kWp
+        }
+
+
+
+        costs[Constants.iCOSTS_TOTAL] = costs[Constants.iCOSTS_PARCIAL]*porcentagemCustosIntegrador;
 
         return costs;
     }

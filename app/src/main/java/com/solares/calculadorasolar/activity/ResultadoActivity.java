@@ -3,16 +3,20 @@ package com.solares.calculadorasolar.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.solares.calculadorasolar.R;
 import com.solares.calculadorasolar.classes.AutoSizeText;
 import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
 import com.solares.calculadorasolar.classes.Constants;
+
+import org.w3c.dom.Text;
 
 import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensions;
 
@@ -47,6 +51,40 @@ public class ResultadoActivity extends AppCompatActivity{
             AutoSizeText.AutoSizeButton(buttonFinalizar, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
             Button buttonAjustarArea = findViewById(R.id.button_ajustar_area);
             AutoSizeText.AutoSizeButton(buttonAjustarArea, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
+
+            //Erro de valor pequeno
+            final TextView textExplicacaoValor = findViewById(R.id.text_explicacao);
+            AutoSizeText.AutoSizeTextView(textExplicacaoValor, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
+            final ConstraintLayout layoutExplicacaoValor = findViewById(R.id.layout_explicacao_valor);
+            LinearLayout darkenerResultado = findViewById(R.id.darkener_resultado);
+
+            //Verifica se a potencia necessária é baixa:
+            if(calculadora.pegaPotenciaNecessaria() < 200){
+                //Mostra a explicação
+                layoutExplicacaoValor.setVisibility(View.VISIBLE);
+                //Define um onclick listener no fundo preto pra sair desse aviso
+                darkenerResultado.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        layoutExplicacaoValor.setVisibility(View.GONE);
+                    }
+                });
+
+                findViewById(R.id.button_fechar_explicacao).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        layoutExplicacaoValor.setVisibility(View.GONE);
+                    }
+                });
+
+                findViewById(R.id.button_duvidas).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        textExplicacaoValor.setText(R.string.saibaa_mais_valor);
+                    }
+                });
+            }
+
 
 
             buttonDados.setOnClickListener(new View.OnClickListener() {

@@ -98,38 +98,27 @@ public class MainActivity extends AppCompatActivity {
                 double entry;
                 //Verifica se o valor inserido é válido
                 try{
-                    entry = Double.parseDouble(mViewHolder.editCostMonth.getText().toString());
-                    //Verifica se o valor inserido não é muito baixo
-                    if(entry < Constants.COST_DISP/3.0){
-                        try{
-                            Toast.makeText(MainActivity.this, "Valor muito baixo!", Toast.LENGTH_LONG).show();
-                        } catch (Exception e){
-                            e.printStackTrace();
-                        }
-                    } else {
-                        //Fecha teclado
-                        mViewHolder.editCostMonth.onEditorAction(EditorInfo.IME_ACTION_DONE);
-                        /////Pega as informações inseridas pelo usuário
-                        //Identifica a cidade escolhida e pega suas informações
-                        final String stateName = mViewHolder.spinnerStates.getSelectedItem().toString();
-                        final int idCity = mViewHolder.spinnerCities.getSelectedItemPosition();
-                        final String cityName = mViewHolder.spinnerCities.getItemAtPosition(idCity).toString();
-                        //Guarda o custo mensal inserido pelo usuário
-                        final double custoReais = Double.parseDouble( mViewHolder.editCostMonth.getText().toString() );
+                    //Fecha teclado
+                    mViewHolder.editCostMonth.onEditorAction(EditorInfo.IME_ACTION_DONE);
+                    /////Pega as informações inseridas pelo usuário
+                    //Identifica a cidade escolhida e pega suas informações
+                    final String stateName = mViewHolder.spinnerStates.getSelectedItem().toString();
+                    final int idCity = mViewHolder.spinnerCities.getSelectedItemPosition();
+                    final String cityName = mViewHolder.spinnerCities.getItemAtPosition(idCity).toString();
+                    //Guarda o custo mensal inserido pelo usuário
+                    final double custoReais = Double.parseDouble( mViewHolder.editCostMonth.getText().toString() );
 
-
-                        // Inicia Calculadora
-                        CalculadoraOnGrid calculadora = new CalculadoraOnGrid();
-                        // Insere as informações que já temos no objeto
-                        calculadora.setNomeCidade(cityName);
-                        calculadora.setCustoReais(custoReais);
-                        // Cria os vetores de Cidade e Estado
-                        calculadora.setVetorCidade(CreateVetorCidade(idCity, stateName));
-                        calculadora.setVetorEstado(CreateVetorEstado(calculadora.pegaVetorCidade()));
-                        // Colocar Tarifa inicial
-                        calculadora.setTarifaMensal(Double.parseDouble(calculadora.pegaVetorEstado()[Constants.iEST_TARIFA]));
-                        calculadora.Calcular(MainActivity.this);
-                    }
+                    // Inicia Calculadora
+                    CalculadoraOnGrid calculadora = new CalculadoraOnGrid();
+                    // Insere as informações que já temos no objeto
+                    calculadora.setNomeCidade(cityName);
+                    calculadora.setCustoReais(custoReais);
+                    // Cria os vetores de Cidade e Estado
+                    calculadora.setVetorCidade(CreateVetorCidade(idCity, stateName));
+                    calculadora.setVetorEstado(CreateVetorEstado(calculadora.pegaVetorCidade()));
+                    // Colocar Tarifa inicial
+                    calculadora.setTarifaMensal(Double.parseDouble(calculadora.pegaVetorEstado()[Constants.iEST_TARIFA]));
+                    calculadora.Calcular(-1, MainActivity.this);
                 } catch (Exception e){
                     try {
                         Toast.makeText(MainActivity.this, "Insira um número positivo!", Toast.LENGTH_LONG).show();

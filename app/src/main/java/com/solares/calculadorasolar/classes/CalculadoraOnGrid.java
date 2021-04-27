@@ -214,7 +214,7 @@ Thomas T.D. Tran, Amanda D. Smith
             tariff = tarifaMensal*Math.pow(1 + Constants.TARIFF_CHANGE/100.0, year);
 
             //Um ajuste do Custo nivelado de energia
-            LCOEDivisor = Math.pow(1 + Constants.SELIC, year);
+            //LCOEDivisor = Math.pow(1 + Constants.SELIC, year);
 
             //Depreciação do painel a cada ano (diminuição de rendimento)
             geracaoComDepreciacao = this.geracaoAnual * (1 - (Constants.DEPREC_PANELS) * year);
@@ -281,8 +281,8 @@ Thomas T.D. Tran, Amanda D. Smith
             custoManutEInstal = (custoTotal * Constants.MAINTENANCE_COST) * Math.pow(1 + (2 * Constants.IPCA), year) + custoInversor * 0.1;
             gastosTotais = custoManutEInstal + custoInversor;
             //Esses são os custos coniderados no LCOE, os custos de energia (da concessionária) não entram no cálculo
-            LCOEcost = gastosTotais/LCOEDivisor;
-            LCOESumCost += LCOEcost;
+            //LCOEcost = gastosTotais/LCOEDivisor;
+            LCOESumCost += gastosTotais;
 
 
             if (year == 0) { //Se for o primeiro ano, considera os custos de instalação
@@ -449,7 +449,6 @@ O custo parcial é apenas o custos dos módulos e dos inversores. O custo total 
         } else {
             porcentagemCustosIntegrador = 1.65 - 0.032*this.pegaPotenciaInstalada()/1000; // /1000 para ter a potencia em kWp
         }
-
 
 
         costs[Constants.iCOSTS_TOTAL] = costs[Constants.iCOSTS_PARCIAL]*porcentagemCustosIntegrador;

@@ -16,8 +16,6 @@ import com.solares.calculadorasolar.classes.AutoSizeText;
 import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
 import com.solares.calculadorasolar.classes.Constants;
 
-import org.w3c.dom.Text;
-
 import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensions;
 
 public class ResultadoActivity extends AppCompatActivity{
@@ -55,8 +53,8 @@ public class ResultadoActivity extends AppCompatActivity{
             //Erro de valor pequeno
             final TextView textExplicacaoValor = findViewById(R.id.text_explicacao);
             AutoSizeText.AutoSizeTextView(textExplicacaoValor, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
-            final ConstraintLayout layoutExplicacaoValor = findViewById(R.id.layout_explicacao_valor);
-            LinearLayout darkenerResultado = findViewById(R.id.darkener_resultado);
+            final ConstraintLayout layoutExplicacaoValor = findViewById(R.id.ACRlayout_pergunta);
+            LinearLayout darkenerResultado = findViewById(R.id.ACRdarkener_resultado);
 
             //Verifica se a potencia necessária é baixa:
             if(calculadora.pegaPotenciaNecessaria() < 200){
@@ -70,14 +68,14 @@ public class ResultadoActivity extends AppCompatActivity{
                     }
                 });
 
-                findViewById(R.id.button_fechar_explicacao).setOnClickListener(new View.OnClickListener() {
+                findViewById(R.id.ACRbutton_fazer_questionario).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         layoutExplicacaoValor.setVisibility(View.GONE);
                     }
                 });
 
-                findViewById(R.id.button_duvidas).setOnClickListener(new View.OnClickListener() {
+                findViewById(R.id.ACRbutton_negar).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         textExplicacaoValor.setText(R.string.saibaa_mais_valor);

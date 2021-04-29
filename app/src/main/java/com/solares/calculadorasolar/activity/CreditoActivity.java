@@ -1,6 +1,7 @@
 package com.solares.calculadorasolar.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.solares.calculadorasolar.R;
 import com.solares.calculadorasolar.classes.AutoSizeText;
@@ -14,11 +15,17 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensions;
 
 public class CreditoActivity extends AppCompatActivity {
+
+    Button bSim;
+    Button bNao;
+    ConstraintLayout popUp;
+    LinearLayout black;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +47,13 @@ public class CreditoActivity extends AppCompatActivity {
 
         TextView textConheca = findViewById(R.id.text_conheca);
         AutoSizeText.AutoSizeTextView(textConheca, MainActivity.alturaTela, MainActivity.larguraTela, 3f);
+
+        //Botões PopUp
+        bSim = (Button)findViewById(R.id.ACRbutton_fazer_questionario);
+        bNao = (Button)findViewById(R.id.ACRbutton_negar);
+        popUp = (ConstraintLayout)findViewById(R.id.ACRlayout_pergunta);
+        black = (LinearLayout)findViewById(R.id.ACRdarkener_resultado);
+        mostrarPopUp();
 
         //Colocando as imagens nos image views
         //Imagem do instagram
@@ -79,6 +93,28 @@ public class CreditoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 FinalizarActivity(calculadora);
+            }
+        });
+    }
+
+    private void mostrarPopUp(){
+        bSim.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/projeto.solares/?utm_source=SolaresOn&utm_medium=name&utm_campaign=app"));
+                startActivity(intent);
+            }
+        });
+        bNao.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popUp.setVisibility(View.GONE);
+            }
+        });
+        black.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popUp.setVisibility(View.GONE);
             }
         });
     }

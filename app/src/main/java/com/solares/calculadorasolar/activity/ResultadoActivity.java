@@ -51,7 +51,7 @@ public class ResultadoActivity extends AppCompatActivity{
             AutoSizeText.AutoSizeButton(buttonAjustarArea, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
             //Erro de valor pequeno
-            final TextView textExplicacaoValor = findViewById(R.id.text_explicacao);
+            final TextView textExplicacaoValor = findViewById(R.id.ACRtext_explicacao_popup);
             AutoSizeText.AutoSizeTextView(textExplicacaoValor, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
             final ConstraintLayout layoutExplicacaoValor = findViewById(R.id.ACRlayout_pergunta);
             LinearLayout darkenerResultado = findViewById(R.id.ACRdarkener_resultado);

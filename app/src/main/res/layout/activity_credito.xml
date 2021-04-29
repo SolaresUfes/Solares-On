@@ -209,7 +209,7 @@
             android:clickable="true"
             android:focusable="true"
             android:orientation="horizontal"
-            app:layout_constraintBottom_toTopOf="@+id/text_explicacao"
+            app:layout_constraintBottom_toTopOf="@+id/ACRtext_explicacao_popup"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -217,7 +217,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/titulo_explicacao"
+            android:id="@+id/ACRtitulo_explicacao"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@color/colorWhite"
@@ -225,14 +225,14 @@
             android:focusable="true"
             android:gravity="center"
             android:padding="16dp"
-            android:text="Valor Baixo"
+            android:text="Pesquisa"
             android:textSize="22dp"
-            app:layout_constraintBottom_toTopOf="@+id/text_explicacao"
+            app:layout_constraintBottom_toTopOf="@+id/ACRtext_explicacao_popup"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/text_explicacao"
+            android:id="@+id/ACRtext_explicacao_popup"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="#FFFFFF"
@@ -240,7 +240,7 @@
             android:focusable="true"
             android:gravity="start"
             android:padding="16dp"
-            android:text="@string/explicacao_valor_inserido_baixo"
+            android:text="@string/texto_pergunta_para_questionario"
             app:layout_constraintBottom_toBottomOf="@id/guideline45"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

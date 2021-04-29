@@ -24,6 +24,8 @@ public class CreditoActivity extends AppCompatActivity {
 
     Button bSim;
     Button bNao;
+    TextView textTituloPopup;
+    TextView textExplicacaoPopup;
     ConstraintLayout popUp;
     LinearLayout black;
 
@@ -48,12 +50,27 @@ public class CreditoActivity extends AppCompatActivity {
         TextView textConheca = findViewById(R.id.text_conheca);
         AutoSizeText.AutoSizeTextView(textConheca, MainActivity.alturaTela, MainActivity.larguraTela, 3f);
 
-        //Botões PopUp
+
+
+        /////Componentes PopUp
         bSim = (Button)findViewById(R.id.ACRbutton_fazer_questionario);
+        AutoSizeText.AutoSizeButton(bSim, MainActivity.alturaTela, MainActivity.larguraTela, 3f);
+
         bNao = (Button)findViewById(R.id.ACRbutton_negar);
+        AutoSizeText.AutoSizeButton(bNao, MainActivity.alturaTela, MainActivity.larguraTela, 3f);
+
+        textTituloPopup = findViewById(R.id.ACRtitulo_explicacao);
+        AutoSizeText.AutoSizeTextView(textTituloPopup, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
+
+        textExplicacaoPopup = findViewById(R.id.ACRtext_explicacao_popup);
+        AutoSizeText.AutoSizeTextView(textExplicacaoPopup, MainActivity.alturaTela, MainActivity.larguraTela, 3f);
+
         popUp = (ConstraintLayout)findViewById(R.id.ACRlayout_pergunta);
         black = (LinearLayout)findViewById(R.id.ACRdarkener_resultado);
         mostrarPopUp();
+
+
+
 
         //Colocando as imagens nos image views
         //Imagem do instagram

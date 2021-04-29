@@ -43,7 +43,7 @@ public class ConsumoActivity extends AppCompatActivity {
         AutoSizeText.AutoSizeTextView(textTituloConsumo, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
 
         //Pega o view da explicação e ajusta o tamanho da fonte
-        TextView textExplicacaoConsumo = findViewById(R.id.text_explicacao);
+        TextView textExplicacaoConsumo = findViewById(R.id.ACRtext_explicacao_popup);
         AutoSizeText.AutoSizeTextView(textExplicacaoConsumo, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
         //Pega o view da tarifa atual e ajusta o tamanho da fonte

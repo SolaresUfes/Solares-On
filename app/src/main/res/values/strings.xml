@@ -78,6 +78,7 @@
         mesmo que tenha consumido pouco, ou até nada, durante o mês. Esse valor representa o custo que a concessionária tem com a infraestrutura ao garantir que o consumidor possa
         utilizar a energia.\n\nPor causa disso, se o seu consumo for baixo (próximo desse valor), não se pode diminuir a conta de luz o
         suficiente para o investimento em um sistema fotovoltaico ser economicamente viável.</string>
+    <string name="texto_pergunta_para_questionario">Olá! Você teria interesse em uma funcionalidade para cálculos Off Grid neste aplicativo?\n\n Se sim, poderia responder um rápido questionário?</string>
     <string-array name="Estados">
         <item>AC</item>
         <item>AL</item>

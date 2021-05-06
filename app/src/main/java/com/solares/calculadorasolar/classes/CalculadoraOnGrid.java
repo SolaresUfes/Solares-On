@@ -201,10 +201,10 @@ Thomas T.D. Tran, Amanda D. Smith
     public void GetEconomicInformation(){
         int year;
         double geracaoComDepreciacao, consumoMedioAnual=consumokWh*12, geracaoTotalVidaUtil=0.0;
-        double saldoDoConsumoCincoAnos=0, consumoAcimaDaGeracao=0, valorAPagar=0;
+        double creditoCincoAnos=0, consumoAcimaDaGeracao=0, valorAPagar=0;
         double gastosTotais, ConsumoAPagarNoAno; //Quanto tem que pagar no ano
         double custoComImposto, custoAtualComImposto, diferencaDeCusto, custoInversor=0.0, custoManutEInstal=0.0;
-        double[] saldoDoConsumoAnual = new double[30], cashFlow=new double[25];
+        double[] creditoAnual = new double[30], cashFlow=new double[25];
         double cashFlowCurrentCurrency=0, payback = 0.0, tariff;
         double LCOEcost, LCOEGeneration, LCOEDivisor;
         double LCOESumCost=0.0, LCOESumGeneration=0.0;
@@ -226,30 +226,41 @@ Thomas T.D. Tran, Amanda D. Smith
             //Encontra quantos KWh o usuário ganhou de créditos esse ano (créditos têm o sinal negativo) ou se ele gastou mais do que produziu
             if (consumoMedioAnual < geracaoComDepreciacao) {
                 //Se ele produziu mais do que gastou, aumenta os créditos
-                saldoDoConsumoAnual[year] = consumoMedioAnual - geracaoComDepreciacao;
+                creditoAnual[year] = consumoMedioAnual - geracaoComDepreciacao;
                 consumoAcimaDaGeracao = 0.0;
             } else {
                 //Se ele consumiu mais do que produziu, não ganha créditos e tem que pagar a diferença
-                saldoDoConsumoAnual[year] = 0.0;
+                creditoAnual[year] = 0.0;
                 consumoAcimaDaGeracao = consumoMedioAnual - geracaoComDepreciacao;
             }
 
             //Os créditos duram apenas por cinco anos, então, se não foram usados, descarta o mais antigo
-            saldoDoConsumoCincoAnos += saldoDoConsumoAnual[year];
-            if (year > 4) {
-                saldoDoConsumoCincoAnos -= saldoDoConsumoAnual[year - 5];
+            creditoCincoAnos = 0;
+            for (int i = year; (i > year - 5) && (i >= 0); i--){
+                creditoCincoAnos += creditoAnual[i];
             }
 
             //Se o consumo que ele tem que pagar for maior do que os créditos que ele tem...
-            if (consumoAcimaDaGeracao + saldoDoConsumoCincoAnos > 0.0) {
+            if (consumoAcimaDaGeracao + creditoCincoAnos > 0.0) {
                 //Verifica de fato quanto ele deve pagar, descontando os créditos ainda restantes
-                ConsumoAPagarNoAno = consumoAcimaDaGeracao + saldoDoConsumoCincoAnos;
-                //Zera os créditos
-                saldoDoConsumoCincoAnos = 0;
+                ConsumoAPagarNoAno = consumoAcimaDaGeracao + creditoCincoAnos;
+                //Zera os créditos dos últimos cinco anos
+                for (int i = year; i > year - 5 && (i >= 0); i--){
+                    creditoAnual[i] = 0.0;
+                }
             } else {
                 //Se os créditos suprirem a demanda, ele não paga "nada"
                 ConsumoAPagarNoAno = 0;
-                saldoDoConsumoCincoAnos += consumoAcimaDaGeracao;
+                //Consome os créditos utilizados
+                for (int i = Math.max(year - 4, 0); i < year; i++){
+                    consumoAcimaDaGeracao = creditoAnual[i] + consumoAcimaDaGeracao;
+                    if(consumoAcimaDaGeracao <= 0.0){ //Se os créditos já quitaram todo o consumo
+                        creditoAnual[i] = consumoAcimaDaGeracao;
+                        break;
+                    } else {
+                        creditoAnual[i] = 0.0;
+                    }
+                }
             }
 
             //Se o que ele deve pagar for menor do que o custo de disponibilidade, ele paga o custo de disponibilidade

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorLightBlue">
+
+        <TextView
+            android:id="@+id/titulo_escolher_modulo_inversor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Escolher Módulo"
+            android:textColor="@color/colorWhite"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.12" />
+
+        <Spinner
+            android:id="@+id/spinner_modulos_inversores"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/colorSuperWhite"
+            android:spinnerMode="dropdown"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/titulo_escolher_modulo_inversor"
+            app:layout_constraintStart_toStartOf="@+id/titulo_escolher_modulo_inversor"
+            app:layout_constraintTop_toBottomOf="@+id/titulo_escolher_modulo_inversor" />
+
+
+        <Button
+            android:id="@+id/button_recalc_modulos_inversores"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/recalcular"
+            android:background="@drawable/background_resultado_text"
+            android:padding="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinner_modulos_inversores" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

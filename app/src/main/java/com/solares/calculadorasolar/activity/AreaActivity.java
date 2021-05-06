@@ -89,7 +89,8 @@ public class AreaActivity extends AppCompatActivity {
                          //Criar uma thread para fazer o cálculo pois é um processamento demorado
                          Thread thread = new Thread(){
                              public void run(){
-                                 calculadora.Calcular(AreaAlvo, AreaActivity.this);
+                                 calculadora.setAreaAlvo(AreaAlvo);
+                                 calculadora.Calcular(AreaActivity.this);
                              }
                          };
                          thread.start();

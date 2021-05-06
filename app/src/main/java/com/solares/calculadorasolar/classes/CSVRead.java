@@ -68,10 +68,11 @@ public class CSVRead {
         return null;
     }
 
-    public static String[] DefineSolarPanel(InputStream is, double WpNeeded, float AreaAlvo){
+    public static String[] DefineSolarPanel(InputStream is, double WpNeeded, float AreaAlvo, int idModuloEscolhido){
         String[] cheaperPanel;
         String[] currentPanel;
         String line;
+        int cont=0;
         double currentCost, cheaperCost, precoTotal;
         BufferedReader bufferedReader=null;
 
@@ -96,7 +97,19 @@ public class CSVRead {
             precoTotal = Double.parseDouble(cheaperPanel[Constants.iPANEL_QTD]) * Double.parseDouble(cheaperPanel[Constants.iPANEL_PRECO]);
             cheaperPanel[Constants.iPANEL_CUSTO_TOTAL] = String.valueOf(precoTotal);
 
+            if(idModuloEscolhido == 0){ //Se o usuário escolheu o primeiro módulo
+                //Fechar o bufferedReader
+                try {
+                    bufferedReader.close();
+                } catch (IOException ioex){
+                    ioex.printStackTrace();
+                }
+
+                return cheaperPanel;
+            }
+
             while ((line = bufferedReader.readLine()) != null){
+                cont++; //contador para escolher um modelo específico de módulo, se preciso
                 currentPanel = line.split(divider);
                 //O custo aqui é definido por preçoTotal/potênciaTotal
                 currentCost = FindPanelCost(WpNeeded, currentPanel, AreaAlvo);
@@ -113,7 +126,13 @@ public class CSVRead {
                 //O custo aqui é em dinheiro mesmo
                 precoTotal = Double.parseDouble(currentPanel[Constants.iPANEL_QTD]) * Double.parseDouble(currentPanel[Constants.iPANEL_PRECO]);
                 currentPanel[Constants.iPANEL_CUSTO_TOTAL] = String.valueOf(precoTotal);
-                if(currentCost<cheaperCost){
+
+                if(idModuloEscolhido == cont){ //Verifica se foi esse o módulo escolhido pelo usuário
+                    cheaperPanel = currentPanel;
+                    break;
+                }
+
+                if(currentCost<cheaperCost) {
                     cheaperCost = currentCost;
                     cheaperPanel = currentPanel;
                 }
@@ -199,11 +218,11 @@ public class CSVRead {
         return null;
     }
 
-    public static String[] DefineInvertor(InputStream is, String[] solarPanel){
+    public static String[] DefineInvertor(InputStream is, String[] solarPanel, int idInversorEscolhido){
         String[] cheaperInvertor, currentInvertor;
         String line;
         double currentCost, cheaperCost, WpGenerated;
-        int numberInvertors;
+        int numberInvertors, cont=0;
         BufferedReader bufferedReader = null;
         WpGenerated = Double.parseDouble(solarPanel[Constants.iPANEL_QTD]) * Double.parseDouble(solarPanel[Constants.iPANEL_POTENCIA]);
         try{
@@ -216,12 +235,29 @@ public class CSVRead {
             cheaperInvertor[Constants.iINV_QTD] = String.valueOf(numberInvertors);
             cheaperInvertor[Constants.iINV_PRECO_TOTAL] = String.valueOf(cheaperCost);
 
+            if(idInversorEscolhido == cont){ //Se o usuário escolheu o primeiro inversor
+                //Fechar o bufferedReader
+                try {
+                    bufferedReader.close();
+                } catch (IOException ioex){
+                    ioex.printStackTrace();
+                }
+
+                return cheaperInvertor;
+            }
+
             while ((line = bufferedReader.readLine()) != null){
+                cont++; //Contador para escolher um inversor específico
                 currentInvertor = line.split(divider);
                 numberInvertors = (int)Math.ceil((0.8*WpGenerated)/Double.parseDouble(currentInvertor[Constants.iINV_POTENCIA]));//Qtd de inversores
                 currentCost = numberInvertors * Double.parseDouble(currentInvertor[Constants.iINV_PRECO]);
                 currentInvertor[Constants.iINV_QTD] = String.valueOf(numberInvertors);
                 currentInvertor[Constants.iINV_PRECO_TOTAL] = String.valueOf(currentCost);
+
+                if(idInversorEscolhido == cont){ //Se o usuário escolheu o cont° inversor
+                    cheaperInvertor = currentInvertor;
+                    break;
+                }
 
                 if(currentCost<cheaperCost){
                     cheaperCost = currentCost;

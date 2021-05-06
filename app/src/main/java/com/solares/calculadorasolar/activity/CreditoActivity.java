@@ -1,14 +1,18 @@
 package com.solares.calculadorasolar.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.solares.calculadorasolar.R;
 import com.solares.calculadorasolar.classes.AutoSizeText;
 import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
 import com.solares.calculadorasolar.classes.Constants;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
@@ -41,6 +45,11 @@ public class CreditoActivity extends AppCompatActivity {
         //Essa função pega as dimensões e as coloca em váriaveis globais
         GetPhoneDimensions(this);
 
+        //Pegando as shared preferences para verificar se já foi mostrado o pop up da pesquisa off grid
+        SharedPreferences sharedPref = this.getPreferences(MODE_PRIVATE);
+        boolean popUpJaFoiMostrado = sharedPref.getBoolean(getString(R.string.SP_popUpJaFoiMostrado), false);
+
+        //Instanciação dos views
         Button buttonInstagram = findViewById(R.id.button_instagram);
         AutoSizeText.AutoSizeButton(buttonInstagram, MainActivity.alturaTela, MainActivity.larguraTela, 3f);
 
@@ -49,7 +58,6 @@ public class CreditoActivity extends AppCompatActivity {
 
         TextView textConheca = findViewById(R.id.text_conheca);
         AutoSizeText.AutoSizeTextView(textConheca, MainActivity.alturaTela, MainActivity.larguraTela, 3f);
-
 
 
         /////Componentes PopUp
@@ -67,7 +75,14 @@ public class CreditoActivity extends AppCompatActivity {
 
         popUp = (ConstraintLayout)findViewById(R.id.ACRlayout_pergunta);
         black = (LinearLayout)findViewById(R.id.ACRdarkener_resultado);
-        mostrarPopUp();
+        if(!popUpJaFoiMostrado){
+            //Registra que o popup já foi mostrado
+            SharedPreferences.Editor editorPref = sharedPref.edit();
+            editorPref.putBoolean(getString(R.string.SP_popUpJaFoiMostrado), true);
+            editorPref.apply();
+            //Mostra popup
+            mostrarPopUp();
+        }
 
 
 
@@ -75,19 +90,19 @@ public class CreditoActivity extends AppCompatActivity {
         //Colocando as imagens nos image views
         //Imagem do instagram
         ImageView imageInstagram = findViewById(R.id.imageViewInstagram);
-        imageInstagram.setImageDrawable(getResources().getDrawable(R.drawable.instagram_icon));
+        imageInstagram.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.instagram_icon));
 
         //Imagem com o nome do Solares
         ImageView imageTitulo = findViewById(R.id.imageViewCredito);
-        imageTitulo.setImageDrawable(getResources().getDrawable(R.drawable.retangulo_logo_solares));
+        imageTitulo.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.retangulo_logo_solares));
 
         //Imagem do Social
         ImageView imageSocial = findViewById(R.id.imageViewCirculoSocial);
-        imageSocial.setImageDrawable(getResources().getDrawable(R.drawable.circulo_social));
+        imageSocial.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.circulo_social));
 
         //Imagem do Barco
         ImageView imageBarco = findViewById(R.id.imageViewCirculoBarco);
-        imageBarco.setImageDrawable(getResources().getDrawable(R.drawable.circulo_barco));
+        imageBarco.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.circulo_barco));
 
         //Se o usuário clicar no ícone do instagram ou no botão com o @, ele é redirecionado para o instagram do solares
         imageInstagram.setOnClickListener(new View.OnClickListener() {
@@ -115,6 +130,8 @@ public class CreditoActivity extends AppCompatActivity {
     }
 
     private void mostrarPopUp(){
+        popUp.setVisibility(View.VISIBLE);
+        
         bSim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -55,8 +55,10 @@
     <string name="kwh">/ kWh</string>
     <string name="texto_creditos">Conheça outras iniciativas do\nProjeto Solares!</string>
     <string name="instagram_projeto_solares">\@projeto.solares</string>
+    <string name="podcast_solares">SolarCast</string>
     <string name="descricao_logo_do_projeto_solares">Logo do projeto Solares</string>
     <string name="descricao_logo_do_instagram">Logo do instagram</string>
+    <string name="descricao_logo_do_spotify">Logo do spotify</string>
     <string name="descricao_poente">Barco movido a energia solar</string>
     <string name="descricao_girassol">Ação do projeto Girassol, uma das áreas do Solares</string>
     <string name="economia_mensal">Economia Mensal</string>

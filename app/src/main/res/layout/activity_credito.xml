@@ -49,6 +49,22 @@
         app:layout_constraintVertical_bias="1.0" />
 
     <ImageView
+        android:id="@+id/imageViewSpotify"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/descricao_logo_do_spotify"
+        android:cropToPadding="false"
+        app:layout_constraintBottom_toBottomOf="@+id/button_spotify"
+        app:layout_constraintEnd_toStartOf="@+id/button_spotify"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/button_spotify" />
+
+    <ImageView
         android:id="@+id/imageViewCirculoBarco"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -96,24 +112,42 @@
         app:layout_constraintTop_toTopOf="@+id/guideline31" />
 
 
-    <Button
-        android:id="@+id/button_instagram"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/background_button_resultado_center"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:text="@string/instagram_projeto_solares"
-        android:textAllCaps="false"
-        android:textColor="@color/colorWhite"
-        app:layout_constraintEnd_toStartOf="@+id/guideline23"
-        app:layout_constraintStart_toStartOf="@+id/guideline22"
-        app:layout_constraintTop_toBottomOf="@+id/text_conheca" />
+        <Button
+            android:id="@+id/button_instagram"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:background="@drawable/background_button_resultado_center"
+            android:paddingStart="20dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="10dp"
+            android:text="@string/instagram_projeto_solares"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite"
+            app:layout_constraintEnd_toStartOf="@+id/guideline23"
+            app:layout_constraintStart_toStartOf="@+id/guideline22"
+            app:layout_constraintTop_toBottomOf="@+id/text_conheca" />
 
-    <Button
+        <Button
+            android:id="@+id/button_spotify"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:background="@drawable/background_button_resultado_center"
+            android:paddingStart="20dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="10dp"
+            android:text="@string/podcast_solares"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite"
+            app:layout_constraintEnd_toStartOf="@+id/guideline23"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/guideline22"
+            app:layout_constraintTop_toBottomOf="@+id/button_instagram" />
+
+        <Button
         android:id="@+id/button_recalcular"
         android:layout_width="0dp"
         android:layout_height="0dp"

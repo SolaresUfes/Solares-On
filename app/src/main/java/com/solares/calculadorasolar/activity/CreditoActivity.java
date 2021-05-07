@@ -53,6 +53,9 @@ public class CreditoActivity extends AppCompatActivity {
         Button buttonInstagram = findViewById(R.id.button_instagram);
         AutoSizeText.AutoSizeButton(buttonInstagram, MainActivity.alturaTela, MainActivity.larguraTela, 3f);
 
+        Button buttonSpotify = findViewById(R.id.button_spotify);
+        AutoSizeText.AutoSizeButton(buttonSpotify, MainActivity.alturaTela, MainActivity.larguraTela, 3f);
+
         Button buttonRecalcular = findViewById(R.id.button_recalcular);
         AutoSizeText.AutoSizeButton(buttonRecalcular, MainActivity.alturaTela, MainActivity.larguraTela, 3f);
 
@@ -104,6 +107,10 @@ public class CreditoActivity extends AppCompatActivity {
         ImageView imageBarco = findViewById(R.id.imageViewCirculoBarco);
         imageBarco.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.circulo_barco));
 
+        //Imagem do Spotify
+        ImageView imageSpotify = findViewById(R.id.imageViewSpotify);
+        imageSpotify.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.icone_spotify));
+
         //Se o usuário clicar no ícone do instagram ou no botão com o @, ele é redirecionado para o instagram do solares
         imageInstagram.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,6 +123,22 @@ public class CreditoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/projeto.solares/?utm_source=SolaresOn&utm_medium=icon&utm_campaign=app"));
+                startActivity(intent);
+            }
+        });
+
+        //Se o usuário clicar no ícone do spotfy ou no botão, ele é redirecionado para a playlist do podcast do solares
+        imageSpotify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://open.spotify.com/show/6mJP4CnB8jMOgz66PzBXfc?si=DhYDOT9mTt-Cj8jg2LH6gA"));
+                startActivity(intent);
+            }
+        });
+        buttonSpotify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://open.spotify.com/show/6mJP4CnB8jMOgz66PzBXfc?si=DhYDOT9mTt-Cj8jg2LH6gA"));
                 startActivity(intent);
             }
         });

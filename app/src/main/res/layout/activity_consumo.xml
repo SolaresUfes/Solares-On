@@ -26,7 +26,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline18" />
 
     <TextView
-        android:id="@+id/text_explicacao"
+        android:id="@+id/ACRtext_explicacao_popup"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"

@@ -236,12 +236,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:id="@+id/layout_explicacao_valor"
+        android:id="@+id/ACRlayout_pergunta"
         android:visibility="gone"
         >
 
         <LinearLayout
-            android:id="@+id/darkener_resultado"
+            android:id="@+id/ACRdarkener_resultado"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:alpha="0.2"
@@ -249,7 +249,7 @@
             android:clickable="true"
             android:focusable="true"
             android:orientation="horizontal"
-            app:layout_constraintBottom_toTopOf="@+id/text_explicacao"
+            app:layout_constraintBottom_toTopOf="@+id/ACRtext_explicacao_popup"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -257,7 +257,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/titulo_explicacao"
+            android:id="@+id/ACRtitulo_explicacao"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@color/colorWhite"
@@ -269,10 +269,10 @@
             android:textSize="22dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/text_explicacao" />
+            app:layout_constraintBottom_toTopOf="@+id/ACRtext_explicacao_popup" />
 
         <TextView
-            android:id="@+id/text_explicacao"
+            android:id="@+id/ACRtext_explicacao_popup"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="#FFFFFF"
@@ -297,7 +297,7 @@
             android:focusable="true">
 
             <Button
-                android:id="@+id/button_fechar_explicacao"
+                android:id="@+id/ACRbutton_fazer_questionario"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginTop="12dp"
@@ -311,7 +311,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                android:id="@+id/button_duvidas"
+                android:id="@+id/ACRbutton_negar"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginTop="12dp"

@@ -154,11 +154,12 @@ public class CreditoActivity extends AppCompatActivity {
 
     private void mostrarPopUp(){
         popUp.setVisibility(View.VISIBLE);
-        
+
+        //Se o usuário clicar em sim, ele vai ser redirecionado para o formulário
         bSim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/projeto.solares/?utm_source=SolaresOn&utm_medium=name&utm_campaign=app"));
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://docs.google.com/forms/d/e/1FAIpQLSfVYj3Dbo3vu-9hZufnwaW60tMcgYXB_wZK9-K-Dk8UqIHoLg/viewform?usp=sf_link"));
                 startActivity(intent);
             }
         });

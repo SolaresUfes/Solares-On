@@ -29,7 +29,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@color/colorSuperWhite"
-            android:spinnerMode="dropdown"
+            android:spinnerMode="dialog"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/titulo_escolher_modulo_inversor"

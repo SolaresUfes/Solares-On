@@ -10,53 +10,82 @@ import java.util.List;
 public class CalculadoraOffGrid {
     // Variáveis Privadas da classe
     String[] vetorCidade;
-    ArrayList<ArrayList<String>> matrizEquipamentos;
-    int[] vetorQntEquipamentos;
-    double potenciaUtilizadaDiaria=0;
+    String[] placaEscolhida;
+    ArrayList<ArrayList<String>> matrizEquipamentosCA;
+    ArrayList<ArrayList<String>> matrizEquipamentosCC;
+    int[] vetorQntEquipamentosCA;
+    int[] vetorQntEquipamentosCC;
+    double potenciaUtilizadaDiariaCC=0;
+    double potenciaUtilizadaDiariaCA=0;
+    double potenciaUtilizadaDiariaTotal=0;
     double horasDeSolPleno=0;
+    double energiaNecessariaDia=0;
+    double area=0;
+
+    float areaAlvo;
+    int idModuloEscolhido;
+    int idInversorEscolhido;
 
     //////////////////////////
     ////  Funções setters ////
     //////////////////////////
     public void setVetorCidade(String[] vetorCidade){ this.vetorCidade = vetorCidade;}
-    public void setMatrizEquipamentos(ArrayList<ArrayList<String>> matrizEquipamentos){
-        this.matrizEquipamentos = new ArrayList();
-        this.matrizEquipamentos = matrizEquipamentos;
+    public void setMatrizEquipamentosCA(ArrayList<ArrayList<String>> matrizEquipamentos){
+        this.matrizEquipamentosCA = new ArrayList();
+        this.matrizEquipamentosCA = matrizEquipamentos;
     }
-    public void setVetorQntEquipamentos(int[] vetorQntEquipamentos){this.vetorQntEquipamentos = vetorQntEquipamentos;}
-
+    public void setMatrizEquipamentosCC(ArrayList<ArrayList<String>> matrizEquipamentos){
+        this.matrizEquipamentosCC = new ArrayList();
+        this.matrizEquipamentosCC = matrizEquipamentos;
+    }
+    public void setVetorQntEquipamentosCA(int[] vetorQntEquipamentos){this.vetorQntEquipamentosCA = vetorQntEquipamentos;}
+    public void setVetorQntEquipamentosCC(int[] vetorQntEquipamentos){this.vetorQntEquipamentosCC = vetorQntEquipamentos;}
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////        Função Principal       /////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public void Calcular(Context MyContext){
         InputStream is=null;
+
         try {
             CalculadoraOnGrid calculadoraOnGrid = new CalculadoraOnGrid();  // talvez mudar isso para uma funcao principal, que essa irá herdar
 
-            // calcular a Hora de Sol Pleno do local
-            horasDeSolPleno = calculadoraOnGrid.MeanSolarHour(vetorCidade);
+            // Calcular a Hora de Sol Pleno do Local
+            this.horasDeSolPleno = calculadoraOnGrid.MeanSolarHour(vetorCidade);
 
-            // calcular a Demanda de Energia Total
-            potenciaUtilizadaDiaria = demandaEnergetica(matrizEquipamentos, vetorQntEquipamentos); // talvez nao precise dos parametros
+            // Calcular a Demanda de Energia Total
+            // - corrente contínua
+            this.potenciaUtilizadaDiariaCC = demandaEnergeticaDiaria(matrizEquipamentosCC, vetorQntEquipamentosCC);
+            // - corrente alternada
+            this.potenciaUtilizadaDiariaCA = demandaEnergeticaDiaria(matrizEquipamentosCA, vetorQntEquipamentosCA);
+            //this.potenciaUtilizadaDiariaTotal = demandaEnergeticaDiaria(matrizEquipamentos, vetorQntEquipamentos); // talvez nao precise dos parametros
+            this.potenciaUtilizadaDiariaTotal = this.potenciaUtilizadaDiariaCC + this.potenciaUtilizadaDiariaCA;
 
-            // calcular o
+            // Calcular a Energia Ativa Necessária Diariamente
+            //this.energiaNecessariaDia = 1;
+
+            //Definindo as placas
+            is = MyContext.getResources().openRawResource(R.raw.banco_paineis);
+            placaEscolhida = CSVRead.DefineSolarPanel(is, potenciaUtilizadaDiariaTotal, this.areaAlvo, this.idModuloEscolhido);
+            area = calculadoraOnGrid.DefineArea(placaEscolhida);
+            
         }catch (Exception e){
             e.printStackTrace();
         }
     }
 
-    public static double demandaEnergetica(ArrayList<ArrayList<String>> matrizEquipamentos, int[] vetorQntEquipamentos){
+    public static double demandaEnergeticaDiaria(ArrayList<ArrayList<String>> matrizEquipamentos, int[] vetorQntEquipamentos){
         double totalPower=0;
-        double eachElementPower=1;
-        double powerEquipament=0;
+        double eachElementPower;
+        double powerEquipment=0;
 
         for(int c=0; c < matrizEquipamentos.size(); c++){
-            powerEquipament = Double.parseDouble(matrizEquipamentos.get(1).get(c)) * vetorQntEquipamentos[c];
+            powerEquipment = Double.parseDouble(matrizEquipamentos.get(1).get(c)) * vetorQntEquipamentos[c];
+            eachElementPower=1;
             for(int l=1; l < matrizEquipamentos.get(c).size(); l++){
-                eachElementPower = Double.parseDouble(matrizEquipamentos.get(l).get(c)) * eachElementPower * powerEquipament / 7;
+                eachElementPower = Double.parseDouble(matrizEquipamentos.get(l).get(c)) * eachElementPower * powerEquipment / 7;
             }
             totalPower = eachElementPower + totalPower;
         }
-        return totalPower;
+        return totalPower / 0.9;
     }
 }

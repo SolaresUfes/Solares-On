@@ -48,9 +48,6 @@ public class AreaActivity extends AppCompatActivity {
         Button buttonRecalcArea = findViewById(R.id.button_recalcular_area);
         AutoSizeText.AutoSizeButton(buttonRecalcArea, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
 
-        Button buttonVoltar = findViewById(R.id.button_voltar);
-        AutoSizeText.AutoSizeButton(buttonVoltar, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
-
         TextView textAreaAtual = findViewById(R.id.text_area_atual);
         AutoSizeText.AutoSizeTextView(textAreaAtual, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
@@ -103,13 +100,6 @@ public class AreaActivity extends AppCompatActivity {
                      }
                      e.printStackTrace();
                  }
-            }
-        });
-
-        buttonVoltar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
             }
         });
 

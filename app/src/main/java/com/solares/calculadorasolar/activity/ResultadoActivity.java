@@ -47,8 +47,6 @@ public class ResultadoActivity extends AppCompatActivity{
             AutoSizeText.AutoSizeButton(buttonIndicesEconomicos, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
             Button buttonFinalizar = findViewById(R.id.button_finalizar);
             AutoSizeText.AutoSizeButton(buttonFinalizar, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
-            Button buttonAjustarArea = findViewById(R.id.button_ajustar_area);
-            AutoSizeText.AutoSizeButton(buttonAjustarArea, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
             //Erro de valor pequeno
             final TextView textExplicacaoValor = findViewById(R.id.ACRtext_explicacao_popup);
@@ -68,17 +66,18 @@ public class ResultadoActivity extends AppCompatActivity{
                     }
                 });
 
-                findViewById(R.id.ACRbutton_fazer_questionario).setOnClickListener(new View.OnClickListener() {
+                findViewById(R.id.RESbutton_ver_resultados).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         layoutExplicacaoValor.setVisibility(View.GONE);
                     }
                 });
 
-                findViewById(R.id.ACRbutton_negar).setOnClickListener(new View.OnClickListener() {
+                findViewById(R.id.RESbutton_saiba_mais).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         textExplicacaoValor.setText(R.string.saibaa_mais_valor);
+                        findViewById(R.id.RESbutton_saiba_mais).setVisibility(View.GONE);
                     }
                 });
             }
@@ -110,13 +109,6 @@ public class ResultadoActivity extends AppCompatActivity{
                 @Override
                 public void onClick(View v) {
                     AbrirActivityIndices(calculadora);
-                }
-            });
-
-            buttonAjustarArea.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AbrirActivityArea(calculadora);
                 }
             });
 
@@ -153,12 +145,6 @@ public class ResultadoActivity extends AppCompatActivity{
 
     public void AbrirActivityIndices(CalculadoraOnGrid calculadora){
         Intent intent = new Intent(this, IndicesEconomicosActivity.class);
-        intent.putExtra(Constants.EXTRA_CALCULADORAON, calculadora);
-        startActivity(intent);
-    }
-
-    public void AbrirActivityArea(CalculadoraOnGrid calculadora){
-        Intent intent = new Intent(this, AreaActivity.class);
         intent.putExtra(Constants.EXTRA_CALCULADORAON, calculadora);
         startActivity(intent);
     }

@@ -31,9 +31,6 @@ public class InstalacaoActivity extends AppCompatActivity {
     private LinearLayout blackener;
     private View rootView;
 
-    private Button buttonInvertors;
-    private Button buttonModules;
-
     private CalculadoraOnGrid calculadora;
 
 
@@ -94,9 +91,20 @@ public class InstalacaoActivity extends AppCompatActivity {
         //Definição do layout para escurecer a tela
         blackener = findViewById(R.id.blackener);
 
-        //Botões para alterar os módulos e inversores
-        buttonInvertors = findViewById(R.id.button_trocar_inversor);
-        buttonModules = findViewById(R.id.button_trocar_modulo);
+        //Botões para alterar os módulos e inversores e a área
+        Button buttonAlterarArea = findViewById(R.id.button_modificar_area);
+        AutoSizeText.AutoSizeButton(buttonAlterarArea, MainActivity.alturaTela, MainActivity.larguraTela, percent - 0.5f);
+
+        Button buttonInvertors = findViewById(R.id.button_trocar_inversor);
+
+        Button buttonModules = findViewById(R.id.button_trocar_modulo);
+
+        buttonAlterarArea.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AbrirActivityArea(calculadora);
+            }
+        });
         buttonInvertors.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,6 +133,11 @@ public class InstalacaoActivity extends AppCompatActivity {
         });
     }
 
+    public void AbrirActivityArea(CalculadoraOnGrid calculadora){
+        Intent intent = new Intent(this, AreaActivity.class);
+        intent.putExtra(Constants.EXTRA_CALCULADORAON, calculadora);
+        startActivity(intent);
+    }
 
     public void ShowPopUpModulos(){
         blackener.setVisibility(View.VISIBLE);

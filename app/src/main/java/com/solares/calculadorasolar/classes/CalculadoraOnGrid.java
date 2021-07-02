@@ -88,7 +88,6 @@ public class CalculadoraOnGrid implements Serializable {
     }
     public void setTarifaMensal(double tarifa){
         this.tarifaMensal = tarifa;
-        this.vetorEstado[Constants.iEST_TARIFA] = String.valueOf(tarifa);
     }
     public void setNomeCidade(String nomeCidade){
         this.nomeCidade = nomeCidade;

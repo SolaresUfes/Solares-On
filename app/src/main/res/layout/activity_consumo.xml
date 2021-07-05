@@ -29,12 +29,9 @@
         android:id="@+id/ACRtext_explicacao_popup"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
         android:text="@string/explicacao_alteracao_consumo"
-        app:layout_constraintBottom_toTopOf="@+id/text_consumo_atual"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline44" />
@@ -44,27 +41,14 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/background_button_resultado_center"
-        android:padding="5dp"
         android:gravity="center"
+        android:padding="5dp"
         android:text="@string/recalcular"
-        android:textAllCaps="false"
-        android:textColor="@color/colorWhite"
-        app:layout_constraintBottom_toTopOf="@+id/guideline92"
-        app:layout_constraintEnd_toStartOf="@+id/guideline91"
-        app:layout_constraintHorizontal_bias="0.49"
-        app:layout_constraintStart_toStartOf="@+id/guideline90"
-        app:layout_constraintTop_toTopOf="@+id/guideline93" />
-
-    <Button
-        android:id="@+id/button_voltar"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/background_button_resultado_center"
-        android:text="@string/voltar"
         android:textAllCaps="false"
         android:textColor="@color/colorWhite"
         app:layout_constraintBottom_toTopOf="@+id/guideline89"
         app:layout_constraintEnd_toStartOf="@+id/guideline91"
+        app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="@+id/guideline90"
         app:layout_constraintTop_toTopOf="@+id/guideline88" />
 
@@ -72,25 +56,21 @@
         android:id="@+id/text_consumo_atual"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
         android:text="@string/consumo_atual"
-        app:layout_constraintBottom_toTopOf="@+id/guideline95"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ACRtext_explicacao_popup" />
 
     <TextView
         android:id="@+id/text_novo_consumo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginStart="32dp"
         android:text="@string/novo_consumo"
-        app:layout_constraintBottom_toTopOf="@+id/guideline94"
+        app:layout_constraintBottom_toBottomOf="@+id/editText_consumo"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline95" />
+        app:layout_constraintTop_toTopOf="@+id/editText_consumo" />
 
     <EditText
         android:id="@+id/editText_consumo"
@@ -98,17 +78,17 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:ems="10"
         android:inputType="numberDecimal"
         android:text=""
-        android:theme="@style/MyEditTextStyleArea"
         android:textCursorDrawable="@null"
-        app:layout_constraintBottom_toTopOf="@+id/guideline94"
+        android:theme="@style/MyEditTextStyleArea"
         app:layout_constraintEnd_toStartOf="@+id/text_unidade_consumo"
         app:layout_constraintStart_toEndOf="@+id/text_novo_consumo"
-        app:layout_constraintTop_toTopOf="@+id/guideline95" />
+        app:layout_constraintTop_toBottomOf="@+id/text_consumo_atual" />
 
     <TextView
         android:id="@+id/text_unidade_consumo"
@@ -116,55 +96,25 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
         android:text="@string/kwh_consumo"
-        app:layout_constraintBottom_toTopOf="@+id/guideline94"
+        app:layout_constraintBottom_toBottomOf="@+id/editText_consumo"
         app:layout_constraintStart_toStartOf="@+id/guideline91"
-        app:layout_constraintTop_toTopOf="@+id/guideline95" />
+        app:layout_constraintTop_toTopOf="@+id/editText_consumo" />
 
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline92"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.75" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline93"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.67" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline94"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.59" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline95"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.48" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline88"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.8" />
+        app:layout_constraintGuide_percent="0.85" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline89"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.88" />
+        app:layout_constraintGuide_percent="0.92" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline90"
@@ -199,7 +149,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.2" />
+        app:layout_constraintGuide_percent="0.25" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

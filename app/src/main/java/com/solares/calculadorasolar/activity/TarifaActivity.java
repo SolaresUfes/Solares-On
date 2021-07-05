@@ -39,13 +39,14 @@ public class TarifaActivity extends AppCompatActivity {
         //Pega o layout para poder colocar um listener nele (esconder o teclado)
         ConstraintLayout layout = findViewById(R.id.layout_tarifa);
 
+
+        //Pega o view da explicação e ajusta o tamanho da fonte
+        TextView textExplicacaoTarifa = findViewById(R.id.text_explicacao_tarifa);
+        AutoSizeText.AutoSizeTextView(textExplicacaoTarifa, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
+
         //Pega o view do título e ajusta o tamanho da fonte
         TextView textTituloTarifa = findViewById(R.id.text_titulo_tarifa);
         AutoSizeText.AutoSizeTextView(textTituloTarifa, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
-
-        //Pega o view da tarifa atual e ajusta o tamanho da fonte
-        TextView textTarifaAtual = findViewById(R.id.text_tarifa_atual);
-        AutoSizeText.AutoSizeTextView(textTarifaAtual, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
         //Pega o view da nova tarifa e ajusta o tamanho da fonte
         TextView textNovaTarifa = findViewById(R.id.text_nova_tarifa);
@@ -63,32 +64,20 @@ public class TarifaActivity extends AppCompatActivity {
         Button buttonRecalcTarifa = findViewById(R.id.button_recalcular_tarifa);
         AutoSizeText.AutoSizeButton(buttonRecalcTarifa, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
 
-        //Pega o view do botão para voltar e ajusta o tamanho da fonte
-        Button buttonVoltar = findViewById(R.id.button_voltar);
-        AutoSizeText.AutoSizeButton(buttonVoltar, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
-
 
         //pegar os intents
         Intent intent = getIntent();
         final CalculadoraOnGrid calculadora = (CalculadoraOnGrid) intent.getSerializableExtra(Constants.EXTRA_CALCULADORAON);
 
 
-        //atualizar o tarifa atual
-        textTarifaAtual.setText(String.format(Locale.ITALY, "Tarifa Atual: R$ %.2f / kWh", calculadora.pegaTarifaMensal()));
+        //MOstrar a tarifa atual como padrão
+        editTarifa.setText(String.format(Locale.ENGLISH, "%.2f", calculadora.pegaTarifaMensal()));
 
         //Listener do botão de recalcular
         buttonRecalcTarifa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AtualizarTarifa(calculadora, editTarifa);
-            }
-        });
-
-        //Listeners do botão de voltar
-        buttonVoltar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
             }
         });
 
@@ -123,12 +112,6 @@ public class TarifaActivity extends AppCompatActivity {
                     Toast.makeText(this, "Insira uma nova tarifa! Valor menor ou igual a zero!", Toast.LENGTH_LONG).show();
                 } catch (Exception etoast1){
                     etoast1.printStackTrace();
-                }
-            } else if (NovaTarifa > calculadora.pegaCustoReais()/Constants.COST_DISP){  //Se a tarifa for muito grande
-                try {
-                    Toast.makeText(this, "Insira uma nova tarifa! Valor muito alto!", Toast.LENGTH_LONG).show();
-                } catch (Exception etoast2){
-                    etoast2.printStackTrace();
                 }
             } else {
                 //Atualiza a tarifa passada

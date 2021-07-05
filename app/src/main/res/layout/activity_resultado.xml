@@ -102,20 +102,6 @@
             app:layout_constraintTop_toTopOf="@+id/guideline13"
             app:layout_constraintVertical_bias="0.0" />
 
-        <Button
-            android:id="@+id/button_ajustar_area"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@drawable/background_button_resultado_center"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text="@string/button_ajustar_area"
-            android:textAllCaps="false"
-            android:textColor="@color/colorWhite"
-            app:layout_constraintBottom_toTopOf="@+id/guideline87"
-            app:layout_constraintEnd_toStartOf="@+id/guideline7"
-            app:layout_constraintStart_toStartOf="@+id/guideline6"
-            app:layout_constraintTop_toTopOf="@+id/guideline82" />
 
         <Button
             android:id="@+id/button_finalizar"
@@ -202,29 +188,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.8" />
+            app:layout_constraintGuide_percent="0.85" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline28"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.88" />
+            app:layout_constraintGuide_percent="0.92" />
 
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline82"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.65" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline87"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.75" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -266,7 +238,7 @@
             android:gravity="center"
             android:padding="16dp"
             android:text="Valor Baixo"
-            android:textSize="22dp"
+            android:textSize="22sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/ACRtext_explicacao_popup" />
@@ -297,7 +269,7 @@
             android:focusable="true">
 
             <Button
-                android:id="@+id/ACRbutton_fazer_questionario"
+                android:id="@+id/RESbutton_ver_resultados"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginTop="12dp"
@@ -311,7 +283,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                android:id="@+id/ACRbutton_negar"
+                android:id="@+id/RESbutton_saiba_mais"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginTop="12dp"

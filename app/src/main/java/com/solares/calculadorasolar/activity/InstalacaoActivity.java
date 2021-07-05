@@ -5,15 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
+import androidx.appcompat.widget.AppCompatSpinner;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.PopupMenu;
 import android.widget.PopupWindow;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.solares.calculadorasolar.R;
@@ -88,8 +87,39 @@ public class InstalacaoActivity extends AppCompatActivity {
         textInversor.setText(String.format(Locale.ITALY, "%d %s de %.2f kW",
                 Integer.parseInt(calculadora.pegaInversor()[Constants.iINV_QTD]), singplur, Double.parseDouble(calculadora.pegaInversor()[Constants.iINV_POTENCIA])/1000));
 
+
         //Definição do layout para escurecer a tela
         blackener = findViewById(R.id.blackener);
+
+        //Botões para alterar os módulos e inversores e a área
+        Button buttonAlterarArea = findViewById(R.id.button_modificar_area);
+        AutoSizeText.AutoSizeButton(buttonAlterarArea, MainActivity.alturaTela, MainActivity.larguraTela, percent - 0.5f);
+
+        Button buttonInvertors = findViewById(R.id.button_trocar_inversor);
+
+        Button buttonModules = findViewById(R.id.button_trocar_modulo);
+
+        buttonAlterarArea.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AbrirActivityArea(calculadora);
+            }
+        });
+        buttonInvertors.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShowPopUpInversores();
+            }
+        });
+        buttonModules.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShowPopUpModulos();
+            }
+        });
+
+
+
 
 
         //Botão voltar
@@ -103,22 +133,33 @@ public class InstalacaoActivity extends AppCompatActivity {
         });
     }
 
+    public void AbrirActivityArea(CalculadoraOnGrid calculadora){
+        Intent intent = new Intent(this, AreaActivity.class);
+        intent.putExtra(Constants.EXTRA_CALCULADORAON, calculadora);
+        startActivity(intent);
+    }
 
-    public void ShowPopUpModulos(View view){
+    public void ShowPopUpModulos(){
         blackener.setVisibility(View.VISIBLE);
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        rootView = inflater.inflate(R.layout.popup_modulos, null, false);
+        rootView = inflater.inflate(R.layout.popup_modulos_inversores, blackener , false);
+        PopupWindow pw;
+        try{
+            pw = new PopupWindow(rootView,(int)(MainActivity.larguraTela*0.7),(MainActivity.alturaTela), true);
+            pw.setAnimationStyle(16973827); //R.style.Animation_Translucent -> Não sei porque tive que botar a constante diretamente e não usando o nome dela
+            pw.showAtLocation(blackener, Gravity.END, 0, 0);
 
-        PopupWindow pw = new PopupWindow(rootView,(int)(MainActivity.larguraTela*0.7),(int)(MainActivity.alturaTela), true);
-        pw.setAnimationStyle(16973827); //R.style.Animation_Translucent -> Não sei porque tive que botar a constante diretamente e não usando o nome dela
-        pw.showAtLocation(view, Gravity.END, 0, 0);
+            pw.setOnDismissListener(new PopupWindow.OnDismissListener(){
+                @Override
+                public void onDismiss() {
+                    blackener.setVisibility(View.GONE);
+                }
+            });
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 
-        pw.setOnDismissListener(new PopupWindow.OnDismissListener(){
-            @Override
-            public void onDismiss() {
-                blackener.setVisibility(View.GONE);
-            }
-        });
+
 
         //Mudar texto do Título
         TextView tituloPopup = rootView.findViewById(R.id.titulo_escolher_modulo_inversor);
@@ -126,11 +167,11 @@ public class InstalacaoActivity extends AppCompatActivity {
         tituloPopup.setText(R.string.titulo_escolher_modulo);
 
         //Criação do Spinner
-        Spinner spineerModulos = rootView.findViewById(R.id.spinner_modulos_inversores);
+        AppCompatSpinner spinnerModulos = rootView.findViewById(R.id.spinner_modulos_inversores);
         //Aqui, coloca o vetor de strings que será exibido no spinner
-        ArrayAdapter<CharSequence> adapterS = ArrayAdapter.createFromResource(this, R.array.Modulos, R.layout.spinner_item);
-        spineerModulos.setAdapter(adapterS);
-        spineerModulos.setSelection(Integer.parseInt(calculadora.pegaPlacaEscolhida()[Constants.iPANEL_I]));
+        ArrayAdapter<CharSequence> adapterS = ArrayAdapter.createFromResource(rootView.getContext(), R.array.Modulos, R.layout.spinner_item);
+        spinnerModulos.setAdapter(adapterS);
+        spinnerModulos.setSelection(Integer.parseInt(calculadora.pegaPlacaEscolhida()[Constants.iPANEL_I]));
 
         //Criação do botão
         Button buttonRecalc = rootView.findViewById(R.id.button_recalc_modulos_inversores);
@@ -139,7 +180,7 @@ public class InstalacaoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Acha o spinner
-                Spinner spinnerModulos = rootView.findViewById(R.id.spinner_modulos_inversores);
+                AppCompatSpinner spinnerModulos = rootView.findViewById(R.id.spinner_modulos_inversores);
                 calculadora.setIdModuloEscolhido(spinnerModulos.getSelectedItemPosition());
                 //Refaz o cálculo
                 calculadora.Calcular(InstalacaoActivity.this);
@@ -147,21 +188,26 @@ public class InstalacaoActivity extends AppCompatActivity {
         });
     }
 
-    public void ShowPopUpInversores(View view){
+    public void ShowPopUpInversores(){
         blackener.setVisibility(View.VISIBLE);
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        rootView = inflater.inflate(R.layout.popup_modulos, null, false);
+        rootView = inflater.inflate(R.layout.popup_modulos_inversores, blackener, false);
 
-        PopupWindow pw = new PopupWindow(rootView,(int)(MainActivity.larguraTela*0.7),(int)(MainActivity.alturaTela), true);
-        pw.setAnimationStyle(16973827); //R.style.Animation_Translucent -> Não sei porque tive que botar a constante diretamente e não usando o nome dela
-        pw.showAtLocation(view, Gravity.END, 0, 0);
+        PopupWindow pw;
+        try{
+            pw = new PopupWindow(rootView,(int)(MainActivity.larguraTela*0.7),(MainActivity.alturaTela), true);
+            pw.setAnimationStyle(16973827); //R.style.Animation_Translucent -> Não sei porque tive que botar a constante diretamente e não usando o nome dela
+            pw.showAtLocation(blackener, Gravity.END, 0, 0);
 
-        pw.setOnDismissListener(new PopupWindow.OnDismissListener(){
-            @Override
-            public void onDismiss() {
-                blackener.setVisibility(View.GONE);
-            }
-        });
+            pw.setOnDismissListener(new PopupWindow.OnDismissListener(){
+                @Override
+                public void onDismiss() {
+                    blackener.setVisibility(View.GONE);
+                }
+            });
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 
         //Mudar texto do Título
         TextView tituloPopup = rootView.findViewById(R.id.titulo_escolher_modulo_inversor);
@@ -169,11 +215,11 @@ public class InstalacaoActivity extends AppCompatActivity {
         tituloPopup.setText(R.string.titulo_escolher_inversor);
 
         //Criação do Spinner
-        Spinner spineerModulos = rootView.findViewById(R.id.spinner_modulos_inversores);
+        AppCompatSpinner spinnerInversores = rootView.findViewById(R.id.spinner_modulos_inversores);
         //Aqui, coloca o vetor de strings que será exibido no spinner
-        ArrayAdapter<CharSequence> adapterS = ArrayAdapter.createFromResource(this, R.array.Inversores, R.layout.spinner_item);
-        spineerModulos.setAdapter(adapterS);
-        spineerModulos.setSelection(Integer.parseInt(calculadora.pegaInversor()[Constants.iINV_ID]));
+        ArrayAdapter<CharSequence> adapterS = ArrayAdapter.createFromResource(rootView.getContext(), R.array.Inversores, R.layout.spinner_item);
+        spinnerInversores.setAdapter(adapterS);
+        spinnerInversores.setSelection(Integer.parseInt(calculadora.pegaInversor()[Constants.iINV_ID]));
 
         //Criação do botão
         Button buttonRecalc = rootView.findViewById(R.id.button_recalc_modulos_inversores);
@@ -182,7 +228,7 @@ public class InstalacaoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Acha o spinner
-                Spinner spinnerInversores = rootView.findViewById(R.id.spinner_modulos_inversores);
+                AppCompatSpinner spinnerInversores = rootView.findViewById(R.id.spinner_modulos_inversores);
                 calculadora.setIdInversorEscolhido(spinnerInversores.getSelectedItemPosition());
                 //Refaz o cálculo
                 calculadora.Calcular(InstalacaoActivity.this);

@@ -64,6 +64,7 @@ public class CreditoActivity extends AppCompatActivity {
 
 
         /////Componentes PopUp
+        /*
         bSim = (Button)findViewById(R.id.ACRbutton_fazer_questionario);
         AutoSizeText.AutoSizeButton(bSim, MainActivity.alturaTela, MainActivity.larguraTela, 3f);
 
@@ -86,6 +87,8 @@ public class CreditoActivity extends AppCompatActivity {
             //Mostra popup
             mostrarPopUp();
         }
+        */
+
 
 
 

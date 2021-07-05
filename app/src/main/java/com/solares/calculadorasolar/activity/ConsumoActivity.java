@@ -66,10 +66,6 @@ public class ConsumoActivity extends AppCompatActivity {
         Button buttonRecalcConsumo = findViewById(R.id.button_recalcular_consumo);
         AutoSizeText.AutoSizeButton(buttonRecalcConsumo, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
 
-        //Pega o view do botão para voltar e ajusta o tamanho da fonte
-        Button buttonVoltar = findViewById(R.id.button_voltar);
-        AutoSizeText.AutoSizeButton(buttonVoltar, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
-
         /////////////////////////////////////
 
         //pegar os intents
@@ -86,15 +82,6 @@ public class ConsumoActivity extends AppCompatActivity {
                 AtualizarTarifa(calculadora, editConsumo);
             }
         });
-
-        //Listeners do botão de voltar
-        buttonVoltar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-
 
         //Listener do fundo do layout, se o usuário clicar nele, esconde o teclado
         layout.setOnClickListener(new View.OnClickListener() {

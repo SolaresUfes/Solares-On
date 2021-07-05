@@ -1,6 +1,7 @@
 package com.solares.calculadorasolar.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
@@ -95,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
         this.mViewHolder.buttonCalc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                double entry;
                 //Verifica se o valor inserido é válido
                 try{
                     //Fecha teclado
@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
                     calculadora.setVetorEstado(CreateVetorEstado(calculadora.pegaVetorCidade()));
                     // Colocar Tarifa inicial
                     calculadora.setTarifaMensal(Double.parseDouble(calculadora.pegaVetorEstado()[Constants.iEST_TARIFA]));
-                    calculadora.Calcular(MainActivity.this);
+                    AbrirActivityTarifa(calculadora);
                 } catch (Exception e){
                     try {
                         Toast.makeText(MainActivity.this, "Insira um número positivo!", Toast.LENGTH_LONG).show();
@@ -170,6 +170,17 @@ public class MainActivity extends AppCompatActivity {
         return null;
     }
 
+    /* Descrição: Vai para uma página para selecionar a tarifa, sendo sugerida a tarifa do estado
+     * Parâmetros de Entrada: calculadora - O Objeto da calculadoraOnGrid;
+     * Saída: void;
+     * Pré Condições: Calculadora já foi criada e inicializada com o nome da cidade, a conta de luz, os vetores da cidade e estado e a tarifa do estado;
+     * Pós Condições: Se o usuário confirmar, realiza o cálculo e mostra os resultados;
+     */
+    public void AbrirActivityTarifa(CalculadoraOnGrid calculadora){
+        Intent intent = new Intent(this, TarifaActivity.class);
+        intent.putExtra(Constants.EXTRA_CALCULADORAON, calculadora);
+        startActivity(intent);
+    }
 
 
 

@@ -41,7 +41,7 @@
     <string name="ndice_de_lucratividade">Índice de Lucratividade</string>
     <string name="custo_da_energia_solar_lcoe">Custo estimado da energia solar</string>
     <string name="tempo_para_retorno_do_investimento">Tempo para Retorno do Investimento</string>
-    <string name="button_ajustar_area">Ajustar Área</string>
+    <string name="button_ajustar_area"><u>Ajustar Área</u></string>
     <string name="deseja_receber_os_resultados">Deseja receber os resultados por e-mail?</string>
     <string name="sim">SIM</string>
     <string name="nao">NÃO</string>
@@ -50,8 +50,7 @@
     <string name="modificar_tarifa"><u>Modificar Tarifa</u></string>
     <string name="modificar_consumo"><u>Alterar Consumo</u></string>
     <string name="tarifa">Tarifa</string>
-    <string name="tarifa_atual">Tarifa Atual: </string>
-    <string name="nova_tarifa">Nova Tarifa: R$</string>
+    <string name="nova_tarifa">Tarifa: R$</string>
     <string name="kwh">/ kWh</string>
     <string name="texto_creditos">Conheça outras iniciativas do\nProjeto Solares!</string>
     <string name="instagram_projeto_solares">\@projeto.solares</string>
@@ -69,10 +68,10 @@
     <string name="sistema_de_placas_escolhido">Sistema de placas escolhido</string>
     <string name="area_necessaria_para_inst">Área necessária para a instalação</string>
     <string name="sistema_de_inversores_escolhido">Sistema de inversores escolhido</string>
-    <string name="consumo_atual">Consumo atual:</string>
-    <string name="novo_consumo">Novo consumo:</string>
+    <string name="consumo_atual">Consumo calculado:</string>
+    <string name="novo_consumo">Consumo:</string>
     <string name="recalcular">Recalcular</string>
-    <string name="explicacao_alteracao_consumo">O consumo na sua conta de luz está diferente do que estimamos?\nInsira aqui o valor real para podermos ajustar os cálculos!</string>
+    <string name="explicacao_alteracao_consumo">O consumo na sua conta de luz está diferente do que estimamos?\nInsira aqui o consumo médio para podermos calcular um valor de tarifa para maior precisão nos cálculos!</string>
     <string name="kwh_consumo">kWh</string>
     <string name="consumo">Consumo</string>
     <string name="titulo_escolher_modulo">Escolher Módulo</string>
@@ -117,6 +116,7 @@
         suficiente para o investimento em um sistema fotovoltaico ser economicamente viável.</string>
     <string name="texto_pergunta_para_questionario">Olá! Você teria interesse em uma funcionalidade para cálculos Off Grid neste aplicativo?\n\n Se sim, poderia responder um rápido questionário?</string>
     <string name="SP_popUpJaFoiMostrado">SHARED_PREF_popUpJaFoiMostrado</string>
+    <string name="explicacao_tarifa">Usamos por padrão a tarifa média no seu estado.\nSe quiser uma simulação mais precisa, pode alterar a tarifa para o valor exato pago em sua casa:</string>
     <string-array name="Estados">
         <item>AC</item>
         <item>AL</item>

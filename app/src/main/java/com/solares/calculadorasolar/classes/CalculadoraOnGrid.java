@@ -1,5 +1,6 @@
 package com.solares.calculadorasolar.classes;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.LightingColorFilter;
@@ -87,7 +88,6 @@ public class CalculadoraOnGrid implements Serializable {
     }
     public void setTarifaMensal(double tarifa){
         this.tarifaMensal = tarifa;
-        this.vetorEstado[Constants.iEST_TARIFA] = String.valueOf(tarifa);
     }
     public void setNomeCidade(String nomeCidade){
         this.nomeCidade = nomeCidade;
@@ -171,7 +171,10 @@ public class CalculadoraOnGrid implements Serializable {
             Log.i("Calculate", "Erro no Cálculo");
             //Se algum erro ocorrer, pede para o usuário informar um número real
             try {
-                Toast.makeText(MyContext, R.string.informe_um_numero, Toast.LENGTH_LONG).show();
+                if(!((Activity) MyContext).isFinishing())
+                {
+                    Toast.makeText(MyContext, R.string.informe_um_numero, Toast.LENGTH_LONG).show();
+                }
             } catch (Exception ee){
                 ee.printStackTrace();
             }

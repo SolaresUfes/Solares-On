@@ -70,36 +70,6 @@ public class CreditoActivity extends AppCompatActivity {
         AutoSizeText.AutoSizeTextView(textConheca, MainActivity.alturaTela, MainActivity.larguraTela, 3f);
 
 
-        /////Componentes PopUp
-        /*
-        bSim = (Button)findViewById(R.id.ACRbutton_fazer_questionario);
-        AutoSizeText.AutoSizeButton(bSim, MainActivity.alturaTela, MainActivity.larguraTela, 3f);
-
-        bNao = (Button)findViewById(R.id.ACRbutton_negar);
-        AutoSizeText.AutoSizeButton(bNao, MainActivity.alturaTela, MainActivity.larguraTela, 3f);
-
-        textTituloPopup = findViewById(R.id.ACRtitulo_explicacao);
-        AutoSizeText.AutoSizeTextView(textTituloPopup, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
-
-        textExplicacaoPopup = findViewById(R.id.ACRtext_explicacao_popup);
-        AutoSizeText.AutoSizeTextView(textExplicacaoPopup, MainActivity.alturaTela, MainActivity.larguraTela, 3f);
-
-        popUp = (ConstraintLayout)findViewById(R.id.ACRlayout_pergunta);
-        black = (LinearLayout)findViewById(R.id.ACRdarkener_resultado);
-        if(!popUpJaFoiMostrado){
-            //Registra que o popup já foi mostrado
-            SharedPreferences.Editor editorPref = sharedPref.edit();
-            editorPref.putBoolean(getString(R.string.SP_popUpJaFoiMostrado), true);
-            editorPref.apply();
-            //Mostra popup
-            mostrarPopUp();
-        }
-        */
-
-
-
-
-
         //Colocando as imagens nos image views
         //Imagem do instagram
         ImageView imageInstagram = findViewById(R.id.imageViewInstagram);
@@ -162,30 +132,6 @@ public class CreditoActivity extends AppCompatActivity {
         });
     }
 
-    private void mostrarPopUp(){
-        popUp.setVisibility(View.VISIBLE);
-
-        //Se o usuário clicar em sim, ele vai ser redirecionado para o formulário
-        bSim.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://docs.google.com/forms/d/e/1FAIpQLSfVYj3Dbo3vu-9hZufnwaW60tMcgYXB_wZK9-K-Dk8UqIHoLg/viewform?usp=sf_link"));
-                startActivity(intent);
-            }
-        });
-        bNao.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                popUp.setVisibility(View.GONE);
-            }
-        });
-        black.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                popUp.setVisibility(View.GONE);
-            }
-        });
-    }
 
     private void PedeAvaliacao(){
         ReviewManager manager = ReviewManagerFactory.create(this);

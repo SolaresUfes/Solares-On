@@ -117,6 +117,15 @@
     <string name="texto_pergunta_para_questionario">Olá! Você teria interesse em uma funcionalidade para cálculos Off Grid neste aplicativo?\n\n Se sim, poderia responder um rápido questionário?</string>
     <string name="SP_popUpJaFoiMostrado">SHARED_PREF_popUpJaFoiMostrado</string>
     <string name="explicacao_tarifa">Usamos por padrão a tarifa média no seu estado.\nSe quiser uma simulação mais precisa, pode alterar a tarifa para o valor exato pago em sua casa:</string>
+    <string name="detalhes">Detalhes</string>
+    <string name="numero_de_fases">Fase: </string>
+
+    <string-array name="Fases">
+        <item>Monofásico</item>
+        <item>Bifásico</item>
+        <item>Trifásico</item>
+    </string-array>
+
     <string-array name="Estados">
         <item>AC</item>
         <item>AL</item>

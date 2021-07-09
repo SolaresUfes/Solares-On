@@ -35,10 +35,11 @@ public class CalculadoraOnGrid implements Serializable {
     int tempoRetorno;
     double horasDeSolPleno;
     double tarifaMensal;
-
+    int numeroDeFases;
     float areaAlvo;
     int idModuloEscolhido;
     int idInversorEscolhido;
+    double custoDisponibilidade;
 
 
     /* Descrição: Construtor do Objeto CalculadoraOnGrid
@@ -76,6 +77,8 @@ public class CalculadoraOnGrid implements Serializable {
     public int pegaTempoRetorno(){ return tempoRetorno; }
     public double pegaHorasDeSolPleno(){ return horasDeSolPleno; }
     public double pegaTarifaMensal(){ return tarifaMensal; }
+    public int pegaNumeroDeFases(){ return numeroDeFases; }
+    public double pegaCustoDisponibilidade(){ return custoDisponibilidade; }
 
     //////////////////////////
     ////  Funções setters ////
@@ -96,6 +99,22 @@ public class CalculadoraOnGrid implements Serializable {
         this.custoReais = custoReais;
     }
     public void setAreaAlvo(float novaAreaAlvo) { this.areaAlvo = novaAreaAlvo; }
+    public void setNumeroDeFases(int novoNumeroDeFases) {
+        this.numeroDeFases = novoNumeroDeFases;
+        switch (novoNumeroDeFases){
+            case 0:
+                this.custoDisponibilidade = Constants.COST_DISP_MONOFASICO;
+                break;
+            case 1:
+                this.custoDisponibilidade = Constants.COST_DISP_BIFASICO;
+                break;
+            case 2:
+                this.custoDisponibilidade = Constants.COST_DISP_TRIFASICO;
+                break;
+            default:
+                this.custoDisponibilidade = Constants.COST_DISP_BIFASICO;
+        }
+    }
 
     //idModuloEscolhido - Inteiro que representa um modelo de módulo escolhido pelo usuário. Se for -1, escolhe o melhor
     public void setIdModuloEscolhido(int novoIdModuloEscolhido) { this.idModuloEscolhido = novoIdModuloEscolhido; }
@@ -267,8 +286,8 @@ Thomas T.D. Tran, Amanda D. Smith
             }
 
             //Se o que ele deve pagar for menor do que o custo de disponibilidade, ele paga o custo de disponibilidade
-            if (ConsumoAPagarNoAno < 12.0 * Constants.COST_DISP) {
-                ConsumoAPagarNoAno = 12.0 * Constants.COST_DISP;
+            if (ConsumoAPagarNoAno < 12.0 * this.pegaCustoDisponibilidade()) {
+                ConsumoAPagarNoAno = 12.0 * this.pegaCustoDisponibilidade();
             }
             //Acha o valor em reais que ele pagará para a concessionária no ano
             valorAPagar = ConsumoAPagarNoAno * tariff;
@@ -414,8 +433,8 @@ tarifaMensal - valor da tarifa de energia
 solarHour - Está em horas (maior que zero)
      * Pós Condições: Retorna o valor da potência necessária em Wp
      */
-    public static double FindTargetCapacity(double energyConsumed, double solarHour){
-        energyConsumed -= Constants.COST_DISP; //O Custo de disponibilidade é o mínimo que alguém pode pagar
+    public double FindTargetCapacity(double energyConsumed, double solarHour){
+        energyConsumed -= this.pegaCustoDisponibilidade(); //O Custo de disponibilidade é o mínimo que alguém pode pagar
         // Ou seja, se a pessoa consumir 400KWh, e produzir 375KWh, ela irá pagar 50KWh à concessionária, se esse for o custo de disponibilidade.
         if(energyConsumed < 0.0){ //Verifica se o consumo é menor que o custo de disponibilidade
             return 0;

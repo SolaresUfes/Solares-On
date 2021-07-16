@@ -1,10 +1,15 @@
 package com.solares.calculadorasolar.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -12,6 +17,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +29,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.solares.calculadorasolar.R;
 import com.solares.calculadorasolar.classes.AutoSizeText;
 import com.solares.calculadorasolar.classes.CSVRead;
+import com.solares.calculadorasolar.classes.CalculadoraOffGrid;
 import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
 import com.solares.calculadorasolar.classes.Constants;
 
@@ -30,6 +38,11 @@ import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity {
 
+    // teste
+    AlertDialog.Builder myDialogBuilder;
+    AlertDialog myDialog;
+
+
     public ViewHolder mViewHolder = new ViewHolder();
 
     /////
@@ -37,6 +50,9 @@ public class MainActivity extends AppCompatActivity {
     public static int alturaTela;
     public float porcent = 4f;
 
+    // teste popup
+    private LinearLayout blackener;
+    private View rootView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +85,9 @@ public class MainActivity extends AppCompatActivity {
 
         this.mViewHolder.layout = findViewById(R.id.layout_calculo);
 
+        // teste
+        blackener = findViewById(R.id.blackener);
+
         //Se o spinner de estado for selecionado, muda o spinner de cidades de acordo
         this.mViewHolder.spinnerStates.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -90,9 +109,74 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         //Se o usuário clicar no botão calcular, o cálculo é feito e muda-se para a próxima activity
         this.mViewHolder.buttonCalc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createNewContactDialog();
+/*
+                double entry;
+                //Verifica se o valor inserido é válido
+                try{
+                    //Fecha teclado
+                    mViewHolder.editCostMonth.onEditorAction(EditorInfo.IME_ACTION_DONE);
+                    /////Pega as informações inseridas pelo usuário
+                    //Identifica a cidade escolhida e pega suas informações
+                    final String stateName = mViewHolder.spinnerStates.getSelectedItem().toString();
+                    final int idCity = mViewHolder.spinnerCities.getSelectedItemPosition();
+                    final String cityName = mViewHolder.spinnerCities.getItemAtPosition(idCity).toString();
+                    //Guarda o custo mensal inserido pelo usuário
+                    final double custoReais = Double.parseDouble( mViewHolder.editCostMonth.getText().toString() );
+
+                    // Inicia Calculadora
+                    CalculadoraOnGrid calculadora = new CalculadoraOnGrid();
+                    // Insere as informações que já temos no objeto
+                    calculadora.setNomeCidade(cityName);
+                    calculadora.setCustoReais(custoReais);
+                    // Cria os vetores de Cidade e Estado
+                    calculadora.setVetorCidade(CreateVetorCidade(idCity, stateName));
+                    calculadora.setVetorEstado(CreateVetorEstado(calculadora.pegaVetorCidade()));
+                    // Colocar Tarifa inicial
+                    calculadora.setTarifaMensal(Double.parseDouble(calculadora.pegaVetorEstado()[Constants.iEST_TARIFA]));
+                    calculadora.Calcular(MainActivity.this);
+
+
+                    // Calculadora OffGrid
+                    CalculadoraOffGrid calculadoraOffGrid = new CalculadoraOffGrid();
+                    // Insere as informações que já temos no objeto
+                    calculadoraOffGrid.setNomeCidade(cityName);
+                    // Cria os vetores de Cidade e Estado
+                    calculadoraOffGrid.setVetorCidade(CreateVetorCidade(idCity, stateName));
+                    calculadoraOffGrid.setVetorEstado(CreateVetorEstado(calculadoraOffGrid.getVetorCidade()));
+                    // Calcular
+                    calculadoraOffGrid.Calcular(MainActivity.this);
+
+                } catch (Exception e){
+                    try {
+                        Toast.makeText(MainActivity.this, "Insira um número positivo!", Toast.LENGTH_LONG).show();
+                    } catch (Exception ee){
+                        ee.printStackTrace();
+                    }
+                }*/
+            }
+        });
+    }
+
+
+    // teste - Criar PopUp escolha on-gird ou off-grid
+    public void createNewContactDialog(){
+        myDialogBuilder = new AlertDialog.Builder(this);
+        final View contectPopUpView = getLayoutInflater().inflate(R.layout.popup_escolha_grid, null);
+        Button onGrid, offGrid;
+
+        onGrid = (Button)contectPopUpView.findViewById(R.id.ongrid);
+        offGrid = (Button)contectPopUpView.findViewById(R.id.offgrid);
+
+        myDialogBuilder.setView(contectPopUpView);
+        myDialog = myDialogBuilder.create();
+        myDialog.show();
+
+        onGrid.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 double entry;
@@ -119,6 +203,51 @@ public class MainActivity extends AppCompatActivity {
                     // Colocar Tarifa inicial
                     calculadora.setTarifaMensal(Double.parseDouble(calculadora.pegaVetorEstado()[Constants.iEST_TARIFA]));
                     calculadora.Calcular(MainActivity.this);
+
+
+                   /* // Calculadora OffGrid
+                    CalculadoraOffGrid calculadoraOffGrid = new CalculadoraOffGrid();
+                    // Insere as informações que já temos no objeto
+                    calculadoraOffGrid.setNomeCidade(cityName);
+                    // Cria os vetores de Cidade e Estado
+                    calculadoraOffGrid.setVetorCidade(CreateVetorCidade(idCity, stateName));
+                    calculadoraOffGrid.setVetorEstado(CreateVetorEstado(calculadoraOffGrid.getVetorCidade()));
+                    // Calcular
+                    calculadoraOffGrid.Calcular(MainActivity.this);*/
+
+                } catch (Exception e){
+                    try {
+                        Toast.makeText(MainActivity.this, "Insira um número positivo!", Toast.LENGTH_LONG).show();
+                    } catch (Exception ee){
+                        ee.printStackTrace();
+                    }
+                }
+            }
+        });
+
+        offGrid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                double entry;
+                //Verifica se o valor inserido é válido
+                try{
+                    //Fecha teclado
+                    mViewHolder.editCostMonth.onEditorAction(EditorInfo.IME_ACTION_DONE);
+                    /////Pega as informações inseridas pelo usuário
+                    //Identifica a cidade escolhida e pega suas informações
+                    final String stateName = mViewHolder.spinnerStates.getSelectedItem().toString();
+                    final int idCity = mViewHolder.spinnerCities.getSelectedItemPosition();
+                    final String cityName = mViewHolder.spinnerCities.getItemAtPosition(idCity).toString();
+
+                    CalculadoraOffGrid calculadoraOffGrid = new CalculadoraOffGrid();
+                    // Insere as informações que já temos no objeto
+                    calculadoraOffGrid.setNomeCidade(cityName);
+                    // Cria os vetores de Cidade e Estado
+                    calculadoraOffGrid.setVetorCidade(CreateVetorCidade(idCity, stateName));
+                    calculadoraOffGrid.setVetorEstado(CreateVetorEstado(calculadoraOffGrid.getVetorCidade()));
+                    // Calcular
+                    calculadoraOffGrid.Calcular(MainActivity.this);
+
                 } catch (Exception e){
                     try {
                         Toast.makeText(MainActivity.this, "Insira um número positivo!", Toast.LENGTH_LONG).show();

@@ -9,9 +9,12 @@ import java.util.List;
 
 public class CalculadoraOffGrid {
     // Variáveis Privadas da classe
+    double HSP=0;
+    String[] vetorEstado;
     String[] vetorCidade;
+    String nomeCidade;
     String[] placaEscolhida;
-    String[] inversor;
+    String[] inversorEscolhido;
     ArrayList<ArrayList<String>> matrizEquipamentosCA;
     ArrayList<ArrayList<String>> matrizEquipamentosCC;
     int[] vetorQntEquipamentosCA;
@@ -19,12 +22,14 @@ public class CalculadoraOffGrid {
     double potenciaUtilizadaDiariaCC=0;
     double potenciaUtilizadaDiariaCA=0;
     double potenciaUtilizadaDiariaTotal=0;
-    double horasDeSolPleno=0;
+    double potenciaAparente=0;
+    double fatorPotencia=0.92;
     double energiaAtivaDia=0;
     double minPotencia=0;
+    double tempMax=0;
     double area=0;
     int autonomia=2;
-    int Vsis=0;
+    int Vsist=0;
     int Vbat=0;
     double CBI_C20=0;
     double Pd=0.3;
@@ -33,15 +38,32 @@ public class CalculadoraOffGrid {
     int nBatParalelo=0;
     double CBI_bat=0;
     int qntBat=0;
+    int placaParalelo=0;
+    int placaSerie=0;
+    double correntePainel=0;
+    double correnteMaxPower=0;
+    double tensaoMaxPowerTempMax=0;
+    boolean controladorPWM;
 
     float areaAlvo=-1f;
     int idModuloEscolhido=-1;
     int idInversorEscolhido=-1;
 
     //////////////////////////
+    ////  Funções getters ////
+    //////////////////////////
+    public String[] getVetorCidade(){ return vetorCidade; }
+
+    //////////////////////////
     ////  Funções setters ////
     //////////////////////////
     public void setVetorCidade(String[] vetorCidade){ this.vetorCidade = vetorCidade;}
+    public void setVetorEstado(String[] vetorEstado){
+        this.vetorEstado = vetorEstado;
+    }
+    public void setNomeCidade(String nomeCidade){
+        this.nomeCidade = nomeCidade;
+    }
     public void setMatrizEquipamentosCA(ArrayList<ArrayList<String>> matrizEquipamentos){
         this.matrizEquipamentosCA = new ArrayList();
         this.matrizEquipamentosCA = matrizEquipamentos;
@@ -65,6 +87,9 @@ public class CalculadoraOffGrid {
         try {
             CalculadoraOnGrid calculadoraOnGrid = new CalculadoraOnGrid();  // talvez mudar isso para uma funcao principal, que essa irá herdar
 
+            // Calcular a HSP
+            HSP = calculadoraOnGrid.MeanSolarHour(vetorCidade);
+
             // Calcular a Demanda de Energia Total
             // - corrente contínua
             this.potenciaUtilizadaDiariaCC = demandaEnergeticaDiaria(matrizEquipamentosCC, vetorQntEquipamentosCC);
@@ -77,7 +102,12 @@ public class CalculadoraOffGrid {
             this.energiaAtivaDia = energiaAtivaNecessariaDia(this.potenciaUtilizadaDiariaCA, this.potenciaUtilizadaDiariaCC);
 
             // Calcular Potência Mínima do Arranjo Fotovoltaico
-            this.minPotencia = potenciaMinimaArranjoFotovoltaico(vetorCidade,this.energiaAtivaDia);
+            this.minPotencia = potenciaMinimaArranjoFotovoltaico(HSP,this.energiaAtivaDia);
+
+            // Calculo da Potência Pico do Sistema
+
+            // Calcular Tensão do Sistema
+            Vsist = defTensaoSistema(this.energiaAtivaDia);
 
             // Definindo as Placas  ---- isso eh para nao esquecer - lembre de criar  uma funcao parecida em CSVRead
             is = MyContext.getResources().openRawResource(R.raw.banco_paineis);
@@ -86,20 +116,41 @@ public class CalculadoraOffGrid {
 
             // Definindo o Banco de Baterias
             this.autonomia = numeroDiasAutonomia(vetorCidade); // deve ter um valor 2 <= n <= 4 dias
-            Vsis = defTensaoSistema(this.energiaAtivaDia);
-            this.CBI_C20 = (this.fatorSeguranca * this.energiaAtivaDia * this.autonomia) / (this.Pd * Vsis);
-                /* --- Aqui definir qual bateria será utilizada --- */
+            this.CBI_C20 = (this.fatorSeguranca * this.energiaAtivaDia * this.autonomia) / (this.Pd * Vsist);
+                /* --- Aqui definir qual bateria será utilizada - arqCSV --- */
             // Quantidade de baterias em série e em paralelo
-            nBatSerie = (int)Math.round(Vsis/Vbat);
+            nBatSerie = (int)Math.round(Vsist/Vbat);
             nBatParalelo = (int)Math.round(this.CBI_C20/this.CBI_bat);
             // Quantidade total de baterias
             this.qntBat = this.nBatParalelo * this.nBatSerie;
 
             // Definindo o Controlador de Carga
-                // sem mppt
+
+
+            // Definindo a quantidade de placas em série e paralelo
+            if(controladorPWM) // controlador PMW
+            {
+                // Quantidade de placas em série
+                this.placaSerie = (int) Math.round((1.2 * Vsist) / this.tensaoMaxPowerTempMax);// Descobrir como ter essa Tensão de Máxima Potência na Temp Max
+                // Corrente do painel fotovoltaico
+                correntePainel = this.minPotencia / this.Vsist;
+                // Quantidade de placas em paralelo
+                this.placaParalelo = (int) Math.round(this.correntePainel / this.correnteMaxPower); // Descobrir como ter a Corrente de Máxima Potência
+            }
+            else{
+                
+                // Quantidade de placas em paralelo
+                this.placaParalelo = (int) Math.round(this.minPotencia / (this.placaSerie)); // Descobrir como ter a Corrente de Máxima Potência
+            }
+
 
             // Definindo os Inversores
-
+            if(this.potenciaUtilizadaDiariaCA != 0){
+                this.potenciaAparente = this.potenciaUtilizadaDiariaCA / this.fatorPotencia;
+                // aqui fazer o 'is' receber o banco de dados dos inversores off-grid
+                inversorEscolhido = CSVRead.DefineInvertorOffGrid(is, this.placaEscolhida ,this.potenciaAparente, this.Vsist, idInversorEscolhido);
+            }
+            else inversorEscolhido=null;
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -131,24 +182,32 @@ public class CalculadoraOffGrid {
         return L;
     }
 
-    public static double potenciaMinimaArranjoFotovoltaico(String[] vetorCidade, double L){
+    public static double potenciaMinimaArranjoFotovoltaico(double HSP, double L){
         double Lmes=0;
-        double HSPi=0;
         double Pi=0;
         double Pmax=0;
         double Red1 = 0.75;
         double Red2 = 0.9;
-        for (int i=0; i<12; i++){
-            if(i==1) Lmes = L * 28;
-            else if(i%2==0) Lmes = L*31;
+        for (int i=0; i<12; i++) {
+            if (i == 1) Lmes = L * 28;
+            else if (i % 2 == 0) Lmes = L * 31;
             else Lmes = L * 30;
 
-            HSPi = horaSolarMes(vetorCidade[i]);
-            Pi = Lmes * (HSPi * Red1 * Red2);
+            Pi = Lmes * (Red1 * Red2);
 
-            if(Pi > Pmax) Pmax = Pi;
+            if (Pi > Pmax) Pmax = Pi;
         }
-        return Pmax;
+        return Pmax * HSP;
+    }
+
+    public static double potenciaPico(double HSP, double minPotencia){
+        double insolacao=0;
+        double potenciaPico=0;
+
+        insolacao = 1000 * HSP;
+        potenciaPico = minPotencia / insolacao;
+
+        return potenciaPico;
     }
 
     public static double horaSolarMes(String cityVec){

@@ -15,6 +15,7 @@ public class CalculadoraOffGrid {
     String nomeCidade;
     String[] placaEscolhida;
     String[] inversorEscolhido;
+    String[] controladorEscolhido;
     ArrayList<ArrayList<String>> matrizEquipamentosCA;
     ArrayList<ArrayList<String>> matrizEquipamentosCC;
     int[] vetorQntEquipamentosCA;
@@ -43,11 +44,11 @@ public class CalculadoraOffGrid {
     double correntePainel=0;
     double correnteMaxPower=0;
     double tensaoMaxPowerTempMax=0;
-    boolean controladorPWM;
 
-    float areaAlvo=-1f;
-    int idModuloEscolhido=-1;
-    int idInversorEscolhido=-1;
+    float areaAlvo;
+    int idModuloEscolhido;
+    int idInversorEscolhido;
+    int idControladorEscolhido;
 
     //////////////////////////
     ////  Funções getters ////
@@ -72,11 +73,19 @@ public class CalculadoraOffGrid {
         this.matrizEquipamentosCC = new ArrayList();
         this.matrizEquipamentosCC = matrizEquipamentos;
     }
-    public void setVetorQntEquipamentosCA(int[] vetorQntEquipamentos){this.vetorQntEquipamentosCA = vetorQntEquipamentos;}
-    public void setVetorQntEquipamentosCC(int[] vetorQntEquipamentos){this.vetorQntEquipamentosCC = vetorQntEquipamentos;}
-    public void setAreaAlvo(float AreaAlvo) { this.areaAlvo = AreaAlvo; }
-    public void setIdModuloEscolhido(int idModuloEscolhido){this.idModuloEscolhido = idModuloEscolhido;}
+    public void setVetorQntEquipamentosCA(int[] vetorQntEquipamentos){ this.vetorQntEquipamentosCA = vetorQntEquipamentos;}
+    public void setVetorQntEquipamentosCC(int[] vetorQntEquipamentos){ this.vetorQntEquipamentosCC = vetorQntEquipamentos;}
+    public void setAreaAlvo(float AreaAlvo) { this.areaAlvo = AreaAlvo;}
+    public void setIdModuloEscolhido(int idModuloEscolhido){ this.idModuloEscolhido = idModuloEscolhido;}
+    public void setIdInversorEscolhido(int idInversorEscolhido){ this.idInversorEscolhido = idInversorEscolhido;}
+    public void setIdControladorEscolhido(int idControladorEscolhido){ this.idControladorEscolhido=idControladorEscolhido;}
 
+    CalculadoraOffGrid(){
+        setAreaAlvo(-1f);
+        setIdModuloEscolhido(-1);
+        setIdInversorEscolhido(-1);
+        setIdControladorEscolhido(-1);
+    }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////        Função Principal       /////////////////////////////////////////////////////////////////////
@@ -90,7 +99,7 @@ public class CalculadoraOffGrid {
             // Calcular a HSP
             HSP = calculadoraOnGrid.MeanSolarHour(vetorCidade);
 
-            // Calcular a Demanda de Energia Total
+            // Calcular a Demanda de Energia Total - isso vai mudar
             // - corrente contínua
             this.potenciaUtilizadaDiariaCC = demandaEnergeticaDiaria(matrizEquipamentosCC, vetorQntEquipamentosCC);
             // - corrente alternada
@@ -113,6 +122,10 @@ public class CalculadoraOffGrid {
             is = MyContext.getResources().openRawResource(R.raw.banco_paineis);
             placaEscolhida = CSVRead.DefineSolarPanel(is, this.minPotencia, this.areaAlvo, this.idModuloEscolhido);
             area = calculadoraOnGrid.DefineArea(placaEscolhida);
+            // Definindo a quantidade de placas em série e paralelo
+            // Quantidade de placas em série e paralelo
+            this.placaSerie = (int) Math.round((this.Vsist * 1.2) / this.tensaoMaxPowerTempMax); // Descobrir como ter a Tensão de Máxima Potência de Temp. Máx.
+            this.placaParalelo = (int) Math.round(this.minPotencia / (this.placaSerie)); // Descobrir como ter a Corrente de Máxima Potência
 
             // Definindo o Banco de Baterias
             this.autonomia = numeroDiasAutonomia(vetorCidade); // deve ter um valor 2 <= n <= 4 dias
@@ -125,24 +138,8 @@ public class CalculadoraOffGrid {
             this.qntBat = this.nBatParalelo * this.nBatSerie;
 
             // Definindo o Controlador de Carga
-
-
-            // Definindo a quantidade de placas em série e paralelo
-            if(controladorPWM) // controlador PMW
-            {
-                // Quantidade de placas em série
-                this.placaSerie = (int) Math.round((1.2 * Vsist) / this.tensaoMaxPowerTempMax);// Descobrir como ter essa Tensão de Máxima Potência na Temp Max
-                // Corrente do painel fotovoltaico
-                correntePainel = this.minPotencia / this.Vsist;
-                // Quantidade de placas em paralelo
-                this.placaParalelo = (int) Math.round(this.correntePainel / this.correnteMaxPower); // Descobrir como ter a Corrente de Máxima Potência
-            }
-            else{
-                
-                // Quantidade de placas em paralelo
-                this.placaParalelo = (int) Math.round(this.minPotencia / (this.placaSerie)); // Descobrir como ter a Corrente de Máxima Potência
-            }
-
+            // aqui fazer o 'is' receber o banco de dados dos inversores off-grid
+            controladorEscolhido = CSVRead.DefineChargeController(is, this.placaParalelo ,this.placaSerie, this.Vsist, idInversorEscolhido);
 
             // Definindo os Inversores
             if(this.potenciaUtilizadaDiariaCA != 0){
@@ -156,7 +153,7 @@ public class CalculadoraOffGrid {
         }
     }
 
-    public static double demandaEnergeticaDiaria(ArrayList<ArrayList<String>> matrizEquipamentos, int[] vetorQntEquipamentos){
+    public static double demandaEnergeticaDiaria(ArrayList<ArrayList<String>> matrizEquipamentos, int[] vetorQntEquipamentos){ // isso vai mudar
         double totalPower=0;
         double eachElementPower;
         double powerEquipment=0;

@@ -1,5 +1,7 @@
 package com.solares.calculadorasolar.classes;
 
+import android.graphics.drawable.Icon;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
@@ -297,17 +299,17 @@ public class CSVRead {
         double currentCost = 0, cheaperCost, potPico = 0;
         int numberInvertors, cont = 0, VinInvertor;
         BufferedReader br = null;
-        String linha = "";
+        String line = "";
 
         try {
             br = new BufferedReader(new InputStreamReader(is));
             br.readLine(); //Joga fora a primeira
-            linha = br.readLine();
+            line = br.readLine();
 
             do{
                 potPico = Double.parseDouble(painelSolar[Constants.iPANEL_QTD]) * Double.parseDouble(painelSolar[Constants.iPANEL_POTENCIA]);
                 FDI = Double.parseDouble(cheaperInvertor[Constants.iINV_POTENCIA]) * potPico;
-                cheaperInvertor = linha.split(divider);
+                cheaperInvertor = line.split(divider);
                 numberInvertors = (int) Math.ceil((0.8 * potPico) / Double.parseDouble(cheaperInvertor[Constants.iINV_POTENCIA]));//Qtd de inversores
                 cheaperCost = numberInvertors * Double.parseDouble(cheaperInvertor[Constants.iINV_PRECO]);
                 cheaperInvertor[Constants.iINV_QTD] = String.valueOf(numberInvertors);
@@ -330,8 +332,8 @@ public class CSVRead {
                 return cheaperInvertor;
             }
 
-            while ((linha = br.readLine()) != null)  {
-                invertor_i = linha.split(divider);
+            while ((line = br.readLine()) != null)  {
+                invertor_i = line.split(divider);
                 numberInvertors = (int)Math.ceil((0.8*potPico)/Double.parseDouble(invertor_i[Constants.iINV_POTENCIA]));//Qtd de inversores
                 currentCost = numberInvertors * Double.parseDouble(invertor_i[Constants.iINV_PRECO]);
                 invertor_i[Constants.iINV_QTD] = String.valueOf(numberInvertors);
@@ -371,5 +373,94 @@ public class CSVRead {
 
         String[] error = {""};
         return error;
+    }
+
+    public static String[] DefineChargeController(InputStream is,int numModuloParalelo, int numModuloSerie, double Isc, int idControladorEscolhido){
+        String[] cheaperController=null;
+        String[] controller_i;
+        double currentCost = 0, cheaperCost, potPico = 0, Icontroller, Vcontroller;
+        int numberController, cont = 0, VinInvertor, numberParallelController=0;
+        BufferedReader br = null;
+        String line = "";
+
+        Icontroller = 1.25 * numModuloParalelo * Isc;
+        try{
+            br = new BufferedReader(new InputStreamReader(is));
+            br.readLine();
+
+            if (idControladorEscolhido == -1) { //Se o usuário escolheu o primeiro inversor
+                //Fechar o bufferedReader
+                try {
+                    br.close();
+                } catch (IOException ioex) {
+                    ioex.printStackTrace();
+                }
+                cheaperController = findCheapest(is, Icontroller);
+                return cheaperController;
+            }
+
+            while((line = br.readLine()) != null){
+                controller_i = line.split(divider);
+                numberController = (int)Math.ceil(Icontroller/Double.parseDouble(controller_i[Constants.iINV_POTENCIA]));//Corrente do Controlador
+                currentCost = numberController * Double.parseDouble(controller_i[Constants.iINV_PRECO]); // adicionar o local que fica o preco do Controlador
+
+                if(idControladorEscolhido == cont){ //Se o usuário escolheu o cont° inversor
+                    controller_i[Constants.iINV_QTD] = String.valueOf(numberController); // Local quantidade de controladores
+                    controller_i[Constants.iINV_PRECO_TOTAL] = String.valueOf(currentCost); // local preco total dos controladores
+                    cheaperController = controller_i;
+                    break;
+                }
+                cont++;
+            }
+            return cheaperController;
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            //Fechar o bufferedReader, se houve algum erro
+            try {
+                if (br != null) {
+                    br.close();
+                }
+            } catch (IOException ioex) {
+                ioex.printStackTrace();
+            }
+        }
+
+        String[] error = {""};
+        return error;
+    }
+
+    static String[] findCheapest(InputStream is, double Icontroller){
+        String[] cheapest = new String[8];
+        String[] controller;
+        int numberController=0;
+        double cheapestCost=0, currentCost=0;
+        BufferedReader br = null;
+        String line = "";
+
+        try{
+            br = new BufferedReader(new InputStreamReader(is));
+            br.readLine();
+            line = br.readLine();
+
+            cheapest = line.split(divider);
+            cheapestCost =  Double.parseDouble(cheapest[Constants.iINV_PRECO]); // adicionar o local que fica o preco do Controlador
+
+            while((line = br.readLine()) != null){
+                controller = line.split(divider);
+                numberController = (int)Math.ceil(Icontroller/Double.parseDouble(controller[Constants.iINV_POTENCIA]));//Corrente do Controlador
+                currentCost = numberController * Double.parseDouble(controller[Constants.iINV_PRECO]); // adicionar o local que fica o preco do Controlador
+
+                if(currentCost < cheapestCost){
+                    controller[Constants.iINV_QTD] = String.valueOf(numberController); // Local quantidade de controladores
+                    controller[Constants.iINV_PRECO_TOTAL] = String.valueOf(currentCost); // local preco total dos controladores
+                    cheapest = controller;
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return cheapest;
     }
 }

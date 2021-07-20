@@ -2,6 +2,7 @@ package com.solares.calculadorasolar.classes;
 import android.content.Context;
 import com.solares.calculadorasolar.R;
 import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
+import com.solares.calculadorasolar.classes.Equipamentos;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -16,13 +17,11 @@ public class CalculadoraOffGrid {
     String[] placaEscolhida;
     String[] inversorEscolhido;
     String[] controladorEscolhido;
-    ArrayList<ArrayList<String>> matrizEquipamentosCA;
-    ArrayList<ArrayList<String>> matrizEquipamentosCC;
+    ArrayList<Equipamentos> vetorEquipamentos;
     int[] vetorQntEquipamentosCA;
     int[] vetorQntEquipamentosCC;
     double potenciaUtilizadaDiariaCC=0;
     double potenciaUtilizadaDiariaCA=0;
-    double potenciaUtilizadaDiariaTotal=0;
     double potenciaAparente=0;
     double fatorPotencia=0.92;
     double energiaAtivaDia=0;
@@ -65,14 +64,7 @@ public class CalculadoraOffGrid {
     public void setNomeCidade(String nomeCidade){
         this.nomeCidade = nomeCidade;
     }
-    public void setMatrizEquipamentosCA(ArrayList<ArrayList<String>> matrizEquipamentos){
-        this.matrizEquipamentosCA = new ArrayList();
-        this.matrizEquipamentosCA = matrizEquipamentos;
-    }
-    public void setMatrizEquipamentosCC(ArrayList<ArrayList<String>> matrizEquipamentos){
-        this.matrizEquipamentosCC = new ArrayList();
-        this.matrizEquipamentosCC = matrizEquipamentos;
-    }
+    public void setVetorEquipamentos(ArrayList<Equipamentos> vetorEquipamentosEquipamentos){ this.vetorEquipamentos = vetorEquipamentos;}
     public void setVetorQntEquipamentosCA(int[] vetorQntEquipamentos){ this.vetorQntEquipamentosCA = vetorQntEquipamentos;}
     public void setVetorQntEquipamentosCC(int[] vetorQntEquipamentos){ this.vetorQntEquipamentosCC = vetorQntEquipamentos;}
     public void setAreaAlvo(float AreaAlvo) { this.areaAlvo = AreaAlvo;}
@@ -100,12 +92,8 @@ public class CalculadoraOffGrid {
             HSP = calculadoraOnGrid.MeanSolarHour(vetorCidade);
 
             // Calcular a Demanda de Energia Total - isso vai mudar
-            // - corrente contínua
-            this.potenciaUtilizadaDiariaCC = demandaEnergeticaDiaria(matrizEquipamentosCC, vetorQntEquipamentosCC);
-            // - corrente alternada
-            this.potenciaUtilizadaDiariaCA = demandaEnergeticaDiaria(matrizEquipamentosCA, vetorQntEquipamentosCA);
-            //this.potenciaUtilizadaDiariaTotal = demandaEnergeticaDiaria(matrizEquipamentos, vetorQntEquipamentos);
-            this.potenciaUtilizadaDiariaTotal = this.potenciaUtilizadaDiariaCC + this.potenciaUtilizadaDiariaCA;
+            this.potenciaUtilizadaDiariaCC = demandaEnergiaDiaria(vetorEquipamentos, true);
+            this.potenciaUtilizadaDiariaCA = demandaEnergiaDiaria(vetorEquipamentos, false);
 
             // Calcular a Energia Ativa Necessária Diariamente
             this.energiaAtivaDia = energiaAtivaNecessariaDia(this.potenciaUtilizadaDiariaCA, this.potenciaUtilizadaDiariaCC);
@@ -138,7 +126,7 @@ public class CalculadoraOffGrid {
             this.qntBat = this.nBatParalelo * this.nBatSerie;
 
             // Definindo o Controlador de Carga
-            // aqui fazer o 'is' receber o banco de dados dos inversores off-grid
+            // aqui fazer o 'is' receber o banco de dados dos controladores off-grid
             controladorEscolhido = CSVRead.DefineChargeController(is, this.placaParalelo ,this.placaSerie, this.Vsist, idInversorEscolhido);
 
             // Definindo os Inversores
@@ -153,22 +141,29 @@ public class CalculadoraOffGrid {
         }
     }
 
-    public static double demandaEnergeticaDiaria(ArrayList<ArrayList<String>> matrizEquipamentos, int[] vetorQntEquipamentos){ // isso vai mudar
-        double totalPower=0;
-        double eachElementPower;
-        double powerEquipment=0;
-        double rendimentoBat=0.9;
-        double rendimentoInv=0.9;
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////        Funções Auxiliares       ////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        for(int c=0; c < matrizEquipamentos.size(); c++){
-            powerEquipment = Double.parseDouble(matrizEquipamentos.get(1).get(c)) * vetorQntEquipamentos[c];
-            eachElementPower=1;
-            for(int l=1; l < matrizEquipamentos.get(c).size(); l++){
-                eachElementPower = Double.parseDouble(matrizEquipamentos.get(l).get(c)) * eachElementPower * powerEquipment / 7;
+    public static double demandaEnergiaDiaria(ArrayList<Equipamentos> vetorEquipamentos, boolean Icontinua){
+        double potenciaTotal=0;
+        double rendimentoBat=0.9, rendimentoInv=0.9;
+
+        if(Icontinua){
+            for(int i=0; i<vetorEquipamentos.size(); i++){
+                if(vetorEquipamentos.get(i).getCC()){
+                    potenciaTotal = potenciaTotal + vetorEquipamentos.get(i).getPotencia()*vetorEquipamentos.get(i).getHorasPorDia()*vetorEquipamentos.get(i).getDiasUtilizados()/7;
+                }
             }
-            totalPower = eachElementPower + totalPower;
+            return potenciaTotal / (rendimentoBat * rendimentoInv);
         }
-        return totalPower / (rendimentoBat * rendimentoInv);
+
+        for(int i=0; i<vetorEquipamentos.size(); i++){
+            if(!vetorEquipamentos.get(i).getCC()){
+                potenciaTotal = potenciaTotal + vetorEquipamentos.get(i).getPotencia()*vetorEquipamentos.get(i).getHorasPorDia()*vetorEquipamentos.get(i).getDiasUtilizados()/7;
+            }
+        }
+        return potenciaTotal / (rendimentoBat * rendimentoInv);
     }
 
     public static double energiaAtivaNecessariaDia(double Lcc, double Lca){
@@ -183,14 +178,14 @@ public class CalculadoraOffGrid {
         double Lmes=0;
         double Pi=0;
         double Pmax=0;
-        double Red1 = 0.75;
-        double Red2 = 0.9;
+        double Red1Red2 = 0.9;
+
         for (int i=0; i<12; i++) {
             if (i == 1) Lmes = L * 28;
             else if (i % 2 == 0) Lmes = L * 31;
             else Lmes = L * 30;
 
-            Pi = Lmes * (Red1 * Red2);
+            Pi = Lmes * (Red1Red2);
 
             if (Pi > Pmax) Pmax = Pi;
         }

@@ -375,11 +375,11 @@ public class CSVRead {
         return error;
     }
 
-    public static String[] DefineChargeController(InputStream is,int numModuloParalelo, int numModuloSerie, double Isc, int idControladorEscolhido){
+    public static String[] DefineChargeController(InputStream is,int numModuloParalelo, int Vbat, double Isc, int idControladorEscolhido){
         String[] cheaperController=null;
         String[] controller_i;
-        double currentCost = 0, cheaperCost, potPico = 0, Icontroller, Vcontroller;
-        int numberController, cont = 0, VinInvertor, numberParallelController=0;
+        double currentCost = 0, Icontroller;
+        int numberController, cont = 0;
         BufferedReader br = null;
         String line = "";
 
@@ -388,25 +388,25 @@ public class CSVRead {
             br = new BufferedReader(new InputStreamReader(is));
             br.readLine();
 
-            if (idControladorEscolhido == -1) { //Se o usuário escolheu o primeiro inversor
+            if (idControladorEscolhido == -1) { //Se o usuário escolheu o primeiro controlador
+                cheaperController = findCheapest(is, Icontroller, Vbat);
                 //Fechar o bufferedReader
                 try {
                     br.close();
                 } catch (IOException ioex) {
                     ioex.printStackTrace();
                 }
-                cheaperController = findCheapest(is, Icontroller);
                 return cheaperController;
             }
 
             while((line = br.readLine()) != null){
                 controller_i = line.split(divider);
-                numberController = (int)Math.ceil(Icontroller/Double.parseDouble(controller_i[Constants.iINV_POTENCIA]));//Corrente do Controlador
-                currentCost = numberController * Double.parseDouble(controller_i[Constants.iINV_PRECO]); // adicionar o local que fica o preco do Controlador
+                numberController = (int)Math.ceil(Icontroller/Double.parseDouble(controller_i[Constants.iCON_I_CARGA]));
+                currentCost = numberController * Double.parseDouble(controller_i[Constants.iCON_PRECO_INDIVITUDAL]);
 
-                if(idControladorEscolhido == cont){ //Se o usuário escolheu o cont° inversor
-                    controller_i[Constants.iINV_QTD] = String.valueOf(numberController); // Local quantidade de controladores
-                    controller_i[Constants.iINV_PRECO_TOTAL] = String.valueOf(currentCost); // local preco total dos controladores
+                if(idControladorEscolhido == cont){ //Se o usuário escolheu o cont° controlador
+                    controller_i[Constants.iCON_QTD] = String.valueOf(numberController);
+                    controller_i[Constants.iCON_PRECO_TOTAL] = String.valueOf(currentCost);
                     cheaperController = controller_i;
                     break;
                 }
@@ -430,10 +430,10 @@ public class CSVRead {
         return error;
     }
 
-    static String[] findCheapest(InputStream is, double Icontroller){
+    static String[] findCheapest(InputStream is, double Icontroller, double Vbat){
         String[] cheapest = new String[8];
-        String[] controller;
-        int numberController=0;
+        String[] currentController;
+        int numberController=0, currentPowerBatController=0;
         double cheapestCost=0, currentCost=0;
         BufferedReader br = null;
         String line = "";
@@ -444,17 +444,18 @@ public class CSVRead {
             line = br.readLine();
 
             cheapest = line.split(divider);
-            cheapestCost =  Double.parseDouble(cheapest[Constants.iINV_PRECO]); // adicionar o local que fica o preco do Controlador
+            cheapestCost =  Double.parseDouble(cheapest[Constants.iCON_PRECO_INDIVITUDAL]);
 
             while((line = br.readLine()) != null){
-                controller = line.split(divider);
-                numberController = (int)Math.ceil(Icontroller/Double.parseDouble(controller[Constants.iINV_POTENCIA]));//Corrente do Controlador
-                currentCost = numberController * Double.parseDouble(controller[Constants.iINV_PRECO]); // adicionar o local que fica o preco do Controlador
+                currentController = line.split(divider);
+                numberController = (int)Math.ceil(Icontroller/Double.parseDouble(currentController[Constants.iCON_I_CARGA]));
+                currentCost = numberController * Double.parseDouble(currentController[Constants.iCON_PRECO_INDIVITUDAL]);
+                currentPowerBatController = Integer.parseInt(currentController[4]);
 
-                if(currentCost < cheapestCost){
-                    controller[Constants.iINV_QTD] = String.valueOf(numberController); // Local quantidade de controladores
-                    controller[Constants.iINV_PRECO_TOTAL] = String.valueOf(currentCost); // local preco total dos controladores
-                    cheapest = controller;
+                if(currentCost < cheapestCost && currentPowerBatController >= Vbat){
+                    currentController[Constants.iCON_QTD] = String.valueOf(numberController);
+                    currentController[Constants.iCON_PRECO_TOTAL] = String.valueOf(currentCost);
+                    cheapest = currentController;
                 }
             }
         }catch (Exception e){

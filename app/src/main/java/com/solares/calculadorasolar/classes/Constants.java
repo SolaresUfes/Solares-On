@@ -69,6 +69,18 @@ public class Constants {
     public static final int iINV_ID = 7;
 
 
+    //Indices Controladores
+    public static final int iCON_NOME = 0;
+    public static final int iCON_MARCA = 1;
+    public static final int iCON_I_CARGA = 2;
+    public static final int iCON_V_MAX_BATERIA = 3;
+    public static final int iCON_V_BATERIA = 4;
+    public static final int iCON_QTD = 5;
+    public static final int iCON_PRECO_TOTAL = 6;
+    public static final int iCON_PRECO_INDIVITUDAL = 7;
+    public static final int iCON_ID = 8;
+
+
     //Indices Cidades
     public static final int iCID_ESTADO = 0;
     //Indices Estados

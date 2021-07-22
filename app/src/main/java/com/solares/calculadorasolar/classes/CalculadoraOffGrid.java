@@ -126,7 +126,7 @@ public class CalculadoraOffGrid {
             this.qntBat = this.nBatParalelo * this.nBatSerie;
 
             // Definindo o Controlador de Carga
-            // aqui fazer o 'is' receber o banco de dados dos controladores off-grid
+            is = MyContext.getResources().openRawResource(R.raw.banco_controladores);
             controladorEscolhido = CSVRead.DefineChargeController(is, this.placaParalelo ,this.placaSerie, this.Vsist, idInversorEscolhido);
 
             // Definindo os Inversores

@@ -52,7 +52,9 @@ public class CalculadoraOffGrid {
     //////////////////////////
     ////  Funções getters ////
     //////////////////////////
-    public String[] getVetorCidade(){ return vetorCidade; }
+    public String[] getVetorCidade(){ return this.vetorCidade; }
+    public String[] getPlacaEscolhida(){ return this.placaEscolhida; }
+    public double getMinPotencia(){ return this.minPotencia; }
 
     //////////////////////////
     ////  Funções setters ////
@@ -101,8 +103,6 @@ public class CalculadoraOffGrid {
             // Calcular Potência Mínima do Arranjo Fotovoltaico
             this.minPotencia = potenciaMinimaArranjoFotovoltaico(HSP,this.energiaAtivaDia);
 
-            // Calculo da Potência Pico do Sistema
-
             // Calcular Tensão do Sistema
             Vsist = defTensaoSistema(this.energiaAtivaDia);
 
@@ -110,10 +110,6 @@ public class CalculadoraOffGrid {
             is = MyContext.getResources().openRawResource(R.raw.banco_paineis);
             placaEscolhida = CSVRead.DefineSolarPanel(is, this.minPotencia, this.areaAlvo, this.idModuloEscolhido);
             area = calculadoraOnGrid.DefineArea(placaEscolhida);
-            // Definindo a quantidade de placas em série e paralelo
-            // Quantidade de placas em série e paralelo
-            this.placaSerie = (int) Math.round((this.Vsist * 1.2) / this.tensaoMaxPowerTempMax); // Descobrir como ter a Tensão de Máxima Potência de Temp. Máx.
-            this.placaParalelo = (int) Math.round(this.minPotencia / (this.placaSerie)); // Descobrir como ter a Corrente de Máxima Potência
 
             // Definindo o Banco de Baterias
             this.autonomia = numeroDiasAutonomia(vetorCidade); // deve ter um valor 2 <= n <= 4 dias
@@ -127,7 +123,11 @@ public class CalculadoraOffGrid {
 
             // Definindo o Controlador de Carga
             is = MyContext.getResources().openRawResource(R.raw.banco_controladores);
-            controladorEscolhido = CSVRead.DefineChargeController(is, this.placaParalelo ,this.placaSerie, this.Vsist, idInversorEscolhido);
+            controladorEscolhido = CSVRead.DefineChargeController(is,this.Vsist, 1, Integer.parseInt(placaEscolhida[Constants.iPANEL_QTD]), this.idControladorEscolhido);
+
+            // Definindo Quantidade de Placas em Série e Paralelo
+            this.placaSerie = numModulosSerie(Integer.parseInt(controladorEscolhido[Constants.iCON_V_MAX_SISTEMA]), 1);// Descobrir como ter a Tensão de Máxima Potência de Temp. Máx.
+            this.placaParalelo = numModulosParalelo(this.minPotencia, this.placaSerie,Integer.parseInt(this.placaEscolhida[Constants.iPANEL_POTENCIA])); // Descobrir como ter a Corrente de Máxima Potência
 
             // Definindo os Inversores
             if(this.potenciaUtilizadaDiariaCA != 0){
@@ -226,5 +226,13 @@ public class CalculadoraOffGrid {
         if(L <= 1000) return 12;
         if(L <= 4000) return 24;
         return 48;
+    }
+
+    public int numModulosSerie(int Vcontrolador, double Voc_corrigida){
+        return (int) Math.round((Vcontrolador * 1.2) / Voc_corrigida);
+    }
+
+    public int numModulosParalelo(double P_pv, int qntPlacasSerie, int P_mod){
+        return (int) Math.round(P_pv / (qntPlacasSerie * P_mod));
     }
 }

@@ -375,44 +375,44 @@ public class CSVRead {
         return error;
     }
 
-    public static String[] DefineChargeController(InputStream is,int numModuloParalelo, int Vbat, double Isc, int idControladorEscolhido){
-        String[] cheaperController=null;
+    public static String[] DefineChargeController(InputStream is,int Vbat, double Isc, int qntPanel, int idControladorEscolhido){
+        String[] simplerController=null;
         String[] controller_i;
-        double currentCost = 0, Icontroller;
+        double currentCost = 0, Ic=1; // achar esse Ic
         int numberController, cont = 0;
         BufferedReader br = null;
         String line = "";
 
-        Icontroller = 1.25 * numModuloParalelo * Isc;
+        //Icontroller = 1.25 * numModuloParalelo * Isc;
         try{
             br = new BufferedReader(new InputStreamReader(is));
             br.readLine();
 
             if (idControladorEscolhido == -1) { //Se o usuário escolheu o primeiro controlador
-                cheaperController = findCheapest(is, Icontroller, Vbat);
+                simplerController = simplestController(is, Vbat, qntPanel, 1);
                 //Fechar o bufferedReader
                 try {
                     br.close();
                 } catch (IOException ioex) {
                     ioex.printStackTrace();
                 }
-                return cheaperController;
+                return simplerController;
             }
 
             while((line = br.readLine()) != null){
                 controller_i = line.split(divider);
-                numberController = (int)Math.ceil(Icontroller/Double.parseDouble(controller_i[Constants.iCON_I_CARGA]));
+                numberController = (int)Math.ceil(Ic/Double.parseDouble(controller_i[Constants.iCON_I_CARGA])); // descobrir essa Ic
                 currentCost = numberController * Double.parseDouble(controller_i[Constants.iCON_PRECO_INDIVITUDAL]);
 
                 if(idControladorEscolhido == cont){ //Se o usuário escolheu o cont° controlador
                     controller_i[Constants.iCON_QTD] = String.valueOf(numberController);
                     controller_i[Constants.iCON_PRECO_TOTAL] = String.valueOf(currentCost);
-                    cheaperController = controller_i;
+                    simplerController = controller_i;
                     break;
                 }
                 cont++;
             }
-            return cheaperController;
+            return simplerController;
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -430,38 +430,47 @@ public class CSVRead {
         return error;
     }
 
-    static String[] findCheapest(InputStream is, double Icontroller, double Vbat){
-        String[] cheapest = new String[8];
-        String[] currentController;
+    static String[] simplestController(InputStream is, double Vbat, int qntPanel, double Voc_corrigida){ //calcular ela previamente com algumas informacoes que ainda nao encontrei
+        CalculadoraOffGrid calculadora = null;
+        int modSerie=0, modParal=0;
         int numberController=0, currentPowerBatController=0;
-        double cheapestCost=0, currentCost=0;
+        double currentCost=0, P_pv, Isc=0;//descobrir o que eh esse Isc
+        double Vcontroller, Icontroller, Ic=1; // descobrir o que eh esse Ic
+        String[] currentController;
+        String[] placaEscolhida;
         BufferedReader br = null;
         String line = "";
+
+        P_pv = calculadora.getMinPotencia();
+        placaEscolhida = calculadora.getPlacaEscolhida();
 
         try{
             br = new BufferedReader(new InputStreamReader(is));
             br.readLine();
             line = br.readLine();
 
-            cheapest = line.split(divider);
-            cheapestCost =  Double.parseDouble(cheapest[Constants.iCON_PRECO_INDIVITUDAL]);
-
             while((line = br.readLine()) != null){
                 currentController = line.split(divider);
-                numberController = (int)Math.ceil(Icontroller/Double.parseDouble(currentController[Constants.iCON_I_CARGA]));
-                currentCost = numberController * Double.parseDouble(currentController[Constants.iCON_PRECO_INDIVITUDAL]);
-                currentPowerBatController = Integer.parseInt(currentController[4]);
 
-                if(currentCost < cheapestCost && currentPowerBatController >= Vbat){
+                modSerie = calculadora.numModulosSerie(Integer.parseInt(currentController[Constants.iCON_V_MAX_SISTEMA]), Voc_corrigida); // encontrar a tensao Voc_corrigida
+                modParal = calculadora.numModulosParalelo(P_pv, modSerie, Integer.parseInt(placaEscolhida[Constants.iPANEL_POTENCIA]));
+
+                Icontroller = Integer.parseInt(currentController[Constants.iCON_I_CARGA]);
+                Vcontroller = Integer.parseInt(currentController[Constants.iCON_V_MAX_SISTEMA]);
+
+                numberController = (int)Math.ceil(Ic/Icontroller); // descobrir o que eh essa Ic
+                currentCost = numberController * Double.parseDouble(currentController[Constants.iCON_PRECO_INDIVITUDAL]);
+                currentPowerBatController = Integer.parseInt(currentController[Constants.iCON_V_BATERIA]);
+
+                if(currentPowerBatController >= Vbat && Icontroller > 1.25 * modParal * Isc && Vcontroller > Voc_corrigida * modSerie){
                     currentController[Constants.iCON_QTD] = String.valueOf(numberController);
                     currentController[Constants.iCON_PRECO_TOTAL] = String.valueOf(currentCost);
-                    cheapest = currentController;
+                    return currentController;
                 }
             }
         }catch (Exception e){
             e.printStackTrace();
         }
-
-        return cheapest;
+        return null;
     }
 }

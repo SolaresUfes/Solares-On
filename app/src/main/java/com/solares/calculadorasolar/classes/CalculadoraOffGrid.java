@@ -17,6 +17,7 @@ public class CalculadoraOffGrid {
     String[] placaEscolhida;
     String[] inversorEscolhido;
     String[] controladorEscolhido;
+    String[] bateriaEscolhida;
     ArrayList<Equipamentos> vetorEquipamentos;
     int[] vetorQntEquipamentosCA;
     int[] vetorQntEquipamentosCC;
@@ -48,6 +49,7 @@ public class CalculadoraOffGrid {
     int idModuloEscolhido;
     int idInversorEscolhido;
     int idControladorEscolhido;
+    int idBateriaEscolhida;
 
     //////////////////////////
     ////  Funções getters ////
@@ -63,22 +65,22 @@ public class CalculadoraOffGrid {
     public void setVetorEstado(String[] vetorEstado){
         this.vetorEstado = vetorEstado;
     }
-    public void setNomeCidade(String nomeCidade){
-        this.nomeCidade = nomeCidade;
-    }
-    public void setVetorEquipamentos(ArrayList<Equipamentos> vetorEquipamentosEquipamentos){ this.vetorEquipamentos = vetorEquipamentos;}
+    public void setNomeCidade(String nomeCidade){ this.nomeCidade = nomeCidade; }
+    public void setVetorEquipamentos(ArrayList<Equipamentos> vetorEquipamentos){ this.vetorEquipamentos = vetorEquipamentos; }
     public void setVetorQntEquipamentosCA(int[] vetorQntEquipamentos){ this.vetorQntEquipamentosCA = vetorQntEquipamentos;}
     public void setVetorQntEquipamentosCC(int[] vetorQntEquipamentos){ this.vetorQntEquipamentosCC = vetorQntEquipamentos;}
     public void setAreaAlvo(float AreaAlvo) { this.areaAlvo = AreaAlvo;}
     public void setIdModuloEscolhido(int idModuloEscolhido){ this.idModuloEscolhido = idModuloEscolhido;}
     public void setIdInversorEscolhido(int idInversorEscolhido){ this.idInversorEscolhido = idInversorEscolhido;}
     public void setIdControladorEscolhido(int idControladorEscolhido){ this.idControladorEscolhido=idControladorEscolhido;}
+    public void setIdBateriaEscolhida(int idBateriaEscolhida){ this.idBateriaEscolhida = idBateriaEscolhida;}
 
     CalculadoraOffGrid(){
         setAreaAlvo(-1f);
         setIdModuloEscolhido(-1);
         setIdInversorEscolhido(-1);
         setIdControladorEscolhido(-1);
+        setIdBateriaEscolhida(-1);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -114,16 +116,12 @@ public class CalculadoraOffGrid {
             // Definindo o Banco de Baterias
             this.autonomia = numeroDiasAutonomia(vetorCidade); // deve ter um valor 2 <= n <= 4 dias
             this.CBI_C20 = (this.fatorSeguranca * this.energiaAtivaDia * this.autonomia) / (this.Pd * Vsist);
-                /* --- Aqui definir qual bateria será utilizada - arqCSV --- */
-            // Quantidade de baterias em série e em paralelo
-            nBatSerie = (int)Math.round(Vsist/Vbat);
-            nBatParalelo = (int)Math.round(this.CBI_C20/this.CBI_bat);
-            // Quantidade total de baterias
-            this.qntBat = this.nBatParalelo * this.nBatSerie;
+            is = MyContext.getResources().openRawResource(R.raw.banco_baterias);
+            bateriaEscolhida = CSVRead.DefineBattery(is, this.CBI_C20, this.Vsist, this.idBateriaEscolhida);
 
             // Definindo o Controlador de Carga
             is = MyContext.getResources().openRawResource(R.raw.banco_controladores);
-            controladorEscolhido = CSVRead.DefineChargeController(is,this.Vsist, 1, Integer.parseInt(placaEscolhida[Constants.iPANEL_QTD]), this.idControladorEscolhido);
+            controladorEscolhido = CSVRead.DefineChargeController(is,this.Vsist, 1, Integer.parseInt(placaEscolhida[Constants.iPANEL_QTD]), this.minPotencia, Integer.parseInt(placaEscolhida[Constants.iPANEL_POTENCIA]), this.idControladorEscolhido);
 
             // Definindo Quantidade de Placas em Série e Paralelo
             this.placaSerie = numModulosSerie(Integer.parseInt(controladorEscolhido[Constants.iCON_V_MAX_SISTEMA]), 1);// Descobrir como ter a Tensão de Máxima Potência de Temp. Máx.

@@ -70,6 +70,17 @@ public class Constants {
 
 
     //Indices Controladores
+    public static final int iBAT_NOME = 0;
+    public static final int iBAT_MARCA = 1;
+    public static final int iBAT_V_NOMINAL = 2;
+    public static final int iBAT_CBI_BAT = 3;
+    public static final int iBAT_QTD = 4;
+    public static final int iBAT_PRECO_TOTAL = 5;
+    public static final int iBAT_PRECO_INDIVITUDAL = 6;
+    public static final int iBAT_ID = 7;
+
+
+    //Indices Controladores
     public static final int iCON_NOME = 0;
     public static final int iCON_MARCA = 1;
     public static final int iCON_I_CARGA = 2;

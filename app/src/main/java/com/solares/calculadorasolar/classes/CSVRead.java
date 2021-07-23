@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.sql.Struct;
 
 
 public class CSVRead {
@@ -292,6 +293,75 @@ public class CSVRead {
         return error;
     }
 
+    public static String[] DefineBattery(InputStream is, double CBI_C20, int Vsist, int idBateriaEscolhida){
+        String[] cheaperBattery;
+        String[] currentBattery;
+        double currentCost = 0, cheaperCost;
+        int nBatSerie=0, nBatParalelo=0,qntBat=0, cont = 0;
+        BufferedReader br = null;
+        String line = "";
+
+        try {
+            br = new BufferedReader(new InputStreamReader(is));
+            br.readLine(); //Joga fora a primeira
+            line = br.readLine();
+
+            cheaperBattery = line.split(divider);
+            nBatSerie = (int)Math.round(Vsist/Double.parseDouble(cheaperBattery[Constants.iBAT_V_NOMINAL]));
+            nBatParalelo = (int)Math.round(CBI_C20/Integer.parseInt(cheaperBattery[Constants.iBAT_CBI_BAT]));
+            qntBat = nBatParalelo * nBatSerie;
+            cheaperCost = Double.parseDouble(cheaperBattery[Constants.iBAT_PRECO_INDIVITUDAL]) * qntBat;
+
+            if (idBateriaEscolhida == cont) { //Se o usuário escolheu o primeiro inversor
+                //Fechar o bufferedReader
+                try {
+                    br.close();
+                } catch (IOException ioex) {
+                    ioex.printStackTrace();
+                }
+                return cheaperBattery;
+            }
+
+            while ((line = br.readLine()) != null) {
+                cont++; //Contador para escolher um inversor específico
+                currentBattery = line.split(divider);
+
+                nBatSerie = (int)Math.round(Vsist/Double.parseDouble(currentBattery[Constants.iBAT_V_NOMINAL]));
+                nBatParalelo = (int)Math.round(CBI_C20/Integer.parseInt(currentBattery[Constants.iBAT_CBI_BAT]));
+                qntBat = nBatParalelo * nBatSerie;
+
+                currentCost = Double.parseDouble(cheaperBattery[Constants.iBAT_PRECO_INDIVITUDAL]) * qntBat;
+                currentBattery[Constants.iINV_QTD] = String.valueOf(qntBat);
+                currentBattery[Constants.iINV_PRECO_TOTAL] = String.valueOf(currentCost);
+
+                if (idBateriaEscolhida == cont) { //Se o usuário escolheu o cont° inversor
+                    cheaperBattery = currentBattery;
+                    break;
+                }
+
+                if (currentCost < cheaperCost) {
+                    cheaperCost = currentCost;
+                    cheaperBattery = currentBattery;
+                }
+            }
+            return cheaperBattery;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            //Fechar o bufferedReader, se houve algum erro
+            try {
+                if (br != null) {
+                    br.close();
+                }
+            } catch (IOException ioex) {
+                ioex.printStackTrace();
+            }
+        }
+        String[] error = {""};
+        return error;
+    }
+
     public static String[] DefineInvertorOffGrid(InputStream is, String[] painelSolar, double S, double Vcc, int idInversorEscolhido) {
         String[] cheaperInvertor = new String[8];
         String[] invertor_i;
@@ -375,7 +445,7 @@ public class CSVRead {
         return error;
     }
 
-    public static String[] DefineChargeController(InputStream is,int Vbat, double Isc, int qntPanel, int idControladorEscolhido){
+    public static String[] DefineChargeController(InputStream is,int Vbat, double Isc, int qntPanel, double P_pv, int potenciaPainel, int idControladorEscolhido){
         String[] simplerController=null;
         String[] controller_i;
         double currentCost = 0, Ic=1; // achar esse Ic
@@ -383,13 +453,12 @@ public class CSVRead {
         BufferedReader br = null;
         String line = "";
 
-        //Icontroller = 1.25 * numModuloParalelo * Isc;
         try{
             br = new BufferedReader(new InputStreamReader(is));
             br.readLine();
 
             if (idControladorEscolhido == -1) { //Se o usuário escolheu o primeiro controlador
-                simplerController = simplestController(is, Vbat, qntPanel, 1);
+                simplerController = simplestController(is, Vbat, qntPanel, 1, P_pv, potenciaPainel);
                 //Fechar o bufferedReader
                 try {
                     br.close();
@@ -430,19 +499,15 @@ public class CSVRead {
         return error;
     }
 
-    static String[] simplestController(InputStream is, double Vbat, int qntPanel, double Voc_corrigida){ //calcular ela previamente com algumas informacoes que ainda nao encontrei
+    static String[] simplestController(InputStream is, double Vbat, int qntPanel, double Voc_corrigida, double P_pv, int potenciaPainel){ //calcular ela previamente com algumas informacoes que ainda nao encontrei
         CalculadoraOffGrid calculadora = null;
         int modSerie=0, modParal=0;
         int numberController=0, currentPowerBatController=0;
-        double currentCost=0, P_pv, Isc=0;//descobrir o que eh esse Isc
+        double currentCost=0, Isc=0;//descobrir o que eh esse Isc
         double Vcontroller, Icontroller, Ic=1; // descobrir o que eh esse Ic
         String[] currentController;
-        String[] placaEscolhida;
         BufferedReader br = null;
         String line = "";
-
-        P_pv = calculadora.getMinPotencia();
-        placaEscolhida = calculadora.getPlacaEscolhida();
 
         try{
             br = new BufferedReader(new InputStreamReader(is));
@@ -453,7 +518,7 @@ public class CSVRead {
                 currentController = line.split(divider);
 
                 modSerie = calculadora.numModulosSerie(Integer.parseInt(currentController[Constants.iCON_V_MAX_SISTEMA]), Voc_corrigida); // encontrar a tensao Voc_corrigida
-                modParal = calculadora.numModulosParalelo(P_pv, modSerie, Integer.parseInt(placaEscolhida[Constants.iPANEL_POTENCIA]));
+                modParal = calculadora.numModulosParalelo(P_pv, modSerie, potenciaPainel);
 
                 Icontroller = Integer.parseInt(currentController[Constants.iCON_I_CARGA]);
                 Vcontroller = Integer.parseInt(currentController[Constants.iCON_V_MAX_SISTEMA]);

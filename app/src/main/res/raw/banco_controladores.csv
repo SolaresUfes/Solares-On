@@ -1,4 +1,4 @@
-Nome, marca, corrente de carga, tensao max. sistema, tensao da bateria, quantidade, preco final, preco unt, ID
+Nome,marca,corrente de carga,tensao max. sistema,tensao da bateria,quantidade,preco final,preco unit,ID
 XTRA 2210N,Epever,20,100,24, , ,739,0
 XTRA 3210N,Epever,30,100,24, , ,839,1
 XTRA 4010N,Epever,40,100,24, , ,1049,2

@@ -72,73 +72,37 @@ public class CSVRead {
     }
 
     public static String[] DefineSolarPanel(InputStream is, double WpNeeded, float AreaAlvo, int idModuloEscolhido) {
-        String[] cheaperPanel;
-        String[] currentPanel;
-        String line;
+        String[] modulo;
+        String line = "";
         int cont = 0;
-        double currentCost, cheaperCost, precoTotal;
+        double precoTotal;
         BufferedReader bufferedReader = null;
 
         try {
             bufferedReader = new BufferedReader(new InputStreamReader(is));
             bufferedReader.readLine();
-            line = bufferedReader.readLine();
-            cheaperPanel = line.split(divider);
+
+            while (cont <= idModuloEscolhido) {
+                cont++; //contador para escolher um modelo específico de módulo, se preciso
+                if((line = bufferedReader.readLine()) == null) return null;
+            }
+
+            modulo = line.split(divider);
             //O custo aqui é definido por preçoTotal/potênciaTotal (R$/Wp)
-            cheaperCost = FindPanelCost(WpNeeded, cheaperPanel, AreaAlvo);
             if (AreaAlvo == -1f) {
-                cheaperPanel[Constants.iPANEL_QTD] = String.valueOf((int) Math.floor(WpNeeded / Double.parseDouble(cheaperPanel[Constants.iPANEL_POTENCIA])));
-                if (cheaperPanel[Constants.iPANEL_QTD].equals("0")) {
-                    cheaperPanel[Constants.iPANEL_QTD] = "1";
+                modulo[Constants.iPANEL_QTD] = String.valueOf((int) Math.floor(WpNeeded / Double.parseDouble(modulo[Constants.iPANEL_POTENCIA])));
+                if (modulo[Constants.iPANEL_QTD].equals("0")) {
+                    modulo[Constants.iPANEL_QTD] = "1";
                 }
             } else {
-                cheaperPanel[Constants.iPANEL_QTD] = String.valueOf((int) Math.floor(AreaAlvo / Double.parseDouble(cheaperPanel[Constants.iPANEL_AREA])));
+                modulo[Constants.iPANEL_QTD] = String.valueOf((int) Math.floor(AreaAlvo / Double.parseDouble(modulo[Constants.iPANEL_AREA])));
             }
 
             //O custo aqui é em dinheiro mesmo (quantidade de dinheiro "bruta")
-            precoTotal = Double.parseDouble(cheaperPanel[Constants.iPANEL_QTD]) * Double.parseDouble(cheaperPanel[Constants.iPANEL_PRECO]);
-            cheaperPanel[Constants.iPANEL_CUSTO_TOTAL] = String.valueOf(precoTotal);
-
-            if (idModuloEscolhido == 0) { //Se o usuário escolheu o primeiro módulo
-                //Fechar o bufferedReader
-                try {
-                    bufferedReader.close();
-                } catch (IOException ioex) {
-                    ioex.printStackTrace();
-                }
-
-                return cheaperPanel;
-            }
-
-            while ((line = bufferedReader.readLine()) != null) {
-                cont++; //contador para escolher um modelo específico de módulo, se preciso
-                currentPanel = line.split(divider);
-                //O custo aqui é definido por preçoTotal/potênciaTotal
-                currentCost = FindPanelCost(WpNeeded, currentPanel, AreaAlvo);
-
-                if (AreaAlvo == -1f) {
-                    currentPanel[Constants.iPANEL_QTD] = String.valueOf((int) Math.floor(WpNeeded / Double.parseDouble(currentPanel[Constants.iPANEL_POTENCIA])));
-                    if (cheaperPanel[Constants.iPANEL_QTD].equals("0")) {
-                        cheaperPanel[Constants.iPANEL_QTD] = "1";
-                    }
-                } else {
-                    currentPanel[Constants.iPANEL_QTD] = String.valueOf((int) Math.floor(AreaAlvo / Double.parseDouble(currentPanel[Constants.iPANEL_AREA])));
-                }
-
-                //O custo aqui é em dinheiro mesmo
-                precoTotal = Double.parseDouble(currentPanel[Constants.iPANEL_QTD]) * Double.parseDouble(currentPanel[Constants.iPANEL_PRECO]);
-                currentPanel[Constants.iPANEL_CUSTO_TOTAL] = String.valueOf(precoTotal);
-
-                if (idModuloEscolhido == cont) { //Verifica se foi esse o módulo escolhido pelo usuário
-                    cheaperPanel = currentPanel;
-                    break;
-                }
-
-                if (currentCost < cheaperCost) {
-                    cheaperCost = currentCost;
-                    cheaperPanel = currentPanel;
-                }
-            }
+            precoTotal = Double.parseDouble(modulo[Constants.iPANEL_QTD]) * Double.parseDouble(modulo[Constants.iPANEL_PRECO]);
+            modulo[Constants.iPANEL_CUSTO_TOTAL] = String.valueOf(precoTotal);
+            
+            
             //Fechar o bufferedReader
             try {
                 bufferedReader.close();
@@ -146,7 +110,7 @@ public class CSVRead {
                 ioex.printStackTrace();
             }
 
-            return cheaperPanel;
+            return modulo;
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -457,6 +421,7 @@ public class CSVRead {
             br.readLine();
 
             while((line = br.readLine()) != null){
+                System.out.println("Line do while Funcao 1: "+ line);
                 controller_i = line.split(divider);
                 numberController = (int)Math.ceil(Ic/Double.parseDouble(controller_i[Constants.iCON_I_CARGA])); // descobrir essa Ic
                 currentCost = numberController * Double.parseDouble(controller_i[Constants.iCON_PRECO_INDIVITUDAL]);
@@ -467,7 +432,7 @@ public class CSVRead {
                     simplerController = controller_i;
                     break;
                 }
-                if(idControladorEscolhido == 2){
+                if(idControladorEscolhido == -1){
                     simplerController = simplestController(line, Vbat, qntPanel, 24, P_pv, potenciaPainel);
                     if(simplerController!=null) break;
                 }
@@ -499,20 +464,31 @@ public class CSVRead {
         int Vcontroller, Icontroller;
         double Ic=1; // descobrir o que eh esse Ic
         String[] currentController;
+        System.out.println("Entrou na funcao simplest, antes do try");
         try{
+
+            System.out.println("Teste");
+            System.out.println("Linhas: "+line);
+            System.out.println(" ");
             currentController = line.split(divider);
             Icontroller = Integer.parseInt(currentController[Constants.iCON_I_CARGA]);
             Vcontroller = Integer.parseInt(currentController[Constants.iCON_V_MAX_SISTEMA]);
             // TALVEZ NAO PRECISE -- modSerie = calculadora.numModulosSerie(Vcontroller, Voc_corrigida); // encontrar a tensao Voc_corrigida
             modParal = calculadora.numModulosParalelo(P_pv, modSerie, potenciaPainel);
+            System.out.println("ModSeruie: "+modSerie);
+
+            System.out.println("Icontroller: "+Icontroller);
+            System.out.println("Vcontroller: "+Vcontroller);
 
             numberController = (int)Math.ceil(Ic/Icontroller); // descobrir o que eh essa Ic
             currentCost = numberController * Double.parseDouble(currentController[Constants.iCON_PRECO_INDIVITUDAL]);
             currentPowerBatController = Integer.parseInt(currentController[Constants.iCON_V_BATERIA]);
+            System.out.println("currentPowerBat: "+currentPowerBatController);
 
             if(currentPowerBatController >= Vbat && (Icontroller > (1.25 * modParal * Isc) )){// && (Vcontroller >= (Voc_corrigida * modSerie))
                 currentController[Constants.iCON_QTD] = String.valueOf(numberController);
                 currentController[Constants.iCON_PRECO_TOTAL] = String.valueOf(currentCost);
+                System.out.println("Entrou no IF da 2 funcao;");
                 return currentController;
             }
 
@@ -521,4 +497,6 @@ public class CSVRead {
         }
         return null;
     }
+
+
 }

@@ -204,17 +204,6 @@ public class MainActivity extends AppCompatActivity {
                     calculadora.setTarifaMensal(Double.parseDouble(calculadora.pegaVetorEstado()[Constants.iEST_TARIFA]));
                     calculadora.Calcular(MainActivity.this);
 
-
-                   /* // Calculadora OffGrid
-                    CalculadoraOffGrid calculadoraOffGrid = new CalculadoraOffGrid();
-                    // Insere as informações que já temos no objeto
-                    calculadoraOffGrid.setNomeCidade(cityName);
-                    // Cria os vetores de Cidade e Estado
-                    calculadoraOffGrid.setVetorCidade(CreateVetorCidade(idCity, stateName));
-                    calculadoraOffGrid.setVetorEstado(CreateVetorEstado(calculadoraOffGrid.getVetorCidade()));
-                    // Calcular
-                    calculadoraOffGrid.Calcular(MainActivity.this);*/
-
                 } catch (Exception e){
                     try {
                         Toast.makeText(MainActivity.this, "Insira um número positivo!", Toast.LENGTH_LONG).show();

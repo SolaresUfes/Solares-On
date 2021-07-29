@@ -130,27 +130,27 @@ public class CalculadoraOnGrid implements Serializable {
 
             //Acha a potêcia necessária
             potenciaNecessaria = FindTargetCapacity(consumokWh, horasDeSolPleno);
-            //Definindo as placas
-            is = MyContext.getResources().openRawResource(R.raw.banco_paineis);
-            placaEscolhida = CSVRead.DefineSolarPanel(is, potenciaNecessaria, this.areaAlvo, this.idModuloEscolhido);
-            area = DefineArea(placaEscolhida);
+            int cont=0, idMelhorModulo=-1;
+            double melhorLucro=0.0;
+            if(this.idModuloEscolhido == -1){
+                while (!calculaResultadosPlaca(MyContext, cont)) {
+                    if (cont == 0) {
+                        idMelhorModulo = cont;
+                        melhorLucro = this.pegaLucro();
+                    }
+                    if (this.pegaLucro() > melhorLucro) { // Definir melhor placa em relação à anterior
+                        idMelhorModulo = cont;
+                        melhorLucro = this.pegaLucro();
+                    }
 
-            //Encontrando a potenciaInstalada
-            this.potenciaInstalada = Double.parseDouble(placaEscolhida[Constants.iPANEL_POTENCIA]) * Double.parseDouble(placaEscolhida[Constants.iPANEL_QTD]);
+                    cont++;
+                }
+                calculaResultadosPlaca(MyContext, idMelhorModulo);
+            }else{
+                calculaResultadosPlaca(MyContext, this.idModuloEscolhido);
+            }
 
-            //Definindo os inversores
-            is = MyContext.getResources().openRawResource(R.raw.banco_inversores);
-            inversor = CSVRead.DefineInvertor(is, placaEscolhida, this.idInversorEscolhido);
 
-            //Definindo os custos
-            double[] custos = this.DefineCosts(placaEscolhida, inversor);
-            custoParcial = custos[Constants.iCOSTS_PARCIAL];
-            custoTotal = custos[Constants.iCOSTS_TOTAL];
-
-            //Calculo da energia produzida em um ano
-            geracaoAnual = EstimateAnualGeneration();
-
-            GetEconomicInformation();
 
             //Preparação para mudar para próxima activity
             Intent intent = new Intent(MyContext, ResultadoActivity.class);
@@ -361,6 +361,35 @@ Thomas T.D. Tran, Amanda D. Smith
     ////////////////////////////////////////        Funções Auxiliares       ////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    public boolean calculaResultadosPlaca(Context MyContext, int idModuloEscolhido){
+        InputStream is;
+        //Definindo as placas
+        is = MyContext.getResources().openRawResource(R.raw.banco_paineis);
+        placaEscolhida = CSVRead.DefineSolarPanel(is, potenciaNecessaria, this.areaAlvo, idModuloEscolhido);
+
+        if(placaEscolhida==null) return true; // Quando terminar de varrer as linhas deverá sair do while
+
+        area = DefineArea(placaEscolhida);
+
+        //Encontrando a potenciaInstalada
+        this.potenciaInstalada = Double.parseDouble(placaEscolhida[Constants.iPANEL_POTENCIA]) * Double.parseDouble(placaEscolhida[Constants.iPANEL_QTD]);
+
+        //Definindo os inversores
+        is = MyContext.getResources().openRawResource(R.raw.banco_inversores);
+        inversor = CSVRead.DefineInvertor(is, placaEscolhida, this.idInversorEscolhido);
+
+        //Definindo os custos
+        double[] custos = this.DefineCosts(placaEscolhida, inversor);
+        custoParcial = custos[Constants.iCOSTS_PARCIAL];
+        custoTotal = custos[Constants.iCOSTS_TOTAL];
+
+        //Calculo da energia produzida em um ano
+        geracaoAnual = EstimateAnualGeneration();
+
+        GetEconomicInformation();
+
+        return false;
+    }
 
     /* Descrição: Recebe a conta de energia em reais e retorna o valor, também em reais, retirando os impostos
      * Parâmetros de Entrada: costReais - Valor em reais da conta de luz média mensal, com impostos

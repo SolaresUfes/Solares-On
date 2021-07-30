@@ -77,7 +77,7 @@ public class CreditoActivity extends AppCompatActivity {
 
         //Imagem com o nome do Solares
         ImageView imageTitulo = findViewById(R.id.imageViewCredito);
-        imageTitulo.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.retangulo_logo_solares));
+        imageTitulo.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.logo_solares_horizontal_fundo_claro));
 
         //Imagem do Social
         ImageView imageSocial = findViewById(R.id.imageViewCirculoSocial);

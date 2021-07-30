@@ -292,9 +292,9 @@ Thomas T.D. Tran, Amanda D. Smith
             //Acha o valor em reais que ele pagará para a concessionária no ano
             valorAPagar = ConsumoAPagarNoAno * tariff;
             //Coloca os roubos... Quero dizer, impostos
-            custoComImposto = (valorAPagar / (1 - (Constants.PIS + Constants.COFINS + Constants.ICMS))) + Constants.CIP;
+            custoComImposto = ValueWithTaxes(valorAPagar);
             //Quanto ele pagaria sem o sistema fotovoltaico, também com roubo (imposto)
-            custoAtualComImposto = ((12.0 * consumokWh)*tariff / (1 - (Constants.PIS + Constants.COFINS + Constants.ICMS))) + Constants.CIP;
+            custoAtualComImposto = ValueWithTaxes((12.0 * consumokWh)*tariff);
             //Acha a diferença que o sistema causou no custo (isso será o lucro ou a economia do ano)
             diferencaDeCusto = custoAtualComImposto - custoComImposto;
             if(year == 0){
@@ -392,7 +392,23 @@ Thomas T.D. Tran, Amanda D. Smith
      */
     @org.jetbrains.annotations.Contract(pure = true)
     public static double ValueWithoutTaxes(double costReais){
-        return (costReais - (Constants.CIP))*(1 - Constants.ICMS - Constants.PIS - Constants.COFINS);
+        //Considera o menor entre 5% do valor total da conta de luz e um valor máximo de 50 reais
+        double contribuicaoIlumPublica = Math.min(costReais * 0.05, Constants.CIPMAX);
+        return (costReais - contribuicaoIlumPublica)*(1 - Constants.ICMS)*(1 - Constants.PIS - Constants.COFINS);
+    }
+
+    /* Descrição: Recebe a o consumo vezes a tarifa, em reais, e retorna o valor total que deveria ser pago
+     * Parâmetros de Entrada: valorSemImpostos - Valor em reais que se pagaria pela energia sem impostos e taxas
+     * Saída: Valor sem impostos - costReais retirando o CIP, ICMS, PIS e COFINS
+     * Pré Condições: costReais é não nulo e contém os impostos
+     * Pós Condições: Retorna o valor sem impostos
+     */
+    @org.jetbrains.annotations.Contract(pure = true)
+    public static double ValueWithTaxes(double valorSemImpostos){
+        double valorSemCIP = (valorSemImpostos / ((1 - Constants.ICMS)*(1 - Constants.PIS - Constants.COFINS)));
+        //Considera o menor entre 5% do valor total da conta de luz e um valor máximo de 50 reais
+        double contribuicaoIlumPublica = Math.min(valorSemCIP * 0.05 / 0.95, Constants.CIPMAX);
+        return  valorSemCIP + contribuicaoIlumPublica;
     }
 
 

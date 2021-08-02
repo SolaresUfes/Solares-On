@@ -5796,5 +5796,6 @@
         <item>Wanderlândia</item>
         <item>Xambioá</item>
     </string-array>
+    <string name="title_activity_pedir_consumo_energetico">PedirConsumoEnergetico</string>
 
 </resources>

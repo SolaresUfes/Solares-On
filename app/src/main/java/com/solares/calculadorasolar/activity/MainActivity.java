@@ -118,9 +118,10 @@ public class MainActivity extends AppCompatActivity {
                     calculadora.setVetorEstado(CreateVetorEstado(calculadora.pegaVetorCidade()));
                     // Colocar Tarifa inicial
                     calculadora.setTarifaMensal(Double.parseDouble(calculadora.pegaVetorEstado()[Constants.iEST_TARIFA]));
-                    AbrirActivityTarifa(calculadora);
+                    AbrirActivityDetalhes(calculadora);
                 } catch (Exception e){
                     try {
+                        e.printStackTrace();
                         Toast.makeText(MainActivity.this, "Insira um número positivo!", Toast.LENGTH_LONG).show();
                     } catch (Exception ee){
                         ee.printStackTrace();
@@ -170,14 +171,14 @@ public class MainActivity extends AppCompatActivity {
         return null;
     }
 
-    /* Descrição: Vai para uma página para selecionar a tarifa, sendo sugerida a tarifa do estado
+    /* Descrição: Vai para uma página para selecionar a tarifa e número de fases, sendo sugerida a tarifa do estado
      * Parâmetros de Entrada: calculadora - O Objeto da calculadoraOnGrid;
      * Saída: void;
      * Pré Condições: Calculadora já foi criada e inicializada com o nome da cidade, a conta de luz, os vetores da cidade e estado e a tarifa do estado;
      * Pós Condições: Se o usuário confirmar, realiza o cálculo e mostra os resultados;
      */
-    public void AbrirActivityTarifa(CalculadoraOnGrid calculadora){
-        Intent intent = new Intent(this, TarifaActivity.class);
+    public void AbrirActivityDetalhes(CalculadoraOnGrid calculadora){
+        Intent intent = new Intent(this, DetalhesActivity.class);
         intent.putExtra(Constants.EXTRA_CALCULADORAON, calculadora);
         startActivity(intent);
     }

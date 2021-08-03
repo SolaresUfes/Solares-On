@@ -35,10 +35,11 @@ public class CalculadoraOnGrid implements Serializable {
     int tempoRetorno;
     double horasDeSolPleno;
     double tarifaMensal;
-
+    int numeroDeFases;
     float areaAlvo;
     int idModuloEscolhido;
     int idInversorEscolhido;
+    double custoDisponibilidade;
 
 
     /* Descrição: Construtor do Objeto CalculadoraOnGrid
@@ -76,6 +77,8 @@ public class CalculadoraOnGrid implements Serializable {
     public int pegaTempoRetorno(){ return tempoRetorno; }
     public double pegaHorasDeSolPleno(){ return horasDeSolPleno; }
     public double pegaTarifaMensal(){ return tarifaMensal; }
+    public int pegaNumeroDeFases(){ return numeroDeFases; }
+    public double pegaCustoDisponibilidade(){ return custoDisponibilidade; }
 
     //////////////////////////
     ////  Funções setters ////
@@ -96,6 +99,22 @@ public class CalculadoraOnGrid implements Serializable {
         this.custoReais = custoReais;
     }
     public void setAreaAlvo(float novaAreaAlvo) { this.areaAlvo = novaAreaAlvo; }
+    public void setNumeroDeFases(int novoNumeroDeFases) {
+        this.numeroDeFases = novoNumeroDeFases;
+        switch (novoNumeroDeFases){
+            case 0:
+                this.custoDisponibilidade = Constants.COST_DISP_MONOFASICO;
+                break;
+            case 1:
+                this.custoDisponibilidade = Constants.COST_DISP_BIFASICO;
+                break;
+            case 2:
+                this.custoDisponibilidade = Constants.COST_DISP_TRIFASICO;
+                break;
+            default:
+                this.custoDisponibilidade = Constants.COST_DISP_BIFASICO;
+        }
+    }
 
     //idModuloEscolhido - Inteiro que representa um modelo de módulo escolhido pelo usuário. Se for -1, escolhe o melhor
     public void setIdModuloEscolhido(int novoIdModuloEscolhido) { this.idModuloEscolhido = novoIdModuloEscolhido; }
@@ -130,27 +149,29 @@ public class CalculadoraOnGrid implements Serializable {
 
             //Acha a potêcia necessária
             potenciaNecessaria = FindTargetCapacity(consumokWh, horasDeSolPleno);
-            //Definindo as placas
-            is = MyContext.getResources().openRawResource(R.raw.banco_paineis);
-            placaEscolhida = CSVRead.DefineSolarPanel(is, potenciaNecessaria, this.areaAlvo, this.idModuloEscolhido);
-            area = DefineArea(placaEscolhida);
+            //Acha a potêcia necessária
+            potenciaNecessaria = FindTargetCapacity(consumokWh, horasDeSolPleno);
+            int cont=0, idMelhorModulo=-1;
+            double melhorLucro=0.0;
+            if(this.idModuloEscolhido == -1){
+                while (!calculaResultadosPlaca(MyContext, cont)) {
+                    if (cont == 0) {
+                        idMelhorModulo = cont;
+                        melhorLucro = this.pegaLucro();
+                    }
+                    if (this.pegaLucro() > melhorLucro) { // Definir melhor placa em relação à anterior
+                        idMelhorModulo = cont;
+                        melhorLucro = this.pegaLucro();
+                    }
 
-            //Encontrando a potenciaInstalada
-            this.potenciaInstalada = Double.parseDouble(placaEscolhida[Constants.iPANEL_POTENCIA]) * Double.parseDouble(placaEscolhida[Constants.iPANEL_QTD]);
+                    cont++;
+                }
+                calculaResultadosPlaca(MyContext, idMelhorModulo);
+            }else{
+                calculaResultadosPlaca(MyContext, this.idModuloEscolhido);
+            }
 
-            //Definindo os inversores
-            is = MyContext.getResources().openRawResource(R.raw.banco_inversores);
-            inversor = CSVRead.DefineInvertor(is, placaEscolhida, this.idInversorEscolhido);
 
-            //Definindo os custos
-            double[] custos = this.DefineCosts(placaEscolhida, inversor);
-            custoParcial = custos[Constants.iCOSTS_PARCIAL];
-            custoTotal = custos[Constants.iCOSTS_TOTAL];
-
-            //Calculo da energia produzida em um ano
-            geracaoAnual = EstimateAnualGeneration();
-
-            GetEconomicInformation();
 
             //Preparação para mudar para próxima activity
             Intent intent = new Intent(MyContext, ResultadoActivity.class);
@@ -267,15 +288,15 @@ Thomas T.D. Tran, Amanda D. Smith
             }
 
             //Se o que ele deve pagar for menor do que o custo de disponibilidade, ele paga o custo de disponibilidade
-            if (ConsumoAPagarNoAno < 12.0 * Constants.COST_DISP) {
-                ConsumoAPagarNoAno = 12.0 * Constants.COST_DISP;
+            if (ConsumoAPagarNoAno < 12.0 * this.pegaCustoDisponibilidade()) {
+                ConsumoAPagarNoAno = 12.0 * this.pegaCustoDisponibilidade();
             }
             //Acha o valor em reais que ele pagará para a concessionária no ano
             valorAPagar = ConsumoAPagarNoAno * tariff;
             //Coloca os roubos... Quero dizer, impostos
-            custoComImposto = (valorAPagar / (1 - (Constants.PIS + Constants.COFINS + Constants.ICMS))) + Constants.CIP;
+            custoComImposto = ValueWithTaxes(valorAPagar);
             //Quanto ele pagaria sem o sistema fotovoltaico, também com roubo (imposto)
-            custoAtualComImposto = ((12.0 * consumokWh)*tariff / (1 - (Constants.PIS + Constants.COFINS + Constants.ICMS))) + Constants.CIP;
+            custoAtualComImposto = ValueWithTaxes((12.0 * consumokWh)*tariff);
             //Acha a diferença que o sistema causou no custo (isso será o lucro ou a economia do ano)
             diferencaDeCusto = custoAtualComImposto - custoComImposto;
             if(year == 0){
@@ -364,6 +385,43 @@ Thomas T.D. Tran, Amanda D. Smith
     ////////////////////////////////////////        Funções Auxiliares       ////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    /* Descrição: Calcula os resultados do dimensionamento para o modelo de módulo fotovoltaico escolhido por idModuloEscolhido,
+     *              retornando true se a placa não existir no banco de dados
+     * Parâmetros de Entrada: MyContext - Contexto de execução da função para criar os inputStreams //
+     *                        idModuloEscolhido - Inteiro representando o módulo no arquivo do banco de dados. 0 representa o primeiro módulo, 1 o segundo, e assim por diante
+     * Saída: Um booleano que representa se é ou não para finalizar o while na função calcular
+     * Pré Condições: MyContext é válido // idModuloEscolhido é não negativo [0, infinity)
+     * Pós Condições: Altera as informações econômicas e do sistema no objeto this
+     */
+    public boolean calculaResultadosPlaca(Context MyContext, int idModuloEscolhido){
+        InputStream is;
+        //Definindo as placas
+        is = MyContext.getResources().openRawResource(R.raw.banco_paineis);
+        placaEscolhida = CSVRead.DefineSolarPanel(is, potenciaNecessaria, this.areaAlvo, idModuloEscolhido);
+
+        if(placaEscolhida==null) return true; // Quando terminar de varrer as linhas deverá sair do while
+
+        area = DefineArea(placaEscolhida);
+
+        //Encontrando a potenciaInstalada
+        this.potenciaInstalada = Double.parseDouble(placaEscolhida[Constants.iPANEL_POTENCIA]) * Double.parseDouble(placaEscolhida[Constants.iPANEL_QTD]);
+
+        //Definindo os inversores
+        is = MyContext.getResources().openRawResource(R.raw.banco_inversores);
+        inversor = CSVRead.DefineInvertor(is, placaEscolhida, this.idInversorEscolhido);
+
+        //Definindo os custos
+        double[] custos = this.DefineCosts(placaEscolhida, inversor);
+        custoParcial = custos[Constants.iCOSTS_PARCIAL];
+        custoTotal = custos[Constants.iCOSTS_TOTAL];
+
+        //Calculo da energia produzida em um ano
+        geracaoAnual = EstimateAnualGeneration();
+
+        GetEconomicInformation();
+
+        return false;
+    }
 
     /* Descrição: Recebe a conta de energia em reais e retorna o valor, também em reais, retirando os impostos
      * Parâmetros de Entrada: costReais - Valor em reais da conta de luz média mensal, com impostos
@@ -373,7 +431,23 @@ Thomas T.D. Tran, Amanda D. Smith
      */
     @org.jetbrains.annotations.Contract(pure = true)
     public static double ValueWithoutTaxes(double costReais){
-        return (costReais - (Constants.CIP))*(1 - Constants.ICMS - Constants.PIS - Constants.COFINS);
+        //Considera o menor entre 5% do valor total da conta de luz e um valor máximo de 50 reais
+        double contribuicaoIlumPublica = Math.min(costReais * 0.05, Constants.CIPMAX);
+        return (costReais - contribuicaoIlumPublica)*(1 - Constants.ICMS)*(1 - Constants.PIS - Constants.COFINS);
+    }
+
+    /* Descrição: Recebe a o consumo vezes a tarifa, em reais, e retorna o valor total que deveria ser pago
+     * Parâmetros de Entrada: valorSemImpostos - Valor em reais que se pagaria pela energia sem impostos e taxas
+     * Saída: Valor sem impostos - costReais retirando o CIP, ICMS, PIS e COFINS
+     * Pré Condições: costReais é não nulo e contém os impostos
+     * Pós Condições: Retorna o valor sem impostos
+     */
+    @org.jetbrains.annotations.Contract(pure = true)
+    public static double ValueWithTaxes(double valorSemImpostos){
+        double valorSemCIP = (valorSemImpostos / ((1 - Constants.ICMS)*(1 - Constants.PIS - Constants.COFINS)));
+        //Considera o menor entre 5% do valor total da conta de luz e um valor máximo de 50 reais
+        double contribuicaoIlumPublica = Math.min(valorSemCIP * 0.05 / 0.95, Constants.CIPMAX);
+        return  valorSemCIP + contribuicaoIlumPublica;
     }
 
 
@@ -414,8 +488,8 @@ tarifaMensal - valor da tarifa de energia
 solarHour - Está em horas (maior que zero)
      * Pós Condições: Retorna o valor da potência necessária em Wp
      */
-    public static double FindTargetCapacity(double energyConsumed, double solarHour){
-        energyConsumed -= Constants.COST_DISP; //O Custo de disponibilidade é o mínimo que alguém pode pagar
+    public double FindTargetCapacity(double energyConsumed, double solarHour){
+        energyConsumed -= this.pegaCustoDisponibilidade(); //O Custo de disponibilidade é o mínimo que alguém pode pagar
         // Ou seja, se a pessoa consumir 400KWh, e produzir 375KWh, ela irá pagar 50KWh à concessionária, se esse for o custo de disponibilidade.
         if(energyConsumed < 0.0){ //Verifica se o consumo é menor que o custo de disponibilidade
             return 0;

@@ -109,7 +109,7 @@ public class ConsumoActivity extends AppCompatActivity {
             double novaTarifa, consumoSemImpostos;
 
             //Se o consumo for menor ou igual a CIP, pede pro usuário inserir novamente
-            if (novoConsumo <= Constants.CIP) {
+            if (novoConsumo <= Constants.CIPMIN) {
                 try {
                     Toast.makeText(this, "O valor para o consumo está muito baixo!", Toast.LENGTH_LONG).show();
                 } catch (Exception etoast){

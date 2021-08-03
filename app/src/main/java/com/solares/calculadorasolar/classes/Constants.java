@@ -6,10 +6,13 @@ public class Constants {
     public static double ICMS = 0.25; //É o valor usado pela maioria dos estados
     public static double PIS = 0.0120;
     public static double COFINS = 0.0553;
-    public static double CIP = 50;
+    public static double CIPMAX = 50; // 50 reais
+    public static double CIPMIN = 8; //8 reais
     //public static double TARIFF = 0.56228;
     public static double TD = 0.8;
-    public static double COST_DISP = 50.0;
+    public static double COST_DISP_MONOFASICO = 30.0;
+    public static double COST_DISP_BIFASICO = 50.0;
+    public static double COST_DISP_TRIFASICO = 100.0;
     public static double PERCENTUAL_COST_INSTALATION = 0.35;
     public static double LOSS_DIRT = 0.01; //Perda de geração devido a sujeira
     public static double DEPREC_PANELS = 0.007; //Perda de eficiência a cada ano

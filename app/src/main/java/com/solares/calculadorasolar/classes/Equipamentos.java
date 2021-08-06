@@ -8,7 +8,7 @@ public class Equipamentos {
     int diasUtilizados;
     boolean CC;
 
-    Equipamentos(){
+    public Equipamentos(){
         setNome(null);
         setQuantidade(0);
         setPotencia(0);

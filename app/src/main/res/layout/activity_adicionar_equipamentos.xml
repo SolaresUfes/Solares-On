@@ -5,31 +5,81 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorLightBlue"
-    tools:context=".activity.PedirConsumoEnergeticoActivity">
-
+    tools:context=".activity.AdicionarEquipamentos">
 
     <Button
-        android:id="@+id/button_adicionar"
+        android:id="@+id/button_continuar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/background_resultado_text"
         android:padding="12dp"
-        android:text="subst esse"
+        android:text="@string/continuar"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toTopOf="@+id/guideline1" />
 
-    <Button
-        android:id="@+id/button_resultados"
+    <Spinner
+        android:id="@+id/spinner_categoria_equipamento"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorSuperWhite"
+        android:spinnerMode="dropdown"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/guideline6"
+        app:layout_constraintEnd_toStartOf="@+id/guideline8"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="@+id/guideline9"
+        app:layout_constraintTop_toTopOf="@+id/guideline5"/>
+
+    <Spinner
+        android:id="@+id/spinner_escolher_equipamento"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorSuperWhite"
+        android:spinnerMode="dropdown"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/guideline10"
+        app:layout_constraintEnd_toStartOf="@+id/guideline8"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="@+id/guideline9"
+        app:layout_constraintTop_toTopOf="@+id/guideline11" />
+
+    <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/background_resultado_text"
-        android:padding="12dp"
-        android:text="@string/resultado"
-        app:layout_constraintBottom_toTopOf="@+id/guideline2"
-        app:layout_constraintStart_toStartOf="@+id/guideline22"
-        app:layout_constraintTop_toTopOf="@+id/guideline1" />
+        android:text="@string/quantidade"
+        app:layout_constraintBottom_toTopOf="@+id/guideline15"
+        app:layout_constraintStart_toStartOf="@+id/guideline9"
+        app:layout_constraintTop_toTopOf="@+id/guideline14" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/potencia"
+        app:layout_constraintBottom_toTopOf="@+id/guideline18"
+        app:layout_constraintStart_toStartOf="@+id/guideline9"
+        app:layout_constraintTop_toTopOf="@+id/guideline17" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/periodo_uso"
+        app:layout_constraintBottom_toTopOf="@+id/guideline20"
+        app:layout_constraintStart_toStartOf="@+id/guideline9"
+        app:layout_constraintTop_toTopOf="@+id/guideline19" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/wh_dia"
+        app:layout_constraintBottom_toTopOf="@+id/guideline16"
+        app:layout_constraintStart_toStartOf="@+id/guideline9"
+        app:layout_constraintTop_toTopOf="@+id/guideline21" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline1"
@@ -121,7 +171,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.80" />
-<!-- Os guide lines 4, 12, 13 e 22 sao para o negocio branco que tem os nomes em cima -->
+    <!-- Os guide lines 4, 12, 13 e 22 sao para o negocio branco que tem os nomes em cima -->
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline14"
         android:layout_width="wrap_content"
@@ -184,5 +234,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.10" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

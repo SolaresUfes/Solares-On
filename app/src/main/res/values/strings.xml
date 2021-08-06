@@ -77,6 +77,11 @@
     <string name="consumo">Consumo</string>
     <string name="titulo_escolher_modulo">Escolher Módulo</string>
     <string name="titulo_escolher_inversor">Escolher Inversor</string>
+    <string name="continuar">CONTINUAR</string>
+    <string name="quantidade">QUANTIDADE</string>
+    <string name="potencia">POTÊNCIA</string>
+    <string name="periodo_uso">PERÍODO DE USO</string>
+    <string name="wh_dia">Wh/DIA</string>
 
     <string-array name="Modulos">
         <item>335PHK-36 POLI 335W - BYD Solar</item>
@@ -108,6 +113,18 @@
         <item>Fronius (30437–5) - 5kW</item>
         <item>ABB (45315–4) - 6kW</item>
         <item>Fronius (31282–7) - 6kW</item>
+    </string-array>
+
+    <string-array name="Categorias">
+        <item>Categoria 1</item>
+        <item>Categoria 2</item>
+        <item>Categoria 3</item>
+    </string-array>
+
+    <string-array name="Equipamentos">
+        <item>Equipamento 1</item>
+        <item>Equipamento 2</item>
+        <item>Equipamento 3</item>
     </string-array>
 
     <string name="explicacao_valor_inserido_baixo">O valor inserido está próximo ou abaixo do custo de disponibilidade, que é o preço mínimo da conta de energia.\n\nPor esse motivo, um sistema solar não seria financeiramente atrativo para você.</string>

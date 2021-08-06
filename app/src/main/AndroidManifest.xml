@@ -2,8 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.solares.calculadorasolar">
-
+    <!-- ' android:name=".classes.Global" ' é usado para criar variável global -->
     <application
+        android:name=".classes.Global"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -11,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activity.PedirConsumoEnergetico"></activity>
+        <activity android:name=".activity.PedirConsumoEnergeticoActivity" />
         <activity
             android:name=".activity.ConsumoActivity"
             android:parentActivityName=".activity.DadosActivity"

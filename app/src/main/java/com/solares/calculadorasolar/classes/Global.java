@@ -5,9 +5,24 @@ import android.app.Application;
 
 public class Global extends Application{
     private ArrayList<Equipamentos> meusEquipamentos = new ArrayList<>();
+    private String nomeEstado;
+    private int idCity;
+    private String nomeCidade;
 
-    /* --- Funcoes setter e getters --- */
+    /* ----------------------- */
+    /* --- Funcoes setters --- */
     public void adicionarElemento(Equipamentos equipamentos){ meusEquipamentos.add(equipamentos); }
+    public void setNomeEstado(String nomeEstado){ this.nomeEstado=nomeEstado; }
+    public void setIdCity(int IdCity){ this.idCity=IdCity; }
+    public void setNomeCidade(String nomeCidade){ this.nomeCidade=nomeCidade; }
+
+    /* ----------------------- */
+    /* --- Funcoes getters --- */
+    public void printarNomeElemento(int a) { System.out.println(meusEquipamentos.get(a).getNome()); }
+    public String getNomeEstado(){ return this.nomeEstado; }
+    public int getIdCity(){ return this.idCity; }
+    public String getNomeCidade(){ return this.nomeCidade; }
+
 
     private static Global instance;
 

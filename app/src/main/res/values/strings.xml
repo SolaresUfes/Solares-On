@@ -116,15 +116,34 @@
     </string-array>
 
     <string-array name="Categorias">
+        <item>Selecione</item>
         <item>Categoria 1</item>
         <item>Categoria 2</item>
         <item>Categoria 3</item>
     </string-array>
 
-    <string-array name="Equipamentos">
+    <string-array name="CategoriaNull">
+        <item>Selecione categoria</item>
+    </string-array>
+
+    <string-array name="Categoria1">
         <item>Equipamento 1</item>
         <item>Equipamento 2</item>
         <item>Equipamento 3</item>
+    </string-array>
+
+    <string-array name="Categoria2">
+        <item>Equipamento 4</item>
+        <item>Equipamento 5</item>
+        <item>Equipamento 6</item>
+        <item>Equipamento 7</item>
+    </string-array>
+
+    <string-array name="Categoria3">
+        <item>Equipamento 7</item>
+        <item>Equipamento 8</item>
+        <item>Equipamento 9</item>
+        <item>Equipamento 10</item>
     </string-array>
 
     <string name="explicacao_valor_inserido_baixo">O valor inserido está próximo ou abaixo do custo de disponibilidade, que é o preço mínimo da conta de energia.\n\nPor esse motivo, um sistema solar não seria financeiramente atrativo para você.</string>

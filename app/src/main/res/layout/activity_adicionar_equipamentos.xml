@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorLightBlue"
-    tools:context=".activity.AdicionarEquipamentos">
+    tools:context=".activity.AdicionarEquipamentosActivity">
 
     <Button
         android:id="@+id/button_continuar"
@@ -39,11 +39,10 @@
         android:background="@color/colorSuperWhite"
         android:spinnerMode="dropdown"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/guideline10"
+        app:layout_constraintBottom_toTopOf="@+id/guideline11"
         app:layout_constraintEnd_toStartOf="@+id/guideline8"
-        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="@+id/guideline9"
-        app:layout_constraintTop_toTopOf="@+id/guideline11" />
+        app:layout_constraintTop_toTopOf="@+id/guideline10" />
 
     <TextView
         android:id="@+id/textView"

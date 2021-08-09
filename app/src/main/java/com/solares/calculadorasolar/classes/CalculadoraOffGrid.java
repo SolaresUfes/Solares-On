@@ -1,12 +1,12 @@
 package com.solares.calculadorasolar.classes;
 import android.content.Context;
-import com.solares.calculadorasolar.R;
-import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
-import com.solares.calculadorasolar.classes.Equipamentos;
+import android.content.Intent;
+
+import com.solares.calculadorasolar.activity.AdicionarEquipamentosActivity;
+import com.solares.calculadorasolar.activity.PedirConsumoEnergeticoActivity;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.List;
 
 public class CalculadoraOffGrid {
     // Variáveis Privadas da classe
@@ -75,7 +75,7 @@ public class CalculadoraOffGrid {
     public void setIdControladorEscolhido(int idControladorEscolhido){ this.idControladorEscolhido=idControladorEscolhido;}
     public void setIdBateriaEscolhida(int idBateriaEscolhida){ this.idBateriaEscolhida = idBateriaEscolhida;}
 
-    CalculadoraOffGrid(){
+    public CalculadoraOffGrid(){
         setAreaAlvo(-1f);
         setIdModuloEscolhido(-1);
         setIdInversorEscolhido(-1);
@@ -92,7 +92,7 @@ public class CalculadoraOffGrid {
         try {
             CalculadoraOnGrid calculadoraOnGrid = new CalculadoraOnGrid();  // talvez mudar isso para uma funcao principal, que essa irá herdar
 
-            // Calcular a HSP
+          /*  // Calcular a HSP
             HSP = calculadoraOnGrid.MeanSolarHour(vetorCidade);
 
             // Calcular a Demanda de Energia Total - isso vai mudar
@@ -106,34 +106,42 @@ public class CalculadoraOffGrid {
             this.minPotencia = potenciaMinimaArranjoFotovoltaico(HSP,this.energiaAtivaDia);
 
             // Calcular Tensão do Sistema
-            Vsist = defTensaoSistema(this.energiaAtivaDia);
+            Vsist = defTensaoSistema(this.energiaAtivaDia);*/
 
-            // Definindo as Placas  ---- isso eh para nao esquecer - lembre de criar  uma funcao parecida em CSVRead
+            /*// Definindo as Placas  ---- isso eh para nao esquecer - lembre de criar  uma funcao parecida em CSVRead
             is = MyContext.getResources().openRawResource(R.raw.banco_paineis);
-            placaEscolhida = CSVRead.DefineSolarPanel(is, this.minPotencia, this.areaAlvo, this.idModuloEscolhido);
+            placaEscolhida = CSVRead.DefineSolarPanel(is, 400, this.areaAlvo, this.idModuloEscolhido); // this.minPotencia
             area = calculadoraOnGrid.DefineArea(placaEscolhida);
+            System.out.println("------------------------"+placaEscolhida[0]);*/
 
+/*
             // Definindo o Banco de Baterias
             this.autonomia = numeroDiasAutonomia(vetorCidade); // deve ter um valor 2 <= n <= 4 dias
             this.CBI_C20 = (this.fatorSeguranca * this.energiaAtivaDia * this.autonomia) / (this.Pd * Vsist);
-            is = MyContext.getResources().openRawResource(R.raw.banco_baterias);
+            //is = MyContext.getResources().openRawResource(R.raw.banco_baterias);
             bateriaEscolhida = CSVRead.DefineBattery(is, this.CBI_C20, this.Vsist, this.idBateriaEscolhida);
-
-            // Definindo o Controlador de Carga
-            is = MyContext.getResources().openRawResource(R.raw.banco_controladores);
-            controladorEscolhido = CSVRead.DefineChargeController(is,this.Vsist, 1, Integer.parseInt(placaEscolhida[Constants.iPANEL_QTD]), this.minPotencia, Integer.parseInt(placaEscolhida[Constants.iPANEL_POTENCIA]), this.idControladorEscolhido);
-
+*/
+            // Definindo o Controlador de Carga is,this.Vsist, 1, Integer.parseInt(placaEscolhida[Constants.iPANEL_QTD]), this.minPotencia, Integer.parseInt(placaEscolhida[Constants.iPANEL_POTENCIA]), this.idControladorEscolhido
+    /*        is = MyContext.getResources().openRawResource(R.raw.banco_controladores);
+            System.out.println("IS de fora: "+is);
+            controladorEscolhido = CSVRead.DefineChargeController(is,24, 1, Integer.parseInt(placaEscolhida[Constants.iPANEL_QTD]), 400, Integer.parseInt(placaEscolhida[Constants.iPANEL_POTENCIA]), 2);//this.idControladorEscolhido
+            System.out.println(" ");
+            System.out.println(" ");
+            System.out.println("------Controlador--------- "+controladorEscolhido[Constants.iCON_ID]);
+            System.out.println(" ");
+            System.out.println(" ");
             // Definindo Quantidade de Placas em Série e Paralelo
             this.placaSerie = numModulosSerie(Integer.parseInt(controladorEscolhido[Constants.iCON_V_MAX_SISTEMA]), 1);// Descobrir como ter a Tensão de Máxima Potência de Temp. Máx.
             this.placaParalelo = numModulosParalelo(this.minPotencia, this.placaSerie,Integer.parseInt(this.placaEscolhida[Constants.iPANEL_POTENCIA])); // Descobrir como ter a Corrente de Máxima Potência
-
+*/
             // Definindo os Inversores
-            if(this.potenciaUtilizadaDiariaCA != 0){
+            /*if(this.potenciaUtilizadaDiariaCA != 0){
                 this.potenciaAparente = this.potenciaUtilizadaDiariaCA / this.fatorPotencia;
                 // aqui fazer o 'is' receber o banco de dados dos inversores off-grid
                 inversorEscolhido = CSVRead.DefineInvertorOffGrid(is, this.placaEscolhida ,this.potenciaAparente, this.Vsist, idInversorEscolhido);
             }
-            else inversorEscolhido=null;
+            else inversorEscolhido=null;*/
+
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -227,7 +235,11 @@ public class CalculadoraOffGrid {
     }
 
     public int numModulosSerie(int Vcontrolador, double Voc_corrigida){
-        return (int) Math.round((Vcontrolador * 1.2) / Voc_corrigida);
+        System.out.println("Entrou na funcao mudo serie");
+        System.out.println("Vcontroller: "+Vcontrolador);
+        System.out.println("Voc_corriegida: "+Voc_corrigida);
+        int mSerie = (int)Math.round((Vcontrolador * 1.2) / Voc_corrigida);
+        return mSerie;
     }
 
     public int numModulosParalelo(double P_pv, int qntPlacasSerie, int P_mod){

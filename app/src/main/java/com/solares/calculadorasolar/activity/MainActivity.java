@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,6 +33,7 @@ import com.solares.calculadorasolar.classes.CSVRead;
 import com.solares.calculadorasolar.classes.CalculadoraOffGrid;
 import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
 import com.solares.calculadorasolar.classes.Constants;
+import com.solares.calculadorasolar.classes.Global;
 
 import java.io.InputStream;
 
@@ -228,14 +230,17 @@ public class MainActivity extends AppCompatActivity {
                     final int idCity = mViewHolder.spinnerCities.getSelectedItemPosition();
                     final String cityName = mViewHolder.spinnerCities.getItemAtPosition(idCity).toString();
 
-                    CalculadoraOffGrid calculadoraOffGrid = new CalculadoraOffGrid();
-                    // Insere as informações que já temos no objeto
-                    calculadoraOffGrid.setNomeCidade(cityName);
-                    // Cria os vetores de Cidade e Estado
-                    calculadoraOffGrid.setVetorCidade(CreateVetorCidade(idCity, stateName));
-                    calculadoraOffGrid.setVetorEstado(CreateVetorEstado(calculadoraOffGrid.getVetorCidade()));
-                    // Calcular
-                    calculadoraOffGrid.Calcular(MainActivity.this);
+                    // Colocar essas informações na variável global
+                    final Global variavelGlobal = (Global)getApplicationContext() ;
+
+                    variavelGlobal.setNomeCidade(cityName);
+                    variavelGlobal.setIdCity(idCity);
+                    variavelGlobal.setNomeEstado(stateName);
+
+                    //Preparação para mudar para próxima activity
+                    System.out.println("Preparando intent");
+                    Intent intent = new Intent(MainActivity.this, PedirConsumoEnergeticoActivity.class);
+                    startActivity(intent);
 
                 } catch (Exception e){
                     try {

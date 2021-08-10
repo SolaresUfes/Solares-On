@@ -32,8 +32,6 @@ public class PedirConsumoEnergeticoActivity extends AppCompatActivity {
 
         System.out.println("Entrou na activity PedirConsumoEnergetico");
 
-
-
         try {
             final Global variavelGlobal = (Global)getApplicationContext();
 
@@ -51,15 +49,17 @@ public class PedirConsumoEnergeticoActivity extends AppCompatActivity {
             this.mViewHolder.buttonResultado.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    CalculadoraOffGrid calculadoraOffGrid = new CalculadoraOffGrid();
+                    variavelGlobal.printarNomeElemento(0);
+                    System.out.println("Quantidade: "+variavelGlobal.getQuantidadeElemento(0));
+                    System.out.println("Potencia: "+variavelGlobal.getPotenciaElemento(0));
+                   /* CalculadoraOffGrid calculadoraOffGrid = new CalculadoraOffGrid();
                     // Insere as informações que já temos no objeto
                     calculadoraOffGrid.setNomeCidade(variavelGlobal.getNomeCidade());
                     // Cria os vetores de Cidade e Estado
                     calculadoraOffGrid.setVetorCidade(CreateVetorCidade(variavelGlobal.getIdCity(), variavelGlobal.getNomeEstado()));
                     calculadoraOffGrid.setVetorEstado(CreateVetorEstado(calculadoraOffGrid.getVetorCidade()));
                     // Calcular
-                    calculadoraOffGrid.Calcular(PedirConsumoEnergeticoActivity.this);
+                    calculadoraOffGrid.Calcular(PedirConsumoEnergeticoActivity.this);*/
 
                 }
             });

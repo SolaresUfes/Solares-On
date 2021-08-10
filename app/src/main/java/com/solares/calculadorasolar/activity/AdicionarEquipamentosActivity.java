@@ -8,22 +8,28 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.solares.calculadorasolar.R;
+import com.solares.calculadorasolar.classes.CSVRead;
 import com.solares.calculadorasolar.classes.CalculadoraOffGrid;
 import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
 import com.solares.calculadorasolar.classes.Constants;
 import com.solares.calculadorasolar.classes.Equipamentos;
 import com.solares.calculadorasolar.classes.Global;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Random;
 
 public class AdicionarEquipamentosActivity extends AppCompatActivity {
 
     public ViewHolder mViewHolder = new ViewHolder();
     Equipamentos meuEquipamento;
-
+    String nome;
+    int posicao=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +49,10 @@ public class AdicionarEquipamentosActivity extends AppCompatActivity {
             this.mViewHolder.buttonContinuar = findViewById(R.id.button_continuar);
             this.mViewHolder.spinnerCategoria = findViewById(R.id.spinner_categoria_equipamento);
             this.mViewHolder.spinnerEquipamento = findViewById(R.id.spinner_escolher_equipamento);
+            this.mViewHolder.editTextQuantidade = findViewById(R.id.editText_quantidade);
+            this.mViewHolder.editTextPotencia = findViewById(R.id.editText_potencia);
+            this.mViewHolder.editTextPeriodoUso = findViewById(R.id.editText_periodoUso);
+            this.mViewHolder.editTextWhdia = findViewById(R.id.editText_Whdia);
 
             //Aqui, coloca o vetor de strings que será exibido no spinner
             ArrayAdapter<CharSequence> adapterC = ArrayAdapter.createFromResource(this, R.array.Categorias, R.layout.spinner_item);
@@ -54,12 +64,13 @@ public class AdicionarEquipamentosActivity extends AppCompatActivity {
             this.mViewHolder.spinnerEquipamento.setAdapter(adapterE);
             this.mViewHolder.spinnerEquipamento.setSelection(0);
 
-            //Se o spinner de estado for selecionado, muda o spinner de cidades de acordo
+            //Se o spinner de categorias for selecionado, muda o spinner de equipamentos de acordo
             this.mViewHolder.spinnerCategoria.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    //Muda o spinner de cidades para o estado correspondente
+                    //Muda o spinner de equipamenros para a categoria correspondente
                     ChangeSpinner(position);
+                    posicao = position;
                 }
 
                 //O ide reclama se eu tirar esse metodo, então deixei ele aí, mas sem nada
@@ -67,20 +78,50 @@ public class AdicionarEquipamentosActivity extends AppCompatActivity {
                 public void onNothingSelected(AdapterView<?> parent) {}
             });
 
+            this.mViewHolder.spinnerEquipamento.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    InputStream is = SelectContext(posicao);
+                    String potenciaEquipamento = CSVRead.getPotenciaEquipamento(is, position);
+
+                    if(potenciaEquipamento!=null){
+                        mViewHolder.editTextQuantidade.setText("0");
+                        mViewHolder.editTextPotencia.setText(potenciaEquipamento);
+                        mViewHolder.editTextPeriodoUso.setText("0");
+                        mViewHolder.editTextWhdia.setText("0");
+                        nome = mViewHolder.spinnerEquipamento.getSelectedItem().toString();
+                    }
+                }
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {}
+            });
+
             this.mViewHolder.buttonContinuar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    System.out.println("Entrou no botao continuar");
-                    int i=0;
-                    Random random = new Random();
-                    i=random.nextInt();
-                    String s;
-                    Equipamentos meusEquipamentos = new Equipamentos();
-                    s=Integer.toString(i);
-                    meusEquipamentos.setNome("Equipamento "+s);
-                    variavelGlobal.adicionarElemento(meusEquipamentos); // descobrir um  jeito de fazer uma variavel global
+                    try {
+                        double quantidade = Integer.parseInt( mViewHolder.editTextQuantidade.getText().toString() );
+                        double potencia = Integer.parseInt( mViewHolder.editTextPotencia.getText().toString() );
+                        double periodoUso = Integer.parseInt( mViewHolder.editTextPeriodoUso.getText().toString() );
+                        double diasUtilizado = Math.round(potencia / Integer.parseInt( mViewHolder.editTextWhdia.getText().toString() ));
 
-                    finish();
+                        // Adicionando as características para o equipamento
+                        meuEquipamento.setNome(nome);
+                        meuEquipamento.setQuantidade(quantidade);
+                        meuEquipamento.setPotencia(potencia);
+                        meuEquipamento.setHorasPorDia(periodoUso);
+                        meuEquipamento.setDiasUtilizados(diasUtilizado);
+
+                        variavelGlobal.adicionarElemento(meuEquipamento);
+
+                        finish();
+                    }catch (Exception e){
+                        try {
+                            Toast.makeText(AdicionarEquipamentosActivity.this, "Selecione um equipamento", Toast.LENGTH_LONG).show();
+                        } catch (Exception ee){
+                            ee.printStackTrace();
+                        }
+                    }
                 }
             });
 
@@ -90,20 +131,27 @@ public class AdicionarEquipamentosActivity extends AppCompatActivity {
         }
     }
 
-    //Muda o spinner de cidades para as cidades do estado selecionado
+    //Muda o spinner de equipamentos para os equipamentos da categoria selecionado
     public void ChangeSpinner(int categoriaPos){
         int[] posicoesCategorias = {R.array.CategoriaNull, R.array.Categoria1, R.array.Categoria2, R.array.Categoria3};
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, posicoesCategorias[categoriaPos], R.layout.spinner_item);
         this.mViewHolder.spinnerEquipamento.setAdapter(adapter);
+    }
 
-        if(categoriaPos == 1){
-            this.mViewHolder.spinnerEquipamento.setSelection(1);
+    public InputStream SelectContext(int posicao){
+        if(posicao == 1){
+            return getResources().openRawResource(R.raw.banco_equipamentos);
         }
+        return getResources().openRawResource(R.raw.banco_equipamentos);
     }
 
     public static class ViewHolder{
         Button buttonContinuar;
         Spinner spinnerCategoria;
         Spinner spinnerEquipamento;
+        EditText editTextQuantidade;
+        EditText editTextPotencia;
+        EditText editTextPeriodoUso;
+        EditText editTextWhdia;
     }
 }

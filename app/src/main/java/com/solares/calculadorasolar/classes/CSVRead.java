@@ -256,6 +256,40 @@ public class CSVRead {
         return error;
     }
 
+    public static String getPotenciaEquipamento(InputStream is, int idEquipamento) {
+        String[] values = new String[0];
+        BufferedReader bufferedReader = null;
+        int currentLine = 0;
+
+        try {
+            bufferedReader = new BufferedReader(new InputStreamReader(is));
+            String line = "";
+            bufferedReader.readLine(); //Ignora a primeira linha (cabeçário)
+
+            while ((line = bufferedReader.readLine()) != null) {
+                values = line.split(divider);
+                if(idEquipamento == Integer.parseInt(values[2])){
+                    System.out.print("Potencia CSV: ");
+                    System.out.println(values[1]);
+                    return values[1];
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            //Fechar o bufferedReader
+            try {
+                if (bufferedReader != null) {
+                    bufferedReader.close();
+                }
+            } catch (IOException ioex) {
+                ioex.printStackTrace();
+            }
+        }
+
+        return null;
+    }
+
     public static String[] DefineBattery(InputStream is, double CBI_C20, int Vsist, int idBateriaEscolhida){
         String[] cheaperBattery;
         String[] currentBattery;
@@ -466,29 +500,19 @@ public class CSVRead {
         String[] currentController;
         System.out.println("Entrou na funcao simplest, antes do try");
         try{
-
-            System.out.println("Teste");
-            System.out.println("Linhas: "+line);
-            System.out.println(" ");
             currentController = line.split(divider);
             Icontroller = Integer.parseInt(currentController[Constants.iCON_I_CARGA]);
             Vcontroller = Integer.parseInt(currentController[Constants.iCON_V_MAX_SISTEMA]);
             // TALVEZ NAO PRECISE -- modSerie = calculadora.numModulosSerie(Vcontroller, Voc_corrigida); // encontrar a tensao Voc_corrigida
             modParal = calculadora.numModulosParalelo(P_pv, modSerie, potenciaPainel);
-            System.out.println("ModSeruie: "+modSerie);
-
-            System.out.println("Icontroller: "+Icontroller);
-            System.out.println("Vcontroller: "+Vcontroller);
 
             numberController = (int)Math.ceil(Ic/Icontroller); // descobrir o que eh essa Ic
             currentCost = numberController * Double.parseDouble(currentController[Constants.iCON_PRECO_INDIVITUDAL]);
             currentPowerBatController = Integer.parseInt(currentController[Constants.iCON_V_BATERIA]);
-            System.out.println("currentPowerBat: "+currentPowerBatController);
 
             if(currentPowerBatController >= Vbat && (Icontroller > (1.25 * modParal * Isc) )){// && (Vcontroller >= (Voc_corrigida * modSerie))
                 currentController[Constants.iCON_QTD] = String.valueOf(numberController);
                 currentController[Constants.iCON_PRECO_TOTAL] = String.valueOf(currentCost);
-                System.out.println("Entrou no IF da 2 funcao;");
                 return currentController;
             }
 

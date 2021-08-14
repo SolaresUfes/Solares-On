@@ -1,15 +1,24 @@
 package com.solares.calculadorasolar.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.solares.calculadorasolar.R;
+import com.solares.calculadorasolar.classes.AutoSizeText;
 import com.solares.calculadorasolar.classes.CSVRead;
 import com.solares.calculadorasolar.classes.CalculadoraOffGrid;
 import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
@@ -22,8 +31,10 @@ import java.util.ArrayList;
 
 public class PedirConsumoEnergeticoActivity extends AppCompatActivity {
 
-    ArrayList<Equipamentos> equipamentos;
+
+    ArrayList<Equipamentos> todosMeusEquipamentos;
     public ViewHolder mViewHolder = new ViewHolder();
+    private LinearLayout layoutTest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,24 +60,57 @@ public class PedirConsumoEnergeticoActivity extends AppCompatActivity {
             this.mViewHolder.buttonResultado.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    variavelGlobal.printarNomeElemento(0);
-                    System.out.println("Quantidade: "+variavelGlobal.getQuantidadeElemento(0));
-                    System.out.println("Potencia: "+variavelGlobal.getPotenciaElemento(0));
-                   /* CalculadoraOffGrid calculadoraOffGrid = new CalculadoraOffGrid();
-                    // Insere as informações que já temos no objeto
-                    calculadoraOffGrid.setNomeCidade(variavelGlobal.getNomeCidade());
-                    // Cria os vetores de Cidade e Estado
-                    calculadoraOffGrid.setVetorCidade(CreateVetorCidade(variavelGlobal.getIdCity(), variavelGlobal.getNomeEstado()));
-                    calculadoraOffGrid.setVetorEstado(CreateVetorEstado(calculadoraOffGrid.getVetorCidade()));
-                    // Calcular
-                    calculadoraOffGrid.Calcular(PedirConsumoEnergeticoActivity.this);*/
-
+                    try {
+                        int a=0;
+                        while (a < todosMeusEquipamentos.size()){
+                            variavelGlobal.printarNomeElemento(a);
+                            System.out.println("Quantidade: "+variavelGlobal.getQuantidadeElemento(a));
+                            System.out.println("Potencia: "+variavelGlobal.getPotenciaElemento(a));
+                            System.out.println("");
+                            a++;
+                        }
+                       /* CalculadoraOffGrid calculadoraOffGrid = new CalculadoraOffGrid();
+                        // Insere as informações que já temos no objeto
+                        calculadoraOffGrid.setNomeCidade(variavelGlobal.getNomeCidade());
+                        // Cria os vetores de Cidade e Estado
+                        calculadoraOffGrid.setVetorCidade(CreateVetorCidade(variavelGlobal.getIdCity(), variavelGlobal.getNomeEstado()));
+                        calculadoraOffGrid.setVetorEstado(CreateVetorEstado(calculadoraOffGrid.getVetorCidade()));
+                        // Calcular
+                        calculadoraOffGrid.Calcular(PedirConsumoEnergeticoActivity.this);*/
+                    }catch (Exception e){
+                        try {
+                            Toast.makeText(PedirConsumoEnergeticoActivity.this, "Não há equipamentos", Toast.LENGTH_LONG).show();
+                        } catch (Exception ee){
+                            ee.printStackTrace();
+                        }
+                    }
                 }
             });
-
-
         }catch (Exception e){
             e.printStackTrace();
+        }
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        int i = 1;
+        final Global variavelGlobal = (Global) getApplicationContext();
+
+        // Criar parte que mostra os equipamentos selecionados
+        todosMeusEquipamentos = variavelGlobal.getEquipamentos();
+        while (i < todosMeusEquipamentos.size()) {
+            System.out.println("----------------------------------- Ha " + i + " equipamentos");
+            /*setContentView(R.layout.popup_escolha_grid);
+            layoutTest=(LinearLayout)findViewById(R.id.layoutTest);
+            TextView textView = new TextView(getApplicationContext());
+
+            textView.setText("testDynamic textView");
+            layoutTest.addView(textView);*/
+            i++;
         }
     }
 

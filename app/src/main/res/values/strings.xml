@@ -6,6 +6,8 @@
     <string name="button_calc">Calcular</string>
     <string name="informe_um_numero">Informe um número real com um ponto\nseparando a parte inteira da real.</string>
     <string name="placa_solar_escolhida">Placas Solares Escolhidas</string>
+    <string name="paineis">Painéis Solares</string>
+    <string name="inversores">Inversores</string>
     <string name="area_necessaria">Área Necessária</string>
     <string name="inversores_escolhidos">Inversores Escolhidos</string>
     <string name="custo_parcial_inversores_paineis">Custo Parcial (Inversores + Paineis)</string>
@@ -119,6 +121,9 @@
     <string name="explicacao_tarifa">Usamos por padrão a tarifa média no seu estado.\nSe quiser uma simulação mais precisa, pode alterar a tarifa para o valor exato pago em sua casa:</string>
     <string name="detalhes">Detalhes</string>
     <string name="numero_de_fases">Fase: </string>
+    <string name="descricao_imagem_de_alerta">Imagem de alerta</string>
+    <string name="descricao_botao_x_fechar">Botão x para fechar</string>
+    <string name="descricao_botao_detalhes">Botão para ver detalhes</string>
 
     <string-array name="Fases">
         <item>Monofásico</item>

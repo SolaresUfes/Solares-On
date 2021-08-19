@@ -1,5 +1,6 @@
 package com.solares.calculadorasolar.activity;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -9,13 +10,20 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.LinearLayout.LayoutParams;
 
 import com.solares.calculadorasolar.R;
 import com.solares.calculadorasolar.classes.AutoSizeText;
@@ -28,13 +36,15 @@ import com.solares.calculadorasolar.classes.Global;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 public class PedirConsumoEnergeticoActivity extends AppCompatActivity {
 
 
     ArrayList<Equipamentos> todosMeusEquipamentos;
     public ViewHolder mViewHolder = new ViewHolder();
-    private LinearLayout layoutTest;
+    private LinearLayout linearLayout;
+    int i = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +58,7 @@ public class PedirConsumoEnergeticoActivity extends AppCompatActivity {
 
             this.mViewHolder.buttonAdicionar = findViewById(R.id.button_adicionar);
             this.mViewHolder.buttonResultado = findViewById(R.id.button_resultados);
+            linearLayout = findViewById(R.id.layoutTest);
 
             this.mViewHolder.buttonAdicionar.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -61,6 +72,7 @@ public class PedirConsumoEnergeticoActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     try {
+
                         int a=0;
                         while (a < todosMeusEquipamentos.size()){
                             variavelGlobal.printarNomeElemento(a);
@@ -69,6 +81,8 @@ public class PedirConsumoEnergeticoActivity extends AppCompatActivity {
                             System.out.println("");
                             a++;
                         }
+
+                        variavelGlobal.setMeusEquipamentos(todosMeusEquipamentos);
                        /* CalculadoraOffGrid calculadoraOffGrid = new CalculadoraOffGrid();
                         // Insere as informações que já temos no objeto
                         calculadoraOffGrid.setNomeCidade(variavelGlobal.getNomeCidade());
@@ -97,22 +111,48 @@ public class PedirConsumoEnergeticoActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        int i = 1;
         final Global variavelGlobal = (Global) getApplicationContext();
 
-        // Criar parte que mostra os equipamentos selecionados
         todosMeusEquipamentos = variavelGlobal.getEquipamentos();
         while (i < todosMeusEquipamentos.size()) {
-            System.out.println("----------------------------------- Ha " + i + " equipamentos");
-            /*setContentView(R.layout.popup_escolha_grid);
-            layoutTest=(LinearLayout)findViewById(R.id.layoutTest);
-            TextView textView = new TextView(getApplicationContext());
-
-            textView.setText("testDynamic textView");
-            layoutTest.addView(textView);*/
+            addView();
             i++;
         }
     }
+
+    public void addView(){
+        final View EquipamentosView = getLayoutInflater().inflate(R.layout.linha_add_elementos, null, false);
+
+        final TextView textViewNomeE = (TextView)EquipamentosView.findViewById(R.id.nome_equipamento);
+        TextView textViewQntE = (TextView)EquipamentosView.findViewById(R.id.quantidade_equipamento);
+        ImageView imageApagar = (ImageView)EquipamentosView.findViewById(R.id.apagar_equipamento);
+
+        textViewNomeE.setText(todosMeusEquipamentos.get(i).getNome());
+        textViewQntE.setText("Quantidade: "+todosMeusEquipamentos.get(i).getQuantidade());
+
+        imageApagar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // melhorar esse modo de encontrar o equipamento no array
+                String nomeEquipamento = (String) textViewNomeE.getText();
+                int j=0;
+                while(j < todosMeusEquipamentos.size() && nomeEquipamento != todosMeusEquipamentos.get(j).getNome()){
+                    j++;
+                }
+                System.out.println("----------------------- J: "+j+" ------------------");
+                i--;
+                todosMeusEquipamentos.remove(j);
+                // ----
+
+                removerView(EquipamentosView);
+            }
+        });
+
+        linearLayout.addView(EquipamentosView);
+    }
+
+    public void removerView(View view){ linearLayout.removeView(view); }
+
 
     /* Descrição: Pega informações do banco de dados e retorna o vetor da cidade do usuário
      * Parâmetros de Entrada: idCity - Inteiro que representa a cidade na lista do estado // nomeEstado - String com a sigla do estado

@@ -12,6 +12,7 @@ public class Global extends Application{
     /* ----------------------- */
     /* --- Funcoes setters --- */
     public void adicionarElemento(Equipamentos equipamentos){ meusEquipamentos.add(equipamentos); }
+    public void setMeusEquipamentos(ArrayList<Equipamentos> meusEquipamentos){ this.meusEquipamentos = meusEquipamentos; }
     public void setNomeEstado(String nomeEstado){ this.nomeEstado=nomeEstado; }
     public void setIdCity(int IdCity){ this.idCity=IdCity; }
     public void setNomeCidade(String nomeCidade){ this.nomeCidade=nomeCidade; }
@@ -19,6 +20,8 @@ public class Global extends Application{
     /* ----------------------- */
     /* --- Funcoes getters --- */
     public void printarNomeElemento(int a) { System.out.println(meusEquipamentos.get(a).getNome()); }
+    public int getSizeEquipamento() { return meusEquipamentos.size();}
+    public ArrayList<Equipamentos> getEquipamentos() { return meusEquipamentos;}
     public double getQuantidadeElemento(int elemento){ return meusEquipamentos.get(elemento).getQuantidade(); }
     public double getPotenciaElemento(int elemento){ return meusEquipamentos.get(elemento).getPotencia();}
     public String getNomeEstado(){ return this.nomeEstado; }

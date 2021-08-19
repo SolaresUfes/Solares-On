@@ -81,7 +81,7 @@ public class PedirConsumoEnergeticoActivity extends AppCompatActivity {
                             System.out.println("");
                             a++;
                         }
-
+                        System.out.println("----------------------- Quantidade de equipamentos: "+todosMeusEquipamentos.size()+" ------------------");
                         variavelGlobal.setMeusEquipamentos(todosMeusEquipamentos);
                        /* CalculadoraOffGrid calculadoraOffGrid = new CalculadoraOffGrid();
                         // Insere as informações que já temos no objeto
@@ -124,7 +124,7 @@ public class PedirConsumoEnergeticoActivity extends AppCompatActivity {
         final View EquipamentosView = getLayoutInflater().inflate(R.layout.linha_add_elementos, null, false);
 
         final TextView textViewNomeE = (TextView)EquipamentosView.findViewById(R.id.nome_equipamento);
-        TextView textViewQntE = (TextView)EquipamentosView.findViewById(R.id.quantidade_equipamento);
+        final TextView textViewQntE = (TextView)EquipamentosView.findViewById(R.id.quantidade_equipamento);
         ImageView imageApagar = (ImageView)EquipamentosView.findViewById(R.id.apagar_equipamento);
 
         textViewNomeE.setText(todosMeusEquipamentos.get(i).getNome());
@@ -134,9 +134,14 @@ public class PedirConsumoEnergeticoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // melhorar esse modo de encontrar o equipamento no array
-                String nomeEquipamento = (String) textViewNomeE.getText();
+                String nomeEquipamentoSelecionado = (String) textViewNomeE.getText();
+                String qntEquipamentoSelecionado = (String) textViewQntE.getText();
+                String quantidade;
                 int j=0;
-                while(j < todosMeusEquipamentos.size() && nomeEquipamento != todosMeusEquipamentos.get(j).getNome()){
+                while(j < todosMeusEquipamentos.size()){
+                    quantidade = "Quantidade: ";
+                    quantidade = quantidade + Double.toString(todosMeusEquipamentos.get(j).getQuantidade());
+                    if(nomeEquipamentoSelecionado.equals(todosMeusEquipamentos.get(j).getNome()) && quantidade.equals(qntEquipamentoSelecionado)) break;
                     j++;
                 }
                 System.out.println("----------------------- J: "+j+" ------------------");

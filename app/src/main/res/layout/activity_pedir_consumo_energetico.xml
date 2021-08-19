@@ -80,27 +80,19 @@
           android:orientation="vertical"
           app:layout_constraintGuide_percent="0.36"/>
 
-      <androidx.constraintlayout.widget.Guideline
-          android:id="@+id/guideline8"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:orientation="horizontal"
-          app:layout_constraintGuide_percent="0" />
-
       <ScrollView
           android:layout_width="match_parent"
-          android:layout_height="573dp"
-          android:scrollbarSize="10dp"
-          android:layout_marginTop="20dp"
-          tools:layout_editor_absoluteX="200dp"
-          tools:layout_editor_absoluteY="363dp"
+          android:layout_height="590dp"
+          android:scrollbarSize="8dp"
+          app:layout_constraintTop_toTopOf="parent"
+          android:layout_marginTop="15dp"
           tools:ignore="MissingConstraints">
 
             <LinearLayout
+                android:id="@+id/layoutTest"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:id="@+id/layoutTest"></LinearLayout>
+                android:orientation="vertical"></LinearLayout>
       </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

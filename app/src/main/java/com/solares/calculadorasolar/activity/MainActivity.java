@@ -17,16 +17,29 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 
 import com.solares.calculadorasolar.R;
 import com.solares.calculadorasolar.classes.AutoSizeText;
 import com.solares.calculadorasolar.classes.CSVRead;
 import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
 import com.solares.calculadorasolar.classes.Constants;
+import com.solares.calculadorasolar.classes.Empresa;
+import com.solares.calculadorasolar.classes.Estado;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -105,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
                     final String stateName = mViewHolder.spinnerStates.getSelectedItem().toString();
                     final int idCity = mViewHolder.spinnerCities.getSelectedItemPosition();
                     final String cityName = mViewHolder.spinnerCities.getItemAtPosition(idCity).toString();
+
                     //Guarda o custo mensal inserido pelo usuário
                     final double custoReais = Double.parseDouble( mViewHolder.editCostMonth.getText().toString() );
 
@@ -118,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
                     calculadora.setVetorEstado(CreateVetorEstado(calculadora.pegaVetorCidade()));
                     // Colocar Tarifa inicial
                     calculadora.setTarifaMensal(Double.parseDouble(calculadora.pegaVetorEstado()[Constants.iEST_TARIFA]));
+                    TestFirebaseDatabase(calculadora);
                     AbrirActivityDetalhes(calculadora);
                 } catch (Exception e){
                     try {
@@ -221,6 +236,84 @@ public class MainActivity extends AppCompatActivity {
         larguraTela = size.x;
         alturaTela = size.y;
     }
+
+
+
+    public static void TestFirebaseDatabase(CalculadoraOnGrid calculadora){
+        Log.d("firebase", "Firebase Database inicializado");
+        // Get the reference to the database
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+        LinkedList<Empresa> empresas = new LinkedList<>();
+
+
+        // Read the companies from the city
+        DatabaseReference dbReferenceCidade = database.getReference("estados")
+                .child(calculadora.pegaVetorEstado()[Constants.iEST_SIGLA]).child(calculadora.pegaNomeCidade());
+        dbReferenceCidade.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                empresas.clear();
+
+                //Get the names of the companies that work in the city
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    String nome = snapshot.getValue(String.class);
+                    empresas.add(new Empresa(nome));
+                }
+
+                ////////////////////////
+                //Get the companies info
+                DatabaseReference dbReferenceEmpresas = database.getReference("empresas");
+                // Read from the empresas database
+                dbReferenceEmpresas.addValueEventListener(new ValueEventListener() {
+                    // This method is called once with the initial value and again
+                    // whenever data at this location is updated.
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for(Empresa empresa : empresas) {
+                            Empresa empresaAtual = dataSnapshot.child(empresa.getNome()).getValue(Empresa.class);
+                            if(empresaAtual != null){
+                                //Log.d("firebase", "Teste empresa" + empresaAtual.getTelefone());
+                                empresa.CopyFrom(empresaAtual);
+                            }
+                        }
+
+
+                        Log.d("firebase", "Empresas disponíveis em " + calculadora.pegaNomeCidade() + ", " + calculadora.pegaVetorEstado()[Constants.iEST_SIGLA]);
+                        for(Empresa empresa : empresas){
+                            Log.d("firebase", empresa.getNome()+" - Telefone: " + empresa.getTelefone() + " Site: "+empresa.getSite());
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        // Failed to read value
+                        Log.d("firebase", "Failed to read value." + error.toException());
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Failed to read value
+                Log.d("firebase", "Failed to read value." + error.toException());
+            }
+        });
+
+
+
+
+
+    }
+
+
+
+
+
+
+
 
     public static class ViewHolder{
         TextView textSimulacao;

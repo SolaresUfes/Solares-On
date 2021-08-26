@@ -83,8 +83,11 @@ public class AdicionarEquipamentosActivity extends AppCompatActivity {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     InputStream is = SelectContext(posicao);
+                    System.out.println("Position: " + position);
                     String[] vetorEquipamento = CSVRead.getEquipamento(is, position);
+                    System.out.println("Vetor WEquipamento: "+vetorEquipamento);
 
+                    // Caso o spinner selecionado é algum diferente do settado
                     if(vetorEquipamento!=null){
                         mViewHolder.editTextQuantidade.setText("0");
                         mViewHolder.editTextPotencia.setText(vetorEquipamento[Constants.iEQUI_POT]);
@@ -92,10 +95,23 @@ public class AdicionarEquipamentosActivity extends AppCompatActivity {
                         mViewHolder.editTextWhdia.setText("0");
                         nome = mViewHolder.spinnerEquipamento.getSelectedItem().toString();
 
-                        //Saber se o equipamento eh CC
-                        if(vetorEquipamento[Constants.iEQUI_CC].equals("1")) correnteContinua = true;
-                            else correnteContinua = false;
+                        //Saber se o equipamento eh de Corrente Contínua ou Não
+                        if(vetorEquipamento[Constants.iEQUI_CC].equals("1"))
+                            correnteContinua = true;
+                        else
+                            correnteContinua = false;
 
+                    }else{
+                        // Limpar o text que está settado
+                        mViewHolder.editTextQuantidade.getText().clear();
+                        mViewHolder.editTextPotencia.getText().clear();
+                        mViewHolder.editTextPeriodoUso.getText().clear();
+                        mViewHolder.editTextWhdia.getText().clear();
+
+                        mViewHolder.editTextQuantidade.setHint("-");
+                        mViewHolder.editTextPotencia.setHint("-");
+                        mViewHolder.editTextPeriodoUso.setHint("-");
+                        mViewHolder.editTextWhdia.setHint("-");
                     }
                 }
                 @Override
@@ -121,7 +137,7 @@ public class AdicionarEquipamentosActivity extends AppCompatActivity {
 
                         variavelGlobal.adicionarElemento(meuEquipamento);
 
-                        System.out.println(correnteContinua);
+                        System.out.println("Equipamento possui corrente contrinua?(1=sim): "+correnteContinua);
 
                         finish();
                     }catch (Exception e){
@@ -147,6 +163,7 @@ public class AdicionarEquipamentosActivity extends AppCompatActivity {
         this.mViewHolder.spinnerEquipamento.setAdapter(adapter);
     }
 
+    // caso cada categoria seja um arquivo CSV diferente
     public InputStream SelectContext(int posicao){
         if(posicao == 1){
             return getResources().openRawResource(R.raw.banco_equipamentos);

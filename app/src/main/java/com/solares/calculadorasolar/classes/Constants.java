@@ -69,7 +69,7 @@ public class Constants {
     public static final int iINV_ID = 7;
 
 
-    //Indices Controladores
+    //Indices Bateria
     public static final int iBAT_NOME = 0;
     public static final int iBAT_MARCA = 1;
     public static final int iBAT_V_NOMINAL = 2;

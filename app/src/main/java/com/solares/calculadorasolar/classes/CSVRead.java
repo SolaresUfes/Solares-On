@@ -257,7 +257,7 @@ public class CSVRead {
     }
 
     public static String[] getEquipamento(InputStream is, int idEquipamento) {
-        String[] values = new String[0];
+        String[] equipament = new String[0];
         BufferedReader bufferedReader = null;
         int currentLine = 0;
 
@@ -267,10 +267,10 @@ public class CSVRead {
             bufferedReader.readLine(); //Ignora a primeira linha (cabeçário)
 
             while ((line = bufferedReader.readLine()) != null) {
-                values = line.split(divider);
-                if(idEquipamento == Integer.parseInt(values[2])){
-                    System.out.println(values);
-                    return values;
+                equipament = line.split(divider);
+                if(idEquipamento == Integer.parseInt(equipament[Constants.iEQUI_ID])){
+                    System.out.println(equipament);
+                    return equipament;
                 }
             }
         } catch (IOException e) {
@@ -442,7 +442,6 @@ public class CSVRead {
     }
 
     public static String[] DefineChargeController(InputStream is,int Vbat, double Isc, int qntPanel, double P_pv, int potenciaPainel, int idControladorEscolhido){
-        System.out.println("Entrou na funcao");
         String[] simplerController=null;
         String[] controller_i;
         double currentCost = 0, Ic=1; // achar esse Ic
@@ -455,7 +454,6 @@ public class CSVRead {
             br.readLine();
 
             while((line = br.readLine()) != null){
-                System.out.println("Line do while Funcao 1: "+ line);
                 controller_i = line.split(divider);
                 numberController = (int)Math.ceil(Ic/Double.parseDouble(controller_i[Constants.iCON_I_CARGA])); // descobrir essa Ic
                 currentCost = numberController * Double.parseDouble(controller_i[Constants.iCON_PRECO_INDIVITUDAL]);
@@ -472,7 +470,9 @@ public class CSVRead {
                 }
                 cont++;
             }
+
             return simplerController;
+
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -498,11 +498,13 @@ public class CSVRead {
         int Vcontroller, Icontroller;
         double Ic=1; // descobrir o que eh esse Ic
         String[] currentController;
-        System.out.println("Entrou na funcao simplest, antes do try");
+
         try{
             currentController = line.split(divider);
             Icontroller = Integer.parseInt(currentController[Constants.iCON_I_CARGA]);
             Vcontroller = Integer.parseInt(currentController[Constants.iCON_V_MAX_SISTEMA]);
+
+            // Calcular a quantidade de Móduloes em Série e Paralelo
             // TALVEZ NAO PRECISE -- modSerie = calculadora.numModulosSerie(Vcontroller, Voc_corrigida); // encontrar a tensao Voc_corrigida
             modParal = calculadora.numModulosParalelo(P_pv, modSerie, potenciaPainel);
 
@@ -510,7 +512,7 @@ public class CSVRead {
             currentCost = numberController * Double.parseDouble(currentController[Constants.iCON_PRECO_INDIVITUDAL]);
             currentPowerBatController = Integer.parseInt(currentController[Constants.iCON_V_BATERIA]);
 
-            if(currentPowerBatController >= Vbat && (Icontroller > (1.25 * modParal * Isc) )){// && (Vcontroller >= (Voc_corrigida * modSerie))
+            if(currentPowerBatController >= Vbat && (Icontroller > (1.25 * modParal * Isc) )){// && (Vcontroller >= (Voc_corrigida * modSerie)) --> isso eh a mesma funcao para calcular a quantidade dos modulos em serie
                 currentController[Constants.iCON_QTD] = String.valueOf(numberController);
                 currentController[Constants.iCON_PRECO_TOTAL] = String.valueOf(currentCost);
                 return currentController;
@@ -521,6 +523,4 @@ public class CSVRead {
         }
         return null;
     }
-
-
 }

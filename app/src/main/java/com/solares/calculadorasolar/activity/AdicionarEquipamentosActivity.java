@@ -30,6 +30,7 @@ public class AdicionarEquipamentosActivity extends AppCompatActivity {
     Equipamentos meuEquipamento;
     String nome;
     int posicao=0;
+    boolean correnteContinua;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,14 +83,19 @@ public class AdicionarEquipamentosActivity extends AppCompatActivity {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     InputStream is = SelectContext(posicao);
-                    String potenciaEquipamento = CSVRead.getPotenciaEquipamento(is, position);
+                    String[] vetorEquipamento = CSVRead.getEquipamento(is, position);
 
-                    if(potenciaEquipamento!=null){
+                    if(vetorEquipamento!=null){
                         mViewHolder.editTextQuantidade.setText("0");
-                        mViewHolder.editTextPotencia.setText(potenciaEquipamento);
+                        mViewHolder.editTextPotencia.setText(vetorEquipamento[Constants.iEQUI_POT]);
                         mViewHolder.editTextPeriodoUso.setText("0");
                         mViewHolder.editTextWhdia.setText("0");
                         nome = mViewHolder.spinnerEquipamento.getSelectedItem().toString();
+
+                        //Saber se o equipamento eh CC
+                        if(vetorEquipamento[Constants.iEQUI_CC].equals("1")) correnteContinua = true;
+                            else correnteContinua = false;
+
                     }
                 }
                 @Override
@@ -111,8 +117,11 @@ public class AdicionarEquipamentosActivity extends AppCompatActivity {
                         meuEquipamento.setPotencia(potencia);
                         meuEquipamento.setHorasPorDia(periodoUso);
                         meuEquipamento.setDiasUtilizados(diasUtilizado);
+                        meuEquipamento.setCC(correnteContinua);
 
                         variavelGlobal.adicionarElemento(meuEquipamento);
+
+                        System.out.println(correnteContinua);
 
                         finish();
                     }catch (Exception e){

@@ -45,6 +45,8 @@ public class PedirConsumoEnergeticoActivity extends AppCompatActivity {
     public ViewHolder mViewHolder = new ViewHolder();
     private LinearLayout linearLayout;
     int i = 0;
+    double potenciaUtilizadaCC=0;
+    double potenciaUtilizadaCA=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +75,7 @@ public class PedirConsumoEnergeticoActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     try {
 
-                        int a=0;
+                        /*int a=0;
                         while (a < todosMeusEquipamentos.size()){
                             variavelGlobal.printarNomeElemento(a);
                             System.out.println("Quantidade: "+variavelGlobal.getQuantidadeElemento(a));
@@ -81,16 +83,27 @@ public class PedirConsumoEnergeticoActivity extends AppCompatActivity {
                             System.out.println("");
                             a++;
                         }
-                        System.out.println("----------------------- Quantidade de equipamentos: "+todosMeusEquipamentos.size()+" ------------------");
+                        System.out.println("----------------------- Quantidade de equipamentos: "+todosMeusEquipamentos.size()+" ------------------");*/
+
                         variavelGlobal.setMeusEquipamentos(todosMeusEquipamentos);
-                       /* CalculadoraOffGrid calculadoraOffGrid = new CalculadoraOffGrid();
+
+                        potenciaUtilizadaCC = demandaEnergiaDiaria(todosMeusEquipamentos, true);
+                        potenciaUtilizadaCA = demandaEnergiaDiaria(todosMeusEquipamentos, false);
+
+                        System.out.println("------ Potencia CC: "+potenciaUtilizadaCC+" ------------------");
+                        System.out.println("------ Potencia CA: "+potenciaUtilizadaCA+" ------------------");
+
+                        CalculadoraOffGrid calculadoraOffGrid = new CalculadoraOffGrid();
                         // Insere as informações que já temos no objeto
                         calculadoraOffGrid.setNomeCidade(variavelGlobal.getNomeCidade());
+                        // Insere a potencia
+                        calculadoraOffGrid.setPotenciaUtilizadaDiariaCC(potenciaUtilizadaCC);
+                        calculadoraOffGrid.setPotenciaUtilizadaDiariaCA(potenciaUtilizadaCA);
                         // Cria os vetores de Cidade e Estado
                         calculadoraOffGrid.setVetorCidade(CreateVetorCidade(variavelGlobal.getIdCity(), variavelGlobal.getNomeEstado()));
                         calculadoraOffGrid.setVetorEstado(CreateVetorEstado(calculadoraOffGrid.getVetorCidade()));
                         // Calcular
-                        calculadoraOffGrid.Calcular(PedirConsumoEnergeticoActivity.this);*/
+                        calculadoraOffGrid.Calcular(PedirConsumoEnergeticoActivity.this);
                     }catch (Exception e){
                         try {
                             Toast.makeText(PedirConsumoEnergeticoActivity.this, "Não há equipamentos", Toast.LENGTH_LONG).show();
@@ -122,7 +135,6 @@ public class PedirConsumoEnergeticoActivity extends AppCompatActivity {
 
     public void addView(){
         final View EquipamentosView = getLayoutInflater().inflate(R.layout.linha_add_elementos, null, false);
-
         final TextView textViewNomeE = (TextView)EquipamentosView.findViewById(R.id.nome_equipamento);
         final TextView textViewQntE = (TextView)EquipamentosView.findViewById(R.id.quantidade_equipamento);
         ImageView imageApagar = (ImageView)EquipamentosView.findViewById(R.id.apagar_equipamento);
@@ -158,6 +170,27 @@ public class PedirConsumoEnergeticoActivity extends AppCompatActivity {
 
     public void removerView(View view){ linearLayout.removeView(view); }
 
+    public double demandaEnergiaDiaria(ArrayList<Equipamentos> vetorEquipamentos, boolean Icontinua){
+        double potenciaTotal=0;
+        double rendimentoBat=0.9, rendimentoInv=0.9;
+
+        if(Icontinua){
+            for(int i=0; i<vetorEquipamentos.size(); i++){
+                System.out.println("Dentro do for: " + vetorEquipamentos.get(i).getCC());
+                if(vetorEquipamentos.get(i).getCC()){
+                    potenciaTotal = potenciaTotal + vetorEquipamentos.get(i).getPotencia()*vetorEquipamentos.get(i).getHorasPorDia()*vetorEquipamentos.get(i).getDiasUtilizados()/7;
+                }
+            }
+            return potenciaTotal / (rendimentoBat * rendimentoInv);
+        }
+
+        for(int i=0; i<vetorEquipamentos.size(); i++){
+            if(!vetorEquipamentos.get(i).getCC()){
+                potenciaTotal = potenciaTotal + vetorEquipamentos.get(i).getPotencia()*vetorEquipamentos.get(i).getHorasPorDia()*vetorEquipamentos.get(i).getDiasUtilizados()/7;
+            }
+        }
+        return potenciaTotal / (rendimentoBat * rendimentoInv);
+    }
 
     /* Descrição: Pega informações do banco de dados e retorna o vetor da cidade do usuário
      * Parâmetros de Entrada: idCity - Inteiro que representa a cidade na lista do estado // nomeEstado - String com a sigla do estado

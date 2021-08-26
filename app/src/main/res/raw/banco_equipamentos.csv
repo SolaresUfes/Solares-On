@@ -1,5 +1,5 @@
-Nome,potencia,ID
-Equipamento 1,1000,1
-Equipamento 2,1500,2
-Equipamento 3,500,3
-Equipamento 4,300,4
+Nome,potencia,CC,ID
+Equipamento 1,1000,1,1
+Equipamento 2,1500,0,2
+Equipamento 3,500,1,3
+Equipamento 4,300,0,4

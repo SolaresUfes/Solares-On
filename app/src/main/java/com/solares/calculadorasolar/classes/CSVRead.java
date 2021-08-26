@@ -256,7 +256,7 @@ public class CSVRead {
         return error;
     }
 
-    public static String getPotenciaEquipamento(InputStream is, int idEquipamento) {
+    public static String[] getEquipamento(InputStream is, int idEquipamento) {
         String[] values = new String[0];
         BufferedReader bufferedReader = null;
         int currentLine = 0;
@@ -269,9 +269,8 @@ public class CSVRead {
             while ((line = bufferedReader.readLine()) != null) {
                 values = line.split(divider);
                 if(idEquipamento == Integer.parseInt(values[2])){
-                    System.out.print("Potencia CSV: ");
-                    System.out.println(values[1]);
-                    return values[1];
+                    System.out.println(values);
+                    return values;
                 }
             }
         } catch (IOException e) {
@@ -443,6 +442,7 @@ public class CSVRead {
     }
 
     public static String[] DefineChargeController(InputStream is,int Vbat, double Isc, int qntPanel, double P_pv, int potenciaPainel, int idControladorEscolhido){
+        System.out.println("Entrou na funcao");
         String[] simplerController=null;
         String[] controller_i;
         double currentCost = 0, Ic=1; // achar esse Ic

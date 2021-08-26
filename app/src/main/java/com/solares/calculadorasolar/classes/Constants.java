@@ -92,6 +92,13 @@ public class Constants {
     public static final int iCON_ID = 8;
 
 
+    //Indices Equipamentos
+    public static final int iEQUI_NOME = 0;
+    public static final int iEQUI_POT = 1;
+    public static final int iEQUI_CC = 2;
+    public static final int iEQUI_ID = 3;
+
+
     //Indices Cidades
     public static final int iCID_ESTADO = 0;
     //Indices Estados

@@ -3,7 +3,6 @@ package com.solares.calculadorasolar.classes;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.LightingColorFilter;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -29,7 +28,7 @@ public class CalculadoraOnGrid implements Serializable {
     double custoTotal;
     double geracaoAnual;
     double lucro;
-    double taxaRetornoInvestimento;
+    double taxaInternaRetorno;
     double economiaMensal;
     double LCOE;
     int tempoRetorno;
@@ -71,7 +70,7 @@ public class CalculadoraOnGrid implements Serializable {
     public double pegaCustoTotal(){ return custoTotal; }
     public double pegaGeracaoAnual(){ return geracaoAnual; }
     public double pegaLucro(){ return lucro; }
-    public double pegaTaxaRetornoInvestimento(){ return taxaRetornoInvestimento; }
+    public double pegaTaxaInternaRetorno(){ return taxaInternaRetorno; }
     public double pegaEconomiaMensal(){ return economiaMensal; }
     public double pegaLCOE(){ return LCOE; }
     public int pegaTempoRetorno(){ return tempoRetorno; }
@@ -349,9 +348,9 @@ Thomas T.D. Tran, Amanda D. Smith
         double internalRateOfReturn = IRR.getIRR(cashFlow);
         //Se o payback for negativo, o irr dá um valor extremamente alto, então eu boto zero
         if(internalRateOfReturn > 1000000.0){
-            this.taxaRetornoInvestimento = 0.0;
+            this.taxaInternaRetorno = 0.0;
         } else {
-            this.taxaRetornoInvestimento = internalRateOfReturn;
+            this.taxaInternaRetorno = internalRateOfReturn;
         }
 
         /* CÁLCULO DO LCOE NO MÉTODO MAIS COMPLEXO (NÃO USADO PELO MERCADO DE ENERGIA SOLAR)

@@ -124,6 +124,7 @@
     <string name="descricao_imagem_de_alerta">Imagem de alerta</string>
     <string name="descricao_botao_x_fechar">Botão x para fechar</string>
     <string name="descricao_botao_detalhes">Botão para ver detalhes</string>
+    <string name="taxa_interna_de_retorno">Taxa Interna de Retorno</string>
 
     <string-array name="Fases">
         <item>Monofásico</item>

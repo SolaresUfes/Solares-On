@@ -45,7 +45,7 @@ public class IndicesEconomicosActivity extends AppCompatActivity {
         TextView textEstaticoTaxaRetorno = findViewById(R.id.text_taxa_retorno_1);
         AutoSizeText.AutoSizeTextView(textEstaticoTaxaRetorno, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
         TextView textTaxaRetorno = findViewById(R.id.text_taxa_retorno);
-        textTaxaRetorno.setText(String.format(Locale.ITALY, "%.2f%%", calculadora.pegaTaxaRetornoInvestimento()));
+        textTaxaRetorno.setText(String.format(Locale.ITALY, "%.2f%%", calculadora.pegaTaxaInternaRetorno()));
         AutoSizeText.AutoSizeTextView(textTaxaRetorno, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
         TextView textEstaticoEconomiaMensal = findViewById(R.id.text_economia_mensal_1);

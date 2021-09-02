@@ -119,7 +119,8 @@ public class InstalacaoActivity extends AppCompatActivity {
             }
         });
 
-        //Tutorial
+        //Tutorial sobre as informações extras
+        /*
         findViewById(R.id.inst_button_info).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -137,10 +138,11 @@ public class InstalacaoActivity extends AppCompatActivity {
                     }
                 });
             }
-        });
+        }); */
 
 
         //Clicar nas informações para explicação
+        /*
         textPotencia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -165,6 +167,7 @@ public class InstalacaoActivity extends AppCompatActivity {
                 ShowPopUpInfo(getString(R.string.inversores), "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos obcaecati temporibus voluptate. Aspernatur dolor eius eveniet ipsam maiores odio vel vitae, voluptatibus. Dolorem eius eos excepturi fugit itaque minima officiis reiciendis tempore ullam, vel? Accusamus animi architecto dicta distinctio eaque ex laboriosam maiores molestias, nostrum qui soluta tenetur voluptas voluptatibus.");
             }
         });
+        */
 
 
 

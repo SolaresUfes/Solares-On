@@ -372,38 +372,31 @@ public class CSVRead {
             br.readLine(); //Joga fora a primeira
             line = br.readLine();
 
-            do{
+            do{ // definir o primeiro inversor
                 potPico = Double.parseDouble(painelSolar[Constants.iPANEL_QTD]) * Double.parseDouble(painelSolar[Constants.iPANEL_POTENCIA]);
                 FDI = Double.parseDouble(cheaperInvertor[Constants.iINV_POTENCIA]) * potPico;
+
                 cheaperInvertor = line.split(divider);
+
                 numberInvertors = (int) Math.ceil((0.8 * potPico) / Double.parseDouble(cheaperInvertor[Constants.iINV_POTENCIA]));//Qtd de inversores
+
                 cheaperCost = numberInvertors * Double.parseDouble(cheaperInvertor[Constants.iINV_PRECO]);
                 cheaperInvertor[Constants.iINV_QTD] = String.valueOf(numberInvertors);
                 cheaperInvertor[Constants.iINV_PRECO_TOTAL] = String.valueOf(cheaperCost);
+
                 VinInvertor = Integer.parseInt(cheaperInvertor[Constants.iINV_PRECO]);// trocar esse iINT_PRECO pelo local em que o Vin vai ficar
             }while(Vcc != VinInvertor);
 
+            while ((line = br.readLine()) != null)  { // usuário escolherá o inversor
+                cont++;
 
-            if (idInversorEscolhido == cont) { //Se o usuário escolheu o primeiro inversor
-                //Fechar o bufferedReader
-                try {
-                    br.close();
-                } catch (IOException ioex) {
-                    ioex.printStackTrace();
-                }
-
-                if (0.75 <= FDI && FDI >= 0.85) {
-                    /* --- COLOCAR UM WORNING DE BAIXO DESEMPENHO --- */
-                }
-                return cheaperInvertor;
-            }
-
-            while ((line = br.readLine()) != null)  {
                 invertor_i = line.split(divider);
-                numberInvertors = (int)Math.ceil((0.8*potPico)/Double.parseDouble(invertor_i[Constants.iINV_POTENCIA]));//Qtd de inversores
+                numberInvertors = (int)Math.ceil((0.8*potPico)/Double.parseDouble(invertor_i[Constants.iINV_POTENCIA]));
                 currentCost = numberInvertors * Double.parseDouble(invertor_i[Constants.iINV_PRECO]);
+
                 invertor_i[Constants.iINV_QTD] = String.valueOf(numberInvertors);
                 invertor_i[Constants.iINV_PRECO_TOTAL] = String.valueOf(currentCost);
+
                 FDI = Double.parseDouble(cheaperInvertor[Constants.iINV_POTENCIA]) * potPico;
 
                 if(idInversorEscolhido == cont){ //Se o usuário escolheu o cont° inversor
@@ -411,15 +404,13 @@ public class CSVRead {
                     break;
                 }
 
-                if(currentCost<cheaperCost && (0.75 <= FDI && FDI >= 0.85)){
+                if(currentCost<cheaperCost){
                     cheaperCost = currentCost;
                     cheaperInvertor = invertor_i;
                 }
-
-                cont++; //Contador para escolher um inversor específico
             }
 
-            if(0.75 <= FDI && FDI >= 0.85){
+            if(FDI <= 0.75 && FDI >= 0.85){
                 /* --- COLOCAR UM WORNING DE BAIXO DESEMPENHO --- */
             }
 
@@ -441,11 +432,13 @@ public class CSVRead {
         return error;
     }
 
-    public static String[] DefineChargeController(InputStream is,int Vbat, double Isc, int qntPanel, double P_pv, int potenciaPainel, int idControladorEscolhido){
+    public static String[] DefineChargeController(InputStream is,int Vbat, double Voc_corrigida, int qntPanel, double P_pv, int potenciaPainel, int idControladorEscolhido){
         String[] simplerController=null;
         String[] controller_i;
-        double currentCost = 0, Ic=1; // achar esse Ic
+        double currentCost = 0, Ic=1, Isc=1;
         int numberController, cont = 0;
+        int modSerie=0, modParal=0;
+        CalculadoraOffGrid calculadora = new CalculadoraOffGrid();
         BufferedReader br = null;
         String line = "";
 
@@ -455,6 +448,12 @@ public class CSVRead {
 
             while((line = br.readLine()) != null){
                 controller_i = line.split(divider);
+
+                modSerie = calculadora.numModulosSerie(Integer.parseInt(controller_i[Constants.iCON_V_MAX_SISTEMA]), Voc_corrigida); // encontrar a tensao Voc_corrigida
+                modParal = calculadora.numModulosParalelo(P_pv, modSerie, potenciaPainel);
+                Isc = modSerie * (potenciaPainel / Voc_corrigida);
+                Ic = 1.25 * modParal * Isc;
+
                 numberController = (int)Math.ceil(Ic/Double.parseDouble(controller_i[Constants.iCON_I_CARGA])); // descobrir essa Ic
                 currentCost = numberController * Double.parseDouble(controller_i[Constants.iCON_PRECO_INDIVITUDAL]);
 
@@ -465,7 +464,7 @@ public class CSVRead {
                     break;
                 }
                 if(idControladorEscolhido == -1){
-                    simplerController = simplestController(line, Vbat, qntPanel, 24, P_pv, potenciaPainel);
+                    simplerController = simplestController(line, Vbat, qntPanel, Voc_corrigida, P_pv, potenciaPainel);
                     if(simplerController!=null) break;
                 }
                 cont++;
@@ -495,24 +494,27 @@ public class CSVRead {
         int modSerie=0, modParal=0;
         int numberController=0, currentPowerBatController=0;
         double currentCost=0, Isc=0;//descobrir o que eh esse Isc
-        int Vcontroller, Icontroller;
-        double Ic=1; // descobrir o que eh esse Ic
+        int Vcontroller, Icarga_controller;
+        double Ic=1;
         String[] currentController;
 
         try{
             currentController = line.split(divider);
-            Icontroller = Integer.parseInt(currentController[Constants.iCON_I_CARGA]);
+            Icarga_controller = Integer.parseInt(currentController[Constants.iCON_I_CARGA]);
             Vcontroller = Integer.parseInt(currentController[Constants.iCON_V_MAX_SISTEMA]);
 
             // Calcular a quantidade de Móduloes em Série e Paralelo
-            // TALVEZ NAO PRECISE -- modSerie = calculadora.numModulosSerie(Vcontroller, Voc_corrigida); // encontrar a tensao Voc_corrigida
+            modSerie = calculadora.numModulosSerie(Vcontroller, Voc_corrigida); // encontrar a tensao Voc_corrigida
             modParal = calculadora.numModulosParalelo(P_pv, modSerie, potenciaPainel);
 
-            numberController = (int)Math.ceil(Ic/Icontroller); // descobrir o que eh essa Ic
+            Isc = modSerie * (potenciaPainel / Voc_corrigida);
+            Ic = 1.25 * modParal * Isc;
+
+            numberController = (int)Math.ceil(Ic/Icarga_controller);
             currentCost = numberController * Double.parseDouble(currentController[Constants.iCON_PRECO_INDIVITUDAL]);
             currentPowerBatController = Integer.parseInt(currentController[Constants.iCON_V_BATERIA]);
 
-            if(currentPowerBatController >= Vbat && (Icontroller > (1.25 * modParal * Isc) )){// && (Vcontroller >= (Voc_corrigida * modSerie)) --> isso eh a mesma funcao para calcular a quantidade dos modulos em serie
+            if(currentPowerBatController >= Vbat){// && (Vcontroller >= (Voc_corrigida * modSerie)) --> isso eh a mesma funcao para calcular a quantidade dos modulos em serie
                 currentController[Constants.iCON_QTD] = String.valueOf(numberController);
                 currentController[Constants.iCON_PRECO_TOTAL] = String.valueOf(currentCost);
                 return currentController;

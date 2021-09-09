@@ -4,9 +4,20 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Guilherme/Desktop/TI/Solares/Solares On/Solares-On/app/src/main/res/drawable-nodpi/background_resultado_text.xml" value="0.28125" />
+        <entry key="..\:/Users/Guilherme/Desktop/TI/Solares/Solares On/Solares-On/app/src/main/res/layout/activity_analise.xml" value="0.26510416666666664" />
         <entry key="..\:/Users/Guilherme/Desktop/TI/Solares/Solares On/Solares-On/app/src/main/res/layout/activity_area.xml" value="0.26510416666666664" />
+        <entry key="..\:/Users/Guilherme/Desktop/TI/Solares/Solares On/Solares-On/app/src/main/res/layout/activity_consumo.xml" value="0.26510416666666664" />
+        <entry key="..\:/Users/Guilherme/Desktop/TI/Solares/Solares On/Solares-On/app/src/main/res/layout/activity_credito.xml" value="0.18070652173913043" />
         <entry key="..\:/Users/Guilherme/Desktop/TI/Solares/Solares On/Solares-On/app/src/main/res/layout/activity_dados.xml" value="0.33" />
-        <entry key="..\:/Users/Guilherme/Desktop/TI/Solares/Solares On/Solares-On/app/src/main/res/layout/activity_detalhes.xml" value="0.17037037037037037" />
+        <entry key="..\:/Users/Guilherme/Desktop/TI/Solares/Solares On/Solares-On/app/src/main/res/layout/activity_detalhes.xml" value="0.5" />
+        <entry key="..\:/Users/Guilherme/Desktop/TI/Solares/Solares On/Solares-On/app/src/main/res/layout/activity_indices_economicos.xml" value="0.18070652173913043" />
+        <entry key="..\:/Users/Guilherme/Desktop/TI/Solares/Solares On/Solares-On/app/src/main/res/layout/activity_instalacao.xml" value="0.18070652173913043" />
+        <entry key="..\:/Users/Guilherme/Desktop/TI/Solares/Solares On/Solares-On/app/src/main/res/layout/activity_main.xml" value="0.18070652173913043" />
+        <entry key="..\:/Users/Guilherme/Desktop/TI/Solares/Solares On/Solares-On/app/src/main/res/layout/activity_resultado.xml" value="0.18070652173913043" />
+        <entry key="..\:/Users/Guilherme/Desktop/TI/Solares/Solares On/Solares-On/app/src/main/res/layout/activity_tarifa.xml" value="0.18070652173913043" />
+        <entry key="..\:/Users/Guilherme/Desktop/TI/Solares/Solares On/Solares-On/app/src/main/res/layout/popup_mais_informacoes.xml" value="0.26510416666666664" />
+        <entry key="..\:/Users/Guilherme/Desktop/TI/Solares/Solares On/Solares-On/app/src/main/res/layout/popup_modulos_inversores.xml" value="0.18070652173913043" />
+        <entry key="..\:/Users/Guilherme/Desktop/TI/Solares/Solares On/Solares-On/app/src/main/res/layout/spinner_item.xml" value="0.18070652173913043" />
       </map>
     </option>
   </component>

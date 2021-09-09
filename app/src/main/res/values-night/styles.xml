@@ -10,13 +10,7 @@
         <item name="android:fontFamily">@font/roboto_family</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
     <!--
-
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="AppTheme.PopUpPergunta">
@@ -27,8 +21,10 @@
     -->
 
     <style name="MyEditTextStyleArea" parent="Widget.AppCompat.EditText">
-        <item name="colorControlActivated">@color/colorGrey</item>
-        <item name="colorControlNormal">@color/colorGrey</item>
+        <item name="colorControlActivated">@color/colorTextDefault</item>
+        <item name="colorControlNormal">@color/colorTextDefault</item>
+        <item name="backgroundTint">@color/colorTextDefault</item>
+        <item name="android:textColor">@color/colorTextDefault</item>
     </style>
 
 

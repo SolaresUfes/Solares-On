@@ -1,8 +1,11 @@
 package com.solares.calculadorasolar.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
@@ -34,11 +37,8 @@ import com.solares.calculadorasolar.classes.CSVRead;
 import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
 import com.solares.calculadorasolar.classes.Constants;
 import com.solares.calculadorasolar.classes.Empresa;
-import com.solares.calculadorasolar.classes.Estado;
 
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 
 
@@ -132,7 +132,9 @@ public class MainActivity extends AppCompatActivity {
                     calculadora.setVetorEstado(CreateVetorEstado(calculadora.pegaVetorCidade()));
                     // Colocar Tarifa inicial
                     calculadora.setTarifaMensal(Double.parseDouble(calculadora.pegaVetorEstado()[Constants.iEST_TARIFA]));
-                    TestFirebaseDatabase(calculadora);
+
+                    GetEmpresasFirebase(calculadora, MainActivity.this);
+
                     AbrirActivityDetalhes(calculadora);
                 } catch (Exception e){
                     try {
@@ -239,12 +241,26 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    public static void TestFirebaseDatabase(CalculadoraOnGrid calculadora){
+
+    public static void FuncaoTeste(LinkedList<Empresa> empresas){
+        Log.d("firebase", "Num Empresas: " + empresas.size());
+    }
+
+
+    public static void GetEmpresasFirebase(CalculadoraOnGrid calculadora, Context context){
         Log.d("firebase", "Firebase Database inicializado");
         // Get the reference to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-
         LinkedList<Empresa> empresas = new LinkedList<>();
+
+        //Verify Connection
+        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
+        if(!isConnected){
+            //Tell the user that this function only works with internet connection
+            Log.d("firebase", "Sem internet!");
+        }
 
 
         // Read the companies from the city
@@ -279,12 +295,12 @@ public class MainActivity extends AppCompatActivity {
                                 empresa.CopyFrom(empresaAtual);
                             }
                         }
-
-
                         Log.d("firebase", "Empresas disponíveis em " + calculadora.pegaNomeCidade() + ", " + calculadora.pegaVetorEstado()[Constants.iEST_SIGLA]);
                         for(Empresa empresa : empresas){
                             Log.d("firebase", empresa.getNome()+" - Telefone: " + empresa.getTelefone() + " Site: "+empresa.getSite());
                         }
+
+                        FuncaoTeste(empresas);
                     }
 
                     @Override
@@ -301,11 +317,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("firebase", "Failed to read value." + error.toException());
             }
         });
-
-
-
-
-
     }
 
 

@@ -1,10 +1,5 @@
 package com.solares.calculadorasolar.classes;
 
-import java.security.PublicKey;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-
 public class Empresa {
     public String telefone;
     public String site;

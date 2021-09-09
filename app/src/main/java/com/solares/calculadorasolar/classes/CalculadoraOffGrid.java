@@ -24,7 +24,7 @@ public class CalculadoraOffGrid {
     double fatorPotencia=0.92;
     double energiaAtivaDia=0;
     double minPotencia=0;
-    double tempMax=0;
+    double temperaturaMedia=0;
     double area=0;
     int autonomia=2;
     int Vsist=0;
@@ -41,6 +41,9 @@ public class CalculadoraOffGrid {
     double correntePainel=0;
     double correnteMaxPower=0;
     double tensaoMaxPowerTempMax=0;
+    double potenciaAparente;
+    double Voc_corrigida;
+    double coeficienteVariacao = -0.29;
 
     float areaAlvo;
     int idModuloEscolhido;
@@ -88,17 +91,23 @@ public class CalculadoraOffGrid {
         try {
             CalculadoraOnGrid calculadoraOnGrid = new CalculadoraOnGrid();  // talvez mudar isso para uma funcao principal, que essa irá herdar
 
-           // Calcular a HSP
+            // Calcular a HSP do estado em questão
             HSP = calculadoraOnGrid.MeanSolarHour(vetorCidade);
+
+            // Calcular a temperatura média do estado em questão
+            temperaturaMedia = Meantemperature(vetorEstado);
 
             // Calcular a Energia Ativa Necessária Diariamente
             this.energiaAtivaDia = energiaAtivaNecessariaDia(this.potenciaUtilizadaDiariaCA, this.potenciaUtilizadaDiariaCC);
 
             // Calcular Potência Mínima do Arranjo Fotovoltaico
-            this.minPotencia = potenciaMinimaArranjoFotovoltaico(HSP,this.energiaAtivaDia);
+            this.minPotencia = potenciaMinimaArranjoFotovoltaico(HSP,this.energiaAtivaDia); // entender o porque do valor alto
 
             // Calcular Tensão do Sistema
             this.Vsist = defTensaoSistema(this.energiaAtivaDia);
+
+            // Calcular Voc_corrigida
+            Voc_corrigida = Vsist * (1 + ((temperaturaMedia - 25) * coeficienteVariacao)/100);
 
             // Definindo as Placas  ---- isso eh para nao esquecer - lembre de criar  uma funcao parecida em CSVRead
             is = MyContext.getResources().openRawResource(R.raw.banco_paineis);
@@ -108,7 +117,7 @@ public class CalculadoraOffGrid {
 
             // Definindo o Controlador de Carga is,this.Vsist, 1, Integer.parseInt(placaEscolhida[Constants.iPANEL_QTD]), this.minPotencia, Integer.parseInt(placaEscolhida[Constants.iPANEL_POTENCIA]), this.idControladorEscolhido
             is = MyContext.getResources().openRawResource(R.raw.banco_controladores);
-            controladorEscolhido = CSVRead.DefineChargeController(is,this.Vsist, 1.0, Integer.parseInt(placaEscolhida[Constants.iPANEL_QTD]), 400, Integer.parseInt(placaEscolhida[Constants.iPANEL_POTENCIA]), idControladorEscolhido);//this.idControladorEscolhido
+            controladorEscolhido = CSVRead.DefineChargeController(is, this.Vsist, Voc_corrigida, Integer.parseInt(placaEscolhida[Constants.iPANEL_QTD]), 400, Integer.parseInt(placaEscolhida[Constants.iPANEL_POTENCIA]), idControladorEscolhido); // P_pv = minPotencia
             System.out.println("------ Controlador: "+controladorEscolhido[Constants.iCON_NOME]);
             // Definindo Quantidade de Placas em Série e Paralelo
  /*           this.placaSerie = numModulosSerie(Integer.parseInt(controladorEscolhido[Constants.iCON_V_MAX_SISTEMA]), 1);// Descobrir como ter a Tensão de Máxima Potência de Temp. Máx.
@@ -123,12 +132,13 @@ public class CalculadoraOffGrid {
 */
 
             // Definindo os Inversores
-            /*if(this.potenciaUtilizadaDiariaCA != 0){
+            if(this.potenciaUtilizadaDiariaCA != 0){
                 this.potenciaAparente = this.potenciaUtilizadaDiariaCA / this.fatorPotencia;
                 // aqui fazer o 'is' receber o banco de dados dos inversores off-grid
+                is = MyContext.getResources().openRawResource(R.raw.banco_inversores);
                 inversorEscolhido = CSVRead.DefineInvertorOffGrid(is, this.placaEscolhida ,this.potenciaAparente, this.Vsist, idInversorEscolhido);
             }
-            else inversorEscolhido=null;*/
+            else inversorEscolhido=null;
 
         }catch (Exception e){
             e.printStackTrace();
@@ -138,6 +148,17 @@ public class CalculadoraOffGrid {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////        Funções Auxiliares       ////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public double Meantemperature(String[] vetorEstado){
+        int i;
+        double temperatura = 0.0;
+        for(i=1; i<=12; i++){
+            temperatura += Double.parseDouble(vetorEstado[i]);
+        }
+        temperatura = temperatura/12.0;
+
+        return temperatura;
+    }
+
     public static double energiaAtivaNecessariaDia(double Lcc, double Lca){
         double L=0;
         double rendimentoBat=0.9;

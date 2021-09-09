@@ -90,7 +90,7 @@ public class PedirConsumoEnergeticoActivity extends AppCompatActivity {
                         potenciaUtilizadaCC = demandaEnergiaDiaria(todosMeusEquipamentos, true);
                         potenciaUtilizadaCA = demandaEnergiaDiaria(todosMeusEquipamentos, false);
 
-                        System.out.println("------ Potencia CC: "+potenciaUtilizadaCC+" ------------------");
+                        System.out.println("\n------ Potencia CC: "+potenciaUtilizadaCC+" ------------------");
                         System.out.println("------ Potencia CA: "+potenciaUtilizadaCA+" ------------------");
 
                         CalculadoraOffGrid calculadoraOffGrid = new CalculadoraOffGrid();
@@ -123,8 +123,12 @@ public class PedirConsumoEnergeticoActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
         final Global variavelGlobal = (Global) getApplicationContext();
+
+        if(variavelGlobal.getRemoverTodasViews()){ // quando o usuário editar um equipamento
+            linearLayout.removeAllViews();
+            i=0;
+        }
 
         todosMeusEquipamentos = variavelGlobal.getEquipamentos();
         while (i < todosMeusEquipamentos.size()) {
@@ -141,6 +145,27 @@ public class PedirConsumoEnergeticoActivity extends AppCompatActivity {
 
         textViewNomeE.setText(todosMeusEquipamentos.get(i).getNome());
         textViewQntE.setText("Quantidade: "+todosMeusEquipamentos.get(i).getQuantidade());
+
+        EquipamentosView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // melhorar esse modo de encontrar o equipamento no array
+                String nomeEquipamentoSelecionado = (String) textViewNomeE.getText();
+                String qntEquipamentoSelecionado = (String) textViewQntE.getText();
+                String quantidade;
+                int j=0;
+                while(j < todosMeusEquipamentos.size()){
+                    quantidade = "Quantidade: ";
+                    quantidade = quantidade + Double.toString(todosMeusEquipamentos.get(j).getQuantidade());
+                    if(nomeEquipamentoSelecionado.equals(todosMeusEquipamentos.get(j).getNome()) && quantidade.equals(qntEquipamentoSelecionado)) break;
+                    j++;
+                }
+                // ----
+                Intent intent = new Intent(getApplicationContext(), AdicionarEquipamentosActivity.class);
+                intent.putExtra("posVariavelGlobal", j);
+                startActivity(intent);
+            }
+        });
 
         imageApagar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,14 +199,17 @@ public class PedirConsumoEnergeticoActivity extends AppCompatActivity {
         double potenciaTotal=0;
         double rendimentoBat=0.9, rendimentoInv=0.9;
 
+        System.out.println(vetorEquipamentos.get(0).getPotencia());
+        System.out.println(vetorEquipamentos.get(0).getHorasPorDia());
+        System.out.println(vetorEquipamentos.get(0).getDiasUtilizados());
+
         if(Icontinua){
             for(int i=0; i<vetorEquipamentos.size(); i++){
-                System.out.println("Dentro do for: " + vetorEquipamentos.get(i).getCC());
                 if(vetorEquipamentos.get(i).getCC()){
                     potenciaTotal = potenciaTotal + vetorEquipamentos.get(i).getPotencia()*vetorEquipamentos.get(i).getHorasPorDia()*vetorEquipamentos.get(i).getDiasUtilizados()/7;
                 }
             }
-            return potenciaTotal / (rendimentoBat * rendimentoInv);
+            return (potenciaTotal / (rendimentoBat * rendimentoInv));
         }
 
         for(int i=0; i<vetorEquipamentos.size(); i++){

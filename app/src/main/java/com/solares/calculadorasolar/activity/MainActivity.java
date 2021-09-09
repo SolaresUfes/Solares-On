@@ -276,7 +276,9 @@ public class MainActivity extends AppCompatActivity {
                 //Get the names of the companies that work in the city
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     String nome = snapshot.getValue(String.class);
-                    empresas.add(new Empresa(nome));
+                    if(nome != null){
+                        empresas.add(new Empresa(nome));
+                    }
                 }
 
                 ////////////////////////

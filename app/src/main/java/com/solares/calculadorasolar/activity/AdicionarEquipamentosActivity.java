@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -40,7 +41,7 @@ public class AdicionarEquipamentosActivity extends AppCompatActivity {
         System.out.println("Entrou na activity AdicionarEquipamentos");
 
         try{
-            Intent intent = getIntent();
+            final Intent intent = getIntent();
             final CalculadoraOnGrid calculadora = (CalculadoraOnGrid) intent.getSerializableExtra(Constants.EXTRA_CALCULADORAON);
             final Global variavelGlobal = (Global)getApplicationContext();
 
@@ -58,11 +59,12 @@ public class AdicionarEquipamentosActivity extends AppCompatActivity {
             //Aqui, coloca o vetor de strings que será exibido no spinner
             ArrayAdapter<CharSequence> adapterC = ArrayAdapter.createFromResource(this, R.array.Categorias, R.layout.spinner_item);
             this.mViewHolder.spinnerCategoria.setAdapter(adapterC);
-            this.mViewHolder.spinnerCategoria.setSelection(0);
 
             ArrayAdapter<CharSequence> adapterE = ArrayAdapter.createFromResource(this, R.array.CategoriaNull, R.layout.spinner_item);
             adapterE.setDropDownViewResource(R.layout.spinner_item);
             this.mViewHolder.spinnerEquipamento.setAdapter(adapterE);
+
+            this.mViewHolder.spinnerCategoria.setSelection(0);
             this.mViewHolder.spinnerEquipamento.setSelection(0);
 
             //Se o spinner de categorias for selecionado, muda o spinner de equipamentos de acordo
@@ -89,10 +91,10 @@ public class AdicionarEquipamentosActivity extends AppCompatActivity {
 
                     // Caso o spinner selecionado é algum diferente do settado
                     if(vetorEquipamento!=null){
-                        mViewHolder.editTextQuantidade.setText("0");
+                        mViewHolder.editTextQuantidade.setText("1");
                         mViewHolder.editTextPotencia.setText(vetorEquipamento[Constants.iEQUI_POT]);
-                        mViewHolder.editTextPeriodoUso.setText("0");
-                        mViewHolder.editTextWhdia.setText("0");
+                        mViewHolder.editTextPeriodoUso.setText("1");
+                        mViewHolder.editTextWhdia.setText("1");
                         nome = mViewHolder.spinnerEquipamento.getSelectedItem().toString();
 
                         //Saber se o equipamento eh de Corrente Contínua ou Não
@@ -125,7 +127,7 @@ public class AdicionarEquipamentosActivity extends AppCompatActivity {
                         double quantidade = Integer.parseInt( mViewHolder.editTextQuantidade.getText().toString() );
                         double potencia = Integer.parseInt( mViewHolder.editTextPotencia.getText().toString() );
                         double periodoUso = Integer.parseInt( mViewHolder.editTextPeriodoUso.getText().toString() );
-                        double diasUtilizado = Math.round(potencia / Integer.parseInt( mViewHolder.editTextWhdia.getText().toString() ));
+                        double diasUtilizado = Math.round(Integer.parseInt(mViewHolder.editTextWhdia.getText().toString()));//potencia / Integer.parseInt( mViewHolder.editTextWhdia.getText().toString()
 
                         // Adicionando as características para o equipamento
                         meuEquipamento.setNome(nome);
@@ -135,7 +137,21 @@ public class AdicionarEquipamentosActivity extends AppCompatActivity {
                         meuEquipamento.setDiasUtilizados(diasUtilizado);
                         meuEquipamento.setCC(correnteContinua);
 
-                        variavelGlobal.adicionarElemento(meuEquipamento);
+                        //Usuário clicou para editar um equipamento posteriormente selecionado
+                        if(getIntent().hasExtra("posVariavelGlobal")){
+                            Bundle bundle = getIntent().getExtras();
+                            int posVariavelGlobal = bundle.getInt("posVariavelGlobal");
+                            System.out.println("Entrou no ig, agora deve fucn0ikfsfar");
+                            System.out.println("POsicao: "+posVariavelGlobal);
+                            System.out.println("Nome: "+meuEquipamento.getNome());
+
+                            variavelGlobal.alterarEquipamento(posVariavelGlobal, meuEquipamento);
+                            variavelGlobal.setRemoverTodasViews(true);
+                            finish();
+                        }else
+                            variavelGlobal.adicionarElemento(meuEquipamento);
+
+
 
                         System.out.println("Equipamento possui corrente contrinua?(1=sim): "+correnteContinua);
 

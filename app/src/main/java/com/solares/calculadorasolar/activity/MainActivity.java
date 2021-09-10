@@ -38,6 +38,9 @@ public class MainActivity extends AppCompatActivity {
     public static int alturaTela;
     public float porcent = 4f;
 
+    //
+    private boolean calcByMoney = true;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,17 @@ public class MainActivity extends AppCompatActivity {
         AutoSizeText.AutoSizeButton(this.mViewHolder.buttonCalc, alturaTela, larguraTela, porcent);
         this.mViewHolder.editCostMonth = findViewById(R.id.edit_cost);
         AutoSizeText.AutoSizeEditText(this.mViewHolder.editCostMonth, alturaTela, larguraTela, 3f);
+        this.mViewHolder.buttonChangeMode = findViewById(R.id.MAIN_button_change_mode);
+        AutoSizeText.AutoSizeButton(this.mViewHolder.buttonChangeMode, alturaTela, larguraTela, 2f);
+
+        if(calcByMoney){
+            this.mViewHolder.buttonChangeMode.setText(R.string.inserir_o_consumo_em_kwh);
+            this.mViewHolder.editCostMonth.setHint(R.string.valor_conta_de_luz);
+        } else {
+            this.mViewHolder.buttonChangeMode.setText(R.string.inserir_o_consumo_em_reais);
+            this.mViewHolder.editCostMonth.setHint(R.string.consumo_conta_de_luz);
+        }
+
 
         //Criando spinners (dos estados e das cidades)
         this.mViewHolder.spinnerStates = findViewById(R.id.spinner_states);
@@ -91,6 +105,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        this.mViewHolder.buttonChangeMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                calcByMoney = !calcByMoney;
+                if(calcByMoney){
+                    mViewHolder.buttonChangeMode.setText(R.string.inserir_o_consumo_em_kwh);
+                    mViewHolder.editCostMonth.setHint(R.string.valor_conta_de_luz);
+                } else {
+                    mViewHolder.buttonChangeMode.setText(R.string.inserir_o_consumo_em_reais);
+                    mViewHolder.editCostMonth.setHint(R.string.consumo_conta_de_luz);
+                }
+            }
+        });
+
 
         //Se o usuário clicar no botão calcular, o cálculo é feito e muda-se para a próxima activity
         this.mViewHolder.buttonCalc.setOnClickListener(new View.OnClickListener() {
@@ -106,13 +134,14 @@ public class MainActivity extends AppCompatActivity {
                     final int idCity = mViewHolder.spinnerCities.getSelectedItemPosition();
                     final String cityName = mViewHolder.spinnerCities.getItemAtPosition(idCity).toString();
                     //Guarda o custo mensal inserido pelo usuário
-                    final double custoReais = Double.parseDouble( mViewHolder.editCostMonth.getText().toString() );
+                    final double consumo = Double.parseDouble( mViewHolder.editCostMonth.getText().toString() );
 
                     // Inicia Calculadora
                     CalculadoraOnGrid calculadora = new CalculadoraOnGrid();
                     // Insere as informações que já temos no objeto
                     calculadora.setNomeCidade(cityName);
-                    calculadora.setCustoReais(custoReais);
+                    calculadora.setConsumo(consumo);
+                    calculadora.setModoCalculoPorDinheiro(calcByMoney);
                     // Cria os vetores de Cidade e Estado
                     calculadora.setVetorCidade(CreateVetorCidade(idCity, stateName));
                     calculadora.setVetorEstado(CreateVetorEstado(calculadora.pegaVetorCidade()));
@@ -226,6 +255,7 @@ public class MainActivity extends AppCompatActivity {
         TextView textSimulacao;
         EditText editCostMonth;
         Button buttonCalc;
+        Button buttonChangeMode;
         Spinner spinnerCities;
         Spinner spinnerStates;
         ConstraintLayout layout;

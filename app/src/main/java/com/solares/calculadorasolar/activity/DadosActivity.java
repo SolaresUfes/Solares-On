@@ -78,10 +78,6 @@ public class DadosActivity extends AppCompatActivity {
         Button buttonTarifa = findViewById(R.id.button_modificar_tarifa);
         AutoSizeText.AutoSizeButton(buttonTarifa, MainActivity.alturaTela, MainActivity.larguraTela, porcent - 0.5f);
 
-        ////////////Configurar o botão de modificar o consumo////////////////
-        Button buttonConsumo = findViewById(R.id.button_modificar_consumo);
-        AutoSizeText.AutoSizeButton(buttonConsumo, MainActivity.alturaTela, MainActivity.larguraTela, porcent - 0.5f);
-
         ////////////Configurar o botão de voltar////////////////
         Button buttonVoltar = findViewById(R.id.button_voltar);
         AutoSizeText.AutoSizeButton(buttonVoltar, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
@@ -93,14 +89,6 @@ public class DadosActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 AbrirActivityTarifa(calculadora);
-            }
-        });
-
-        //Listener do botão para modificar o consumo, se ele for clicado, abre uma activity
-        buttonConsumo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AbrirActivityConsumo(calculadora);
             }
         });
 

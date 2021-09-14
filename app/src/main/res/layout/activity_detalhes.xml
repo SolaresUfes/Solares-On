@@ -116,7 +116,6 @@
         android:layout_height="0dp"
         android:background="@drawable/background_button_resultado_center"
         android:gravity="center"
-        android:padding="5dp"
         android:text="Confirmar"
         android:textAllCaps="false"
         android:textColor="@color/colorWhite"

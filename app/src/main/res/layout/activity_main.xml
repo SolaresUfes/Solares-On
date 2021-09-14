@@ -89,6 +89,7 @@
     <Button
         android:id="@+id/MAIN_button_change_mode"
         style="?android:attr/borderlessButtonStyle"
+        android:focusable="false"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingLeft="20dp"

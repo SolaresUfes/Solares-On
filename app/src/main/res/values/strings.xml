@@ -26,6 +26,7 @@
     <string name="finalizar">Finalizar</string>
     <string name="voltar">Voltar</string>
     <string name="valor_conta_de_luz">Conta de Luz (R$)</string>
+    <string name="consumo_conta_de_luz">Consumo (kWh)</string>
     <string name="nome">Nome</string>
     <string name="e_mail">E-mail</string>
     <string name="resultado">Resultado</string>
@@ -54,7 +55,7 @@
     <string name="tarifa">Tarifa</string>
     <string name="nova_tarifa">Tarifa: R$</string>
     <string name="kwh">/ kWh</string>
-    <string name="texto_creditos">Conheça outras iniciativas do\nProjeto Solares!</string>
+    <string name="texto_creditos">Conheça outras iniciativas do Projeto Solares!</string>
     <string name="instagram_projeto_solares">\@projeto.solares</string>
     <string name="podcast_solares">SolarCast</string>
     <string name="descricao_logo_do_projeto_solares">Logo do projeto Solares</string>
@@ -109,6 +110,17 @@
         <item>Fronius (30437–5) - 5kW</item>
         <item>ABB (45315–4) - 6kW</item>
         <item>Fronius (31282–7) - 6kW</item>
+        <item>Growatt (97058–4) - 10kW</item>
+        <item>Growatt (73046–9) - 15kW</item>
+        <item>Growatt (63283–3) - 20kW</item>
+        <item>Growatt (117716–7) - 15kW</item>
+        <item>Growatt (68201–6) - 25kW</item>
+        <item>Growatt (117717–1) - 20kW</item>
+        <item>Growatt (117718–5) - 25kW</item>
+        <item>Growatt (117719–9) - 30kW</item>
+        <item>Growatt (117720–6) - 36kW</item>
+        <item>Growatt (63282–9) - 60kW</item>
+        <item>Growatt (116874–8) - 100kW</item>
     </string-array>
 
     <string name="explicacao_valor_inserido_baixo">O valor inserido está próximo ou abaixo do custo de disponibilidade, que é o preço mínimo da conta de energia.\n\nPor esse motivo, um sistema solar não seria financeiramente atrativo para você.</string>
@@ -125,6 +137,8 @@
     <string name="descricao_botao_x_fechar">Botão x para fechar</string>
     <string name="descricao_botao_detalhes">Botão para ver detalhes</string>
     <string name="taxa_interna_de_retorno">Taxa Interna de Retorno</string>
+    <string name="inserir_o_consumo_em_kwh"><u>Inserir o consumo em kWh</u></string>
+    <string name="inserir_o_consumo_em_reais"><u>Inserir o valor da conta de luz (R$)</u></string>
 
     <string-array name="Fases">
         <item>Monofásico</item>

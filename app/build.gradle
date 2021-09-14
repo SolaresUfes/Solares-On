@@ -9,8 +9,8 @@ android {
         applicationId "com.solares.calculadorasolar"
         minSdkVersion 16
         targetSdkVersion 30
-        versionCode 24
-        versionName "1.3.6"
+        versionCode 26
+        versionName "1.3.8"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -30,23 +30,23 @@ android {
 
 dependencies {
     //Add Firebase analytics
-    implementation 'com.google.firebase:firebase-analytics:19.0.0'
+    implementation 'com.google.firebase:firebase-analytics:19.0.1'
     // Add the Firebase SDK for Crashlytics.
-    implementation 'com.google.firebase:firebase-crashlytics:18.2.0'
+    implementation 'com.google.firebase:firebase-crashlytics:18.2.1'
 
     // debugImplementation because LeakCanary should only run in debug builds. PRECISA COMENTAR O jetbrains:annotations aqui em baixo
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.4'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
     implementation 'com.google.android.material:material:1.4.0'
-    implementation 'com.google.firebase:firebase-core:19.0.0'
+    implementation 'com.google.firebase:firebase-core:19.0.1'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test:runner:1.4.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation 'org.jetbrains:annotations-java5:15.0'
 
-    implementation 'com.google.android.play:core:1.10.0' //Used for the In-App review API
+    implementation 'com.google.android.play:core:1.10.1' //Used for the In-App review API
 
 }

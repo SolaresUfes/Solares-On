@@ -40,6 +40,9 @@ public class CalculadoraOnGrid implements Serializable {
     int idInversorEscolhido;
     double custoDisponibilidade;
 
+    double consumo;
+    boolean modoCalculoPorDinheiro;
+
 
     /* Descrição: Construtor do Objeto CalculadoraOnGrid
      * Parâmetros de Entrada: -;
@@ -94,9 +97,12 @@ public class CalculadoraOnGrid implements Serializable {
     public void setNomeCidade(String nomeCidade){
         this.nomeCidade = nomeCidade;
     }
+    public void setConsumo(double consumo) { this.consumo = consumo; }
+    public void setModoCalculoPorDinheiro(boolean modoCalculoPorDinheiro) { this.modoCalculoPorDinheiro = modoCalculoPorDinheiro; }
     public void setCustoReais(double custoReais){
         this.custoReais = custoReais;
     }
+    public void setConsumokWh(double consumokWh) { this.consumokWh = consumokWh; }
     public void setAreaAlvo(float novaAreaAlvo) { this.areaAlvo = novaAreaAlvo; }
     public void setNumeroDeFases(int novoNumeroDeFases) {
         this.numeroDeFases = novoNumeroDeFases;
@@ -136,15 +142,21 @@ public class CalculadoraOnGrid implements Serializable {
         InputStream is=null;
 
         try {
+            //Calcula os consumos em kWh e em reais
+            if(modoCalculoPorDinheiro){
+                //Calcula o consumo mensal em KWh
+                double custoSemImpostos = CalculadoraOnGrid.ValueWithoutTaxes(consumo);
+                this.setConsumokWh(CalculadoraOnGrid.ConvertToKWh(custoSemImpostos, this.pegaTarifaMensal()));
+                this.setCustoReais(consumo);
+            } else {
+                //Calcula o consumo mensal em reais
+                this.setConsumokWh(consumo);
+                this.setCustoReais(ValueWithTaxes(consumo*this.pegaTarifaMensal()));
+            }
+
+
             //Calcula a média anual da hora solar da cidade escolhida
             horasDeSolPleno = MeanSolarHour(vetorCidade);
-
-            /////////////////double custoReais;
-
-            //Calcula o consumo mensal em KWh
-            double custoSemImpostos = ValueWithoutTaxes(custoReais);
-            consumokWh = ConvertToKWh(custoSemImpostos, this.pegaTarifaMensal());
-
 
             //Acha a potêcia necessária
             potenciaNecessaria = FindTargetCapacity(consumokWh, horasDeSolPleno);

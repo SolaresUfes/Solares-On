@@ -99,53 +99,51 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.20" />
 
-    <TextView
-        android:id="@+id/text_conheca"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:gravity="center_horizontal"
-        android:text="@string/texto_creditos"
-        android:textColor="@color/colorSolaresBlue"
-        app:layout_constraintEnd_toStartOf="@+id/guideline23"
-        app:layout_constraintStart_toStartOf="@+id/guideline22"
-        app:layout_constraintTop_toTopOf="@+id/guideline31" />
+        <TextView
+            android:id="@+id/text_conheca"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:gravity="center_horizontal"
+            android:text="@string/texto_creditos"
+            android:textColor="@color/colorSolaresBlue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline31" />
 
 
         <Button
             android:id="@+id/button_instagram"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
+            android:layout_height="0dp"
             android:background="@drawable/background_button_resultado_center"
             android:paddingStart="20dp"
-            android:paddingTop="10dp"
             android:paddingEnd="20dp"
-            android:paddingBottom="10dp"
             android:text="@string/instagram_projeto_solares"
             android:textAllCaps="false"
             android:textColor="@color/colorWhite"
+            app:layout_constraintBottom_toTopOf="@+id/guideline58"
             app:layout_constraintEnd_toStartOf="@+id/guideline23"
             app:layout_constraintStart_toStartOf="@+id/guideline22"
-            app:layout_constraintTop_toBottomOf="@+id/text_conheca" />
+            app:layout_constraintTop_toTopOf="@+id/guideline56" />
 
         <Button
             android:id="@+id/button_spotify"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
+            android:layout_height="0dp"
             android:background="@drawable/background_button_resultado_center"
             android:paddingStart="20dp"
-            android:paddingTop="10dp"
             android:paddingEnd="20dp"
-            android:paddingBottom="10dp"
             android:text="@string/podcast_solares"
             android:textAllCaps="false"
             android:textColor="@color/colorWhite"
+            app:layout_constraintBottom_toTopOf="@+id/guideline59"
             app:layout_constraintEnd_toStartOf="@+id/guideline23"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/guideline22"
-            app:layout_constraintTop_toBottomOf="@+id/button_instagram" />
+            app:layout_constraintTop_toTopOf="@+id/guideline60" />
 
         <Button
         android:id="@+id/button_recalcular"
@@ -176,7 +174,35 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.53" />
 
-    <androidx.constraintlayout.widget.Guideline
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline59"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.47" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline60"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.4" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline56"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.3" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline58"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.37" />
+
+        <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline33"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

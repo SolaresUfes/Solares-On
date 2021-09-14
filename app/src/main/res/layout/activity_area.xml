@@ -64,6 +64,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline95" />
 
     <EditText
+        style="@style/MyEditTextStyleArea"
         android:id="@+id/editText_area"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -74,7 +75,6 @@
         android:ems="10"
         android:inputType="numberDecimal"
         android:text=""
-        android:theme="@style/MyEditTextStyleArea"
         android:textCursorDrawable="@null"
         app:layout_constraintBottom_toTopOf="@+id/guideline94"
         app:layout_constraintEnd_toStartOf="@+id/text_unidade"

@@ -28,6 +28,15 @@ public class ConsumoActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        //////////////////////////////////////////////////////
+        /*
+        ESSA ACTIVITY NÃO ESTÁ SENDO USADA NO MOMENTO, ELA ABRIA SE O USUÁRIO QUISESSE ACHAR UMA TARIFA COM BASE NO CONSUMO
+        EM REAIS E NO CONSUMO EM KWH SIMULTANEAMENTE. MAS ACREDITO QUE NÃO HAJA MUITA RAZÃO PRA ISSO EXISTIR.
+         */
+        //////////////////////////////////////////////////////
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_consumo);
 

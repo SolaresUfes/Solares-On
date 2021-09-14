@@ -66,6 +66,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline95" />
 
     <EditText
+        style="@style/MyEditTextStyleArea"
         android:id="@+id/ADE_editText_tarifa"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -76,7 +77,6 @@
         android:ems="10"
         android:inputType="numberDecimal"
         android:text=""
-        android:theme="@style/MyEditTextStyleArea"
         android:textCursorDrawable="@null"
         app:layout_constraintBottom_toTopOf="@+id/guideline94"
         app:layout_constraintEnd_toStartOf="@+id/ADE_text_unidade_tarifa"
@@ -116,7 +116,6 @@
         android:layout_height="0dp"
         android:background="@drawable/background_button_resultado_center"
         android:gravity="center"
-        android:padding="5dp"
         android:text="Confirmar"
         android:textAllCaps="false"
         android:textColor="@color/colorWhite"

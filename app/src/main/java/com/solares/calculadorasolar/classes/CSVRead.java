@@ -289,7 +289,7 @@ public class CSVRead {
         return null;
     }
 
-    public static String[] DefineBattery(InputStream is, double CBI_C20, int Vsist, int idBateriaEscolhida){
+    public static String[] DefineBattery(InputStream is, double CBI_C20, int Vsist, int idBateriaEscolhida){ // como sera o vetor bateria ->[tera todas as informacoes necessarias, qntSerie, qntParalelo, Preco]
         String[] cheaperBattery;
         String[] currentBattery;
         double currentCost = 0, cheaperCost;
@@ -303,12 +303,12 @@ public class CSVRead {
             line = br.readLine();
 
             cheaperBattery = line.split(divider);
-            nBatSerie = (int)Math.round(Vsist/Double.parseDouble(cheaperBattery[Constants.iBAT_V_NOMINAL]));
-            nBatParalelo = (int)Math.round(CBI_C20/Integer.parseInt(cheaperBattery[Constants.iBAT_CBI_BAT]));
+            nBatSerie = (int)Math.ceil(Vsist/Double.parseDouble(cheaperBattery[Constants.iBAT_V_NOMINAL]));
+            nBatParalelo = (int)Math.ceil(CBI_C20/Double.parseDouble(cheaperBattery[Constants.iBAT_CBI_BAT]));
             qntBat = nBatParalelo * nBatSerie;
             cheaperCost = Double.parseDouble(cheaperBattery[Constants.iBAT_PRECO_INDIVITUDAL]) * qntBat;
 
-            if (idBateriaEscolhida == cont) { //Se o usuário escolheu o primeiro inversor
+            if (idBateriaEscolhida == cont) { //Se o usuário escolheu a primeira bateria
                 //Fechar o bufferedReader
                 try {
                     br.close();
@@ -322,15 +322,15 @@ public class CSVRead {
                 cont++; //Contador para escolher um inversor específico
                 currentBattery = line.split(divider);
 
-                nBatSerie = (int)Math.round(Vsist/Double.parseDouble(currentBattery[Constants.iBAT_V_NOMINAL]));
-                nBatParalelo = (int)Math.round(CBI_C20/Integer.parseInt(currentBattery[Constants.iBAT_CBI_BAT]));
-                qntBat = nBatParalelo * nBatSerie;
+                nBatSerie = (int)Math.ceil(Vsist/Double.parseDouble(currentBattery[Constants.iBAT_V_NOMINAL]));
+                nBatParalelo = (int)Math.ceil(CBI_C20/Double.parseDouble(currentBattery[Constants.iBAT_CBI_BAT]));
 
                 currentCost = Double.parseDouble(cheaperBattery[Constants.iBAT_PRECO_INDIVITUDAL]) * qntBat;
-                currentBattery[Constants.iINV_QTD] = String.valueOf(qntBat);
+                currentBattery[Constants.iBAT_QTD_SERIE] = String.valueOf(nBatSerie);
+                currentBattery[Constants.iBAT_QTD_PARAL] = String.valueOf(nBatParalelo);
                 currentBattery[Constants.iINV_PRECO_TOTAL] = String.valueOf(currentCost);
 
-                if (idBateriaEscolhida == cont) { //Se o usuário escolheu o cont° inversor
+                if (idBateriaEscolhida == cont) {
                     cheaperBattery = currentBattery;
                     break;
                 }

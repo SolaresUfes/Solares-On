@@ -30,8 +30,6 @@ public class CalculadoraOffGrid {
     int Vsist=0;
     int Vbat=0;
     double CBI_C20=0;
-    double Pd=0.3;
-    double fatorSeguranca=1.25;
     int nBatSerie=0;
     int nBatParalelo=0;
     double CBI_bat=0;
@@ -109,6 +107,12 @@ public class CalculadoraOffGrid {
             // Calcular Voc_corrigida
             Voc_corrigida = Vsist * (1 + ((temperaturaMedia - 25) * coeficienteVariacao)/100);
 
+            // Número de Dias de Autonomia
+            this.autonomia = numeroDiasAutonomia(vetorCidade);
+
+            // Calculo do CBI_C20
+            this.CBI_C20 = (Constants.fatorSeguranca * this.energiaAtivaDia * this.autonomia) / (Constants.Pd * this.Vsist);
+
             // Definindo as Placas  ---- isso eh para nao esquecer - lembre de criar  uma funcao parecida em CSVRead
             is = MyContext.getResources().openRawResource(R.raw.banco_paineis);
             placaEscolhida = CSVRead.DefineSolarPanel(is, this.minPotencia, this.areaAlvo, this.idModuloEscolhido); // this.minPotencia
@@ -116,29 +120,27 @@ public class CalculadoraOffGrid {
             System.out.println("------ Módulo: "+placaEscolhida[Constants.iPANEL_NOME]);
 
             // Definindo o Controlador de Carga is,this.Vsist, 1, Integer.parseInt(placaEscolhida[Constants.iPANEL_QTD]), this.minPotencia, Integer.parseInt(placaEscolhida[Constants.iPANEL_POTENCIA]), this.idControladorEscolhido
-            is = MyContext.getResources().openRawResource(R.raw.banco_controladores);
+            /*is = MyContext.getResources().openRawResource(R.raw.banco_controladores);
             controladorEscolhido = CSVRead.DefineChargeController(is, this.Vsist, Voc_corrigida, Integer.parseInt(placaEscolhida[Constants.iPANEL_QTD]), 400, Integer.parseInt(placaEscolhida[Constants.iPANEL_POTENCIA]), idControladorEscolhido); // P_pv = minPotencia
-            System.out.println("------ Controlador: "+controladorEscolhido[Constants.iCON_NOME]);
+            System.out.println("------ Controlador: "+controladorEscolhido[Constants.iCON_NOME]);*/
             // Definindo Quantidade de Placas em Série e Paralelo
  /*           this.placaSerie = numModulosSerie(Integer.parseInt(controladorEscolhido[Constants.iCON_V_MAX_SISTEMA]), 1);// Descobrir como ter a Tensão de Máxima Potência de Temp. Máx.
             this.placaParalelo = numModulosParalelo(this.minPotencia, this.placaSerie,Integer.parseInt(this.placaEscolhida[Constants.iPANEL_POTENCIA])); // Descobrir como ter a Corrente de Máxima Potência
 */
 /*
             // Definindo o Banco de Baterias
-            this.autonomia = numeroDiasAutonomia(vetorCidade); // deve ter um valor 2 <= n <= 4 dias
-            this.CBI_C20 = (this.fatorSeguranca * this.energiaAtivaDia * this.autonomia) / (this.Pd * Vsist);
             //is = MyContext.getResources().openRawResource(R.raw.banco_baterias);
             bateriaEscolhida = CSVRead.DefineBattery(is, this.CBI_C20, this.Vsist, this.idBateriaEscolhida);
 */
 
             // Definindo os Inversores
-            if(this.potenciaUtilizadaDiariaCA != 0){
+           /* if(this.potenciaUtilizadaDiariaCA != 0){
                 this.potenciaAparente = this.potenciaUtilizadaDiariaCA / this.fatorPotencia;
                 // aqui fazer o 'is' receber o banco de dados dos inversores off-grid
                 is = MyContext.getResources().openRawResource(R.raw.banco_inversores);
                 inversorEscolhido = CSVRead.DefineInvertorOffGrid(is, this.placaEscolhida ,this.potenciaAparente, this.Vsist, idInversorEscolhido);
             }
-            else inversorEscolhido=null;
+            else inversorEscolhido=null;*/
 
         }catch (Exception e){
             e.printStackTrace();
@@ -195,22 +197,20 @@ public class CalculadoraOffGrid {
         return potenciaPico;
     }
 
-    public static double horaSolarMes(String cityVec){
-        double solarHour = 0.0;
-        solarHour = Double.parseDouble(cityVec)/1000.0;
-        return solarHour;
-    }
-
     public static int numeroDiasAutonomia(String[] vetorCidade){
         double HSPmin=-1;
         double HSPmes=-1;
         int dias=2;
-        for (int i=0; i<12; i++){
-            HSPmes = horaSolarMes(vetorCidade[i]);
+
+        HSPmin = Double.parseDouble(vetorCidade[1])/1000.0;
+        for (int i=2; i<=12; i++){
+            HSPmes = Double.parseDouble(vetorCidade[i])/1000.0;
             if(HSPmin > HSPmes) HSPmin = HSPmes;
         }
-        dias = (int) Math.round((-0.48 * HSPmin) + 4.58);
-        if (dias < 2) return 2;
+
+        dias = (int) Math.ceil((-0.48 * HSPmin) + 4.58);
+
+        if(dias < 2) return 2;
         else if(dias > 4) return 4;
         return dias;
     }

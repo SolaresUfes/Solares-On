@@ -20,6 +20,9 @@ public class Constants {
     public static double SELIC = 0.065;
     public static double TARIFF_CHANGE = 6;
     public static double PANEL_LIFE = 25;
+    // Constantes para o calculo das baterias - off grid
+    public static double fatorSeguranca = 1.25;
+    public static double Pd = 0.8;
 
     // Strings para passagem de parâmetros para outras activities
     public static final String EXTRA_CALCULADORAON = "com.solares.com.solares.calculadorasolar.EXTRA_CALCULADORAON";
@@ -74,10 +77,11 @@ public class Constants {
     public static final int iBAT_MARCA = 1;
     public static final int iBAT_V_NOMINAL = 2;
     public static final int iBAT_CBI_BAT = 3;
-    public static final int iBAT_QTD = 4;
-    public static final int iBAT_PRECO_TOTAL = 5;
-    public static final int iBAT_PRECO_INDIVITUDAL = 6;
-    public static final int iBAT_ID = 7;
+    public static final int iBAT_QTD_PARAL = 4;
+    public static final int iBAT_QTD_SERIE = 5;
+    public static final int iBAT_PRECO_TOTAL = 6;
+    public static final int iBAT_PRECO_INDIVITUDAL = 7;
+    public static final int iBAT_ID = 8;
 
 
     //Indices Controladores

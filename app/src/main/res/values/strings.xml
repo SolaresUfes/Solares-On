@@ -82,6 +82,11 @@
     <string name="potencia">POTÊNCIA</string>
     <string name="periodo_uso">PERÍODO DE USO</string>
     <string name="wh_dia">Wh/DIA</string>
+    <string name="showEquipamentos">Equipamentos</string>
+    <string name="economico">Econômico</string>
+    <string name="bateria">Bateria</string>
+    <string name="geracao">Geração</string>
+
 
     <string-array name="Modulos">
         <item>335PHK-36 POLI 335W - BYD Solar</item>

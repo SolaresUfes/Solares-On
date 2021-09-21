@@ -1,10 +1,12 @@
 package com.solares.calculadorasolar.classes;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 
 import com.solares.calculadorasolar.R;
 import com.solares.calculadorasolar.activity.AdicionarEquipamentosActivity;
 import com.solares.calculadorasolar.activity.PedirConsumoEnergeticoActivity;
+import com.solares.calculadorasolar.activity.ResultadoOffGridActivity;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -141,6 +143,22 @@ public class CalculadoraOffGrid {
                 inversorEscolhido = CSVRead.DefineInvertorOffGrid(is, this.placaEscolhida ,this.potenciaAparente, this.Vsist, idInversorEscolhido);
             }
             else inversorEscolhido=null;*/
+
+            //Preparação para mudar para próxima activity
+            Intent intent = new Intent(MyContext, ResultadoOffGridActivity.class);
+
+            //Fechar o InputStream
+            try {
+                is.close();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+
+            //Passar o objeto com as informações calculadas para a próxima Activity (Resultado)
+            intent.putExtra(Constants.EXTRA_CALCULADORAOFF, (Parcelable) this);
+
+            //Mudar de activity
+            MyContext.startActivity(intent);
 
         }catch (Exception e){
             e.printStackTrace();

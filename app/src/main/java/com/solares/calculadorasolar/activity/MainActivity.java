@@ -243,12 +243,8 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
 
                 } catch (Exception e){
-                    try {
-                        Toast.makeText(MainActivity.this, "Insira um número positivo!", Toast.LENGTH_LONG).show();
-                    } catch (Exception ee){
-                        ee.printStackTrace();
+                        e.printStackTrace();
                     }
-                }
             }
         });
     }

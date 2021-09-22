@@ -1,4 +1,4 @@
-package com.solares.calculadorasolar.classes;
+package com.solares.calculadorasolar.classes.auxiliares;
 
 import android.util.TypedValue;
 import android.widget.Button;

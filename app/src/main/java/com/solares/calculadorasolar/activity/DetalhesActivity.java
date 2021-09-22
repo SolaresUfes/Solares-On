@@ -16,9 +16,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.solares.calculadorasolar.R;
-import com.solares.calculadorasolar.classes.AutoSizeText;
+import com.solares.calculadorasolar.classes.auxiliares.AutoSizeText;
 import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
-import com.solares.calculadorasolar.classes.Constants;
+import com.solares.calculadorasolar.classes.auxiliares.Constants;
+import com.solares.calculadorasolar.classes.auxiliares.FirebaseManager;
+import com.solares.calculadorasolar.classes.entidades.Painel;
 
 import java.util.Locale;
 
@@ -73,8 +75,8 @@ public class DetalhesActivity extends AppCompatActivity {
         spinnerFases.setSelection(1);
 
         //Pega o view do botão pra recalcular e ajusta o tamanho da fonte
-        Button buttonRecalcTarifa = findViewById(R.id.ADE_button_recalcular_tarifa);
-        AutoSizeText.AutoSizeButton(buttonRecalcTarifa, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
+        Button buttonConfirm = findViewById(R.id.ADE_button_recalcular_tarifa);
+        AutoSizeText.AutoSizeButton(buttonConfirm, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
 
 
         //pegar os intents
@@ -85,10 +87,14 @@ public class DetalhesActivity extends AppCompatActivity {
         //MOstrar a tarifa atual como padrão
         editTarifa.setText(String.format(Locale.ENGLISH, "%.2f", calculadora.pegaTarifaMensal()));
 
-        //Listener do botão de recalcular
-        buttonRecalcTarifa.setOnClickListener(new View.OnClickListener() {
+        //Listener do botão de confirmar
+        buttonConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d("firebase", "Placas:");
+                for (Painel painel : calculadora.pegaListaPaineis() ) {
+                    Log.d("firebase", painel.getMarca() + " " + painel.getCodigo() + " " + painel.getPotencia() + " " + painel.getArea() + " " + painel.getNOCT() + " " + painel.getCoefTempPot() + " " + painel.getPreco());
+                }
                 RealizaCalculos(calculadora, editTarifa, spinnerFases);
             }
         });
@@ -132,15 +138,7 @@ public class DetalhesActivity extends AppCompatActivity {
                 //Seleciona o número de fases
                 calculadora.setNumeroDeFases((int)spinnerFases.getSelectedItemPosition());
 
-
-                //Refaz o cálculo com a nova tarifa e inicia a ResultadoActivity
-                //Criar uma thread para fazer o cálculo pois é um processamento demorado
-                Thread thread = new Thread(){
-                    public void run(){
-                        calculadora.Calcular(DetalhesActivity.this);
-                    }
-                };
-                thread.start();
+                calculadora.Calcular(DetalhesActivity.this);
 
             }
         } catch (Exception e){

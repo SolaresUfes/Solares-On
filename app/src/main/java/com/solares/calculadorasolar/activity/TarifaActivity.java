@@ -4,9 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.solares.calculadorasolar.R;
-import com.solares.calculadorasolar.classes.AutoSizeText;
+import com.solares.calculadorasolar.classes.auxiliares.AutoSizeText;
 import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
-import com.solares.calculadorasolar.classes.Constants;
+import com.solares.calculadorasolar.classes.auxiliares.Constants;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,7 +18,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.InputStream;
 import java.util.Locale;
 
 import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensions;

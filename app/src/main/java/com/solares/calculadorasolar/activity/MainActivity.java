@@ -1,5 +1,7 @@
 package com.solares.calculadorasolar.activity;
 
+
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Point;
@@ -21,12 +23,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.solares.calculadorasolar.R;
-import com.solares.calculadorasolar.classes.AutoSizeText;
-import com.solares.calculadorasolar.classes.CSVRead;
+import com.solares.calculadorasolar.classes.auxiliares.AutoSizeText;
+import com.solares.calculadorasolar.classes.auxiliares.CSVRead;
 import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
-import com.solares.calculadorasolar.classes.Constants;
+import com.solares.calculadorasolar.classes.auxiliares.Constants;
+import com.solares.calculadorasolar.classes.auxiliares.FirebaseManager;
+import com.solares.calculadorasolar.classes.entidades.Painel;
 
 import java.io.InputStream;
+import java.util.LinkedList;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -84,6 +89,14 @@ public class MainActivity extends AppCompatActivity {
 
         this.mViewHolder.layout = findViewById(R.id.layout_calculo);
 
+
+        //////////// Inicia Calculadora
+        CalculadoraOnGrid calculadora = new CalculadoraOnGrid();
+        // Cria os vetores de Paineis e de Inversores
+        calculadora.setListaPaineis(FirebaseManager.fbBuscaListaPaineis(MainActivity.this));
+        // inversor
+
+
         //Se o spinner de estado for selecionado, muda o spinner de cidades de acordo
         this.mViewHolder.spinnerStates.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -136,8 +149,6 @@ public class MainActivity extends AppCompatActivity {
                     //Guarda o custo mensal inserido pelo usuário
                     final double consumo = Double.parseDouble( mViewHolder.editCostMonth.getText().toString() );
 
-                    // Inicia Calculadora
-                    CalculadoraOnGrid calculadora = new CalculadoraOnGrid();
                     // Insere as informações que já temos no objeto
                     calculadora.setNomeCidade(cityName);
                     calculadora.setConsumo(consumo);
@@ -199,6 +210,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return null;
     }
+
 
     /* Descrição: Vai para uma página para selecionar a tarifa e número de fases, sendo sugerida a tarifa do estado
      * Parâmetros de Entrada: calculadora - O Objeto da calculadoraOnGrid;

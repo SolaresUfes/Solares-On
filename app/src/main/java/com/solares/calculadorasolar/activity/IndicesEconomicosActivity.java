@@ -9,9 +9,9 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.solares.calculadorasolar.R;
-import com.solares.calculadorasolar.classes.AutoSizeText;
+import com.solares.calculadorasolar.classes.auxiliares.AutoSizeText;
 import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
-import com.solares.calculadorasolar.classes.Constants;
+import com.solares.calculadorasolar.classes.auxiliares.Constants;
 
 import java.util.Locale;
 

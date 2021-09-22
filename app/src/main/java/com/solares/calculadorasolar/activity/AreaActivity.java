@@ -16,12 +16,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.solares.calculadorasolar.R;
-import com.solares.calculadorasolar.classes.AutoSizeText;
-import com.solares.calculadorasolar.classes.CSVRead;
+import com.solares.calculadorasolar.classes.auxiliares.AutoSizeText;
 import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
-import com.solares.calculadorasolar.classes.Constants;
+import com.solares.calculadorasolar.classes.auxiliares.Constants;
 
-import java.io.InputStream;
 import java.util.Locale;
 
 import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensions;

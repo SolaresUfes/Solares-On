@@ -8,14 +8,20 @@ import android.widget.Toast;
 
 import com.solares.calculadorasolar.R;
 import com.solares.calculadorasolar.activity.ResultadoActivity;
+import com.solares.calculadorasolar.classes.auxiliares.CSVRead;
+import com.solares.calculadorasolar.classes.auxiliares.Constants;
+import com.solares.calculadorasolar.classes.auxiliares.IRR;
+import com.solares.calculadorasolar.classes.entidades.Painel;
 
 import java.io.InputStream;
 import java.io.Serializable;
+import java.util.LinkedList;
 
 public class CalculadoraOnGrid implements Serializable {
     //Variáveis da Classe
     String[] vetorCidade;
     String[] vetorEstado;
+    LinkedList<Painel> listaPaineis;
     String nomeCidade;
     String[] placaEscolhida;
     double custoReais;
@@ -61,6 +67,7 @@ public class CalculadoraOnGrid implements Serializable {
     //////////////////////////
     public String[] pegaVetorCidade(){ return vetorCidade; }
     public String[] pegaVetorEstado(){ return vetorEstado; }
+    public LinkedList<Painel> pegaListaPaineis() { return listaPaineis; }
     public String pegaNomeCidade(){ return nomeCidade; }
     public String[] pegaPlacaEscolhida(){ return placaEscolhida; }
     public double pegaCustoReais(){ return custoReais; }
@@ -91,6 +98,7 @@ public class CalculadoraOnGrid implements Serializable {
     public void setVetorEstado(String[] vetorEstado){
         this.vetorEstado = vetorEstado;
     }
+    public void setListaPaineis(LinkedList<Painel> listaPaineis) { this.listaPaineis = listaPaineis; }
     public void setTarifaMensal(double tarifa){
         this.tarifaMensal = tarifa;
     }
@@ -182,8 +190,6 @@ public class CalculadoraOnGrid implements Serializable {
                 calculaResultadosPlaca(MyContext, this.idModuloEscolhido);
             }
 
-
-
             //Preparação para mudar para próxima activity
             Intent intent = new Intent(MyContext, ResultadoActivity.class);
 
@@ -200,17 +206,8 @@ public class CalculadoraOnGrid implements Serializable {
             //Mudar de activity
             MyContext.startActivity(intent);
         } catch (Exception e){
-            Log.i("Calculate", "Erro no Cálculo");
-            //Se algum erro ocorrer, pede para o usuário informar um número real
-            try {
-                if(!((Activity) MyContext).isFinishing())
-                {
-                    Toast.makeText(MyContext, R.string.informe_um_numero, Toast.LENGTH_LONG).show();
-                }
-            } catch (Exception ee){
-                ee.printStackTrace();
-            }
             e.printStackTrace();
+            Log.i("Calculate", "Erro no Cálculo");
         } finally {
             //Fechar o InputStream, se ocorreu algum erro
             try {

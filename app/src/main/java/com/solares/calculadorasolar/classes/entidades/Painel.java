@@ -11,6 +11,8 @@ public class Painel implements Serializable {
     private float NOCT;
     private float Potencia;
     private float Preco;
+    private int Qtd;
+    private float CustoTotal;
 
 
     public Painel(){ /* Construtor Vazio */}
@@ -70,4 +72,12 @@ public class Painel implements Serializable {
     public void setArea(float area) {
         Area = area;
     }
+
+    public int getQtd() { return Qtd; }
+
+    public void setQtd(int qtd) { Qtd = qtd; }
+
+    public float getCustoTotal() { return CustoTotal; }
+
+    public void setCustoTotal(float custoTotal) { CustoTotal = custoTotal; }
 }

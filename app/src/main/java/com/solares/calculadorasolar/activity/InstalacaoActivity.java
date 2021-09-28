@@ -62,13 +62,13 @@ public class InstalacaoActivity extends AppCompatActivity {
         TextView textPlaca = findViewById(R.id.text_placa);
         AutoSizeText.AutoSizeTextView(textPlaca, MainActivity.alturaTela, MainActivity.larguraTela, percent);
         String singplur;
-        if(Integer.parseInt(calculadora.pegaPlacaEscolhida()[Constants.iPANEL_QTD]) > 1){
+        if(calculadora.pegaPlacaEscolhida().getQtd() > 1){
             singplur = "Placas";
         } else {
             singplur = "Placa";
         }
         textPlaca.setText(String.format(Locale.ITALY, "%d %s de %.0f Wp",
-                Integer.parseInt(calculadora.pegaPlacaEscolhida()[Constants.iPANEL_QTD]), singplur, Double.parseDouble(calculadora.pegaPlacaEscolhida()[Constants.iPANEL_POTENCIA])));
+                calculadora.pegaPlacaEscolhida().getQtd(), singplur, calculadora.pegaPlacaEscolhida().getPotencia()));
 
         TextView textEstaticoArea = findViewById(R.id.text_area_1);
         AutoSizeText.AutoSizeTextView(textEstaticoArea, MainActivity.alturaTela, MainActivity.larguraTela, percent);
@@ -217,10 +217,11 @@ public class InstalacaoActivity extends AppCompatActivity {
 
         //Criação do Spinner
         AppCompatSpinner spinnerModulos = rootView.findViewById(R.id.spinner_modulos_inversores);
+
         //Aqui, coloca o vetor de strings que será exibido no spinner
-        ArrayAdapter<CharSequence> adapterS = ArrayAdapter.createFromResource(rootView.getContext(), R.array.Modulos, R.layout.spinner_item);
+        ArrayAdapter<String> adapterS =new ArrayAdapter<String>(rootView.getContext(), R.layout.spinner_item, calculadora.pegaNomesPaineis()); //ArrayAdapter.createFromResource(rootView.getContext(), R.array.Modulos, R.layout.spinner_item);
         spinnerModulos.setAdapter(adapterS);
-        spinnerModulos.setSelection(Integer.parseInt(calculadora.pegaPlacaEscolhida()[Constants.iPANEL_I]));
+        spinnerModulos.setSelection(calculadora.pegaListaPaineis().indexOf(calculadora.pegaPlacaEscolhida()));
 
         //Criação do botão
         Button buttonRecalc = rootView.findViewById(R.id.button_recalc_modulos_inversores);

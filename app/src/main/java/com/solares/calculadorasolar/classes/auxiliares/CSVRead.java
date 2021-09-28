@@ -1,5 +1,7 @@
 package com.solares.calculadorasolar.classes.auxiliares;
 
+import com.solares.calculadorasolar.classes.entidades.Painel;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
@@ -181,13 +183,13 @@ public class CSVRead {
         return null;
     }
 
-    public static String[] DefineInvertor(InputStream is, String[] solarPanel, int idInversorEscolhido){
+    public static String[] DefineInvertor(InputStream is, Painel solarPanel, int idInversorEscolhido){
         String[] cheaperInvertor, currentInvertor;
         String line;
         double currentCost, cheaperCost, WpGenerated;
         int numberInvertors, cont=0;
         BufferedReader bufferedReader = null;
-        WpGenerated = Double.parseDouble(solarPanel[Constants.iPANEL_QTD]) * Double.parseDouble(solarPanel[Constants.iPANEL_POTENCIA]);
+        WpGenerated = solarPanel.getQtd() * solarPanel.getPotencia();
         try{
             bufferedReader = new BufferedReader(new InputStreamReader(is));
             bufferedReader.readLine(); //Joga fora a primeira

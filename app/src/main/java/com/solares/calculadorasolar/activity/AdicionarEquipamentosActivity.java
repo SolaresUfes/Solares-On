@@ -141,10 +141,6 @@ public class AdicionarEquipamentosActivity extends AppCompatActivity {
                         if(getIntent().hasExtra("posVariavelGlobal")){
                             Bundle bundle = getIntent().getExtras();
                             int posVariavelGlobal = bundle.getInt("posVariavelGlobal");
-                            System.out.println("Entrou no ig, agora deve fucn0ikfsfar");
-                            System.out.println("POsicao: "+posVariavelGlobal);
-                            System.out.println("Nome: "+meuEquipamento.getNome());
-
                             variavelGlobal.alterarEquipamento(posVariavelGlobal, meuEquipamento);
                             variavelGlobal.setRemoverTodasViews(true);
                             finish();

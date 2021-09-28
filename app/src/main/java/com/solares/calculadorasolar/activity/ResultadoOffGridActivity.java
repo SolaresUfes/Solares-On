@@ -2,11 +2,17 @@ package com.solares.calculadorasolar.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import com.solares.calculadorasolar.R;
+import com.solares.calculadorasolar.classes.CalculadoraOffGrid;
+import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
+import com.solares.calculadorasolar.classes.Constants;
 
 public class ResultadoOffGridActivity extends AppCompatActivity {
 
@@ -15,6 +21,10 @@ public class ResultadoOffGridActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_resultado_off_grid);
+
+        Intent intent = getIntent();
+        final CalculadoraOffGrid calculadora = (CalculadoraOffGrid) intent.getSerializableExtra(Constants.EXTRA_CALCULADORAOFF);
+        System.out.println("Calculadora Placa: "+calculadora);
 
         try {
             this.mViewHolder.buttonEquipamento = findViewById(R.id.button_equipamentos);
@@ -26,7 +36,9 @@ public class ResultadoOffGridActivity extends AppCompatActivity {
             this.mViewHolder.buttonEquipamento.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Intent intent = new Intent(ResultadoOffGridActivity.this, MostrarPainelContInvActivity.class);
+                    intent.putExtra(Constants.EXTRA_CALCULADORAOFF, String.valueOf(calculadora));
+                    startActivity(intent);
                 }
             });
 
@@ -59,8 +71,15 @@ public class ResultadoOffGridActivity extends AppCompatActivity {
             });
 
         }catch (Exception e){
-            e.printStackTrace();
+            Log.i("ResultadoActivity", "Erro na captura de intents");
         }
+    }
+
+    public void AbrirActivityEquipamentos(CalculadoraOnGrid calculadora){
+        Intent intent = new Intent(this, MostrarPainelContInvActivity.class);
+        intent.putExtra(Constants.EXTRA_CALCULADORAOFF, calculadora);
+
+        startActivity(intent);
     }
 
     public static class ViewHolder{

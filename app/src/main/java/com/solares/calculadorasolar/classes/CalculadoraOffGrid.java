@@ -1,14 +1,18 @@
 package com.solares.calculadorasolar.classes;
+
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Parcelable;
 
 import com.solares.calculadorasolar.R;
 import com.solares.calculadorasolar.activity.AdicionarEquipamentosActivity;
 import com.solares.calculadorasolar.activity.PedirConsumoEnergeticoActivity;
 import com.solares.calculadorasolar.activity.ResultadoOffGridActivity;
+import com.solares.calculadorasolar.classes.Global;
 
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class CalculadoraOffGrid {
@@ -57,6 +61,8 @@ public class CalculadoraOffGrid {
     public String[] getVetorCidade(){ return this.vetorCidade; }
     public String[] getPlacaEscolhida(){ return this.placaEscolhida; }
     public double getMinPotencia(){ return this.minPotencia; }
+    public String[] getControlador(){ return controladorEscolhido; }
+    public String[] getInversor(){ return inversorEscolhido; }
 
     //////////////////////////
     ////  Funções setters ////
@@ -89,7 +95,7 @@ public class CalculadoraOffGrid {
         InputStream is;
 
         try {
-            CalculadoraOnGrid calculadoraOnGrid = new CalculadoraOnGrid();  // talvez mudar isso para uma funcao principal, que essa irá herdar
+            CalculadoraOnGrid calculadoraOnGrid = new CalculadoraOnGrid();
 
             // Calcular a HSP do estado em questão
             HSP = calculadoraOnGrid.MeanSolarHour(vetorCidade);
@@ -144,6 +150,10 @@ public class CalculadoraOffGrid {
             }
             else inversorEscolhido=null;*/
 
+
+
+
+            // Por algum motivo nao esta funcionando            variavelGlobal.setPlaca(placaEscolhida);
             //Preparação para mudar para próxima activity
             Intent intent = new Intent(MyContext, ResultadoOffGridActivity.class);
 
@@ -154,8 +164,10 @@ public class CalculadoraOffGrid {
                 e.printStackTrace();
             }
 
-            //Passar o objeto com as informações calculadas para a próxima Activity (Resultado)
-            intent.putExtra(Constants.EXTRA_CALCULADORAOFF, (Parcelable) this);
+            //Passar o objeto com as informações calculadas para a próxima Activity (ResultadoOff)
+            //Bundle mBundle = new Bundle();
+            //mBundle.putSerializable(Constants.EXTRA_CALCULADORAON, (Serializable) this);
+            intent.putExtra(Constants.EXTRA_CALCULADORAON, (Serializable) this);
 
             //Mudar de activity
             MyContext.startActivity(intent);

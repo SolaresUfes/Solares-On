@@ -48,28 +48,21 @@ public class Constants {
     public static final String EXTRA_ECONOMIA_MENSAL = "com.solares.com.solares.calculadorasolar.EXTRA_ECONOMIA_MENSAL";
 
     //Indices Paineis
-    public static final int iPANEL_NOME = 0;
-    public static final int iPANEL_MARCA = 1;
-    public static final int iPANEL_POTENCIA = 2;
-    public static final int iPANEL_PRECO = 3;
-    public static final int iPANEL_AREA = 4;
-    public static final int iPANEL_QTD = 5;
-    public static final int iPANEL_CUSTO_TOTAL = 6;
-    public static final int iPANEL_COEFTEMP = 7;
-    public static final int iPANEL_NOCT = 8;
-    public static final int iPANEL_I = 9;
-
+    public static final int iPANEL_CODIGO = 1;
+    public static final int iPANEL_MARCA = 2;
+    public static final int iPANEL_POTENCIA = 3;
+    public static final int iPANEL_PRECO = 4;
+    public static final int iPANEL_AREA = 5;
+    public static final int iPANEL_COEFTEMP = 6;
+    public static final int iPANEL_NOCT = 7;
 
 
     //Indices Inversores
-    public static final int iINV_NOME = 0;
-    public static final int iINV_MARCA = 1;
-    public static final int iINV_POTENCIA = 2;
-    public static final int iINV_PRECO = 3;
-    public static final int iINV_RENDIMENTO_MAXIMO = 4;
-    public static final int iINV_QTD = 5;
-    public static final int iINV_PRECO_TOTAL = 6;
-    public static final int iINV_ID = 7;
+    public static final int iINV_CODIGO = 1;
+    public static final int iINV_MARCA = 2;
+    public static final int iINV_POTENCIA = 3;
+    public static final int iINV_PRECO = 4;
+    public static final int iINV_RENDIMENTO_MAXIMO = 5;
 
 
     //Indices Cidades

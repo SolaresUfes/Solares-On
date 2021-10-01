@@ -80,13 +80,13 @@ public class InstalacaoActivity extends AppCompatActivity {
         AutoSizeText.AutoSizeTextView(textEstaticoInversor, MainActivity.alturaTela, MainActivity.larguraTela, percent);
         TextView textInversor = findViewById(R.id.text_inversor);
         AutoSizeText.AutoSizeTextView(textInversor, MainActivity.alturaTela, MainActivity.larguraTela, percent);
-        if(Integer.parseInt(calculadora.pegaInversor()[Constants.iINV_QTD]) > 1){
+        if(calculadora.pegaInversor().getQtd() > 1){
             singplur = "Inversores";
         } else {
             singplur = "Inversor";
         }
         textInversor.setText(String.format(Locale.ITALY, "%d %s de %.2f kW",
-                Integer.parseInt(calculadora.pegaInversor()[Constants.iINV_QTD]), singplur, Double.parseDouble(calculadora.pegaInversor()[Constants.iINV_POTENCIA])/1000));
+                calculadora.pegaInversor().getQtd(), singplur, calculadora.pegaInversor().getPotencia()/1000));
 
 
         //Definição do layout para escurecer a tela
@@ -219,7 +219,7 @@ public class InstalacaoActivity extends AppCompatActivity {
         AppCompatSpinner spinnerModulos = rootView.findViewById(R.id.spinner_modulos_inversores);
 
         //Aqui, coloca o vetor de strings que será exibido no spinner
-        ArrayAdapter<String> adapterS =new ArrayAdapter<String>(rootView.getContext(), R.layout.spinner_item, calculadora.pegaNomesPaineis()); //ArrayAdapter.createFromResource(rootView.getContext(), R.array.Modulos, R.layout.spinner_item);
+        ArrayAdapter<String> adapterS =new ArrayAdapter<String>(rootView.getContext(), R.layout.spinner_item, calculadora.pegaNomesPaineis());
         spinnerModulos.setAdapter(adapterS);
         spinnerModulos.setSelection(calculadora.pegaListaPaineis().indexOf(calculadora.pegaPlacaEscolhida()));
 
@@ -267,9 +267,9 @@ public class InstalacaoActivity extends AppCompatActivity {
         //Criação do Spinner
         AppCompatSpinner spinnerInversores = rootView.findViewById(R.id.spinner_modulos_inversores);
         //Aqui, coloca o vetor de strings que será exibido no spinner
-        ArrayAdapter<CharSequence> adapterS = ArrayAdapter.createFromResource(rootView.getContext(), R.array.Inversores, R.layout.spinner_item);
+        ArrayAdapter<String> adapterS =new ArrayAdapter<String>(rootView.getContext(), R.layout.spinner_item, calculadora.pegaNomesInversores());
         spinnerInversores.setAdapter(adapterS);
-        spinnerInversores.setSelection(Integer.parseInt(calculadora.pegaInversor()[Constants.iINV_ID]));
+        spinnerInversores.setSelection(calculadora.pegaListaInversores().indexOf(calculadora.pegaInversor()));
 
         //Criação do botão
         Button buttonRecalc = rootView.findViewById(R.id.button_recalc_modulos_inversores);

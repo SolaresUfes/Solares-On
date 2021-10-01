@@ -4,6 +4,7 @@ package com.solares.calculadorasolar.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,14 +25,12 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.solares.calculadorasolar.R;
 import com.solares.calculadorasolar.classes.auxiliares.AutoSizeText;
-import com.solares.calculadorasolar.classes.auxiliares.CSVRead;
+import com.solares.calculadorasolar.classes.auxiliares.CSVManager;
 import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
 import com.solares.calculadorasolar.classes.auxiliares.Constants;
 import com.solares.calculadorasolar.classes.auxiliares.FirebaseManager;
-import com.solares.calculadorasolar.classes.entidades.Painel;
 
 import java.io.InputStream;
-import java.util.LinkedList;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -93,8 +92,9 @@ public class MainActivity extends AppCompatActivity {
         //////////// Inicia Calculadora
         CalculadoraOnGrid calculadora = new CalculadoraOnGrid();
         // Cria os vetores de Paineis e de Inversores
-        calculadora.setListaPaineis(FirebaseManager.fbBuscaListaPaineis(MainActivity.this));
-        // inversor
+        SharedPreferences sharedPref = getPreferences(MODE_PRIVATE);
+        calculadora.setListaPaineis(FirebaseManager.fbBuscaListaPaineis(MainActivity.this, sharedPref));
+        calculadora.setListaInversores(FirebaseManager.fbBuscaListaInversores(MainActivity.this, sharedPref));
 
 
         //Se o spinner de estado for selecionado, muda o spinner de cidades de acordo
@@ -184,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Pega as informações da cidade escolhida
         is = this.getResources().openRawResource(R.raw.banco_irradiancia);
-        vetorCidade = CSVRead.getCity(idCity, nomeEstado, is);
+        vetorCidade = CSVManager.getCity(idCity, nomeEstado, is);
 
         //Pegando as informações do estado
         is = this.getResources().openRawResource(R.raw.banco_estados);
@@ -205,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
         InputStream is = this.getResources().openRawResource(R.raw.banco_estados);
         String[] VetorEstado;
         if (vetorCidade != null) {
-            VetorEstado = CSVRead.getState(vetorCidade, is);
+            VetorEstado = CSVManager.getState(vetorCidade, is);
             return VetorEstado;
         }
         return null;

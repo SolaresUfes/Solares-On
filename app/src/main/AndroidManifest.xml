@@ -11,6 +11,7 @@
         android:supportsRtl="false"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".activity.EmpresasActivity"></activity>
         <activity
             android:name=".activity.ConsumoActivity"
             android:parentActivityName=".activity.DadosActivity"

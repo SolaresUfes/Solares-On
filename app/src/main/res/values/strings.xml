@@ -22,11 +22,13 @@
     <string name="analise_custos">Análise de Custos</string>
     <string name="indices_economicos">Índices Econômicos</string>
     <string name="finalizar">Finalizar</string>
+    <string name="continuar">Continuar</string>
     <string name="voltar">Voltar</string>
     <string name="valor_conta_de_luz">Conta de Luz (R$)</string>
     <string name="nome">Nome</string>
     <string name="e_mail">E-mail</string>
     <string name="resultado">Resultado</string>
+    <string name="empresas">Empresas</string>
     <string name="resultados_warning">Os resultados alcançados nessa simulação são aproximações feitas por integrantes do Solares. Diversas variáveis podem alterar o valor real do projeto.</string>
     <string name="consumo_mensal_de_energia_em_reais">Consumo mensal de energia (em reais)</string>
     <string name="consumo_mensal_de_energia">Consumo mensal de energia</string>

@@ -40,6 +40,7 @@ import com.solares.calculadorasolar.classes.Empresa;
 
 import java.io.InputStream;
 import java.util.LinkedList;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -56,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //empresas = new LinkedList<>(); // adicionei
 
         //Pegando informações sobre o dispositivo, para regular o tamanho da letra (fonte)
         //Essa função pega as dimensões e as coloca em váriaveis globais
@@ -133,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
                     // Colocar Tarifa inicial
                     calculadora.setTarifaMensal(Double.parseDouble(calculadora.pegaVetorEstado()[Constants.iEST_TARIFA]));
 
-                    GetEmpresasFirebase(calculadora, MainActivity.this);
+                    //GetEmpresasFirebase(calculadora, MainActivity.this);
 
                     AbrirActivityDetalhes(calculadora);
                 } catch (Exception e){
@@ -197,6 +200,7 @@ public class MainActivity extends AppCompatActivity {
     public void AbrirActivityDetalhes(CalculadoraOnGrid calculadora){
         Intent intent = new Intent(this, DetalhesActivity.class);
         intent.putExtra(Constants.EXTRA_CALCULADORAON, calculadora);
+        //intent.putExtra(Constants.EXTRA_EMPRESAS, empresas);
         startActivity(intent);
     }
 
@@ -238,95 +242,6 @@ public class MainActivity extends AppCompatActivity {
         larguraTela = size.x;
         alturaTela = size.y;
     }
-
-
-
-
-    public static void FuncaoTeste(LinkedList<Empresa> empresas){
-        Log.d("firebase", "Num Empresas: " + empresas.size());
-    }
-
-
-    public static void GetEmpresasFirebase(CalculadoraOnGrid calculadora, Context context){
-        Log.d("firebase", "Firebase Database inicializado");
-        // Get the reference to the database
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        LinkedList<Empresa> empresas = new LinkedList<>();
-
-        //Verify Connection
-        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
-        if(!isConnected){
-            //Tell the user that this function only works with internet connection
-            Log.d("firebase", "Sem internet!");
-        }
-
-
-        // Read the companies from the city
-        DatabaseReference dbReferenceCidade = database.getReference("estados")
-                .child(calculadora.pegaVetorEstado()[Constants.iEST_SIGLA]).child(calculadora.pegaNomeCidade());
-        dbReferenceCidade.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                empresas.clear();
-
-                //Get the names of the companies that work in the city
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    String nome = snapshot.getValue(String.class);
-                    if(nome != null){
-                        empresas.add(new Empresa(nome));
-                    }
-                }
-
-                ////////////////////////
-                //Get the companies info
-                DatabaseReference dbReferenceEmpresas = database.getReference("empresas");
-                // Read from the empresas database
-                dbReferenceEmpresas.addValueEventListener(new ValueEventListener() {
-                    // This method is called once with the initial value and again
-                    // whenever data at this location is updated.
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for(Empresa empresa : empresas) {
-                            Empresa empresaAtual = dataSnapshot.child(empresa.getNome()).getValue(Empresa.class);
-                            if(empresaAtual != null){
-                                //Log.d("firebase", "Teste empresa" + empresaAtual.getTelefone());
-                                empresa.CopyFrom(empresaAtual);
-                            }
-                        }
-                        Log.d("firebase", "Empresas disponíveis em " + calculadora.pegaNomeCidade() + ", " + calculadora.pegaVetorEstado()[Constants.iEST_SIGLA]);
-                        for(Empresa empresa : empresas){
-                            Log.d("firebase", empresa.getNome()+" - Telefone: " + empresa.getTelefone() + " Site: "+empresa.getSite());
-                        }
-
-                        FuncaoTeste(empresas);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        // Failed to read value
-                        Log.d("firebase", "Failed to read value." + error.toException());
-                    }
-                });
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Failed to read value
-                Log.d("firebase", "Failed to read value." + error.toException());
-            }
-        });
-    }
-
-
-
-
-
-
-
 
     public static class ViewHolder{
         TextView textSimulacao;

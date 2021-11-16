@@ -26,6 +26,7 @@ public class Constants {
 
     // Strings para passagem de parâmetros para outras activities
     public static final String EXTRA_CALCULADORAON = "com.solares.com.solares.calculadorasolar.EXTRA_CALCULADORAON";
+    public static final String EXTRA_EMPRESAS = "com.solares.com.solares.calculadorasolar.EXTRA_EMPRESAS";
 
     //Indices Paineis
     public static final int iPANEL_NOME = 0;

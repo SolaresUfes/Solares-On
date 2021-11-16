@@ -104,13 +104,13 @@
 
 
         <Button
-            android:id="@+id/button_finalizar"
+            android:id="@+id/button_continuar"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@drawable/background_button_resultado_center"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:text="@string/finalizar"
+            android:text="@string/continuar"
             android:textAllCaps="false"
             android:textColor="@color/colorWhite"
             app:layout_constraintBottom_toTopOf="@+id/guideline28"

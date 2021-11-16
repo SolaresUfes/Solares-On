@@ -1,7 +1,12 @@
 package com.solares.calculadorasolar.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -11,10 +16,17 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.solares.calculadorasolar.R;
 import com.solares.calculadorasolar.classes.AutoSizeText;
 import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
 import com.solares.calculadorasolar.classes.Constants;
+
+import java.util.LinkedList;
 
 import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensions;
 
@@ -45,8 +57,8 @@ public class ResultadoActivity extends AppCompatActivity{
             AutoSizeText.AutoSizeButton(buttonAnalise, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
             Button buttonIndicesEconomicos = findViewById(R.id.button_indices_economicos);
             AutoSizeText.AutoSizeButton(buttonIndicesEconomicos, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
-            Button buttonFinalizar = findViewById(R.id.button_finalizar);
-            AutoSizeText.AutoSizeButton(buttonFinalizar, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
+            Button buttonContinuar = findViewById(R.id.button_continuar);
+            AutoSizeText.AutoSizeButton(buttonContinuar, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
 
             //Erro de valor pequeno
             final TextView textExplicacaoValor = findViewById(R.id.ACRtext_explicacao_popup);
@@ -112,10 +124,10 @@ public class ResultadoActivity extends AppCompatActivity{
                 }
             });
 
-            buttonFinalizar.setOnClickListener(new View.OnClickListener() {
+            buttonContinuar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FinalizarCalculo(calculadora);
+                    ContinuarCalculo(calculadora);
                 }
             });
 
@@ -149,8 +161,8 @@ public class ResultadoActivity extends AppCompatActivity{
         startActivity(intent);
     }
 
-    public void FinalizarCalculo(CalculadoraOnGrid calculadora){
-        Intent intent = new Intent(this, CreditoActivity.class);
+    public void ContinuarCalculo(CalculadoraOnGrid calculadora){
+        Intent intent = new Intent(this, EmpresasActivity.class);
         intent.putExtra(Constants.EXTRA_CALCULADORAON, calculadora);
         startActivity(intent);
     }

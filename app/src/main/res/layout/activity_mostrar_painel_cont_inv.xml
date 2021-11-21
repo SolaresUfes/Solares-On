@@ -4,10 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background_resultados"
     tools:context=".activity.MostrarPainelContInvActivity">
 
 
-    <Button
+   <!-- <Button
         android:id="@+id/button_trocar_modulo1"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -47,10 +48,10 @@
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/text_inversor1"
-        app:layout_constraintTop_toTopOf="@+id/text_inversor1" />
+        app:layout_constraintTop_toTopOf="@+id/text_inversor1" />-->
 
     <TextView
-        android:id="@+id/text_titulo_equipamentos"
+        android:id="@+id/text_titulo_lista_equipamentos"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/background_resultado_text"

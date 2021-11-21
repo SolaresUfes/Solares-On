@@ -38,6 +38,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensions;
+
 public class PedirConsumoEnergeticoActivity extends AppCompatActivity {
 
 
@@ -47,6 +49,8 @@ public class PedirConsumoEnergeticoActivity extends AppCompatActivity {
     int i = 0;
     double potenciaUtilizadaCC=0;
     double potenciaUtilizadaCA=0;
+
+    TextView textSemEquipamentos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +62,19 @@ public class PedirConsumoEnergeticoActivity extends AppCompatActivity {
         try {
             final Global variavelGlobal = (Global)getApplicationContext();
 
+            //Pegando informações sobre o dispositivo, para regular o tamanho da letra (fonte)
+            //Essa função pega as dimensões e as coloca em váriaveis globais
+            GetPhoneDimensions(this);
+
+            textSemEquipamentos = findViewById(R.id.text_sem_equipamentos);
+            AutoSizeText.AutoSizeTextView(textSemEquipamentos, MainActivity.alturaTela, MainActivity.larguraTela, 2f);
+            TextView textListaEquipamentos = findViewById(R.id.text_titulo_lista_equipamentos);
+            AutoSizeText.AutoSizeTextView(textListaEquipamentos, MainActivity.alturaTela, MainActivity.larguraTela, 2f);
             this.mViewHolder.buttonAdicionar = findViewById(R.id.button_adicionar);
+            AutoSizeText.AutoSizeButton(this.mViewHolder.buttonAdicionar, MainActivity.alturaTela, MainActivity.larguraTela, 2f);
             this.mViewHolder.buttonResultado = findViewById(R.id.button_resultados);
+            AutoSizeText.AutoSizeButton(this.mViewHolder.buttonResultado, MainActivity.alturaTela, MainActivity.larguraTela, 2f);
+
             linearLayout = findViewById(R.id.layoutTest);
 
             this.mViewHolder.buttonAdicionar.setOnClickListener(new View.OnClickListener() {
@@ -87,8 +102,8 @@ public class PedirConsumoEnergeticoActivity extends AppCompatActivity {
 
                         variavelGlobal.setMeusEquipamentos(todosMeusEquipamentos);
 
-                        potenciaUtilizadaCC = demandaEnergiaDiaria(todosMeusEquipamentos, true);
-                        potenciaUtilizadaCA = demandaEnergiaDiaria(todosMeusEquipamentos, false);
+                        potenciaUtilizadaCC = demandaEnergiaAtivaDiaria(todosMeusEquipamentos, true);
+                        potenciaUtilizadaCA = demandaEnergiaAtivaDiaria(todosMeusEquipamentos, false);
 
                         System.out.println("\n------ Potencia CC: "+potenciaUtilizadaCC+" ------------------");
                         System.out.println("------ Potencia CA: "+potenciaUtilizadaCA+" ------------------");
@@ -116,14 +131,34 @@ public class PedirConsumoEnergeticoActivity extends AppCompatActivity {
         }catch (Exception e){
             e.printStackTrace();
         }
-
-
     }
 
+    // Ao voltar da Activity AdicionarEquipametos, aqui irá criar dinâmicamente objetos na tela
     @Override
     protected void onStart() {
         super.onStart();
         final Global variavelGlobal = (Global) getApplicationContext();
+
+        Equipamentos meuEquipamento = new Equipamentos();
+        Equipamentos meuEquipamento2 = new Equipamentos();
+        // Adicionando as características para o equipamento
+        meuEquipamento.setNome("Celular");
+        meuEquipamento.setQuantidade(1);
+        meuEquipamento.setPotencia(100);
+        meuEquipamento.setHorasPorDia(2);
+        meuEquipamento.setDiasUtilizados(3);
+        meuEquipamento.setCC(true);
+        variavelGlobal.adicionarElemento(meuEquipamento);
+        meuEquipamento2.setNome("Alternada");
+        meuEquipamento2.setQuantidade(2);
+        meuEquipamento2.setPotencia(100);
+        meuEquipamento2.setHorasPorDia(2);
+        meuEquipamento2.setDiasUtilizados(3);
+        meuEquipamento2.setCC(false);
+        variavelGlobal.adicionarElemento(meuEquipamento2);
+
+        // Esconder o texto de não ter adicionado nenhum equipamento ainda - Pensar melhor no que fazer
+        TextoVisibilidade(variavelGlobal);
 
         if(variavelGlobal.getRemoverTodasViews()){ // quando o usuário editar um equipamento
             linearLayout.removeAllViews();
@@ -170,6 +205,8 @@ public class PedirConsumoEnergeticoActivity extends AppCompatActivity {
         imageApagar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TextoVisibilidade(variavelGlobal);
+
                 // melhorar esse modo de encontrar o equipamento no array
                 String nomeEquipamentoSelecionado = (String) textViewNomeE.getText();
                 String qntEquipamentoSelecionado = (String) textViewQntE.getText();
@@ -195,26 +232,27 @@ public class PedirConsumoEnergeticoActivity extends AppCompatActivity {
 
     public void removerView(View view){ linearLayout.removeView(view); }
 
-    public double demandaEnergiaDiaria(ArrayList<Equipamentos> vetorEquipamentos, boolean Icontinua){
+    public double demandaEnergiaAtivaDiaria(ArrayList<Equipamentos> vetorEquipamentos, boolean Icontinua){
         double potenciaTotal=0;
         double rendimentoBat=0.9, rendimentoInv=0.9;
 
-        System.out.println(vetorEquipamentos.get(0).getPotencia());
-        System.out.println(vetorEquipamentos.get(0).getHorasPorDia());
-        System.out.println(vetorEquipamentos.get(0).getDiasUtilizados());
-
         if(Icontinua){
+            System.out.println("!!!!Entrou!!!!");
             for(int i=0; i<vetorEquipamentos.size(); i++){
                 if(vetorEquipamentos.get(i).getCC()){
-                    potenciaTotal = potenciaTotal + vetorEquipamentos.get(i).getPotencia()*vetorEquipamentos.get(i).getHorasPorDia()*vetorEquipamentos.get(i).getDiasUtilizados()/7;
+                    potenciaTotal = potenciaTotal + vetorEquipamentos.get(i).getPotencia() * vetorEquipamentos.get(i).getQuantidade() * vetorEquipamentos.get(i).getHorasPorDia() * vetorEquipamentos.get(i).getDiasUtilizados()/7;
                 }
             }
-            return (potenciaTotal / (rendimentoBat * rendimentoInv));
+            return (potenciaTotal / (rendimentoBat));
         }
 
         for(int i=0; i<vetorEquipamentos.size(); i++){
+            System.out.println(vetorEquipamentos.get(i).getCC());
             if(!vetorEquipamentos.get(i).getCC()){
-                potenciaTotal = potenciaTotal + vetorEquipamentos.get(i).getPotencia()*vetorEquipamentos.get(i).getHorasPorDia()*vetorEquipamentos.get(i).getDiasUtilizados()/7;
+                System.out.println(vetorEquipamentos.get(i).getPotencia());
+                System.out.println(vetorEquipamentos.get(i).getHorasPorDia());
+                System.out.println(vetorEquipamentos.get(i).getDiasUtilizados());
+                potenciaTotal = potenciaTotal + vetorEquipamentos.get(i).getPotencia() * vetorEquipamentos.get(i).getQuantidade() * vetorEquipamentos.get(i).getHorasPorDia() * vetorEquipamentos.get(i).getDiasUtilizados()/7;
             }
         }
         return potenciaTotal / (rendimentoBat * rendimentoInv);
@@ -241,6 +279,15 @@ public class PedirConsumoEnergeticoActivity extends AppCompatActivity {
         return vetorCidade;
     }
 
+    void TextoVisibilidade(Global variavelGlobal){
+        if(variavelGlobal.getEquipamentos().size() != 0){
+            textSemEquipamentos.setVisibility(View.GONE);
+        }
+        else{
+            textSemEquipamentos.setVisibility(View.VISIBLE);
+        }
+
+    }
 
     /* Descrição: Pega informações do banco de dados e retorna o vetor do estado do usuário
      * Parâmetros de Entrada: vetorCidade - Vetor de Strings com as informações da cidade;

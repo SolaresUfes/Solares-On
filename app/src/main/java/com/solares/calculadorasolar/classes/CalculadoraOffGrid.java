@@ -15,7 +15,7 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class CalculadoraOffGrid {
+public class CalculadoraOffGrid implements Serializable{
     // Variáveis Privadas da classe
     double HSP=0;
     String[] vetorEstado;
@@ -107,7 +107,8 @@ public class CalculadoraOffGrid {
             this.energiaAtivaDia = energiaAtivaNecessariaDia(this.potenciaUtilizadaDiariaCA, this.potenciaUtilizadaDiariaCC);
 
             // Calcular Potência Mínima do Arranjo Fotovoltaico
-            this.minPotencia = potenciaMinimaArranjoFotovoltaico(HSP,this.energiaAtivaDia); // entender o porque do valor alto
+            this.minPotencia = potenciaMinimaArranjoFotovoltaico(HSP, this.energiaAtivaDia);
+            System.out.println("Essa é a minima potencia: " + this.minPotencia);
 
             // Calcular Tensão do Sistema
             this.Vsist = defTensaoSistema(this.energiaAtivaDia);
@@ -127,8 +128,8 @@ public class CalculadoraOffGrid {
             area = calculadoraOnGrid.DefineArea(placaEscolhida);
             System.out.println("------ Módulo: "+placaEscolhida[Constants.iPANEL_NOME]);
 
-            // Definindo o Controlador de Carga is,this.Vsist, 1, Integer.parseInt(placaEscolhida[Constants.iPANEL_QTD]), this.minPotencia, Integer.parseInt(placaEscolhida[Constants.iPANEL_POTENCIA]), this.idControladorEscolhido
-            /*is = MyContext.getResources().openRawResource(R.raw.banco_controladores);
+           /* // Definindo o Controlador de Carga is,this.Vsist, 1, Integer.parseInt(placaEscolhida[Constants.iPANEL_QTD]), this.minPotencia, Integer.parseInt(placaEscolhida[Constants.iPANEL_POTENCIA]), this.idControladorEscolhido
+            is = MyContext.getResources().openRawResource(R.raw.banco_controladores);
             controladorEscolhido = CSVRead.DefineChargeController(is, this.Vsist, Voc_corrigida, Integer.parseInt(placaEscolhida[Constants.iPANEL_QTD]), 400, Integer.parseInt(placaEscolhida[Constants.iPANEL_POTENCIA]), idControladorEscolhido); // P_pv = minPotencia
             System.out.println("------ Controlador: "+controladorEscolhido[Constants.iCON_NOME]);*/
             // Definindo Quantidade de Placas em Série e Paralelo
@@ -165,10 +166,7 @@ public class CalculadoraOffGrid {
             }
 
             //Passar o objeto com as informações calculadas para a próxima Activity (ResultadoOff)
-            //Bundle mBundle = new Bundle();
-            //mBundle.putSerializable(Constants.EXTRA_CALCULADORAON, (Serializable) this);
-            intent.putExtra(Constants.EXTRA_CALCULADORAON, (Serializable) this);
-
+            intent.putExtra(Constants.EXTRA_CALCULADORAOFF, this);
             //Mudar de activity
             MyContext.startActivity(intent);
 
@@ -199,6 +197,8 @@ public class CalculadoraOffGrid {
         return L;
     }
 
+    // #### Fórmula ####
+    // Pmax = max_i=1 ^12 (L_i / (HSP * Red1 * Red2))
     public static double potenciaMinimaArranjoFotovoltaico(double HSP, double L){
         double Lmes=0;
         double Pi=0;
@@ -206,15 +206,18 @@ public class CalculadoraOffGrid {
         double Red1Red2 = 0.9;
 
         for (int i=0; i<12; i++) {
-            if (i == 1) Lmes = L * 28;
-            else if (i % 2 == 0) Lmes = L * 31;
-            else Lmes = L * 30;
-
-            Pi = Lmes * (Red1Red2);
-
+            Lmes = L * numDiasMes(i);
+            Pi = HSP * (Red1Red2);
+            Pi = Lmes / Pi;
             if (Pi > Pmax) Pmax = Pi;
         }
-        return Pmax * HSP;
+        return Pmax;
+    }
+
+    static int numDiasMes(int i){
+        if(i==3 || i==5 || i==8 || i==10) return 30; // abril, junho, setembro, novembro
+        else if(i==2) return 2;
+        return 31;
     }
 
     public static double potenciaPico(double HSP, double minPotencia){

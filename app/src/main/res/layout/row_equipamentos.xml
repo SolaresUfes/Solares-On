@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp">
+
+    <TextView
+        android:id="@+id/text_row_equipamento"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_weight="1"
+        android:background="@drawable/background_edit_text_gray"
+        android:textColor="@color/colorBlack"
+        android:padding="10dp"
+        android:text="Testanto texto"></TextView>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_edit_text_gray">
+
+        <ImageView
+            android:id="@+id/image_row_edit"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@android:drawable/ic_menu_edit"
+            ></ImageView>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_edit_text_gray"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="5dp">
+
+        <ImageView
+            android:id="@+id/image_row_delete"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:background="@android:drawable/ic_menu_close_clear_cancel"
+            ></ImageView>
+
+    </FrameLayout>
+
+
+</LinearLayout>

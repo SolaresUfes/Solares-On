@@ -86,6 +86,8 @@
     <string name="economico">Econômico</string>
     <string name="bateria">Bateria</string>
     <string name="geracao">Geração</string>
+    <string name="lista_equipamento">Lista de equipamentos</string>
+    <string name="adicionar_item">Adicionar outro item</string>
 
 
     <string-array name="Modulos">

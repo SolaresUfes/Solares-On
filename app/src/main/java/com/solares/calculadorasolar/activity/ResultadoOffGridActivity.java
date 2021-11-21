@@ -24,7 +24,7 @@ public class ResultadoOffGridActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         final CalculadoraOffGrid calculadora = (CalculadoraOffGrid) intent.getSerializableExtra(Constants.EXTRA_CALCULADORAOFF);
-        System.out.println("Calculadora Placa: "+calculadora);
+        System.out.println("Calculadora Placa: "+calculadora.getControlador());
 
         try {
             this.mViewHolder.buttonEquipamento = findViewById(R.id.button_equipamentos);
@@ -37,7 +37,7 @@ public class ResultadoOffGridActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(ResultadoOffGridActivity.this, MostrarPainelContInvActivity.class);
-                    intent.putExtra(Constants.EXTRA_CALCULADORAOFF, String.valueOf(calculadora));
+                    intent.putExtra(Constants.EXTRA_CALCULADORAOFF, calculadora);
                     startActivity(intent);
                 }
             });

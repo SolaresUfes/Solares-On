@@ -42,6 +42,9 @@ public class Painel implements Serializable {
     }
 
     public String getMarca() {
+        if(Marca == null){
+            return "";
+        }
         return Marca;
     }
 
@@ -58,6 +61,9 @@ public class Painel implements Serializable {
     }
 
     public String getCodigo() {
+        if(Codigo == null){
+            return "";
+        }
         return Codigo;
     }
 

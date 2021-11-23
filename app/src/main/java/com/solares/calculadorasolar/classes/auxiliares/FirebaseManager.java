@@ -7,7 +7,6 @@ import android.net.NetworkInfo;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -15,17 +14,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
-import com.solares.calculadorasolar.R;
-import com.solares.calculadorasolar.activity.MainActivity;
 import com.solares.calculadorasolar.classes.entidades.Inversor;
 import com.solares.calculadorasolar.classes.entidades.Painel;
 
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Objects;
-import java.util.Set;
 
 public class FirebaseManager {
     public static LinkedList<Painel> fbBuscaListaPaineis(Context context, SharedPreferences sharedPref){
@@ -39,19 +33,7 @@ public class FirebaseManager {
         if(!isConnected){
             Log.d("firebase", "Sem internet!");
 
-            //Pega os paineis da shared prefs
-            Gson gson = new Gson();
-            String json = sharedPref.getString("paineis", "");
-            Painel[] arrayPaineis = gson.fromJson(json, Painel[].class);
-
-            paineis.clear();
-            //Se não tiver nada salvo, pega do csv:
-            if(arrayPaineis == null) {
-                Log.d("firebase", "Pegando os paineis do CSV!");
-                paineis.addAll(Objects.requireNonNull(CSVManager.getPaineisCSV(context)));
-            } else {
-                paineis.addAll(Arrays.asList(arrayPaineis));
-            }
+            pegaPaineisOffline(context, sharedPref, paineis);
         }
 
 
@@ -63,6 +45,7 @@ public class FirebaseManager {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 paineis.clear();
                 //Pega os paineis e os coloca em uma lista
+                Log.d("firebase", "Buscando painéis no firebase...");
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Painel painel = snapshot.getValue(Painel.class);
                     if(painel != null && !painel.getCodigo().equals("")){
@@ -72,11 +55,13 @@ public class FirebaseManager {
                 }
 
                 //Salva os inversores no banco de dados na shared pref
-                SharedPreferences.Editor prefsEditor = sharedPref.edit();
-                Gson gson = new Gson();
-                String json = gson.toJson(paineis.toArray());
-                prefsEditor.putString("paineis", json);
-                prefsEditor.apply();
+                if(paineis.size() > 0){
+                    SharedPreferences.Editor prefsEditor = sharedPref.edit();
+                    Gson gson = new Gson();
+                    String json = gson.toJson(paineis.toArray());
+                    prefsEditor.putString("paineis", json);
+                    prefsEditor.apply();
+                }
             }
 
             @Override
@@ -100,19 +85,7 @@ public class FirebaseManager {
         if(!isConnected){
             Log.d("firebase", "Sem internet!");
 
-            //Pega os paineis da shared prefs
-            Gson gson = new Gson();
-            String json = sharedPref.getString("inversores", "");
-            Inversor[] arrayInversores = gson.fromJson(json, Inversor[].class);
-
-            inversores.clear();
-            //Se não tiver nada salvo, pega do csv:
-            if(arrayInversores == null){
-                Log.d("firebase", "Pegando os inversores do CSV!");
-                inversores.addAll(Objects.requireNonNull(CSVManager.getInversoresCSV(context)));
-            } else {
-                inversores.addAll(Arrays.asList(arrayInversores));
-            }
+            pegaInversoresOffline(context, sharedPref, inversores);
         }
 
 
@@ -124,20 +97,23 @@ public class FirebaseManager {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 inversores.clear();
                 //Pega os paineis e os coloca em uma lista
+                Log.d("firebase", "Buscando inversores no firebase...");
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Inversor inversor = snapshot.getValue(Inversor.class);
                     if(inversor != null && !inversor.getMarca().equals("")){
-                        Log.d("firebase", "Inversor: " + inversor.getMarca() + inversor.getPotencia());
+                        Log.d("firebase", "Inversor: " + inversor.getMarca() + " " + inversor.getPotencia());
                         inversores.add(inversor);
                     }
                 }
 
                 //Salva os inversores no banco de dados na shared pref
-                SharedPreferences.Editor prefsEditor = sharedPref.edit();
-                Gson gson = new Gson();
-                String json = gson.toJson(inversores.toArray());
-                prefsEditor.putString("inversores", json);
-                prefsEditor.apply();
+                if(inversores.size() > 0) {
+                    SharedPreferences.Editor prefsEditor = sharedPref.edit();
+                    Gson gson = new Gson();
+                    String json = gson.toJson(inversores.toArray());
+                    prefsEditor.putString("inversores", json);
+                    prefsEditor.apply();
+                }
             }
 
             @Override
@@ -148,5 +124,40 @@ public class FirebaseManager {
         });
 
         return inversores;
+    }
+
+
+    ////// Funções para busca offline //////////////////////////////////////
+
+    public static void pegaPaineisOffline(Context context, SharedPreferences sharedPref, LinkedList<Painel> paineis){
+        //Pega os paineis da shared prefs
+        Gson gson = new Gson();
+        String json = sharedPref.getString("paineis", "");
+        Painel[] arrayPaineis = gson.fromJson(json, Painel[].class);
+
+        paineis.clear();
+        //Se não tiver nada salvo, pega do csv:
+        if(arrayPaineis == null) {
+            Log.d("firebase", "Pegando os paineis do CSV!");
+            paineis.addAll(Objects.requireNonNull(CSVManager.getPaineisCSV(context)));
+        } else {
+            paineis.addAll(Arrays.asList(arrayPaineis));
+        }
+    }
+
+    public static void pegaInversoresOffline(Context context, SharedPreferences sharedPref, LinkedList<Inversor> inversores){
+        //Pega os paineis da shared prefs
+        Gson gson = new Gson();
+        String json = sharedPref.getString("inversores", "");
+        Inversor[] arrayInversores = gson.fromJson(json, Inversor[].class);
+
+        inversores.clear();
+        //Se não tiver nada salvo, pega do csv:
+        if(arrayInversores == null){
+            Log.d("firebase", "Pegando os inversores do CSV!");
+            inversores.addAll(Objects.requireNonNull(CSVManager.getInversoresCSV(context)));
+        } else {
+            inversores.addAll(Arrays.asList(arrayInversores));
+        }
     }
 }

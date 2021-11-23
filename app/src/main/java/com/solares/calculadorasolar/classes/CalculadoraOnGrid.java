@@ -155,6 +155,13 @@ public class CalculadoraOnGrid implements Serializable {
     public void Calcular(Context MyContext) {
         InputStream is=null;
 
+        if(this.pegaListaInversores().size() <= 0){
+            Log.i("Calculate", "Falha na busca por inversores");
+        }
+        if(this.pegaListaPaineis().size() <= 0){
+            Log.i("Calculate", "Falha na busca por paineis");
+        }
+
         try {
             //Calcula os consumos em kWh e em reais
             if(modoCalculoPorDinheiro){

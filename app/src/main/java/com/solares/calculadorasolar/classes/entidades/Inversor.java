@@ -38,6 +38,9 @@ public class Inversor implements Serializable {
     }
 
     public String getMarca() {
+        if(Marca == null){
+            return "";
+        }
         return Marca;
     }
 
@@ -62,6 +65,9 @@ public class Inversor implements Serializable {
     }
 
     public String getCodigo() {
+        if(Codigo == null){
+            return "";
+        }
         return Codigo;
     }
 

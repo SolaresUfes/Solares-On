@@ -6,10 +6,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.storage.StorageManager;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -17,12 +22,18 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.solares.calculadorasolar.classes.AutoSizeText;
 import com.solares.calculadorasolar.R;
 import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
@@ -34,11 +45,15 @@ import java.util.LinkedList;
 
 public class EmpresasActivity extends AppCompatActivity {
 
+    TextView textFacaOrcamento;
     private LinearLayout linearLayout;
+    FirebaseStorage firebaseStorage;
+    StorageReference storageReference;
 
     public static int larguraTela;
     public static int alturaTela;
     public float porcent = 4f;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +61,9 @@ public class EmpresasActivity extends AppCompatActivity {
         setContentView(R.layout.activity_empresas);
 
         // Arrumar algum jeito de mandar o vetor "Empresa" para essa view
+
+        // Indicar que irá ter um tempo de espara para carregar as empresas
+        Toast.makeText(EmpresasActivity.this, "Aguarde um momento!", Toast.LENGTH_SHORT).show();
 
         Intent intent = getIntent();
         final CalculadoraOnGrid calculadora = (CalculadoraOnGrid) intent.getSerializableExtra(Constants.EXTRA_CALCULADORAON);
@@ -56,12 +74,14 @@ public class EmpresasActivity extends AppCompatActivity {
 
         TextView textTituloEmpresas = findViewById(R.id.text_titulo_empresas);
         AutoSizeText.AutoSizeTextView(textTituloEmpresas, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
-        TextView textFacaOrcamento = findViewById(R.id.text_faca_orcamento);
+        textFacaOrcamento = findViewById(R.id.text_faca_orcamento);
         AutoSizeText.AutoSizeTextView(textFacaOrcamento, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
         Button buttonFinalizar = findViewById(R.id.button_finalizar);
         AutoSizeText.AutoSizeButton(buttonFinalizar, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
 
         linearLayout = findViewById(R.id.LinearLayoutMostrarEmpresas);
+        firebaseStorage = FirebaseStorage.getInstance();
+        storageReference = firebaseStorage.getReference();
 
         try{
             GetEmpresasFirebase(calculadora, EmpresasActivity.this);
@@ -87,21 +107,55 @@ public class EmpresasActivity extends AppCompatActivity {
     }
 
     public void addView(Empresa empresa){
-        final View EquipamentosView = getLayoutInflater().inflate(R.layout.linha_mostrar_empresas, null, false);
-        final TextView nomeEmpresa = (TextView)EquipamentosView.findViewById(R.id.TextViewNome);
-        final TextView siteEmpresa = (TextView)EquipamentosView.findViewById(R.id.TextViewSite);
-        final TextView telefoneEmpresa = (TextView)EquipamentosView.findViewById(R.id.TextViewTelefone);
-        final ImageView logoEmpresa = (ImageView)EquipamentosView.findViewById(R.id.ImageViewLogo);
 
-        nomeEmpresa.setText(empresa.getNome());
-        siteEmpresa.setText(empresa.getSite());
-        telefoneEmpresa.setText(empresa.getTelefone());
+        if(empresa != null){
+            final View EquipamentosView = getLayoutInflater().inflate(R.layout.linha_mostrar_empresas, null, false);
+            final TextView nomeEmpresa = (TextView)EquipamentosView.findViewById(R.id.TextViewNome);
+            final TextView siteEmpresa = (TextView)EquipamentosView.findViewById(R.id.TextViewSite);
+            final TextView telefoneEmpresa = (TextView)EquipamentosView.findViewById(R.id.TextViewTelefone);
+            final ImageView logoEmpresa = (ImageView)EquipamentosView.findViewById(R.id.ImageViewLogo);
 
-        AutoSizeText.AutoSizeTextView(nomeEmpresa, MainActivity.alturaTela, MainActivity.larguraTela, 2f);
-        AutoSizeText.AutoSizeTextView(siteEmpresa, MainActivity.alturaTela, MainActivity.larguraTela, 2f);
-        AutoSizeText.AutoSizeTextView(telefoneEmpresa, MainActivity.alturaTela, MainActivity.larguraTela, 2f);
+            downloadLogo(empresa.nome, logoEmpresa);
 
-        linearLayout.addView(EquipamentosView);
+            nomeEmpresa.setText(empresa.getNome());
+            siteEmpresa.setText(empresa.getSite());
+            telefoneEmpresa.setText(empresa.getTelefone());
+
+            AutoSizeText.AutoSizeTextView(nomeEmpresa, MainActivity.alturaTela, MainActivity.larguraTela, 2f);
+            AutoSizeText.AutoSizeTextView(siteEmpresa, MainActivity.alturaTela, MainActivity.larguraTela, 2f);
+            AutoSizeText.AutoSizeTextView(telefoneEmpresa, MainActivity.alturaTela, MainActivity.larguraTela, 2f);
+
+            linearLayout.addView(EquipamentosView);
+        }
+        else{
+            textFacaOrcamento.setText("Não há empresas parceiras");
+            Toast.makeText(EmpresasActivity.this, "Não há empresas parceiras próximas", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    public void downloadLogo(String nomeEmpresa, ImageView logoEmpresa){
+        String pathLogo = "LogoEmpresas/".concat(nomeEmpresa).concat(".png");
+        //Download file in Memory
+        StorageReference logo = storageReference.child(pathLogo);
+
+        long MAXBYTES = 1024*1024;
+
+        logo.getBytes(MAXBYTES).addOnSuccessListener(new OnSuccessListener<byte[]>() { // Settar imagem baixada no ImageView
+            @Override
+            public void onSuccess(byte[] bytes) {
+                // convert byte to Bitmap
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                Drawable image = new BitmapDrawable(getResources(), bitmap);
+                logoEmpresa.setImageBitmap(bitmap);
+                //logoEmpresa.setImageDrawable(image);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(EmpresasActivity.this, "Erro ao carregar logo", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void FinalizarCalculo(CalculadoraOnGrid calculadora){
@@ -115,7 +169,6 @@ public class EmpresasActivity extends AppCompatActivity {
     public static void FuncaoTeste(LinkedList<Empresa> empresas){
         Log.d("firebase", "Num Empresas: " + empresas.size());
     }
-
 
     public void GetEmpresasFirebase(CalculadoraOnGrid calculadora, Context context){
         Log.d("firebase", "Firebase Database inicializado");
@@ -166,11 +219,18 @@ public class EmpresasActivity extends AppCompatActivity {
                                 empresa.CopyFrom(empresaAtual);
                             }
                         }
+
                         Log.d("firebase", "Empresas disponíveis em " + calculadora.pegaNomeCidade() + ", " + calculadora.pegaVetorEstado()[Constants.iEST_SIGLA]);
-                        for(Empresa empresa : empresas){
-                            Log.d("firebase", empresa.getNome()+" - Telefone: " + empresa.getTelefone() + " Site: "+empresa.getSite());
-                            addView(empresa);
+                        if(empresas.size() != 0){
+                            for(Empresa empresa : empresas){
+                                Log.d("firebase", empresa.getNome()+" - Telefone: " + empresa.getTelefone() + " Site: "+empresa.getSite());
+                                addView(empresa);
+                            }
                         }
+                        else{
+                            addView(null);
+                        }
+
 
                         FuncaoTeste(empresas);
                     }

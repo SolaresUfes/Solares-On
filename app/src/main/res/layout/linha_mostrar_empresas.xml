@@ -20,15 +20,18 @@
 
             <ImageView
                 android:id="@+id/ImageViewLogo"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:layout_margin="16dp"
-                android:scaleType="centerCrop"
-                app:srcCompat="@drawable/common_google_signin_btn_icon_dark"></ImageView>
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/circle_arrow"
+                ></ImageView>
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="3"
                 android:padding="5dp"
                 android:orientation="vertical">
 

@@ -1,6 +1,7 @@
 package com.solares.calculadorasolar.classes;
 
 import android.graphics.drawable.Icon;
+import android.widget.Toast;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -373,10 +374,10 @@ public class CSVRead {
             line = br.readLine();
 
             do{ // definir o primeiro inversor
+                /*cheaperInvertor = line.split(divider);
+
                 potPico = Double.parseDouble(painelSolar[Constants.iPANEL_QTD]) * Double.parseDouble(painelSolar[Constants.iPANEL_POTENCIA]);
                 FDI = Double.parseDouble(cheaperInvertor[Constants.iINV_POTENCIA]) * potPico;
-
-                cheaperInvertor = line.split(divider);
 
                 numberInvertors = (int) Math.ceil((0.8 * potPico) / Double.parseDouble(cheaperInvertor[Constants.iINV_POTENCIA]));//Qtd de inversores
 
@@ -384,30 +385,34 @@ public class CSVRead {
                 cheaperInvertor[Constants.iINV_QTD] = String.valueOf(numberInvertors);
                 cheaperInvertor[Constants.iINV_PRECO_TOTAL] = String.valueOf(cheaperCost);
 
-                VinInvertor = Integer.parseInt(cheaperInvertor[Constants.iINV_PRECO]);// trocar esse iINT_PRECO pelo local em que o Vin vai ficar
-            }while(Vcc != VinInvertor);
+                VinInvertor = Integer.parseInt(cheaperInvertor[Constants.iINVOFF_TENSAOENTRADA]);*/
 
+                cheaperInvertor = line.split(divider);
+                VinInvertor = Integer.parseInt(cheaperInvertor[Constants.iINVOFF_TENSAOENTRADA]);
+                numberInvertors = (int) Math.ceil(S / Double.parseDouble(cheaperInvertor[Constants.iINVOFF_POTENCIAAPARENTE]));
+                cheaperCost = Integer.parseInt(cheaperInvertor[Constants.iINVOFF_PRECO]);
+
+                cheaperInvertor[Constants.iINVOFF_QTD] = Integer.toString(numberInvertors);
+                cheaperInvertor[Constants.iINVOFF_PRECO_TOTAL] = Double.toString(cheaperCost);
+            }while(Vcc > VinInvertor && (line = br.readLine()) != null);
+
+            System.out.println("--------------"+idInversorEscolhido);
             while ((line = br.readLine()) != null)  { // usuário escolherá o inversor
-                cont++;
-
                 invertor_i = line.split(divider);
-                numberInvertors = (int)Math.ceil((0.8*potPico)/Double.parseDouble(invertor_i[Constants.iINV_POTENCIA]));
-                currentCost = numberInvertors * Double.parseDouble(invertor_i[Constants.iINV_PRECO]);
+                VinInvertor = Integer.parseInt(cheaperInvertor[Constants.iINVOFF_TENSAOENTRADA]);
+                numberInvertors = (int) Math.ceil(S / Double.parseDouble(cheaperInvertor[Constants.iINVOFF_POTENCIAAPARENTE]));
+                cheaperCost = Integer.parseInt(cheaperInvertor[Constants.iINVOFF_PRECO]);
 
-                invertor_i[Constants.iINV_QTD] = String.valueOf(numberInvertors);
-                invertor_i[Constants.iINV_PRECO_TOTAL] = String.valueOf(currentCost);
-
-                FDI = Double.parseDouble(cheaperInvertor[Constants.iINV_POTENCIA]) * potPico;
+                invertor_i[Constants.iINVOFF_QTD] = Integer.toString(numberInvertors);
+                invertor_i[Constants.iINVOFF_PRECO_TOTAL] = Double.toString(cheaperCost);
 
                 if(idInversorEscolhido == cont){ //Se o usuário escolheu o cont° inversor
                     cheaperInvertor = invertor_i;
                     break;
                 }
+                cont++;
 
-                if(currentCost<cheaperCost){
-                    cheaperCost = currentCost;
-                    cheaperInvertor = invertor_i;
-                }
+                //FDI = Double.parseDouble(cheaperInvertor[Constants.iINVOFF_POTENCIAAPARENTE]) * S*0.8;//substitui potPico por S*0.8
             }
 
             if(FDI <= 0.75 && FDI >= 0.85){

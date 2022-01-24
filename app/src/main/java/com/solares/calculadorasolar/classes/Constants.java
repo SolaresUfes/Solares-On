@@ -73,6 +73,20 @@ public class Constants {
     public static final int iINV_ID = 7;
 
 
+    //Indices Inversores Off-Grid
+    public static final int iINVOFF_NOME = 0;
+    public static final int iINVOFF_MARCA = 1;
+    public static final int iINVOFF_POTENCIAPICO = 2;
+    public static final int iINVOFF_POTENCIAAPARENTE = 3;
+    public static final int iINVOFF_TENSAOENTRADA = 4;
+    public static final int iINVOFF_TENSAOSAIDA = 5;
+    public static final int iINVOFF_PRECO = 6;
+    public static final int iINVOFF_RENDIMENTO_MAXIMO = 7;
+    public static final int iINVOFF_QTD = 8;
+    public static final int iINVOFF_PRECO_TOTAL = 9;
+    public static final int iINVOFF_ID = 10;
+
+
     //Indices Bateria
     public static final int iBAT_NOME = 0;
     public static final int iBAT_MARCA = 1;

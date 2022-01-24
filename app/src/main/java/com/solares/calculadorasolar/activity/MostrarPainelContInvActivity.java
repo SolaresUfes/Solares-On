@@ -34,28 +34,42 @@ public class MostrarPainelContInvActivity extends AppCompatActivity {
         TextView textControlador = findViewById(R.id.text_controlador1);
         TextView textInversor = findViewById(R.id.text_inversor1);
 
-        System.out.println("Nome da placa que chegou: "+calculadora.getPlacaEscolhida()[Constants.iPANEL_NOME]);
+        try{
+            System.out.println("Nome da placa que chegou: "+calculadora.getPlacaEscolhida()[Constants.iPANEL_NOME]);
+            System.out.println("Nome do inversor que chegou: "+calculadora.getInversor()[Constants.iINVOFF_NOME]);
+            System.out.println("Nome do controlador que chegou: "+calculadora.getControlador()[Constants.iCON_NOME]);
 
-        for(int i=0; i< calculadora.getPlacaEscolhida().length; i++){
-            System.out.println(calculadora.getPlacaEscolhida()[i]);
+            // for(int i=0; i< calculadora.getPlacaEscolhida().length; i++){
+            //    System.out.println(calculadora.getPlacaEscolhida()[i]);
+            // }
+
+            textPlaca.setText(String.format(Locale.ITALY, "%d %s de %.0f Wp",
+                    Integer.parseInt(calculadora.getPlacaEscolhida()[Constants.iPANEL_QTD]), "Placa", Double.parseDouble(calculadora.getPlacaEscolhida()[Constants.iPANEL_POTENCIA])));
+
+            textControlador.setText(String.format(Locale.ITALY, "%d %s de %.0f Wp",
+                    Integer.parseInt(calculadora.getControlador()[Constants.iPANEL_QTD]), "Controlador", Double.parseDouble(calculadora.getControlador()[Constants.iPANEL_POTENCIA])));
+
+            if(calculadora.getInversor() != null) {
+                textInversor.setText(String.format(Locale.ITALY, "%d %s de %.2f kW",
+                        Integer.parseInt(calculadora.getInversor()[Constants.iINVOFF_QTD]), "Inversor", (Double.parseDouble(calculadora.getInversor()[Constants.iINVOFF_POTENCIAAPARENTE]) / 1000) * 0.8));
+            }
+            else{
+                textInversor.setText(String.format(Locale.ITALY, "%d %s de %.2f kW", "Não há necessidade de inversor!"));
+            }
+
+            //Botão voltar
+            Button buttonVoltar = findViewById(R.id.button_voltar);
+            buttonVoltar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+
+        }catch (Exception e){
+            e.printStackTrace();
+
         }
 
-        textPlaca.setText(String.format(Locale.ITALY, "%d %s de %.0f Wp",
-                Integer.parseInt(calculadora.getPlacaEscolhida()[Constants.iPANEL_QTD]), "Placa", Double.parseDouble(calculadora.getPlacaEscolhida()[Constants.iPANEL_POTENCIA])));
-
-        //textControlador.setText(String.format(Locale.ITALY, "%d %s de %.0f Wp",
-        //        Integer.parseInt(calculadora.getControlador()[Constants.iPANEL_QTD]), "Controlador", Double.parseDouble(calculadora.getControlador()[Constants.iPANEL_POTENCIA])));
-
-       // textInversor.setText(String.format(Locale.ITALY, "%d %s de %.2f kW",
-      //          Integer.parseInt(calculadora.getInversor()[Constants.iINV_QTD]), "Inversor", Double.parseDouble(calculadora.getInversor()[Constants.iINV_POTENCIA])/1000));
-
-        //Botão voltar
-        Button buttonVoltar = findViewById(R.id.button_voltar);
-        buttonVoltar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
     }
 }

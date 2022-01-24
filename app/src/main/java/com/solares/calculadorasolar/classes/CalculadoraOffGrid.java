@@ -128,14 +128,14 @@ public class CalculadoraOffGrid implements Serializable{
             area = calculadoraOnGrid.DefineArea(placaEscolhida);
             System.out.println("------ Módulo: "+placaEscolhida[Constants.iPANEL_NOME]);
 
-           /* // Definindo o Controlador de Carga is,this.Vsist, 1, Integer.parseInt(placaEscolhida[Constants.iPANEL_QTD]), this.minPotencia, Integer.parseInt(placaEscolhida[Constants.iPANEL_POTENCIA]), this.idControladorEscolhido
+            // Definindo o Controlador de Carga is,this.Vsist, 1, Integer.parseInt(placaEscolhida[Constants.iPANEL_QTD]), this.minPotencia, Integer.parseInt(placaEscolhida[Constants.iPANEL_POTENCIA]), this.idControladorEscolhido
             is = MyContext.getResources().openRawResource(R.raw.banco_controladores);
             controladorEscolhido = CSVRead.DefineChargeController(is, this.Vsist, Voc_corrigida, Integer.parseInt(placaEscolhida[Constants.iPANEL_QTD]), 400, Integer.parseInt(placaEscolhida[Constants.iPANEL_POTENCIA]), idControladorEscolhido); // P_pv = minPotencia
-            System.out.println("------ Controlador: "+controladorEscolhido[Constants.iCON_NOME]);*/
+            System.out.println("------ Controlador: "+controladorEscolhido[Constants.iCON_NOME]);
             // Definindo Quantidade de Placas em Série e Paralelo
- /*           this.placaSerie = numModulosSerie(Integer.parseInt(controladorEscolhido[Constants.iCON_V_MAX_SISTEMA]), 1);// Descobrir como ter a Tensão de Máxima Potência de Temp. Máx.
-            this.placaParalelo = numModulosParalelo(this.minPotencia, this.placaSerie,Integer.parseInt(this.placaEscolhida[Constants.iPANEL_POTENCIA])); // Descobrir como ter a Corrente de Máxima Potência
-*/
+           // this.placaSerie = numModulosSerie(Integer.parseInt(controladorEscolhido[Constants.iCON_V_MAX_SISTEMA]), 1);// Descobrir como ter a Tensão de Máxima Potência de Temp. Máx.
+           // this.placaParalelo = numModulosParalelo(this.minPotencia, this.placaSerie,Integer.parseInt(this.placaEscolhida[Constants.iPANEL_POTENCIA])); // Descobrir como ter a Corrente de Máxima Potência
+
 /*
             // Definindo o Banco de Baterias
             //is = MyContext.getResources().openRawResource(R.raw.banco_baterias);
@@ -143,13 +143,14 @@ public class CalculadoraOffGrid implements Serializable{
 */
 
             // Definindo os Inversores
-           /* if(this.potenciaUtilizadaDiariaCA != 0){
+            if(this.potenciaUtilizadaDiariaCA != 0){
+                System.out.println("-------- Vsist: "+Vsist);
                 this.potenciaAparente = this.potenciaUtilizadaDiariaCA / this.fatorPotencia;
-                // aqui fazer o 'is' receber o banco de dados dos inversores off-grid
-                is = MyContext.getResources().openRawResource(R.raw.banco_inversores);
+                is = MyContext.getResources().openRawResource(R.raw.banco_inversores_off);
                 inversorEscolhido = CSVRead.DefineInvertorOffGrid(is, this.placaEscolhida ,this.potenciaAparente, this.Vsist, idInversorEscolhido);
+                System.out.println("-------- Inversor: "+inversorEscolhido[Constants.iINVOFF_NOME]);
             }
-            else inversorEscolhido=null;*/
+            else inversorEscolhido=null;
 
 
 

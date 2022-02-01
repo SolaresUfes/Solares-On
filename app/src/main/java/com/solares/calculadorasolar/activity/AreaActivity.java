@@ -19,6 +19,7 @@ import com.solares.calculadorasolar.R;
 import com.solares.calculadorasolar.classes.auxiliares.AutoSizeText;
 import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
 import com.solares.calculadorasolar.classes.auxiliares.Constants;
+import com.solares.calculadorasolar.classes.auxiliares.ExplicacaoInfos;
 
 import java.util.Locale;
 
@@ -64,6 +65,16 @@ public class AreaActivity extends AppCompatActivity {
         final CalculadoraOnGrid calculadora = (CalculadoraOnGrid) intent.getSerializableExtra(Constants.EXTRA_CALCULADORAON);
 
         textAreaAtual.setText(String.format(Locale.ITALY, "Área Atual: %.2f m²", calculadora.pegaArea()));
+
+
+        //Tutorial sobre as informações
+        findViewById(R.id.inst_button_info).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExplicacaoInfos.ShowPopUpInfo(AreaActivity.this, findViewById(R.id.blackener), "Dúvidas",
+                        "Tarifa blablabla\nTrifásico fulano e tals. Lorem ipsu batata lorem itjkansdkj kskpdl iodjdmkc jdasjkd9o");
+            }
+        });
 
         buttonRecalcArea.setOnClickListener(new View.OnClickListener() {
             @Override

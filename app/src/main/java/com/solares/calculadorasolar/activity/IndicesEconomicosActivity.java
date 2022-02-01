@@ -12,6 +12,7 @@ import com.solares.calculadorasolar.R;
 import com.solares.calculadorasolar.classes.auxiliares.AutoSizeText;
 import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
 import com.solares.calculadorasolar.classes.auxiliares.Constants;
+import com.solares.calculadorasolar.classes.auxiliares.ExplicacaoInfos;
 
 import java.util.Locale;
 
@@ -69,6 +70,48 @@ public class IndicesEconomicosActivity extends AppCompatActivity {
         } else {
             textTempo.setText(String.format(Locale.ITALY, "%d anos", calculadora.pegaTempoRetorno()));
         }
+
+
+        //Tutorial sobre as informações extras
+        findViewById(R.id.inst_button_info).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExplicacaoInfos.ShowHint(findViewById(R.id.blackener), findViewById(R.id.inst_image_info));
+            }
+        });
+
+
+        //Clicar nas informações para explicação
+        textLucro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExplicacaoInfos.ShowPopUpInfo(IndicesEconomicosActivity.this, findViewById(R.id.blackener), "Economia em 25 anos", "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos obcaecati temporibus voluptate. Aspernatur dolor eius eveniet ipsam maiores odio vel vitae, voluptatibus. Dolorem eius eos excepturi fugit itaque minima officiis reiciendis tempore ullam, vel? Accusamus animi architecto dicta distinctio eaque ex laboriosam maiores molestias, nostrum qui soluta tenetur voluptas voluptatibus.");
+            }
+        });
+        textTaxaRetorno.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExplicacaoInfos.ShowPopUpInfo(IndicesEconomicosActivity.this, findViewById(R.id.blackener), "Taxa Interna de Retorno", "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos obcaecati temporibus voluptate. Aspernatur dolor eius eveniet ipsam maiores odio vel vitae, voluptatibus. Dolorem eius eos excepturi fugit itaque minima officiis reiciendis tempore ullam, vel? Accusamus animi architecto dicta distinctio eaque ex laboriosam maiores molestias, nostrum qui soluta tenetur voluptas voluptatibus.");
+            }
+        });
+        textEconomiaMensal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExplicacaoInfos.ShowPopUpInfo(IndicesEconomicosActivity.this, findViewById(R.id.blackener), "Economia Mensal", "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos obcaecati temporibus voluptate. Aspernatur dolor eius eveniet ipsam maiores odio vel vitae, voluptatibus. Dolorem eius eos excepturi fugit itaque minima officiis reiciendis tempore ullam, vel? Accusamus animi architecto dicta distinctio eaque ex laboriosam maiores molestias, nostrum qui soluta tenetur voluptas voluptatibus.");
+            }
+        });
+        textLCOE.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExplicacaoInfos.ShowPopUpInfo(IndicesEconomicosActivity.this, findViewById(R.id.blackener), "Custo da Energia Solar", "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos obcaecati temporibus voluptate. Aspernatur dolor eius eveniet ipsam maiores odio vel vitae, voluptatibus. Dolorem eius eos excepturi fugit itaque minima officiis reiciendis tempore ullam, vel? Accusamus animi architecto dicta distinctio eaque ex laboriosam maiores molestias, nostrum qui soluta tenetur voluptas voluptatibus.");
+            }
+        });
+        textTempo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExplicacaoInfos.ShowPopUpInfo(IndicesEconomicosActivity.this, findViewById(R.id.blackener), "Retorno do Investimento", "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos obcaecati temporibus voluptate. Aspernatur dolor eius eveniet ipsam maiores odio vel vitae, voluptatibus. Dolorem eius eos excepturi fugit itaque minima officiis reiciendis tempore ullam, vel? Accusamus animi architecto dicta distinctio eaque ex laboriosam maiores molestias, nostrum qui soluta tenetur voluptas voluptatibus.");
+            }
+        });
 
         Button buttonVoltar = findViewById(R.id.button_voltar);
         AutoSizeText.AutoSizeButton(buttonVoltar, MainActivity.alturaTela, MainActivity.larguraTela, 4f);

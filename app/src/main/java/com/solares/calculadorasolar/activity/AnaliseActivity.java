@@ -15,6 +15,8 @@ import com.solares.calculadorasolar.classes.auxiliares.Constants;
 import java.util.Locale;
 
 import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensions;
+import static com.solares.calculadorasolar.classes.auxiliares.ExplicacaoInfos.ShowHint;
+import static com.solares.calculadorasolar.classes.auxiliares.ExplicacaoInfos.ShowPopUpInfo;
 
 
 public class AnaliseActivity extends AppCompatActivity {
@@ -53,6 +55,37 @@ public class AnaliseActivity extends AppCompatActivity {
         TextView textGeracao = findViewById(R.id.text_geracao_anual);
         textGeracao.setText(String.format(Locale.ITALY,"%.2f kWh", calculadora.pegaGeracaoAnual()/12));
         AutoSizeText.AutoSizeTextView(textGeracao, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
+
+
+        //Tutorial sobre as informações extras
+        findViewById(R.id.inst_button_info).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShowHint(findViewById(R.id.blackener), findViewById(R.id.inst_image_info));
+            }
+        });
+
+
+        //Clicar nas informações para explicação
+        textCustoParcial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShowPopUpInfo(AnaliseActivity.this, findViewById(R.id.blackener), "Custo Parcial", "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos obcaecati temporibus voluptate. Aspernatur dolor eius eveniet ipsam maiores odio vel vitae, voluptatibus. Dolorem eius eos excepturi fugit itaque minima officiis reiciendis tempore ullam, vel? Accusamus animi architecto dicta distinctio eaque ex laboriosam maiores molestias, nostrum qui soluta tenetur voluptas voluptatibus.");
+            }
+        });
+        textCustoTotal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShowPopUpInfo(AnaliseActivity.this, findViewById(R.id.blackener), "Custo Total", "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos obcaecati temporibus voluptate. Aspernatur dolor eius eveniet ipsam maiores odio vel vitae, voluptatibus. Dolorem eius eos excepturi fugit itaque minima officiis reiciendis tempore ullam, vel? Accusamus animi architecto dicta distinctio eaque ex laboriosam maiores molestias, nostrum qui soluta tenetur voluptas voluptatibus.");
+            }
+        });
+        textGeracao.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShowPopUpInfo(AnaliseActivity.this, findViewById(R.id.blackener), "Estimativa Geração", "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos obcaecati temporibus voluptate. Aspernatur dolor eius eveniet ipsam maiores odio vel vitae, voluptatibus. Dolorem eius eos excepturi fugit itaque minima officiis reiciendis tempore ullam, vel? Accusamus animi architecto dicta distinctio eaque ex laboriosam maiores molestias, nostrum qui soluta tenetur voluptas voluptatibus.");
+            }
+        });
+
 
         Button buttonVoltar = findViewById(R.id.button_voltar);
         AutoSizeText.AutoSizeButton(buttonVoltar, MainActivity.alturaTela, MainActivity.larguraTela, 4f);

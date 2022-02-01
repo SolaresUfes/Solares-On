@@ -24,6 +24,8 @@ import com.solares.calculadorasolar.classes.auxiliares.Constants;
 import java.util.Locale;
 
 import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensions;
+import static com.solares.calculadorasolar.classes.auxiliares.ExplicacaoInfos.ShowHint;
+import static com.solares.calculadorasolar.classes.auxiliares.ExplicacaoInfos.ShowPopUpInfo;
 
 public class InstalacaoActivity extends AppCompatActivity {
 
@@ -120,54 +122,40 @@ public class InstalacaoActivity extends AppCompatActivity {
         });
 
         //Tutorial sobre as informações extras
-        /*
         findViewById(R.id.inst_button_info).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Mostra a dica
-                ImageView dica = findViewById(R.id.inst_image_info);
-                dica.setVisibility(View.VISIBLE);
-                blackener.setVisibility(View.VISIBLE);
-
-                //Prepara pra esconder a dica
-                blackener.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dica.setVisibility(View.GONE);
-                        blackener.setVisibility(View.GONE);
-                    }
-                });
+                ShowHint(blackener, findViewById(R.id.inst_image_info));
             }
-        }); */
+        });
 
 
         //Clicar nas informações para explicação
-        /*
         textPotencia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShowPopUpInfo(getString(R.string.potencia_necessaria), "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos obcaecati temporibus voluptate. Aspernatur dolor eius eveniet ipsam maiores odio vel vitae, voluptatibus. Dolorem eius eos excepturi fugit itaque minima officiis reiciendis tempore ullam, vel? Accusamus animi architecto dicta distinctio eaque ex laboriosam maiores molestias, nostrum qui soluta tenetur voluptas voluptatibus.");
+                ShowPopUpInfo(InstalacaoActivity.this, blackener, getString(R.string.potencia_necessaria), "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos obcaecati temporibus voluptate. Aspernatur dolor eius eveniet ipsam maiores odio vel vitae, voluptatibus. Dolorem eius eos excepturi fugit itaque minima officiis reiciendis tempore ullam, vel? Accusamus animi architecto dicta distinctio eaque ex laboriosam maiores molestias, nostrum qui soluta tenetur voluptas voluptatibus.");
             }
         });
         textPlaca.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShowPopUpInfo(getString(R.string.paineis), "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos obcaecati temporibus voluptate. Aspernatur dolor eius eveniet ipsam maiores odio vel vitae, voluptatibus. Dolorem eius eos excepturi fugit itaque minima officiis reiciendis tempore ullam, vel? Accusamus animi architecto dicta distinctio eaque ex laboriosam maiores molestias, nostrum qui soluta tenetur voluptas voluptatibus.");
+                ShowPopUpInfo(InstalacaoActivity.this, blackener, getString(R.string.paineis), "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos obcaecati temporibus voluptate. Aspernatur dolor eius eveniet ipsam maiores odio vel vitae, voluptatibus. Dolorem eius eos excepturi fugit itaque minima officiis reiciendis tempore ullam, vel? Accusamus animi architecto dicta distinctio eaque ex laboriosam maiores molestias, nostrum qui soluta tenetur voluptas voluptatibus.");
             }
         });
         textArea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShowPopUpInfo(getString(R.string.area_necessaria), "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos obcaecati temporibus voluptate. Aspernatur dolor eius eveniet ipsam maiores odio vel vitae, voluptatibus. Dolorem eius eos excepturi fugit itaque minima officiis reiciendis tempore ullam, vel? Accusamus animi architecto dicta distinctio eaque ex laboriosam maiores molestias, nostrum qui soluta tenetur voluptas voluptatibus.");
+                ShowPopUpInfo(InstalacaoActivity.this, blackener, getString(R.string.area_necessaria), "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos obcaecati temporibus voluptate. Aspernatur dolor eius eveniet ipsam maiores odio vel vitae, voluptatibus. Dolorem eius eos excepturi fugit itaque minima officiis reiciendis tempore ullam, vel? Accusamus animi architecto dicta distinctio eaque ex laboriosam maiores molestias, nostrum qui soluta tenetur voluptas voluptatibus.");
             }
         });
         textInversor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShowPopUpInfo(getString(R.string.inversores), "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos obcaecati temporibus voluptate. Aspernatur dolor eius eveniet ipsam maiores odio vel vitae, voluptatibus. Dolorem eius eos excepturi fugit itaque minima officiis reiciendis tempore ullam, vel? Accusamus animi architecto dicta distinctio eaque ex laboriosam maiores molestias, nostrum qui soluta tenetur voluptas voluptatibus.");
+                ShowPopUpInfo(InstalacaoActivity.this, blackener, getString(R.string.inversores), "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos obcaecati temporibus voluptate. Aspernatur dolor eius eveniet ipsam maiores odio vel vitae, voluptatibus. Dolorem eius eos excepturi fugit itaque minima officiis reiciendis tempore ullam, vel? Accusamus animi architecto dicta distinctio eaque ex laboriosam maiores molestias, nostrum qui soluta tenetur voluptas voluptatibus.");
             }
         });
-        */
+
 
 
 
@@ -238,24 +226,24 @@ public class InstalacaoActivity extends AppCompatActivity {
         });
     }
 
-    public void ShowPopUpInversores(){
+    public void ShowPopUpInversores() {
         blackener.setVisibility(View.VISIBLE);
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         rootView = inflater.inflate(R.layout.popup_modulos_inversores, blackener, false);
 
         PopupWindow pw;
-        try{
-            pw = new PopupWindow(rootView,(int)(MainActivity.larguraTela*0.7),(MainActivity.alturaTela), true);
+        try {
+            pw = new PopupWindow(rootView, (int) (MainActivity.larguraTela * 0.7), (MainActivity.alturaTela), true);
             pw.setAnimationStyle(16973827); //R.style.Animation_Translucent -> Não sei porque tive que botar a constante diretamente e não usando o nome dela
             pw.showAtLocation(blackener, Gravity.END, 0, 0);
 
-            pw.setOnDismissListener(new PopupWindow.OnDismissListener(){
+            pw.setOnDismissListener(new PopupWindow.OnDismissListener() {
                 @Override
                 public void onDismiss() {
                     blackener.setVisibility(View.GONE);
                 }
             });
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -267,7 +255,7 @@ public class InstalacaoActivity extends AppCompatActivity {
         //Criação do Spinner
         AppCompatSpinner spinnerInversores = rootView.findViewById(R.id.spinner_modulos_inversores);
         //Aqui, coloca o vetor de strings que será exibido no spinner
-        ArrayAdapter<String> adapterS =new ArrayAdapter<String>(rootView.getContext(), R.layout.spinner_item, calculadora.pegaNomesInversores());
+        ArrayAdapter<String> adapterS = new ArrayAdapter<String>(rootView.getContext(), R.layout.spinner_item, calculadora.pegaNomesInversores());
         spinnerInversores.setAdapter(adapterS);
         spinnerInversores.setSelection(calculadora.pegaListaInversores().indexOf(calculadora.pegaInversor()));
 
@@ -284,58 +272,5 @@ public class InstalacaoActivity extends AppCompatActivity {
                 calculadora.Calcular(InstalacaoActivity.this);
             }
         });
-    }
-
-
-
-
-    ////////Pop ups das informações:
-
-    public void ShowPopUpInfo(String titulo, String textoExplicacao){
-        blackener.setVisibility(View.VISIBLE);
-        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        rootView = inflater.inflate(R.layout.popup_mais_informacoes, blackener , false);
-        PopupWindow pw;
-        try{
-            pw = new PopupWindow(rootView,(int)(MainActivity.larguraTela),(int)(MainActivity.alturaTela), true);
-            pw.setAnimationStyle(R.style.Animation_Design_BottomSheetDialog);
-            pw.showAtLocation(blackener, Gravity.BOTTOM, 0, 0);
-
-            pw.setOnDismissListener(new PopupWindow.OnDismissListener(){
-                @Override
-                public void onDismiss() {
-                    blackener.setVisibility(View.GONE);
-                }
-            });
-
-
-            //Mudar texto do Título
-            TextView tituloPopup = rootView.findViewById(R.id.pInfo_titulo_info);
-            AutoSizeText.AutoSizeTextView(tituloPopup, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
-            tituloPopup.setText(titulo);
-
-            //Mudar texto da explicacao
-            TextView textExplicacao = rootView.findViewById(R.id.pInfo_texto_explicacao);
-            AutoSizeText.AutoSizeTextView(textExplicacao, MainActivity.alturaTela, MainActivity.larguraTela, 3f);
-            textExplicacao.setText(textoExplicacao);
-
-            //Criar maneiras de fechar o popup
-            ImageView botaoFechar = rootView.findViewById(R.id.pInfo_button_xclose);
-            botaoFechar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    pw.dismiss();
-                }
-            });
-            rootView.findViewById(R.id.pInfo_background).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    pw.dismiss();
-                }
-            });
-
-        } catch (Exception e){
-            e.printStackTrace();
-        }
     }
 }

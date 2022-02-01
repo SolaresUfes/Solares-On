@@ -19,6 +19,7 @@ import com.solares.calculadorasolar.R;
 import com.solares.calculadorasolar.classes.auxiliares.AutoSizeText;
 import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
 import com.solares.calculadorasolar.classes.auxiliares.Constants;
+import com.solares.calculadorasolar.classes.auxiliares.ExplicacaoInfos;
 import com.solares.calculadorasolar.classes.auxiliares.FirebaseManager;
 import com.solares.calculadorasolar.classes.entidades.Painel;
 
@@ -86,6 +87,16 @@ public class DetalhesActivity extends AppCompatActivity {
 
         //MOstrar a tarifa atual como padrão
         editTarifa.setText(String.format(Locale.ENGLISH, "%.2f", calculadora.pegaTarifaMensal()));
+
+        //Tutorial sobre as informações
+        findViewById(R.id.ADE_inst_button_info).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExplicacaoInfos.ShowPopUpInfo(DetalhesActivity.this, findViewById(R.id.blackener), "Dúvidas",
+                        "Tarifa blablabla\nTrifásico fulano e tals. Lorem ipsu batata lorem itjkansdkj kskpdl iodjdmkc jdasjkd9o");
+            }
+        });
+
 
         //Listener do botão de confirmar
         buttonConfirm.setOnClickListener(new View.OnClickListener() {

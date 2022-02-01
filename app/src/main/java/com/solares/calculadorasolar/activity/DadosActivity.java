@@ -12,6 +12,7 @@ import com.solares.calculadorasolar.R;
 import com.solares.calculadorasolar.classes.auxiliares.AutoSizeText;
 import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
 import com.solares.calculadorasolar.classes.auxiliares.Constants;
+import com.solares.calculadorasolar.classes.auxiliares.ExplicacaoInfos;
 
 import java.util.Locale;
 
@@ -81,6 +82,41 @@ public class DadosActivity extends AppCompatActivity {
         ////////////Configurar o botão de voltar////////////////
         Button buttonVoltar = findViewById(R.id.button_voltar);
         AutoSizeText.AutoSizeButton(buttonVoltar, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
+
+        //Tutorial sobre as informações extras
+        findViewById(R.id.inst_button_info).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExplicacaoInfos.ShowHint(findViewById(R.id.blackener), findViewById(R.id.inst_image_info));
+            }
+        });
+
+
+        //Clicar nas informações para explicação
+        textCustoReais.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExplicacaoInfos.ShowPopUpInfo(DadosActivity.this, findViewById(R.id.blackener), "Consumo Mensal R$", "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos obcaecati temporibus voluptate. Aspernatur dolor eius eveniet ipsam maiores odio vel vitae, voluptatibus. Dolorem eius eos excepturi fugit itaque minima officiis reiciendis tempore ullam, vel? Accusamus animi architecto dicta distinctio eaque ex laboriosam maiores molestias, nostrum qui soluta tenetur voluptas voluptatibus.");
+            }
+        });
+        textConsumoEnergia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExplicacaoInfos.ShowPopUpInfo(DadosActivity.this, findViewById(R.id.blackener), "Consumo Mensal kWh", "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos obcaecati temporibus voluptate. Aspernatur dolor eius eveniet ipsam maiores odio vel vitae, voluptatibus. Dolorem eius eos excepturi fugit itaque minima officiis reiciendis tempore ullam, vel? Accusamus animi architecto dicta distinctio eaque ex laboriosam maiores molestias, nostrum qui soluta tenetur voluptas voluptatibus.");
+            }
+        });
+        textHoraSolar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExplicacaoInfos.ShowPopUpInfo(DadosActivity.this, findViewById(R.id.blackener), "Horas de Sol Pleno", "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos obcaecati temporibus voluptate. Aspernatur dolor eius eveniet ipsam maiores odio vel vitae, voluptatibus. Dolorem eius eos excepturi fugit itaque minima officiis reiciendis tempore ullam, vel? Accusamus animi architecto dicta distinctio eaque ex laboriosam maiores molestias, nostrum qui soluta tenetur voluptas voluptatibus.");
+            }
+        });
+        textTarifa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExplicacaoInfos.ShowPopUpInfo(DadosActivity.this, findViewById(R.id.blackener), "Tarifa de energia", "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos obcaecati temporibus voluptate. Aspernatur dolor eius eveniet ipsam maiores odio vel vitae, voluptatibus. Dolorem eius eos excepturi fugit itaque minima officiis reiciendis tempore ullam, vel? Accusamus animi architecto dicta distinctio eaque ex laboriosam maiores molestias, nostrum qui soluta tenetur voluptas voluptatibus.");
+            }
+        });
 
 
 

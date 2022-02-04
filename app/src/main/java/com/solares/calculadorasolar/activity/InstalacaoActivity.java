@@ -134,25 +134,29 @@ public class InstalacaoActivity extends AppCompatActivity {
         textPotencia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShowPopUpInfo(InstalacaoActivity.this, blackener, getString(R.string.potencia_necessaria), "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos obcaecati temporibus voluptate. Aspernatur dolor eius eveniet ipsam maiores odio vel vitae, voluptatibus. Dolorem eius eos excepturi fugit itaque minima officiis reiciendis tempore ullam, vel? Accusamus animi architecto dicta distinctio eaque ex laboriosam maiores molestias, nostrum qui soluta tenetur voluptas voluptatibus.");
+                ShowPopUpInfo(InstalacaoActivity.this, blackener, getString(R.string.potencia_necessaria),
+                        "Capacidade de Potência ideal que o sistema fotovoltaico deve possuir para suprir o consumo energético informado. O sistema foi dimensionado almejando esse valor de potência.");
             }
         });
         textPlaca.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShowPopUpInfo(InstalacaoActivity.this, blackener, getString(R.string.paineis), "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos obcaecati temporibus voluptate. Aspernatur dolor eius eveniet ipsam maiores odio vel vitae, voluptatibus. Dolorem eius eos excepturi fugit itaque minima officiis reiciendis tempore ullam, vel? Accusamus animi architecto dicta distinctio eaque ex laboriosam maiores molestias, nostrum qui soluta tenetur voluptas voluptatibus.");
+                ShowPopUpInfo(InstalacaoActivity.this, blackener, getString(R.string.paineis),
+                        "De acordo com a demanda solicitada, este arranjo de placas fotovoltaicas traz o maior retorno financeiro dentre as possíveis opções no nosso banco de dados.");
             }
         });
         textArea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShowPopUpInfo(InstalacaoActivity.this, blackener, getString(R.string.area_necessaria), "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos obcaecati temporibus voluptate. Aspernatur dolor eius eveniet ipsam maiores odio vel vitae, voluptatibus. Dolorem eius eos excepturi fugit itaque minima officiis reiciendis tempore ullam, vel? Accusamus animi architecto dicta distinctio eaque ex laboriosam maiores molestias, nostrum qui soluta tenetur voluptas voluptatibus.");
+                ShowPopUpInfo(InstalacaoActivity.this, blackener, getString(R.string.area_necessaria),
+                        "A área de telhado ou de solo sem sombreamento em m² necessária para instalar as placas fotovoltaicas apresentadas. No hemisfério sul, é interessante que essa área tenha uma leve inclinação em direção ao norte, para o sistema ter maior eficiência.");
             }
         });
         textInversor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShowPopUpInfo(InstalacaoActivity.this, blackener, getString(R.string.inversores), "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos obcaecati temporibus voluptate. Aspernatur dolor eius eveniet ipsam maiores odio vel vitae, voluptatibus. Dolorem eius eos excepturi fugit itaque minima officiis reiciendis tempore ullam, vel? Accusamus animi architecto dicta distinctio eaque ex laboriosam maiores molestias, nostrum qui soluta tenetur voluptas voluptatibus.");
+                ShowPopUpInfo(InstalacaoActivity.this, blackener, getString(R.string.inversores),
+                        "O arranjo de inversores escolhido para suportar o sistema fotovoltaico proposto. A potência total dos inversores pode ser até 20% menor do que a potência nominal do arranjo das placas fotovoltaicas.");
             }
         });
 

@@ -78,7 +78,7 @@ public class TarifaActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ExplicacaoInfos.ShowPopUpInfo(TarifaActivity.this, findViewById(R.id.blackener), "Dúvidas",
-                        "Tarifa blablabla\nTrifásico fulano e tals. Lorem ipsu batata lorem itjkansdkj kskpdl iodjdmkc jdasjkd9o");
+                        "Altere o valor da tarifa de energia usado nos cálculos. O valor da tarifa deve ser inserido sem impostos e seu valor pode ser encontrado na sua conta de luz ou no site da distribuidora de energia que atende ao seu imóvel.");
             }
         });
 

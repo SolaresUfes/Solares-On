@@ -70,19 +70,22 @@ public class AnaliseActivity extends AppCompatActivity {
         textCustoParcial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShowPopUpInfo(AnaliseActivity.this, findViewById(R.id.blackener), "Custo Parcial", "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos obcaecati temporibus voluptate. Aspernatur dolor eius eveniet ipsam maiores odio vel vitae, voluptatibus. Dolorem eius eos excepturi fugit itaque minima officiis reiciendis tempore ullam, vel? Accusamus animi architecto dicta distinctio eaque ex laboriosam maiores molestias, nostrum qui soluta tenetur voluptas voluptatibus.");
+                ShowPopUpInfo(AnaliseActivity.this, findViewById(R.id.blackener), "Custo Parcial",
+                        "Custo dos equipamentos do sistema fotovoltaico escolhido, tanto das placas como dos inversores. Não inclui os custos com mão de obra para instalação.");
             }
         });
         textCustoTotal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShowPopUpInfo(AnaliseActivity.this, findViewById(R.id.blackener), "Custo Total", "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos obcaecati temporibus voluptate. Aspernatur dolor eius eveniet ipsam maiores odio vel vitae, voluptatibus. Dolorem eius eos excepturi fugit itaque minima officiis reiciendis tempore ullam, vel? Accusamus animi architecto dicta distinctio eaque ex laboriosam maiores molestias, nostrum qui soluta tenetur voluptas voluptatibus.");
+                ShowPopUpInfo(AnaliseActivity.this, findViewById(R.id.blackener), "Custo Total",
+                        "Custo parcial somado ao custo de instalação do sistema, tais como: mão de obra, equipamentos de fixação, cabos, lucro estimado da instaladora, etc. Esta é a estimativa do valor total do investimento inicial para se ter o sistema dimensionado.");
             }
         });
         textGeracao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShowPopUpInfo(AnaliseActivity.this, findViewById(R.id.blackener), "Estimativa Geração", "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos obcaecati temporibus voluptate. Aspernatur dolor eius eveniet ipsam maiores odio vel vitae, voluptatibus. Dolorem eius eos excepturi fugit itaque minima officiis reiciendis tempore ullam, vel? Accusamus animi architecto dicta distinctio eaque ex laboriosam maiores molestias, nostrum qui soluta tenetur voluptas voluptatibus.");
+                ShowPopUpInfo(AnaliseActivity.this, findViewById(R.id.blackener), "Estimativa Geração",
+                        "Cálculo aproximado de quanta energia seria gerada pelo sistema dimensionado em um mês médio na cidade escolhida.");
             }
         });
 

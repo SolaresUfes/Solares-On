@@ -96,25 +96,29 @@ public class DadosActivity extends AppCompatActivity {
         textCustoReais.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ExplicacaoInfos.ShowPopUpInfo(DadosActivity.this, findViewById(R.id.blackener), "Consumo Mensal R$", "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos obcaecati temporibus voluptate. Aspernatur dolor eius eveniet ipsam maiores odio vel vitae, voluptatibus. Dolorem eius eos excepturi fugit itaque minima officiis reiciendis tempore ullam, vel? Accusamus animi architecto dicta distinctio eaque ex laboriosam maiores molestias, nostrum qui soluta tenetur voluptas voluptatibus.");
+                ExplicacaoInfos.ShowPopUpInfo(DadosActivity.this, findViewById(R.id.blackener), "Consumo Mensal R$",
+                        "A média do valor total pago numa conta de luz, já incluindo impostos e o valor da tarifa. Como é algo menos previsível, as bandeiras tarifárias não são consideradas.");
             }
         });
         textConsumoEnergia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ExplicacaoInfos.ShowPopUpInfo(DadosActivity.this, findViewById(R.id.blackener), "Consumo Mensal kWh", "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos obcaecati temporibus voluptate. Aspernatur dolor eius eveniet ipsam maiores odio vel vitae, voluptatibus. Dolorem eius eos excepturi fugit itaque minima officiis reiciendis tempore ullam, vel? Accusamus animi architecto dicta distinctio eaque ex laboriosam maiores molestias, nostrum qui soluta tenetur voluptas voluptatibus.");
+                ExplicacaoInfos.ShowPopUpInfo(DadosActivity.this, findViewById(R.id.blackener), "Consumo Mensal kWh",
+                        "A média mensal de consumo de energia do seu imóvel. Se esse valor foi calculado a partir do consumo em reais, podem haver pequenos erros devido a variações do cálculo em cada município ou a bandeiras tarifárias.");
             }
         });
         textHoraSolar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ExplicacaoInfos.ShowPopUpInfo(DadosActivity.this, findViewById(R.id.blackener), "Horas de Sol Pleno", "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos obcaecati temporibus voluptate. Aspernatur dolor eius eveniet ipsam maiores odio vel vitae, voluptatibus. Dolorem eius eos excepturi fugit itaque minima officiis reiciendis tempore ullam, vel? Accusamus animi architecto dicta distinctio eaque ex laboriosam maiores molestias, nostrum qui soluta tenetur voluptas voluptatibus.");
+                ExplicacaoInfos.ShowPopUpInfo(DadosActivity.this, findViewById(R.id.blackener), "Horas de Sol Pleno",
+                        "Conceito que indica numericamente a energia gerada pelo sol em kWh/m²dia (Energia solar diária por metro quadrado). O Valor fornecido é referente a média das HSP da cidade preenchida anteriormente.");
             }
         });
         textTarifa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ExplicacaoInfos.ShowPopUpInfo(DadosActivity.this, findViewById(R.id.blackener), "Tarifa de energia", "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos obcaecati temporibus voluptate. Aspernatur dolor eius eveniet ipsam maiores odio vel vitae, voluptatibus. Dolorem eius eos excepturi fugit itaque minima officiis reiciendis tempore ullam, vel? Accusamus animi architecto dicta distinctio eaque ex laboriosam maiores molestias, nostrum qui soluta tenetur voluptas voluptatibus.");
+                ExplicacaoInfos.ShowPopUpInfo(DadosActivity.this, findViewById(R.id.blackener), "Tarifa de energia",
+                        "Valor cobrado por sua companhia de energia por cada kWh consumido em sua cidade (sem impostos). O cálculo não considera possíveis bandeiras tarifárias.");
             }
         });
 

@@ -72,7 +72,7 @@ public class AreaActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ExplicacaoInfos.ShowPopUpInfo(AreaActivity.this, findViewById(R.id.blackener), "Dúvidas",
-                        "Tarifa blablabla\nTrifásico fulano e tals. Lorem ipsu batata lorem itjkansdkj kskpdl iodjdmkc jdasjkd9o");
+                        "Selecione uma nova área, em m2, de telhado ou de solo sem sombreamento conforme o espaço que deseja que o sistema ocupe. Pode inserir uma área menor que a recomendada caso não tenha esse espaço disponível ou queira um sistema menor. Ou também pode aumentar a área ocupada pelo sistema e ver os impactos nos aspectos financeiros.");
             }
         });
 

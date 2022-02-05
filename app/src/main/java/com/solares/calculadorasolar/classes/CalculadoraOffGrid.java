@@ -61,8 +61,9 @@ public class CalculadoraOffGrid implements Serializable{
     public String[] getVetorCidade(){ return this.vetorCidade; }
     public String[] getPlacaEscolhida(){ return this.placaEscolhida; }
     public double getMinPotencia(){ return this.minPotencia; }
-    public String[] getControlador(){ return controladorEscolhido; }
-    public String[] getInversor(){ return inversorEscolhido; }
+    public String[] getControlador(){ return this.controladorEscolhido; }
+    public String[] getInversor(){ return this.inversorEscolhido; }
+    public String[] getBateria(){ return this.bateriaEscolhida; }
 
     //////////////////////////
     ////  Funções setters ////

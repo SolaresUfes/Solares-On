@@ -46,12 +46,19 @@ public class ResultadoOffGridActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
 
+                    Intent intent = new Intent(ResultadoOffGridActivity.this, EconomicoOffGridActivity.class);
+                    intent.putExtra(Constants.EXTRA_CALCULADORAOFF, calculadora);
+                    startActivity(intent);
                 }
             });
 
             this.mViewHolder.buttonBateria.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    Intent intent = new Intent(ResultadoOffGridActivity.this, BateriaOffGridActivity.class);
+                    intent.putExtra(Constants.EXTRA_CALCULADORAOFF, calculadora);
+                    startActivity(intent);
 
                 }
             });

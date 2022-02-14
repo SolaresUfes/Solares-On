@@ -85,7 +85,7 @@ public class DetalhesActivity extends AppCompatActivity {
         final CalculadoraOnGrid calculadora = (CalculadoraOnGrid) intent.getSerializableExtra(Constants.EXTRA_CALCULADORAON);
 
 
-        //MOstrar a tarifa atual como padrão
+        //Mostrar a tarifa atual como padrão
         editTarifa.setText(String.format(Locale.ENGLISH, "%.2f", calculadora.pegaTarifaMensal()));
 
         //Tutorial sobre as informações

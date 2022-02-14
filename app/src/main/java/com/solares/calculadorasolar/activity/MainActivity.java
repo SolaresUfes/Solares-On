@@ -5,8 +5,15 @@ package com.solares.calculadorasolar.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -16,10 +23,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -29,6 +39,7 @@ import com.solares.calculadorasolar.classes.auxiliares.AutoSizeText;
 import com.solares.calculadorasolar.classes.auxiliares.CSVManager;
 import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
 import com.solares.calculadorasolar.classes.auxiliares.Constants;
+import com.solares.calculadorasolar.classes.auxiliares.ExplicacaoInfos;
 import com.solares.calculadorasolar.classes.auxiliares.FirebaseManager;
 
 import java.io.InputStream;
@@ -136,7 +147,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         //Se o usuário clicar no botão calcular, o cálculo é feito e muda-se para a próxima activity
         this.mViewHolder.buttonCalc.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,6 +185,67 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        final ConstraintLayout layoutNovidade = findViewById(R.id.MAIN_popUP_Novidade);
+        final LinearLayout darkenerMain = findViewById(R.id.blackener);
+
+        TextView texttitulo = findViewById(R.id.pInfo_titulo_info);
+        AutoSizeText.AutoSizeTextView(texttitulo, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
+        TextView textNovidade = findViewById(R.id.pInfo_texto_novidade);
+        AutoSizeText.AutoSizeTextView(textNovidade, MainActivity.alturaTela, MainActivity.larguraTela, 3f);
+        ImageView b_sair = findViewById(R.id.button_xclose);
+
+        String text = "Pensando sempre em melhorar o SolaresOn, temos uma super novidade para você. \nGostaria de fazer parte do nosso aplicativo com mais de 20 mil downloads? \nEntre em contato pelo link!";
+        SpannableString ss = new SpannableString(text);
+
+        //Mostra a explicação
+        darkenerMain.setVisibility(View.VISIBLE);
+        layoutNovidade.setVisibility(View.VISIBLE);
+
+        ClickableSpan clickableLink = new ClickableSpan() {
+            @Override
+            public void onClick(@NonNull View view) {
+                String numTelefone = "5527999782143";
+                //String mensagem = "Olá,+vi+no+SolaresOn+que+existe+uma+possibilidade+da+minha+empresa+aparecer+no+aplicativo.%0D%0DPode+me+passar+mais+informações";
+                String mensagem = "Olá, vi no SolaresOn que existe uma chance da minha empresa aparecer no aplicativo.\n" +
+                        "\n" +
+                        "Pode me passar mais informações?";
+                String link = "https://api.whatsapp.com/send/?phone="+numTelefone+"&text="+mensagem+"?&app_absent=0";
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+                startActivity(intent);
+            }
+
+            @Override
+            public void updateDrawState(@NonNull TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setFakeBoldText(true);
+                //ds.setColor(Color.BLACK);
+            }
+        };
+
+        ss.setSpan(clickableLink, 175, 179, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        textNovidade.setText(ss);
+        textNovidade.setMovementMethod(LinkMovementMethod.getInstance());
+
+        b_sair.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                layoutNovidade.setVisibility(View.GONE);
+                darkenerMain.setVisibility(View.GONE);
+            }
+        });
+        //Define um onclick listener no fundo preto pra sair desse aviso
+        darkenerMain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                layoutNovidade.setVisibility(View.GONE);
+                darkenerMain.setVisibility(View.GONE);
+            }
+        });
+    }
 
     /* Descrição: Pega informações do banco de dados e retorna o vetor da cidade do usuário
      * Parâmetros de Entrada: idCity - Inteiro que representa a cidade na lista do estado // nomeEstado - String com a sigla do estado

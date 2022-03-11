@@ -9,8 +9,8 @@ android {
         applicationId "com.solares.calculadorasolar"
         minSdkVersion 16
         targetSdkVersion 31
-        versionCode 31
-        versionName "1.3.13"
+        versionCode 32
+        versionName "1.4.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

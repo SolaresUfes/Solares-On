@@ -149,8 +149,8 @@ public class ResultadoActivity extends AppCompatActivity{
         startActivity(intent);
     }
 
-    public void FinalizarCalculo(CalculadoraOnGrid calculadora){
-        Intent intent = new Intent(this, CreditoActivity.class);
+    public void FinalizarCalculo(CalculadoraOnGrid calculadora){ // aqui foi mudado o local do intent
+        Intent intent = new Intent(this, EmpresasActivity.class);
         intent.putExtra(Constants.EXTRA_CALCULADORAON, calculadora);
         startActivity(intent);
     }

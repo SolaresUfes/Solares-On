@@ -41,8 +41,11 @@ import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
 import com.solares.calculadorasolar.classes.auxiliares.Constants;
 import com.solares.calculadorasolar.classes.auxiliares.ExplicacaoInfos;
 import com.solares.calculadorasolar.classes.auxiliares.FirebaseManager;
+import com.solares.calculadorasolar.classes.entidades.Empresa;
 
 import java.io.InputStream;
+import java.util.LinkedList;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -172,6 +175,10 @@ public class MainActivity extends AppCompatActivity {
                     calculadora.setVetorEstado(CreateVetorEstado(calculadora.pegaVetorCidade()));
                     // Colocar Tarifa inicial
                     calculadora.setTarifaMensal(Double.parseDouble(calculadora.pegaVetorEstado()[Constants.iEST_TARIFA]));
+
+                    // Criar Lista de Empresas
+                    calculadora.setListaEmpresas(FirebaseManager.fbBuscaListaEmpresasPorEstado(MainActivity.this, calculadora.pegaVetorEstado()[Constants.iEST_SIGLA]));
+
                     AbrirActivityDetalhes(calculadora);
                 } catch (Exception e){
                     try {
@@ -297,6 +304,8 @@ public class MainActivity extends AppCompatActivity {
      * Pós Condições: Se o usuário confirmar, realiza o cálculo e mostra os resultados;
      */
     public void AbrirActivityDetalhes(CalculadoraOnGrid calculadora){
+        //calculadora.setListaEmpresas(FirebaseManager.fbBuscaLista(MainActivity.this));
+
         Intent intent = new Intent(this, DetalhesActivity.class);
         intent.putExtra(Constants.EXTRA_CALCULADORAON, calculadora);
         startActivity(intent);

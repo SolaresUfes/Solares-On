@@ -12,63 +12,66 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
+            android:name=".activity.EmpresasActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.ConsumoActivity"
-            android:parentActivityName=".activity.DadosActivity"
             android:exported="false"
+            android:parentActivityName=".activity.DadosActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".activity.CreditoActivity"
-            android:parentActivityName=".activity.ResultadoActivity"
             android:exported="false"
+            android:parentActivityName=".activity.ResultadoActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".activity.TarifaActivity"
-            android:parentActivityName=".activity.DadosActivity"
             android:exported="false"
+            android:parentActivityName=".activity.DadosActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".activity.AreaActivity"
-            android:parentActivityName=".activity.ResultadoActivity"
             android:exported="false"
+            android:parentActivityName=".activity.ResultadoActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".activity.AnaliseActivity"
-            android:parentActivityName=".activity.ResultadoActivity"
             android:exported="false"
+            android:parentActivityName=".activity.ResultadoActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".activity.InstalacaoActivity"
-            android:parentActivityName=".activity.ResultadoActivity"
             android:exported="false"
+            android:parentActivityName=".activity.ResultadoActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".activity.DadosActivity"
-            android:parentActivityName=".activity.ResultadoActivity"
             android:exported="false"
+            android:parentActivityName=".activity.ResultadoActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".activity.IndicesEconomicosActivity"
-            android:parentActivityName=".activity.ResultadoActivity"
             android:exported="false"
+            android:parentActivityName=".activity.ResultadoActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".activity.ResultadoActivity"
-            android:parentActivityName=".activity.MainActivity"
             android:exported="false"
+            android:parentActivityName=".activity.MainActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".activity.DetalhesActivity"
-            android:parentActivityName=".activity.MainActivity"
             android:exported="false"
+            android:parentActivityName=".activity.MainActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity

@@ -8,6 +8,7 @@ import com.solares.calculadorasolar.R;
 import com.solares.calculadorasolar.activity.ResultadoActivity;
 import com.solares.calculadorasolar.classes.auxiliares.Constants;
 import com.solares.calculadorasolar.classes.auxiliares.IRR;
+import com.solares.calculadorasolar.classes.entidades.Empresa;
 import com.solares.calculadorasolar.classes.entidades.Inversor;
 import com.solares.calculadorasolar.classes.entidades.Painel;
 
@@ -18,6 +19,7 @@ import java.util.Locale;
 
 public class CalculadoraOnGrid implements Serializable {
     //Variáveis da Classe
+    LinkedList<Empresa> listaEmpresas;
     String[] vetorCidade;
     String[] vetorEstado;
     LinkedList<Painel> listaPaineis;
@@ -69,6 +71,7 @@ public class CalculadoraOnGrid implements Serializable {
     //////////////////////////
     public String[] pegaVetorCidade(){ return vetorCidade; }
     public String[] pegaVetorEstado(){ return vetorEstado; }
+    public LinkedList<Empresa> pegaListaEmpresa() { return listaEmpresas; }
     public LinkedList<Painel> pegaListaPaineis() { return listaPaineis; }
     public String[] pegaNomesPaineis() { return nomesPaineis; }
     public LinkedList<Inversor> pegaListaInversores() { return listaInversores; }
@@ -105,6 +108,7 @@ public class CalculadoraOnGrid implements Serializable {
     }
     public void setListaPaineis(LinkedList<Painel> listaPaineis) { this.listaPaineis = listaPaineis; }
     public void setListaInversores(LinkedList<Inversor> listaInversores) { this.listaInversores = listaInversores; }
+    public void setListaEmpresas(LinkedList<Empresa> listaEmpresas) { this.listaEmpresas = listaEmpresas; }
     public void setTarifaMensal(double tarifa){
         this.tarifaMensal = tarifa;
     }

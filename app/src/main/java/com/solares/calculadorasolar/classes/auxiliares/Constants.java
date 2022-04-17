@@ -68,6 +68,7 @@ public class Constants {
     //Indices Cidades
     public static final int iCID_ESTADO = 0;
     //Indices Estados
+    public static final int iEST_SIGLA = 0;
     public static final int iEST_TARIFA = 13;
 
     //Indices costs[]

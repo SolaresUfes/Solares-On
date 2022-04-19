@@ -15,7 +15,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
-import com.solares.calculadorasolar.activity.EmpresasActivity;
 import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
 import com.solares.calculadorasolar.classes.entidades.Empresa;
 import com.solares.calculadorasolar.classes.entidades.Inversor;
@@ -23,6 +22,7 @@ import com.solares.calculadorasolar.classes.entidades.Painel;
 
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 public class FirebaseManager {
@@ -177,8 +177,6 @@ public class FirebaseManager {
         return empresas;
     }
 
-
-
     public static LinkedList<Empresa> fbBuscaListaEmpresasPorEstado(Context context, String sigla){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         LinkedList<Empresa> empresas = new LinkedList<>();
@@ -190,7 +188,7 @@ public class FirebaseManager {
         if(!isConnected){
             Log.d("firebase", "Sem internet!");
         }
-        // Read the companies from the city
+        // Read the companies from the state
         DatabaseReference dbReference = database.getReference("estados").child(sigla);
         //Cria um listener que vai chamar o onDataChange sempre que os dados mudarem no banco de dados e quando ele for criado
         dbReference.addValueEventListener(new ValueEventListener() {
@@ -207,46 +205,15 @@ public class FirebaseManager {
                         empresas.add(new Empresa(nome));
                     }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Failed to read value
-                Log.d("firebase", "Failed to read value." + error.toException());
-            }
-        });
-        return empresas;
-    }
-
-    public static LinkedList<Empresa> fbBuscaListaEmpresas(Context context, CalculadoraOnGrid calculadora ){
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        LinkedList<Empresa> empresas;
-        empresas = calculadora.pegaListaEmpresa();
-
-        //Verify Connection
-        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
-        if(!isConnected){
-            Log.d("firebase", "Sem internet!");
-        }
-        // Read the companies from the city
-        DatabaseReference dbReference = database.getReference("empresas");
-        //Cria um listener que vai chamar o onDataChange sempre que os dados mudarem no banco de dados e quando ele for criado
-        LinkedList<Empresa> finalEmpresas = empresas;
-        dbReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //Pega as empresas e as coloca em uma lista
-                Log.d("firebase", "Buscando empresas no firebase...");
-                for(Empresa empresa : finalEmpresas){
+                for(Empresa empresa : empresas){
                     Empresa empresaAtual = dataSnapshot.child(empresa.getNome()).getValue(Empresa.class);
                     if(empresaAtual != null){
                         Log.d("firebase", "Telefone empresa: " + empresaAtual.getTelefone());
                         empresa.CopyFrom(empresaAtual);
+                        Log.d("firebase", "Empresas a : " + empresa.getNome());
                     }
                 }
-                Log.d("firebase", "Empresas disponíveis em " + calculadora.pegaNomeCidade() + ", " + calculadora.pegaVetorEstado()[Constants.iEST_SIGLA]);
             }
 
             @Override
@@ -255,7 +222,6 @@ public class FirebaseManager {
                 Log.d("firebase", "Failed to read value." + error.toException());
             }
         });
-
         return empresas;
     }
 

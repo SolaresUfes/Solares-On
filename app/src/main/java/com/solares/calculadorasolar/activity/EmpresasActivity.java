@@ -43,9 +43,8 @@ public class EmpresasActivity extends AppCompatActivity {
         final CalculadoraOnGrid calculadora = (CalculadoraOnGrid) intent.getSerializableExtra(Constants.EXTRA_CALCULADORAON);
 
         LinkedList<Empresa> listaEmpresas = new LinkedList<>();
-        //listaEmpresas = FirebaseManager.fbBuscaListaEmpresas(EmpresasActivity.this, calculadora);
-        //System.out.println("----------------------------  "+calculadora.pegaListaEmpresa());
-
+        listaEmpresas = calculadora.pegaListaEmpresa();
+        //listaEmpresas = FirebaseManager.fbBuscaListaEmpresasPorEstado(EmpresasActivity.this, calculadora.pegaVetorEstado()[Constants.iEST_SIGLA]);
 
         // Indicar que irá ter um tempo de espara para carregar as empresas
         Toast.makeText(EmpresasActivity.this, "Aguarde um momento!", Toast.LENGTH_SHORT).show();
@@ -78,16 +77,13 @@ public class EmpresasActivity extends AppCompatActivity {
     }
 
     public void AdicionarEmpresa(LinkedList<Empresa> empresas){
-        System.out.println("Dentro da Funcao");
-        if(empresas==null || empresas.get(0).nome.equals("")){
-            System.out.println("Dentro do IF");
+        System.out.println("Empresas: "+ empresas.size());
+        if(empresas.size()==0){
             textFacaOrcamento.setText("Não há empresas parceiras");
             Toast.makeText(EmpresasActivity.this, "Não há empresas parceiras próximas", Toast.LENGTH_SHORT).show();
             return;
         }
-        System.out.println("Fora do IF");
         for (Empresa empresa: empresas){
-            System.out.println("Dentro do FOR");
             addView(empresa);
         }
     }

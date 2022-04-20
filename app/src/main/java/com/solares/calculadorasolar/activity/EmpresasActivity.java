@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.icu.lang.UScript;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.Button;
@@ -43,7 +44,11 @@ public class EmpresasActivity extends AppCompatActivity {
         final CalculadoraOnGrid calculadora = (CalculadoraOnGrid) intent.getSerializableExtra(Constants.EXTRA_CALCULADORAON);
 
         LinkedList<Empresa> listaEmpresas = new LinkedList<>();
+        //listaEmpresas = FirebaseManager.fbBuscaListaEmpresasPorEstado(EmpresasActivity.this, "ES");
+        //Log.d("firebase", "Empresas Calculardoras: "+listaEmpresas.size());
+
         listaEmpresas = calculadora.pegaListaEmpresa();
+        Log.d("firebase", "Empresas Calculardorwes: "+calculadora.pegaListaEmpresa().size());
         //listaEmpresas = FirebaseManager.fbBuscaListaEmpresasPorEstado(EmpresasActivity.this, calculadora.pegaVetorEstado()[Constants.iEST_SIGLA]);
 
         // Indicar que irá ter um tempo de espara para carregar as empresas

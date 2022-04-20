@@ -177,7 +177,9 @@ public class MainActivity extends AppCompatActivity {
                     calculadora.setTarifaMensal(Double.parseDouble(calculadora.pegaVetorEstado()[Constants.iEST_TARIFA]));
 
                     // Criar Lista de Empresas
-                    calculadora.setListaEmpresas(FirebaseManager.fbBuscaListaEmpresasPorEstado(MainActivity.this, calculadora.pegaVetorEstado()[Constants.iEST_SIGLA]));
+                    //calculadora.setListaEmpresas(FirebaseManager.fbBuscaListaEmpresasPorEstado(MainActivity.this, calculadora.pegaVetorEstado()[Constants.iEST_SIGLA]));
+                    //calculadora.setListaEmpresas(FirebaseManager.fbBuscaTodasEmpresas(MainActivity.this));
+                    calculadora.setListaEmpresas(FirebaseManager.GetEmpresasFirebase(calculadora, MainActivity.this));
 
                     AbrirActivityDetalhes(calculadora);
                 } catch (Exception e){

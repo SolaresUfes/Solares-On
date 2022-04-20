@@ -79,6 +79,7 @@
     <string name="consumo">Consumo</string>
     <string name="titulo_escolher_modulo">Escolher Módulo</string>
     <string name="titulo_escolher_inversor">Escolher Inversor</string>
+    <string name="continuar">Continuar</string>
     <string name="empresas">Empresas</string>
 
     <string-array name="Modulos">

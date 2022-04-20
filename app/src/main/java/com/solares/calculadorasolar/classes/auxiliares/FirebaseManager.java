@@ -127,46 +127,39 @@ public class FirebaseManager {
                 Log.d("firebase", "Failed to read value." + error.toException());
             }
         });
-
         return inversores;
     }
 
 
 
 
-    public static LinkedList<Empresa> fbBuscaLista(Context context){
+    public static LinkedList<Empresa> EncontrarEmpresas(LinkedList<Empresa> empresas){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        LinkedList<Empresa> empresas = new LinkedList<>();
-
-        //Verify Connection
-        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
-        if(!isConnected){
-            Log.d("firebase", "Sem internet!");
-            Toast.makeText(context, "Sem internet!", Toast.LENGTH_SHORT).show();
-        }
-
 
         // Read the companies from the city
-        DatabaseReference dbReference = database.getReference("empresas").child("ES");
-        //Cria um listener que vai chamar o onDataChange sempre que os dados mudarem no banco de dados e quando ele for criado
+        DatabaseReference dbReference = database.getReference("empresas");
         dbReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                empresas.clear();
                 //Pega os paineis e os coloca em uma lista
-                Log.d("firebase", "Buscando inversores no firebase...");
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    String nome = snapshot.getValue(String.class);
-                    if(nome != null){
-                        Log.d("firebase", "Empresa: " +nome);
-                        empresas.add(new Empresa(nome));
+                Log.d("firebase", "Buscando empresas no firebase...");
+                //for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    //String nome = snapshot.getValue(String.class);
+                    //if(nome != null){
+                    //    Log.d("firebase", "Empresa: " +nome);
+                   // }
+               // }
+                for(Empresa empresa:empresas) {
+                    Empresa empresaAtual = dataSnapshot.child(empresa.getNome()).getValue(Empresa.class);
+                    if (empresaAtual != null) {
+                        Log.d("firebase", "Telefone empresa: " + empresaAtual.getTelefone());
+                        empresa.CopyFrom(empresaAtual);
                     }
                 }
+                Log.d("firebase", "Telefone empresa: " + empresas.get(0).getTelefone());
+                Log.d("firebase", "NOme empresa: " + empresas.get(0).getNome());
+                Log.d("firebase", "Site empresa: " + empresas.get(0).getSite());
             }
-
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // Failed to read value
@@ -180,6 +173,7 @@ public class FirebaseManager {
     public static LinkedList<Empresa> fbBuscaListaEmpresasPorEstado(Context context, String sigla){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         LinkedList<Empresa> empresas = new LinkedList<>();
+        final LinkedList<Empresa>[] empresasFinal = new LinkedList[]{new LinkedList<>()};
 
         //Verify Connection
         ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -205,14 +199,10 @@ public class FirebaseManager {
                         empresas.add(new Empresa(nome));
                     }
                 }
+                System.out.println("Empresas size: "+ empresas.size());
 
-                for(Empresa empresa : empresas){
-                    Empresa empresaAtual = dataSnapshot.child(empresa.getNome()).getValue(Empresa.class);
-                    if(empresaAtual != null){
-                        Log.d("firebase", "Telefone empresa: " + empresaAtual.getTelefone());
-                        empresa.CopyFrom(empresaAtual);
-                        Log.d("firebase", "Empresas a : " + empresa.getNome());
-                    }
+                if(empresas.size()!=0){
+
                 }
             }
 
@@ -222,8 +212,138 @@ public class FirebaseManager {
                 Log.d("firebase", "Failed to read value." + error.toException());
             }
         });
+
         return empresas;
     }
+
+
+
+
+
+
+    public static LinkedList<Empresa> fbBuscaTodasEmpresas(Context context){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        LinkedList<Empresa> empresas = new LinkedList<>();
+        final LinkedList<Empresa>[] empresasFinal = new LinkedList[]{new LinkedList<>()};
+
+        //Verify Connection
+        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
+        if(!isConnected){
+            Log.d("firebase", "Sem internet!");
+        }
+        // Read the companies from the state
+        DatabaseReference dbReference = database.getReference("estados");
+        //Cria um listener que vai chamar o onDataChange sempre que os dados mudarem no banco de dados e quando ele for criado
+        dbReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d("firebase", dataSnapshot.getValue().toString());
+                /*empresas.clear();
+                //Pega as empresas e as coloca em uma lista
+                Log.d("firebase", "Buscando empresas por estado no firebase...");
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    //Empresa empresa = snapshot.getValue(Empresa.class);
+                    String nome = snapshot.getValue(String.class);
+                    if(nome != null){
+                        Log.d("firebase", "Empresas: " + nome);
+                        empresas.add(new Empresa(nome));
+                    }
+                }
+                System.out.println("Empresas size: "+ empresas.size());
+
+                if(empresas.size()!=0){
+
+                }*/
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Failed to read value
+                Log.d("firebase", "Failed to read value." + error.toException());
+            }
+        });
+
+        return empresas;
+    }
+
+
+
+
+
+
+    public static LinkedList<Empresa> GetEmpresasFirebase(CalculadoraOnGrid calculadora, Context context){
+        Log.d("firebase", "Firebase Database inicializado");
+        // Get the reference to the database
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        LinkedList<Empresa> empresas = new LinkedList<>();
+
+        // Read the companies from the city
+        DatabaseReference dbReferenceCidade = database.getReference("estados")
+                .child(calculadora.pegaVetorEstado()[Constants.iEST_SIGLA]);
+        dbReferenceCidade.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                empresas.clear();
+
+                //Get the names of the companies that work in the city
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    String nome = snapshot.getValue(String.class);
+                    if(nome != null){
+                        empresas.add(new Empresa(nome));
+                    }
+                }
+
+                ////////////////////////
+                //Get the companies info
+                DatabaseReference dbReferenceEmpresas = database.getReference("empresas");
+                // Read from the empresas database
+                dbReferenceEmpresas.addValueEventListener(new ValueEventListener() {
+                    // This method is called once with the initial value and again
+                    // whenever data at this location is updated.
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for(Empresa empresa : empresas) {
+                            Empresa empresaAtual = dataSnapshot.child(empresa.getNome()).getValue(Empresa.class);
+                            if(empresaAtual != null){
+                                Log.d("firebase", "Teste empresa" + empresaAtual.getTelefone());
+                                empresa.CopyFrom(empresaAtual);
+                            }
+                        }
+
+                        Log.d("firebase", "Empresas disponíveis em " + calculadora.pegaNomeCidade() + ", " + calculadora.pegaVetorEstado()[Constants.iEST_SIGLA]);
+                        if(empresas.size() != 0){
+                            for(Empresa empresa : empresas){
+                                Log.d("firebase", empresa.getNome()+" - Telefone: " + empresa.getTelefone() + " Site: "+empresa.getSite());
+                            }
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        // Failed to read value
+                        Log.d("firebase", "Failed to read value." + error.toException());
+                    }
+                });
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Failed to read value
+                Log.d("firebase", "Failed to read value." + error.toException());
+            }
+        });
+
+        return empresas;
+    }
+
+
+
+
+
+
+
 
     ////// Funções para busca offline //////////////////////////////////////
 

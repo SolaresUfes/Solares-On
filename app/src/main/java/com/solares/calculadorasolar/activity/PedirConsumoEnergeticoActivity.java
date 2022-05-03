@@ -141,21 +141,29 @@ public class PedirConsumoEnergeticoActivity extends AppCompatActivity {
 
         Equipamentos meuEquipamento = new Equipamentos();
         Equipamentos meuEquipamento2 = new Equipamentos();
+        Equipamentos meuEquipamento3 = new Equipamentos();
         // Adicionando as características para o equipamento
-        meuEquipamento.setNome("Celular");
+        meuEquipamento.setNome("Equipamento 1 - Alternada");
         meuEquipamento.setQuantidade(1);
-        meuEquipamento.setPotencia(100);
-        meuEquipamento.setHorasPorDia(2);
-        meuEquipamento.setDiasUtilizados(3);
-        meuEquipamento.setCC(true);
+        meuEquipamento.setPotencia(15);
+        meuEquipamento.setHorasPorDia(3);
+        meuEquipamento.setDiasUtilizados(4);
+        meuEquipamento.setCC(false);
         variavelGlobal.adicionarElemento(meuEquipamento);
-        meuEquipamento2.setNome("Alternada");
-        meuEquipamento2.setQuantidade(2);
-        meuEquipamento2.setPotencia(100);
+        meuEquipamento2.setNome("Equipamento 2 - Alternada");
+        meuEquipamento2.setQuantidade(1);
+        meuEquipamento2.setPotencia(60);
         meuEquipamento2.setHorasPorDia(2);
-        meuEquipamento2.setDiasUtilizados(3);
+        meuEquipamento2.setDiasUtilizados(2);
         meuEquipamento2.setCC(false);
         variavelGlobal.adicionarElemento(meuEquipamento2);
+        meuEquipamento3.setNome("Equipamento 3 - Alternada");
+        meuEquipamento3.setQuantidade(1);
+        meuEquipamento3.setPotencia(100);
+        meuEquipamento3.setHorasPorDia(1.5);
+        meuEquipamento3.setDiasUtilizados(7);
+        meuEquipamento3.setCC(false);
+        variavelGlobal.adicionarElemento(meuEquipamento3);
 
         // Esconder o texto de não ter adicionado nenhum equipamento ainda - Pensar melhor no que fazer
         TextoVisibilidade(variavelGlobal);
@@ -218,7 +226,6 @@ public class PedirConsumoEnergeticoActivity extends AppCompatActivity {
                     if(nomeEquipamentoSelecionado.equals(todosMeusEquipamentos.get(j).getNome()) && quantidade.equals(qntEquipamentoSelecionado)) break;
                     j++;
                 }
-                System.out.println("----------------------- J: "+j+" ------------------");
                 i--;
                 todosMeusEquipamentos.remove(j);
                 // ----
@@ -237,7 +244,6 @@ public class PedirConsumoEnergeticoActivity extends AppCompatActivity {
         double rendimentoBat=0.9, rendimentoInv=0.9;
 
         if(Icontinua){
-            System.out.println("!!!!Entrou!!!!");
             for(int i=0; i<vetorEquipamentos.size(); i++){
                 if(vetorEquipamentos.get(i).getCC()){
                     potenciaTotal = potenciaTotal + vetorEquipamentos.get(i).getPotencia() * vetorEquipamentos.get(i).getQuantidade() * vetorEquipamentos.get(i).getHorasPorDia() * vetorEquipamentos.get(i).getDiasUtilizados()/7;
@@ -247,11 +253,7 @@ public class PedirConsumoEnergeticoActivity extends AppCompatActivity {
         }
 
         for(int i=0; i<vetorEquipamentos.size(); i++){
-            System.out.println(vetorEquipamentos.get(i).getCC());
             if(!vetorEquipamentos.get(i).getCC()){
-                System.out.println(vetorEquipamentos.get(i).getPotencia());
-                System.out.println(vetorEquipamentos.get(i).getHorasPorDia());
-                System.out.println(vetorEquipamentos.get(i).getDiasUtilizados());
                 potenciaTotal = potenciaTotal + vetorEquipamentos.get(i).getPotencia() * vetorEquipamentos.get(i).getQuantidade() * vetorEquipamentos.get(i).getHorasPorDia() * vetorEquipamentos.get(i).getDiasUtilizados()/7;
             }
         }

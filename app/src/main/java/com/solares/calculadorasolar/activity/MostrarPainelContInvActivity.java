@@ -37,7 +37,7 @@ public class MostrarPainelContInvActivity extends AppCompatActivity {
         try{
             System.out.println("Nome da placa que chegou: "+calculadora.getPlacaEscolhida()[Constants.iPANEL_NOME]);
             System.out.println("Nome do inversor que chegou: "+calculadora.getInversor()[Constants.iINVOFF_NOME]);
-            System.out.println("Nome do controlador que chegou: "+calculadora.getControlador()[Constants.iCON_NOME]);
+            //System.out.println("Nome do controlador que chegou: "+calculadora.getControlador()[Constants.iCON_NOME]);
 
             // for(int i=0; i< calculadora.getPlacaEscolhida().length; i++){
             //    System.out.println(calculadora.getPlacaEscolhida()[i]);
@@ -46,8 +46,8 @@ public class MostrarPainelContInvActivity extends AppCompatActivity {
             textPlaca.setText(String.format(Locale.ITALY, "%d %s de %.0f Wp",
                     Integer.parseInt(calculadora.getPlacaEscolhida()[Constants.iPANEL_QTD]), "Placa", Double.parseDouble(calculadora.getPlacaEscolhida()[Constants.iPANEL_POTENCIA])));
 
-            textControlador.setText(String.format(Locale.ITALY, "%d %s de %.0f Wp",
-                    Integer.parseInt(calculadora.getControlador()[Constants.iPANEL_QTD]), "Controlador", Double.parseDouble(calculadora.getControlador()[Constants.iPANEL_POTENCIA])));
+           // textControlador.setText(String.format(Locale.ITALY, "%d %s de %.0f Wp",
+           //         Integer.parseInt(calculadora.getControlador()[Constants.iPANEL_QTD]), "Controlador", Double.parseDouble(calculadora.getControlador()[Constants.iPANEL_POTENCIA])));
 
             if(calculadora.getInversor() != null) {
                 textInversor.setText(String.format(Locale.ITALY, "%d %s de %.2f kW",

@@ -24,9 +24,7 @@ public class MostrarPainelContInvActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mostrar_painel_cont_inv);
 
-        //Pegar informações da última activity (informações que serão exibidas)
-        Intent intent = getIntent();
-        final CalculadoraOffGrid calculadora = (CalculadoraOffGrid) intent.getSerializableExtra(Constants.EXTRA_CALCULADORAOFF);
+
 
         final Global variavelGlobal = (Global)getApplicationContext();
 
@@ -35,6 +33,9 @@ public class MostrarPainelContInvActivity extends AppCompatActivity {
         TextView textInversor = findViewById(R.id.text_inversor1);
 
         try{
+            //Pegar informações da última activity (informações que serão exibidas)
+            Intent intent = getIntent();
+            final CalculadoraOffGrid calculadora = (CalculadoraOffGrid) intent.getSerializableExtra(Constants.EXTRA_CALCULADORAOFF);
             System.out.println("Nome da placa que chegou: "+calculadora.getPlacaEscolhida()[Constants.iPANEL_NOME]);
             System.out.println("Nome do inversor que chegou: "+calculadora.getInversor()[Constants.iINVOFF_NOME]);
             //System.out.println("Nome do controlador que chegou: "+calculadora.getControlador()[Constants.iCON_NOME]);
@@ -46,15 +47,15 @@ public class MostrarPainelContInvActivity extends AppCompatActivity {
             textPlaca.setText(String.format(Locale.ITALY, "%d %s de %.0f Wp",
                     Integer.parseInt(calculadora.getPlacaEscolhida()[Constants.iPANEL_QTD]), "Placa", Double.parseDouble(calculadora.getPlacaEscolhida()[Constants.iPANEL_POTENCIA])));
 
-           // textControlador.setText(String.format(Locale.ITALY, "%d %s de %.0f Wp",
-           //         Integer.parseInt(calculadora.getControlador()[Constants.iPANEL_QTD]), "Controlador", Double.parseDouble(calculadora.getControlador()[Constants.iPANEL_POTENCIA])));
+            textControlador.setText(String.format(Locale.ITALY, "%d %s de %.0f Wp",
+                    Integer.parseInt(calculadora.getControlador()[Constants.iPANEL_QTD]), "Controlador", Double.parseDouble(calculadora.getControlador()[Constants.iPANEL_POTENCIA])));
 
-            if(calculadora.getInversor() != null) {
+            if(calculadora.getInversor().equals("0")) {
                 textInversor.setText(String.format(Locale.ITALY, "%d %s de %.2f kW",
                         Integer.parseInt(calculadora.getInversor()[Constants.iINVOFF_QTD]), "Inversor", (Double.parseDouble(calculadora.getInversor()[Constants.iINVOFF_POTENCIAAPARENTE]) / 1000) * 0.8));
             }
             else{
-                textInversor.setText(String.format(Locale.ITALY, "%d %s de %.2f kW", "Não há necessidade de inversor!"));
+                textInversor.setText(String.format(Locale.ITALY,  "Não há necessidade de inversor!"));
             }
 
             //Botão voltar

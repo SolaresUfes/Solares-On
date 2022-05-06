@@ -127,18 +127,18 @@ public class CalculadoraOffGrid implements Serializable{
             this.CBI_C20 = (Constants.fatorSeguranca * this.energiaAtivaDia * this.autonomia) / (Constants.Pd * this.Vsist);
 
             // Definindo as Placas  ---- isso eh para nao esquecer - lembre de criar  uma funcao parecida em CSVRead
-            is = MyContext.getResources().openRawResource(R.raw.banco_paineis);
+            is = MyContext.getResources().openRawResource(R.raw.banco_paineis_offgrid);
             placaEscolhida = CSVRead.DefineSolarPanel(is, this.minPotencia, this.areaAlvo, this.idModuloEscolhido); // this.minPotencia
             area = calculadoraOnGrid.DefineArea(placaEscolhida);
             System.out.println("------ Módulo: "+placaEscolhida[Constants.iPANEL_NOME]);
 
-            // Definindo o Controlador de Carga is,this.Vsist, 1, Integer.parseInt(placaEscolhida[Constants.iPANEL_QTD]), this.minPotencia, Integer.parseInt(placaEscolhida[Constants.iPANEL_POTENCIA]), this.idControladorEscolhido
-            //is = MyContext.getResources().openRawResource(R.raw.banco_controladores);
-            //controladorEscolhido = CSVRead.DefineChargeController(is, this.Vsist, Voc_corrigida, Integer.parseInt(placaEscolhida[Constants.iPANEL_QTD]), 400, Integer.parseInt(placaEscolhida[Constants.iPANEL_POTENCIA]), idControladorEscolhido); // P_pv = minPotencia
-           // System.out.println("------ Controlador: "+controladorEscolhido[Constants.iCON_NOME]);
+            // Definindo o Controlador de Carga is,this.Vsist, 1, Integer.parseInt(placaEscolhida[Constants.iPANELOFF_QTD]), this.minPotencia, Integer.parseInt(placaEscolhida[Constants.iPANELOFF_POTENCIA]), this.idControladorEscolhido
+            is = MyContext.getResources().openRawResource(R.raw.banco_controladores);
+            controladorEscolhido = CSVRead.DefineChargeController(is, this.Vsist, this.placaEscolhida, this.minPotencia, this.idControladorEscolhido); // P_pv = minPotencia
+            System.out.println("------ Controlador: "+controladorEscolhido[Constants.iCON_NOME]);
             // Definindo Quantidade de Placas em Série e Paralelo
            // this.placaSerie = numModulosSerie(Integer.parseInt(controladorEscolhido[Constants.iCON_V_MAX_SISTEMA]), 1);// Descobrir como ter a Tensão de Máxima Potência de Temp. Máx.
-           // this.placaParalelo = numModulosParalelo(this.minPotencia, this.placaSerie,Integer.parseInt(this.placaEscolhida[Constants.iPANEL_POTENCIA])); // Descobrir como ter a Corrente de Máxima Potência
+           // this.placaParalelo = numModulosParalelo(this.minPotencia, this.placaSerie,Integer.parseInt(this.placaEscolhida[Constants.iPANELOFF_POTENCIA])); // Descobrir como ter a Corrente de Máxima Potência
 
 
             // Definindo o Banco de Baterias
@@ -153,7 +153,7 @@ public class CalculadoraOffGrid implements Serializable{
                 inversorEscolhido = CSVRead.DefineInvertorOffGrid(is, this.placaEscolhida ,this.potenciaAparente, this.Vsist, idInversorEscolhido);
                 System.out.println("-------- Inversor: "+inversorEscolhido[Constants.iINVOFF_NOME]);
             }
-            else inversorEscolhido=null;
+            else inversorEscolhido= new String[]{"0"};
 
 
 
@@ -259,10 +259,7 @@ public class CalculadoraOffGrid implements Serializable{
         return 48;
     }
 
-    public int numModulosSerie(int Vcontrolador, double Voc_corrigida){
-        System.out.println("Entrou na funcao mudo serie");
-        System.out.println("Vcontroller: "+Vcontrolador);
-        System.out.println("Voc_corriegida: "+Voc_corrigida);
+    public int numModulosSerie(int Vcontrolador, double Voc_corrigida){ ;
         int mSerie = (int)Math.round((Vcontrolador * 1.2) / Voc_corrigida);
         return mSerie;
     }

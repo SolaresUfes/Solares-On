@@ -148,21 +148,21 @@ public class PedirConsumoEnergeticoActivity extends AppCompatActivity {
         meuEquipamento.setPotencia(15);
         meuEquipamento.setHorasPorDia(3);
         meuEquipamento.setDiasUtilizados(4);
-        meuEquipamento.setCC(false);
+        meuEquipamento.setCC(true);
         variavelGlobal.adicionarElemento(meuEquipamento);
         meuEquipamento2.setNome("Equipamento 2 - Alternada");
         meuEquipamento2.setQuantidade(1);
         meuEquipamento2.setPotencia(60);
         meuEquipamento2.setHorasPorDia(2);
         meuEquipamento2.setDiasUtilizados(2);
-        meuEquipamento2.setCC(false);
+        meuEquipamento2.setCC(true);
         variavelGlobal.adicionarElemento(meuEquipamento2);
         meuEquipamento3.setNome("Equipamento 3 - Alternada");
         meuEquipamento3.setQuantidade(1);
         meuEquipamento3.setPotencia(100);
         meuEquipamento3.setHorasPorDia(1.5);
         meuEquipamento3.setDiasUtilizados(7);
-        meuEquipamento3.setCC(false);
+        meuEquipamento3.setCC(true);
         variavelGlobal.adicionarElemento(meuEquipamento3);
 
         // Esconder o texto de não ter adicionado nenhum equipamento ainda - Pensar melhor no que fazer

@@ -59,6 +59,8 @@ public class Constants {
     public static final int iPANEL_COEFTEMP = 7;
     public static final int iPANEL_NOCT = 8;
     public static final int iPANEL_I = 9;
+    public static final int iPANEL_Voc = 10;
+    public static final int iPANEL_Isc = 11;
 
 
 
@@ -71,6 +73,7 @@ public class Constants {
     public static final int iINV_QTD = 5;
     public static final int iINV_PRECO_TOTAL = 6;
     public static final int iINV_ID = 7;
+
 
 
     //Indices Inversores Off-Grid

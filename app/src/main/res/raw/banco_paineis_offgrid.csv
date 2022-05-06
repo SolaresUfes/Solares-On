@@ -1,0 +1,3 @@
+Nome da Placa,Marca,Potencia,Preco,Area[m2],qtd,custoTotal,Coef Temp p/ Pot,NOCT,ID,Tensao open circuit,Corrente de curto circuito
+ODA280-30-P,OSDA,280,798.99,1.63, , ,-0.4,45,0,38.33,9.41
+RS6E-155M,Resun,155,798.99,0.86, , ,-0.35,45,1,24.46,8.31

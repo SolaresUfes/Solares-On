@@ -132,9 +132,13 @@ public class CalculadoraOffGrid implements Serializable{
             area = calculadoraOnGrid.DefineArea(placaEscolhida);
             System.out.println("------ Módulo: "+placaEscolhida[Constants.iPANEL_NOME]);
 
+            // Calcular Voc_corrigida
+            double voc = Double.parseDouble(placaEscolhida[Constants.iPANEL_Voc]);
+            placaEscolhida[Constants.iPANEL_Voc] = Double.toString(voc * (1 + ((temperaturaMedia - 25) * coeficienteVariacao)/100));
+
             // Definindo o Controlador de Carga is,this.Vsist, 1, Integer.parseInt(placaEscolhida[Constants.iPANELOFF_QTD]), this.minPotencia, Integer.parseInt(placaEscolhida[Constants.iPANELOFF_POTENCIA]), this.idControladorEscolhido
             is = MyContext.getResources().openRawResource(R.raw.banco_controladores);
-            controladorEscolhido = CSVRead.DefineChargeController(is, this.Vsist, this.placaEscolhida, this.minPotencia, this.idControladorEscolhido); // P_pv = minPotencia
+            controladorEscolhido = CSVRead.DefineChargeController(is, this.Vsist, this.placaEscolhida, this.minPotencia, this.idControladorEscolhido); // P_pv talvez seja a potencia da placa multiplicado pela quantidade de placas
             System.out.println("------ Controlador: "+controladorEscolhido[Constants.iCON_NOME]);
             // Definindo Quantidade de Placas em Série e Paralelo
            // this.placaSerie = numModulosSerie(Integer.parseInt(controladorEscolhido[Constants.iCON_V_MAX_SISTEMA]), 1);// Descobrir como ter a Tensão de Máxima Potência de Temp. Máx.

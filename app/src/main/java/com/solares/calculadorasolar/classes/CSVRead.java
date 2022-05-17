@@ -442,9 +442,9 @@ public class CSVRead {
     }
 
     public static String[] DefineChargeController(InputStream is,int Vbat,String[] placaEscolhida, double P_pv, int idControladorEscolhido){
-        System.out.println("----- ----- ----- : "+placaEscolhida[Constants.iPANEL_Voc]);
-        System.out.println("----- ----- ----- : "+placaEscolhida[Constants.iPANEL_QTD]);
-        System.out.println("----- ----- ----- : "+placaEscolhida[Constants.iPANEL_POTENCIA]);
+        System.out.println("----- p Voc----- ----- : "+placaEscolhida[Constants.iPANEL_Voc]);
+        System.out.println("----- p Qnt----- ----- : "+placaEscolhida[Constants.iPANEL_QTD]);
+        System.out.println("----- p Pot----- ----- : "+placaEscolhida[Constants.iPANEL_POTENCIA]);
         String[] simplerController=null;
         String[] controller_i;
         double currentCost = 0, Ic=1;
@@ -465,7 +465,9 @@ public class CSVRead {
             while((line = br.readLine()) != null){
                 controller_i = line.split(divider);
 
-                modSerie = calculadora.numModulosSerie(Integer.parseInt(controller_i[Constants.iCON_V_MAX_SISTEMA]), Voc); // encontrar a tensao Voc_corrigida
+
+                System.out.println("Tenssão Corrigida : "+Voc);
+                modSerie = calculadora.numModulosSerie(Integer.parseInt(controller_i[Constants.iCON_V_MAX_SISTEMA]), Voc);
                 modParal = calculadora.numModulosParalelo(P_pv, modSerie, potenciaPainel);
                 Ic = 1.25 * modParal * Isc;
 

@@ -125,7 +125,9 @@ public class EmpresasActivity extends AppCompatActivity {
         //
 
         nomeEmpresa.setText(empresa.getNome());
-        siteEmpresa.setText(empresa.getSite());
+        // gambiarra por enquanto
+        if (empresa.getNome().equals("Aruna")) siteEmpresa.setText("arunaenergia.com.br");
+        else siteEmpresa.setText(empresa.getSite());
         telefoneEmpresa.setText(empresa.getTelefone());
 
         AutoSizeText.AutoSizeTextView(nomeEmpresa, MainActivity.alturaTela, MainActivity.larguraTela, 2f);

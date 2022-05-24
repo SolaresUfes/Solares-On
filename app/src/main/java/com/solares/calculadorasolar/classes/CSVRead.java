@@ -292,7 +292,7 @@ public class CSVRead {
         return null;
     }
 
-    public static String[] DefineBattery(InputStream is, double CBI_C20, int Vsist, int idBateriaEscolhida){ // como sera o vetor bateria ->[tera todas as informacoes necessarias, qntSerie, qntParalelo, Preco]
+    public static String[] DefineBattery(InputStream is, double CBI_C20, int Vsist, int idBateriaEscolhida, int autonomia){ // como sera o vetor bateria ->[tera todas as informacoes necessarias, qntSerie, qntParalelo, Preco]
         String[] cheaperBattery;
         String[] currentBattery;
         double currentCost = 0, cheaperCost;
@@ -310,6 +310,7 @@ public class CSVRead {
             nBatParalelo = (int)Math.ceil(CBI_C20/Double.parseDouble(cheaperBattery[Constants.iBAT_CBI_BAT]));
             qntBat = nBatParalelo * nBatSerie;
             cheaperCost = Double.parseDouble(cheaperBattery[Constants.iBAT_PRECO_INDIVITUDAL]) * qntBat;
+            cheaperBattery[Constants.iBAT_DIAS_AUTONOMIA] = String.valueOf(autonomia);
 
             if (idBateriaEscolhida == cont) { //Se o usuário escolheu a primeira bateria
                 //Fechar o bufferedReader
@@ -327,18 +328,26 @@ public class CSVRead {
 
                 nBatSerie = (int)Math.ceil(Vsist/Double.parseDouble(currentBattery[Constants.iBAT_V_NOMINAL]));
                 nBatParalelo = (int)Math.ceil(CBI_C20/Double.parseDouble(currentBattery[Constants.iBAT_CBI_BAT]));
+                qntBat = nBatParalelo * nBatSerie;
 
                 currentCost = Double.parseDouble(cheaperBattery[Constants.iBAT_PRECO_INDIVITUDAL]) * qntBat;
                 currentBattery[Constants.iBAT_QTD_SERIE] = String.valueOf(nBatSerie);
                 currentBattery[Constants.iBAT_QTD_PARAL] = String.valueOf(nBatParalelo);
-                currentBattery[Constants.iINV_PRECO_TOTAL] = String.valueOf(currentCost);
+                currentBattery[Constants.iBAT_PRECO_TOTAL] = String.valueOf(currentCost);
+                System.out.println(String.valueOf(currentCost));
+
+                System.out.println("Autonomia: "+autonomia);
+                System.out.println("cbiu: "+CBI_C20);
+                System.out.println("seir: "+nBatSerie);
+                System.out.println("paral: "+nBatParalelo);
+                System.out.println("qnt: "+qntBat);
 
                 if (idBateriaEscolhida == cont) {
                     cheaperBattery = currentBattery;
                     break;
                 }
 
-                if (currentCost < cheaperCost) {
+                if (currentCost <= cheaperCost) {
                     cheaperCost = currentCost;
                     cheaperBattery = currentBattery;
                 }
@@ -484,6 +493,7 @@ public class CSVRead {
                     break;
                 }
                 if(idControladorEscolhido == -1){
+                    System.out.println("Entrou if");
                     simplerController = simplestController(line, Vbat, qntPanel, Voc, P_pv, potenciaPainel, Isc, modSerie, modParal, Voc);
                     if(simplerController!=null) break;
                 }
@@ -530,7 +540,12 @@ public class CSVRead {
             currentPowerBatController = Integer.parseInt(currentController[Constants.iCON_V_BATERIA]);
             currentPowerSistController = Double.parseDouble(currentController[Constants.iCON_V_MAX_SISTEMA]);
 
-            if(currentPowerBatController >= Vbat &&  currentPowerSistController > Voc*modSerie){// && (Vcontroller >= (Voc_corrigida * modSerie)) --> isso eh a mesma funcao para calcular a quantidade dos modulos em serie
+            System.out.println("CPBT: "+ currentPowerBatController);
+            System.out.println("CPSC: "+ currentPowerSistController);
+            System.out.println("Ref1: "+Vbat);
+            System.out.println("Ref2: "+Voc*modSerie);
+
+            if(currentPowerBatController >= Vbat){//  &&  currentPowerSistController > Voc*modSerie --> devo colocar, entretanto está sempre retornando Falso
                 currentController[Constants.iCON_QTD] = String.valueOf(numberController);
                 currentController[Constants.iCON_PRECO_TOTAL] = String.valueOf(currentCost);
                 return currentController;

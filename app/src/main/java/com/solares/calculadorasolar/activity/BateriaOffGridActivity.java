@@ -31,6 +31,10 @@ public class BateriaOffGridActivity extends AppCompatActivity {
         TextView textBateria = findViewById(R.id.text_bateria);
         TextView textNomeBateria = findViewById(R.id.text_nome_bateria);
         TextView textValorBateria = findViewById(R.id.text_preco_bateria);
+        TextView textSerie = findViewById(R.id.text_serie);
+        TextView textValorQntSerie = findViewById(R.id.text_qnt_serie);
+        TextView textParal = findViewById(R.id.text_paral);
+        TextView textValorQntParal = findViewById(R.id.text_qnt_paral);
 
         try {
             System.out.println("Nome da bateria que chegou: "+calculadora.getBateria()[Constants.iPANEL_CUSTO_TOTAL]);
@@ -39,6 +43,14 @@ public class BateriaOffGridActivity extends AppCompatActivity {
                     calculadora.getBateria()[Constants.iBAT_NOME]));
             textValorBateria.setText(String.format(Locale.ITALY, "R$ %.2f",
                     Double.parseDouble(calculadora.getBateria()[Constants.iBAT_PRECO_TOTAL])));
+
+            textSerie.setText(String.format(Locale.ITALY, "Quantidade em Série"));
+            textValorQntSerie.setText(String.format(Locale.ITALY, "%d",
+                    Integer.parseInt(calculadora.getBateria()[Constants.iBAT_QTD_SERIE])));
+
+            textParal.setText(String.format(Locale.ITALY, "Quantidade em Paralelo"));;
+            textValorQntParal.setText(String.format(Locale.ITALY, "%d",
+                    Integer.parseInt(calculadora.getBateria()[Constants.iBAT_QTD_PARAL])));
 
             //Botão voltar
             Button buttonVoltar = findViewById(R.id.button_voltar);

@@ -1,0 +1,4 @@
+Nome,marca,tensao nominal,CBI_bat,Qnt serie,Qnt paralelo,preco total,preco unit,# dias de autonomia,ID
+DF300,Johnson Controls,12,30, , , ,329.0, ,0
+DF500,Johnson Controls,12,40, , , ,344.90, ,1
+DF700,Johnson Controls,12,50, , , ,413.90, ,2

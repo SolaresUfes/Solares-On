@@ -99,7 +99,8 @@ public class Constants {
     public static final int iBAT_QTD_SERIE = 5;
     public static final int iBAT_PRECO_TOTAL = 6;
     public static final int iBAT_PRECO_INDIVITUDAL = 7;
-    public static final int iBAT_ID = 8;
+    public static final int iBAT_DIAS_AUTONOMIA = 8;
+    public static final int iBAT_ID = 9;
 
 
     //Indices Controladores

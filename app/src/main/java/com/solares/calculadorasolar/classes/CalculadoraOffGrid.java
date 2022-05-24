@@ -146,8 +146,8 @@ public class CalculadoraOffGrid implements Serializable{
 
 
             // Definindo o Banco de Baterias
-            //is = MyContext.getResources().openRawResource(R.raw.banco_baterias);
-//            bateriaEscolhida = CSVRead.DefineBattery(is, this.CBI_C20, this.Vsist, this.idBateriaEscolhida);
+            is = MyContext.getResources().openRawResource(R.raw.banco_baterias);
+            bateriaEscolhida = CSVRead.DefineBattery(is, this.CBI_C20, this.Vsist, this.idBateriaEscolhida, this.autonomia);
 
 
             // Definindo os Inversores

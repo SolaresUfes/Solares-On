@@ -435,9 +435,9 @@ Thomas T.D. Tran, Amanda D. Smith
     public void calculaResultadosPlaca(Context MyContext, Painel placaEscolhida){
         //Definindo oas placas
         if(this.areaAlvo < 0){
-            placaEscolhida.setQtd((int) Math.floor(this.potenciaNecessaria / placaEscolhida.getPotencia()));
+            placaEscolhida.setQtd((int) Math.ceil(this.potenciaNecessaria / placaEscolhida.getPotencia())); // arredondar para cima
         } else {
-            placaEscolhida.setQtd((int)Math.floor(this.areaAlvo / placaEscolhida.getArea()));
+            placaEscolhida.setQtd((int)Math.floor(this.areaAlvo / placaEscolhida.getArea())); // arredondar para baixo
         }
         placaEscolhida.setCustoTotal(placaEscolhida.getQtd() * placaEscolhida.getPreco());
 
@@ -562,7 +562,7 @@ solarHour - Está em horas (maior que zero)
      * Pós Condições: Retorna o valor da potência necessária em Wp
      */
     public double FindTargetCapacity(double energyConsumed, double solarHour){
-        energyConsumed -= this.pegaCustoDisponibilidade(); //O Custo de disponibilidade é o mínimo que alguém pode pagar
+        //energyConsumed -= this.pegaCustoDisponibilidade(); //O Custo de disponibilidade é o mínimo que alguém pode pagar
         // Ou seja, se a pessoa consumir 400KWh, e produzir 375KWh, ela irá pagar 50KWh à concessionária, se esse for o custo de disponibilidade.
         if(energyConsumed < 0.0){ //Verifica se o consumo é menor que o custo de disponibilidade
             return 0;

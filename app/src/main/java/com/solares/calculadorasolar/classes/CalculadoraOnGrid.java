@@ -435,7 +435,7 @@ Thomas T.D. Tran, Amanda D. Smith
     public void calculaResultadosPlaca(Context MyContext, Painel placaEscolhida){
         //Definindo oas placas
         if(this.areaAlvo < 0){
-            placaEscolhida.setQtd((int) Math.ceil(this.potenciaNecessaria / placaEscolhida.getPotencia())); // arredondar para cima
+            placaEscolhida.setQtd((int) Math.floor(this.potenciaNecessaria / placaEscolhida.getPotencia())); // arredondar para baixo
         } else {
             placaEscolhida.setQtd((int)Math.floor(this.areaAlvo / placaEscolhida.getArea())); // arredondar para baixo
         }

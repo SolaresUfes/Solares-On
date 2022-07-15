@@ -50,7 +50,7 @@ public class MostrarPainelContInvActivity extends AppCompatActivity {
             textControlador.setText(String.format(Locale.ITALY, "%d %s de %.0f Wp",
                     Integer.parseInt(calculadora.getControlador()[Constants.iPANEL_QTD]), "Controlador", Double.parseDouble(calculadora.getControlador()[Constants.iPANEL_POTENCIA])));
 
-            if(calculadora.getInversor().equals("0")) {
+            if(calculadora.getInversor()[Constants.iINVOFF_NOME].equals("0")) {
                 textInversor.setText(String.format(Locale.ITALY, "%d %s de %.2f kW",
                         Integer.parseInt(calculadora.getInversor()[Constants.iINVOFF_QTD]), "Inversor", (Double.parseDouble(calculadora.getInversor()[Constants.iINVOFF_POTENCIAAPARENTE]) / 1000) * 0.8));
             }

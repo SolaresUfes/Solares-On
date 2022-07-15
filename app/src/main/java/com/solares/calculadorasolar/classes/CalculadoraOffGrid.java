@@ -1,5 +1,7 @@
 package com.solares.calculadorasolar.classes;
 
+import static com.solares.calculadorasolar.classes.CalculadoraOnGrid.DefineArea;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,8 +32,12 @@ public class CalculadoraOffGrid implements Serializable{
     double fatorPotencia=0.92;
     double energiaAtivaDia=0;
     double minPotencia=0;
+    double potenciaInstalada=0;
     double temperaturaMedia=0;
     double area=0;
+    double custoParcial=0;
+    double custoTotal=0;
+    double lucro=0;
     int autonomia=2;
     int Vsist=0;
     int Vbat=0;
@@ -64,6 +70,7 @@ public class CalculadoraOffGrid implements Serializable{
     public String[] getControlador(){ return this.controladorEscolhido; }
     public String[] getInversor(){ return this.inversorEscolhido; }
     public String[] getBateria(){ return this.bateriaEscolhida; }
+    public double pegaLucro(){return this.lucro; }
 
     //////////////////////////
     ////  Funções setters ////
@@ -83,7 +90,7 @@ public class CalculadoraOffGrid implements Serializable{
 
     public CalculadoraOffGrid(){
         setAreaAlvo(-1f);
-        setIdModuloEscolhido(0);
+        setIdModuloEscolhido(-1);
         setIdInversorEscolhido(-1);
         setIdControladorEscolhido(-1);
         setIdBateriaEscolhida(-1);
@@ -93,7 +100,7 @@ public class CalculadoraOffGrid implements Serializable{
     /////////////////////////////////////////        Função Principal       /////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public void Calcular(Context MyContext){
-        InputStream is;
+        InputStream is=null;
 
         try {
             CalculadoraOnGrid calculadoraOnGrid = new CalculadoraOnGrid();
@@ -126,7 +133,7 @@ public class CalculadoraOffGrid implements Serializable{
             // Calculo do CBI_C20
             this.CBI_C20 = (Constants.fatorSeguranca * this.energiaAtivaDia * this.autonomia) / (Constants.Pd * this.Vsist);
 
-            // Definindo as Placas  ---- isso eh para nao esquecer - lembre de criar  uma funcao parecida em CSVRead
+            /*// Definindo as Placas  ---- isso eh para nao esquecer - lembre de criar  uma funcao parecida em CSVRead
             is = MyContext.getResources().openRawResource(R.raw.banco_paineis_offgrid);
             placaEscolhida = CSVRead.DefineSolarPanel(is, this.minPotencia, this.areaAlvo, this.idModuloEscolhido); // this.minPotencia
             area = calculadoraOnGrid.DefineArea(placaEscolhida);
@@ -157,8 +164,26 @@ public class CalculadoraOffGrid implements Serializable{
                 inversorEscolhido = CSVRead.DefineInvertorOffGrid(is, this.placaEscolhida ,this.potenciaAparente, this.Vsist, idInversorEscolhido);
                 System.out.println("-------- Inversor: "+inversorEscolhido[Constants.iINVOFF_NOME]);
             }
-            else inversorEscolhido= new String[]{"0"};
+            else inversorEscolhido= new String[]{"0"};*/
 
+            int cont=0, idMelhorModulo=-1;
+            double menorCusto=0.0;
+            if(this.idModuloEscolhido == -1){
+                idMelhorModulo = cont;
+                menorCusto = this.pegaLucro();
+                while (!calculaResultadosPlaca(MyContext, cont)) {
+                    if (custoTotal < menorCusto) { // Definir melhor placa em relação à anterior
+                        idMelhorModulo = cont;
+                        menorCusto = custoTotal;
+                    }
+
+                    cont++;
+                }
+                calculaResultadosPlaca(MyContext, idMelhorModulo);
+            }else{
+                calculaResultadosPlaca(MyContext, this.idModuloEscolhido);
+            }
+            System.out.println("IDDD: "+idMelhorModulo);
 
 
 
@@ -270,5 +295,84 @@ public class CalculadoraOffGrid implements Serializable{
 
     public int numModulosParalelo(double P_pv, int qntPlacasSerie, int P_mod){
         return (int) Math.round(P_pv / (qntPlacasSerie * P_mod));
+    }
+
+    public boolean calculaResultadosPlaca(Context MyContext, int idModuloEscolhido){
+        InputStream is;
+        //Definindo as placas
+        is = MyContext.getResources().openRawResource(R.raw.banco_paineis_offgrid);
+        placaEscolhida = CSVRead.DefineSolarPanel(is, minPotencia, this.areaAlvo, idModuloEscolhido);
+
+        if(placaEscolhida==null) return true; // Quando terminar de varrer as linhas deverá sair do while
+
+        area = DefineArea(placaEscolhida);
+
+        //Encontrando a potenciaInstalada
+        this.potenciaInstalada = Double.parseDouble(placaEscolhida[Constants.iPANEL_POTENCIA]) * Double.parseDouble(placaEscolhida[Constants.iPANEL_QTD]);
+
+        // Calcular Voc_corrigida
+        double voc = Double.parseDouble(placaEscolhida[Constants.iPANEL_Voc]);
+        placaEscolhida[Constants.iPANEL_Voc] = Double.toString(voc * (1 + ((temperaturaMedia - 25) * coeficienteVariacao)/100));
+
+        // Definindo o Controlador de Carga
+        is = MyContext.getResources().openRawResource(R.raw.banco_controladores);
+        controladorEscolhido = CSVRead.DefineChargeController(is, this.Vsist, this.placaEscolhida, this.minPotencia, this.idControladorEscolhido); // P_pv talvez seja a potencia da placa multiplicado pela quantidade de placas
+        System.out.println("------ Controlador: "+controladorEscolhido[Constants.iCON_NOME]);
+
+        // Definindo o Banco de Baterias
+        is = MyContext.getResources().openRawResource(R.raw.banco_baterias);
+        bateriaEscolhida = CSVRead.DefineBattery(is, this.CBI_C20, this.Vsist, this.idBateriaEscolhida, this.autonomia);
+        System.out.println("-------- Bateria: "+bateriaEscolhida[Constants.iBAT_NOME]);
+
+        // Definindo os Inversores
+        System.out.println(potenciaUtilizadaDiariaCA);
+        if(this.potenciaUtilizadaDiariaCA != 0){
+            this.potenciaAparente = this.potenciaUtilizadaDiariaCA / this.fatorPotencia;
+            is = MyContext.getResources().openRawResource(R.raw.banco_inversores_off);
+            inversorEscolhido = CSVRead.DefineInvertorOffGrid(is, this.placaEscolhida ,this.potenciaAparente, this.Vsist, idInversorEscolhido);
+            System.out.println("-------- Inversor: "+inversorEscolhido[Constants.iINVOFF_NOME]);
+        }
+        else inversorEscolhido= new String[]{"0","0", "0", "0", "0", "0", "0", "0", "0","0"};
+
+        //Definindo os custos
+        double[] custos = this.DefineCosts(placaEscolhida, inversorEscolhido, controladorEscolhido, bateriaEscolhida);
+        custoParcial = custos[Constants.iCOSTS_PARCIAL];
+        custoTotal = custos[Constants.iCOSTS_TOTAL];
+
+        //Calculo da energia produzida em um ano
+        //geracaoAnual = EstimateAnualGeneration();
+
+        System.out.println("Preco Modulo: "+placaEscolhida[Constants.iPANEL_CUSTO_TOTAL]);
+        System.out.println("Preco inv: "+inversorEscolhido[Constants.iINVOFF_PRECO_TOTAL]);
+        System.out.println("Preco c: "+controladorEscolhido[Constants.iCON_PRECO_TOTAL]);
+        System.out.println("Preco b: "+bateriaEscolhida[Constants.iBAT_PRECO_TOTAL]);
+
+        return false;
+    }
+
+    public double[] DefineCosts(String[] solarPanel, String[] invertor, String[] controlador, String[] bateria){
+        double[] costs = {0.0, 0.0};
+        double porcentagemCustosIntegrador;
+
+        //Definido custo parcial
+        costs[Constants.iCOSTS_PARCIAL] = Double.parseDouble(invertor[Constants.iINVOFF_PRECO_TOTAL]) +
+                Double.parseDouble(solarPanel[Constants.iPANEL_CUSTO_TOTAL]) + Double.parseDouble(controlador[Constants.iCON_PRECO_TOTAL]) +
+                Double.parseDouble(bateria[Constants.iBAT_PRECO_TOTAL]);
+        ////Definindo o custo total
+        //Porcentagem do custo parcial para custos com mão de obra, outros componentes etc... Segundo Estudo estratégico da Greener de 2020
+        //Nesse estudo, chegamos na equação y = 1.65-0.032x para descrever a porcentagem do custo do kit que representa o custo final para o consumidor
+        //Isso desde 1kWp até 8kWp, além desses limites, usamos o valor do limite
+        if(this.potenciaInstalada < 1000){
+            porcentagemCustosIntegrador = 1.65 - 0.032*1;
+        } else if(this.potenciaInstalada > 8000) {
+            porcentagemCustosIntegrador = 1.65 - 0.032 * 8;
+        } else {
+            porcentagemCustosIntegrador = 1.65 - 0.032*this.potenciaInstalada/1000; // /1000 para ter a potencia em kWp
+        }
+
+
+        costs[Constants.iCOSTS_TOTAL] = costs[Constants.iCOSTS_PARCIAL]*porcentagemCustosIntegrador;
+
+        return costs;
     }
 }

@@ -405,10 +405,8 @@ public class CSVRead {
 
                 cheaperInvertor[Constants.iINVOFF_QTD] = Integer.toString(numberInvertors);
                 cheaperInvertor[Constants.iINVOFF_PRECO_TOTAL] = Double.toString(cheaperCost);
-                System.out.println(""+cheaperInvertor);
             }while(Vcc >= VinInvertor && (line = br.readLine()) != null && S >= potAparenteInversor);
 
-            System.out.println("------- ID ------"+idInversorEscolhido);
             while ((line = br.readLine()) != null)  { // usuário escolherá o inversor
                 invertor_i = line.split(divider);
                 VinInvertor = Integer.parseInt(cheaperInvertor[Constants.iINVOFF_TENSAOENTRADA]);

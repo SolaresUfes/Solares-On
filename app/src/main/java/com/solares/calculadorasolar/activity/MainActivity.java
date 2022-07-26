@@ -109,11 +109,15 @@ public class MainActivity extends AppCompatActivity {
 
         //////////// Inicia Calculadora
         CalculadoraOnGrid calculadora = new CalculadoraOnGrid();
-        // Cria os vetores de Paineis e de Inversores
+        // Cria os vetores de Paineis e de Inversores - Sistema On Grid
         SharedPreferences sharedPref = getPreferences(MODE_PRIVATE);
         calculadora.setListaPaineis(FirebaseManager.fbBuscaListaPaineis(MainActivity.this, sharedPref));
         calculadora.setListaInversores(FirebaseManager.fbBuscaListaInversores(MainActivity.this, sharedPref));
-
+        // Cria os vetores de Paineis, Inversores, Baterias, Controladores e Equipamentos - Sistema Off Grid
+        calculadora.setListaPaineisOffGrid(FirebaseManager.fbBuscaListaPaineisOffGrid(MainActivity.this, sharedPref));
+        calculadora.setListaInversoresOffGrid(FirebaseManager.fbBuscaListaInversoresOffGrid(MainActivity.this, sharedPref));
+        calculadora.setListaControladoresOffGrid(FirebaseManager.fbBuscaListaControladorOffGrid(MainActivity.this, sharedPref));
+        calculadora.setListaBateriasOffGrid(FirebaseManager.fbBuscaListaBateriaOffGrid(MainActivity.this, sharedPref));
 
         //Se o spinner de estado for selecionado, muda o spinner de cidades de acordo
         this.mViewHolder.spinnerStates.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

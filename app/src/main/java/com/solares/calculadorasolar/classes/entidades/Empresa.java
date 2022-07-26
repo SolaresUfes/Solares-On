@@ -1,6 +1,8 @@
 package com.solares.calculadorasolar.classes.entidades;
 
-public class Empresa {
+import java.io.Serializable;
+
+public class Empresa implements Serializable {
     public String telefone;
     public String site;
     public String nome;

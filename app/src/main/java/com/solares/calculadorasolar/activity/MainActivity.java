@@ -35,6 +35,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.solares.calculadorasolar.R;
+import com.solares.calculadorasolar.classes.CalculadoraOffGrid;
 import com.solares.calculadorasolar.classes.auxiliares.AutoSizeText;
 import com.solares.calculadorasolar.classes.auxiliares.CSVManager;
 import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     public float porcent = 4f;
 
     //
-    private boolean calcByMoney = true;
+    //private boolean calcByMoney = true;
 
 
     @Override
@@ -78,18 +79,18 @@ public class MainActivity extends AppCompatActivity {
         AutoSizeText.AutoSizeTextView(this.mViewHolder.textSimulacao, alturaTela, larguraTela, 3f);
         this.mViewHolder.buttonCalc = findViewById(R.id.button_calc);
         AutoSizeText.AutoSizeButton(this.mViewHolder.buttonCalc, alturaTela, larguraTela, porcent);
-        this.mViewHolder.editCostMonth = findViewById(R.id.edit_cost);
-        AutoSizeText.AutoSizeEditText(this.mViewHolder.editCostMonth, alturaTela, larguraTela, 3f);
-        this.mViewHolder.buttonChangeMode = findViewById(R.id.MAIN_button_change_mode);
-        AutoSizeText.AutoSizeButton(this.mViewHolder.buttonChangeMode, alturaTela, larguraTela, 2f);
+       // this.mViewHolder.editCostMonth = findViewById(R.id.edit_cost);
+       // AutoSizeText.AutoSizeEditText(this.mViewHolder.editCostMonth, alturaTela, larguraTela, 3f);
+       // this.mViewHolder.buttonChangeMode = findViewById(R.id.MAIN_button_change_mode);
+        //AutoSizeText.AutoSizeButton(this.mViewHolder.buttonChangeMode, alturaTela, larguraTela, 2f);
 
-        if(calcByMoney){
+        /*if(calcByMoney){
             this.mViewHolder.buttonChangeMode.setText(R.string.inserir_o_consumo_em_kwh);
             this.mViewHolder.editCostMonth.setHint(R.string.valor_conta_de_luz);
         } else {
             this.mViewHolder.buttonChangeMode.setText(R.string.inserir_o_consumo_em_reais);
             this.mViewHolder.editCostMonth.setHint(R.string.consumo_conta_de_luz);
-        }
+        }*/
 
 
         //Criando spinners (dos estados e das cidades)
@@ -106,18 +107,19 @@ public class MainActivity extends AppCompatActivity {
 
         this.mViewHolder.layout = findViewById(R.id.layout_calculo);
 
-
-        //////////// Inicia Calculadora
+        SharedPreferences sharedPref = getPreferences(MODE_PRIVATE);
+        //////////// Inicia Calculadora On-Grid
         CalculadoraOnGrid calculadora = new CalculadoraOnGrid();
         // Cria os vetores de Paineis e de Inversores - Sistema On Grid
-        SharedPreferences sharedPref = getPreferences(MODE_PRIVATE);
         calculadora.setListaPaineis(FirebaseManager.fbBuscaListaPaineis(MainActivity.this, sharedPref));
         calculadora.setListaInversores(FirebaseManager.fbBuscaListaInversores(MainActivity.this, sharedPref));
+        //////////// Inicia Calculadora Off-Grid
+        CalculadoraOffGrid calculadoraOffGrid = new CalculadoraOffGrid();
         // Cria os vetores de Paineis, Inversores, Baterias, Controladores e Equipamentos - Sistema Off Grid
-        calculadora.setListaPaineisOffGrid(FirebaseManager.fbBuscaListaPaineisOffGrid(MainActivity.this, sharedPref));
-        calculadora.setListaInversoresOffGrid(FirebaseManager.fbBuscaListaInversoresOffGrid(MainActivity.this, sharedPref));
-        calculadora.setListaControladoresOffGrid(FirebaseManager.fbBuscaListaControladorOffGrid(MainActivity.this, sharedPref));
-        calculadora.setListaBateriasOffGrid(FirebaseManager.fbBuscaListaBateriaOffGrid(MainActivity.this, sharedPref));
+        calculadoraOffGrid.setListaPaineisOffGrid(FirebaseManager.fbBuscaListaPaineisOffGrid(MainActivity.this, sharedPref));
+        calculadoraOffGrid.setListaInversoresOffGrid(FirebaseManager.fbBuscaListaInversoresOffGrid(MainActivity.this, sharedPref));
+        calculadoraOffGrid.setListaControladoresOffGrid(FirebaseManager.fbBuscaListaControladorOffGrid(MainActivity.this, sharedPref));
+        calculadoraOffGrid.setListaBateriasOffGrid(FirebaseManager.fbBuscaListaBateriaOffGrid(MainActivity.this, sharedPref));
 
         //Se o spinner de estado for selecionado, muda o spinner de cidades de acordo
         this.mViewHolder.spinnerStates.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -140,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        this.mViewHolder.buttonChangeMode.setOnClickListener(new View.OnClickListener() {
+        /*this.mViewHolder.buttonChangeMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 calcByMoney = !calcByMoney;
@@ -152,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
                     mViewHolder.editCostMonth.setHint(R.string.consumo_conta_de_luz);
                 }
             }
-        });
+        });*/
 
         //Se o usuário clicar no botão calcular, o cálculo é feito e muda-se para a próxima activity
         this.mViewHolder.buttonCalc.setOnClickListener(new View.OnClickListener() {
@@ -161,19 +163,19 @@ public class MainActivity extends AppCompatActivity {
                 //Verifica se o valor inserido é válido
                 try{
                     //Fecha teclado
-                    mViewHolder.editCostMonth.onEditorAction(EditorInfo.IME_ACTION_DONE);
+                    //mViewHolder.editCostMonth.onEditorAction(EditorInfo.IME_ACTION_DONE);
                     /////Pega as informações inseridas pelo usuário
                     //Identifica a cidade escolhida e pega suas informações
                     final String stateName = mViewHolder.spinnerStates.getSelectedItem().toString();
                     final int idCity = mViewHolder.spinnerCities.getSelectedItemPosition();
                     final String cityName = mViewHolder.spinnerCities.getItemAtPosition(idCity).toString();
                     //Guarda o custo mensal inserido pelo usuário
-                    final double consumo = Double.parseDouble( mViewHolder.editCostMonth.getText().toString() );
+                   // final double consumo = Double.parseDouble( mViewHolder.editCostMonth.getText().toString() );
 
                     // Insere as informações que já temos no objeto
                     calculadora.setNomeCidade(cityName);
-                    calculadora.setConsumo(consumo);
-                    calculadora.setModoCalculoPorDinheiro(calcByMoney);
+                    //calculadora.setConsumo(consumo);
+                    //calculadora.setModoCalculoPorDinheiro(calcByMoney);
                     // Cria os vetores de Cidade e Estado
                     calculadora.setVetorCidade(CreateVetorCidade(idCity, stateName));
                     calculadora.setVetorEstado(CreateVetorEstado(calculadora.pegaVetorCidade()));
@@ -181,8 +183,6 @@ public class MainActivity extends AppCompatActivity {
                     calculadora.setTarifaMensal(Double.parseDouble(calculadora.pegaVetorEstado()[Constants.iEST_TARIFA]));
 
                     // Criar Lista de Empresas
-                    //calculadora.setListaEmpresas(FirebaseManager.fbBuscaListaEmpresasPorEstado(MainActivity.this, calculadora.pegaVetorEstado()[Constants.iEST_SIGLA]));
-                    //calculadora.setListaEmpresas(FirebaseManager.fbBuscaTodasEmpresas(MainActivity.this));
                     calculadora.setListaEmpresas(FirebaseManager.GetEmpresasFirebase(calculadora, MainActivity.this));
 
                     AbrirActivityDetalhes(calculadora);
@@ -245,9 +245,14 @@ public class MainActivity extends AppCompatActivity {
      * Pós Condições: Se o usuário confirmar, realiza o cálculo e mostra os resultados;
      */
     public void AbrirActivityDetalhes(CalculadoraOnGrid calculadora){
-        Intent intent = new Intent(this, DetalhesActivity.class);
-        intent.putExtra(Constants.EXTRA_CALCULADORAON, calculadora);
-        startActivity(intent);
+        try {
+            Intent intent = new Intent(this, DetalhesActivity.class);
+            intent.putExtra(Constants.EXTRA_CALCULADORAON, calculadora);
+            startActivity(intent);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
 

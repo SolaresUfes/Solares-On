@@ -43,6 +43,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'com.google.firebase:firebase-core:19.0.1' //N atualizar isso sem mudar o min SDK para 19
     implementation 'com.google.firebase:firebase-database:20.0.2'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support.constraint:constraint-layout:2.0.4'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test:runner:1.4.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'

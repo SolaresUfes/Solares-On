@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.solares.calculadorasolar.R;
@@ -32,12 +33,6 @@ public class DetalhesActivity extends AppCompatActivity {
 
     public static float porcent = 3f;
 
-    public ViewHolder mViewHolder = new ViewHolder();
-
-    /////
-    public static int larguraTela;
-    public static int alturaTela;
-
     //
     private boolean calcByMoney = true;
 
@@ -45,6 +40,8 @@ public class DetalhesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalhes);
+
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         //pegar os intents
         Intent intent = getIntent();
@@ -56,12 +53,6 @@ public class DetalhesActivity extends AppCompatActivity {
 
         //Pega o layout para poder colocar um listener nele (esconder o teclado)
         ConstraintLayout layout = findViewById(R.id.ADE_layout_tarifa);
-
-        //Identificando os componentes do layout
-        this.mViewHolder.editCostMonth = findViewById(R.id.edit_cost_1);
-        AutoSizeText.AutoSizeEditText(this.mViewHolder.editCostMonth, alturaTela, larguraTela, 3f);
-        this.mViewHolder.buttonChangeMode = findViewById(R.id.TARIFA_button_change_mode);
-        AutoSizeText.AutoSizeButton(this.mViewHolder.buttonChangeMode, alturaTela, larguraTela, 2f);
 
         //Pega o view da explicação e ajusta o tamanho da fonte
         TextView textExplicacaoTarifa = findViewById(R.id.ADE_text_explicacao_tarifa);
@@ -98,6 +89,14 @@ public class DetalhesActivity extends AppCompatActivity {
         Button buttonConfirm = findViewById(R.id.ADE_button_recalcular_tarifa);
         AutoSizeText.AutoSizeButton(buttonConfirm, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
 
+        //Pega o view do botão pra recalcular e ajusta o tamanho da fonte
+        Button buttonChangeMode = findViewById(R.id.TARIFA_button_change_mode);
+        AutoSizeText.AutoSizeButton(buttonChangeMode, MainActivity.alturaTela, MainActivity.larguraTela, 2f);
+
+        //Pega o view do edit text pra recalcular e ajusta o tamanho da fonte
+        final EditText editCostMonth = findViewById(R.id.edit_cost_1);
+        AutoSizeText.AutoSizeEditText(editCostMonth, MainActivity.alturaTela, MainActivity.larguraTela, 3f);
+
         //Mostrar a tarifa atual como padrão
         editTarifa.setText(String.format(Locale.ENGLISH, "%.2f", calculadora.pegaTarifaMensal()));
 
@@ -112,31 +111,31 @@ public class DetalhesActivity extends AppCompatActivity {
 
 
         if(calcByMoney){
-            this.mViewHolder.buttonChangeMode.setText(R.string.inserir_o_consumo_em_kwh);
-            this.mViewHolder.editCostMonth.setHint(R.string.valor_conta_de_luz);
+            buttonChangeMode.setText(R.string.inserir_o_consumo_em_kwh);
+            editCostMonth.setHint(R.string.valor_conta_de_luz);
         } else {
-            this.mViewHolder.buttonChangeMode.setText(R.string.inserir_o_consumo_em_reais);
-            this.mViewHolder.editCostMonth.setHint(R.string.consumo_conta_de_luz);
+            buttonChangeMode.setText(R.string.inserir_o_consumo_em_reais);
+            editCostMonth.setHint(R.string.consumo_conta_de_luz);
         }
 
         //Se o usuário clicar no fundo do app, o teclado se fecha
-        this.mViewHolder.layout.setOnClickListener(new View.OnClickListener() {
+       /* this.mViewHolder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 hideKeyboard(mViewHolder.editCostMonth);
             }
-        });
+        });*/
 
-        this.mViewHolder.buttonChangeMode.setOnClickListener(new View.OnClickListener() {
+        buttonChangeMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 calcByMoney = !calcByMoney;
                 if(calcByMoney){
-                    mViewHolder.buttonChangeMode.setText(R.string.inserir_o_consumo_em_kwh);
-                    mViewHolder.editCostMonth.setHint(R.string.valor_conta_de_luz);
+                    buttonChangeMode.setText(R.string.inserir_o_consumo_em_kwh);
+                    editCostMonth.setHint(R.string.valor_conta_de_luz);
                 } else {
-                    mViewHolder.buttonChangeMode.setText(R.string.inserir_o_consumo_em_reais);
-                    mViewHolder.editCostMonth.setHint(R.string.consumo_conta_de_luz);
+                    buttonChangeMode.setText(R.string.inserir_o_consumo_em_reais);
+                    editCostMonth.setHint(R.string.consumo_conta_de_luz);
                 }
             }
         });
@@ -151,19 +150,18 @@ public class DetalhesActivity extends AppCompatActivity {
                     Log.d("firebase", painel.getMarca() + " " + painel.getCodigo() + " " + painel.getPotencia() + " " + painel.getArea() + " " + painel.getNOCT() + " " + painel.getCoefTempPot() + " " + painel.getPreco());
                 }
                 //Verifica se o valor inserido é válido
-                /*try{
+                try{
                     //Fecha teclado
-                    mViewHolder.editCostMonth.onEditorAction(EditorInfo.IME_ACTION_DONE);
+                    editCostMonth.onEditorAction(EditorInfo.IME_ACTION_DONE);
                     /////Pega as informações inseridas pelo usuário
                     //Guarda o custo mensal inserido pelo usuário
-                    final double consumo = Double.parseDouble( mViewHolder.editCostMonth.getText().toString() );
+                    final double consumo = Double.parseDouble(editCostMonth.getText().toString() );
 
                     // Insere as informações que já temos no objeto
                     calculadora.setConsumo(consumo);
                     calculadora.setModoCalculoPorDinheiro(calcByMoney);
-                    // Cria os vetores de Cidade e Estado
-                    // Colocar Tarifa inicial
-                    calculadora.setTarifaMensal(Double.parseDouble(calculadora.pegaVetorEstado()[Constants.iEST_TARIFA]));
+
+                    RealizaCalculos(calculadora, editTarifa, spinnerFases);
 
                 } catch (Exception e){
                     try {
@@ -172,10 +170,7 @@ public class DetalhesActivity extends AppCompatActivity {
                     } catch (Exception ee){
                         ee.printStackTrace();
                     }
-                }*/
-
-                RealizaCalculos(calculadora, editTarifa, spinnerFases);
-
+                }
             }
         });
 
@@ -229,12 +224,5 @@ public class DetalhesActivity extends AppCompatActivity {
             }
             e.printStackTrace();
         }
-    }
-
-    public static class ViewHolder{
-        EditText editCostMonth;
-        Button buttonCalc;
-        Button buttonChangeMode;
-        ConstraintLayout layout;
     }
 }

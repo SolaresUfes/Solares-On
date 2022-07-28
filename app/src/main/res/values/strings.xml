@@ -3,7 +3,8 @@
     <string name="informe_a_sua_conta_de_energia_em_reais">Informe a sua conta de energia em reais</string>
     <string name="kwh_consumido">Consumo mensal de energia</string>
     <string name="pot_necessaria">Potência Necessária</string>
-    <string name="button_calc">Calcular</string>
+    <string name="button_on_grid">ON-GRID</string>
+    <string name="button_off_grid">OFF-GRID</string>
     <string name="informe_um_numero">Informe um número real com um ponto\nseparando a parte inteira da real.</string>
     <string name="placa_solar_escolhida">Placas Solares Escolhidas</string>
     <string name="paineis">Painéis Solares</string>
@@ -81,6 +82,12 @@
     <string name="titulo_escolher_inversor">Escolher Inversor</string>
     <string name="continuar">Continuar</string>
     <string name="empresas">Empresas</string>
+    <string name="adicionar_item">Adicionar Item</string>
+    <string name="lista_equipamento">Lista de Equipamentos</string>
+    <string name="quantidade">Quantidade</string>
+    <string name="potencia">Potência</string>
+    <string name="periodo_uso">Período de Uso</string>
+    <string name="wh_dia">Wh/dia</string>
 
     <string-array name="Modulos">
         <item>335PHK-36 POLI 335W - BYD Solar</item>

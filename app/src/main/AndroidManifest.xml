@@ -12,6 +12,12 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
+            android:name=".activity.AdicionarEquipamentosActivity"
+            android:exported="false"
+            android:parentActivityName=".activity.VizualizarEquipamentosActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
             android:name=".activity.EmpresasActivity"
             android:exported="false" />
         <activity
@@ -70,6 +76,12 @@
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".activity.DetalhesActivity"
+            android:exported="false"
+            android:parentActivityName=".activity.MainActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".activity.VizualizarEquipamentosActivity"
             android:exported="false"
             android:parentActivityName=".activity.MainActivity"
             android:screenOrientation="portrait"

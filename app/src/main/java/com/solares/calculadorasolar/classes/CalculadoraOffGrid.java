@@ -1,12 +1,11 @@
 package com.solares.calculadorasolar.classes;
 
-import com.solares.calculadorasolar.classes.auxiliares.Constants;
+import android.content.Context;
+
 import com.solares.calculadorasolar.classes.entidades.Bateria_OffGrid;
 import com.solares.calculadorasolar.classes.entidades.Controlador_OffGrid;
-import com.solares.calculadorasolar.classes.entidades.Empresa;
-import com.solares.calculadorasolar.classes.entidades.Inversor;
+import com.solares.calculadorasolar.classes.entidades.Equipamentos_OffGrid;
 import com.solares.calculadorasolar.classes.entidades.Inversor_OffGrid;
-import com.solares.calculadorasolar.classes.entidades.Painel;
 import com.solares.calculadorasolar.classes.entidades.Painel_OffGrid;
 
 import java.io.Serializable;
@@ -23,6 +22,7 @@ public class CalculadoraOffGrid implements Serializable {
     String[] nomesControladores_off_grid;
     LinkedList<Bateria_OffGrid> listaBaterias_off_grid;
     String[] nomesBaterias_off_grid;
+    LinkedList<Equipamentos_OffGrid> listaEquipamentos_off_grid;
     String nomeCidade;
     Painel_OffGrid placaEscolhida;
     Inversor_OffGrid inversorEscolhido;
@@ -47,11 +47,33 @@ public class CalculadoraOffGrid implements Serializable {
     float areaAlvo;
     int idModuloEscolhido;
     int idInversorEscolhido;
+    int idControladorEscolhido;
+    int idBateriaEscolhida;
     double custoDisponibilidade;
 
     double consumo;
     boolean modoCalculoPorDinheiro;
 
+    double potenciaUtilizadaDiariaCC=0;
+    double potenciaUtilizadaDiariaCA=0;
+    double fatorPotencia=0.92;
+    double energiaAtivaDia=0;
+    double minPotencia=0;
+    double Vsist=0;
+    double Vbat=0;
+    double CBI_C20=0;
+    int nBatSerie=0;
+    int nBatParalelo=0;
+    double CBI_bat=0;
+    int qntBat=0;
+    int placaParalelo=0;
+    int placaSerie=0;
+    double correntePainel=0;
+    double correnteMaxPower=0;
+    double tensaoMaxPowerTempMax=0;
+    double potenciaAparente;
+    double Voc_corrigida;
+    double coeficienteVariacao = -0.29;
 
     /* Descrição: Construtor do Objeto CalculadoraOnGrid
      * Parâmetros de Entrada: -;
@@ -63,6 +85,8 @@ public class CalculadoraOffGrid implements Serializable {
         this.areaAlvo = -1f;
         this.idModuloEscolhido = -1;
         this.idInversorEscolhido = -1;
+        this.idControladorEscolhido = -1;
+        this.idBateriaEscolhida = -1;
     }
 
     //////////////////////////
@@ -78,6 +102,7 @@ public class CalculadoraOffGrid implements Serializable {
     public String[] pegaNomesControladoresOffGrid() { return nomesControladores_off_grid; }
     public LinkedList<Bateria_OffGrid> pegaListaBateriasOffGrid() { return listaBaterias_off_grid; }
     public String[] pegaNomesBateriasOffGrid() { return nomesBaterias_off_grid; }
+    public LinkedList<Equipamentos_OffGrid> pegaListaEquipamentosOffGrid() { return listaEquipamentos_off_grid; }
     public String pegaNomeCidade(){ return nomeCidade; }
     public double pegaCustoReais(){ return custoReais; }
     public double pegaConsumokWhs(){ return consumokWh; }
@@ -96,6 +121,7 @@ public class CalculadoraOffGrid implements Serializable {
     public double pegaTarifaMensal(){ return tarifaMensal; }
     public int pegaNumeroDeFases(){ return numeroDeFases; }
     public double pegaCustoDisponibilidade(){ return custoDisponibilidade; }
+    public double getMinPotencia(){ return this.minPotencia; }
 
     //////////////////////////
     ////  Funções setters ////
@@ -110,6 +136,7 @@ public class CalculadoraOffGrid implements Serializable {
     public void setListaInversoresOffGrid(LinkedList<Inversor_OffGrid> listaInversores_off_grid) { this.listaInversores_off_grid = listaInversores_off_grid; }
     public void setListaControladoresOffGrid(LinkedList<Controlador_OffGrid> listaControladores_off_grid) { this.listaControladores_off_grid = listaControladores_off_grid; }
     public void setListaBateriasOffGrid(LinkedList<Bateria_OffGrid> listaBateriasOffGrid) { this.listaBaterias_off_grid = listaBaterias_off_grid; }
+    public void setListaEquipamentosOffGrid(LinkedList<Equipamentos_OffGrid> listaEquipamentosOffGrid) { this.listaEquipamentos_off_grid = listaEquipamentosOffGrid; }
     public void setTarifaMensal(double tarifa){
         this.tarifaMensal = tarifa;
     }
@@ -123,25 +150,22 @@ public class CalculadoraOffGrid implements Serializable {
     }
     public void setConsumokWh(double consumokWh) { this.consumokWh = consumokWh; }
     public void setAreaAlvo(float novaAreaAlvo) { this.areaAlvo = novaAreaAlvo; }
-    public void setNumeroDeFases(int novoNumeroDeFases) {
-        this.numeroDeFases = novoNumeroDeFases;
-        switch (novoNumeroDeFases){
-            case 0:
-                this.custoDisponibilidade = Constants.COST_DISP_MONOFASICO;
-                break;
-            case 1:
-                this.custoDisponibilidade = Constants.COST_DISP_BIFASICO;
-                break;
-            case 2:
-                this.custoDisponibilidade = Constants.COST_DISP_TRIFASICO;
-                break;
-            default:
-                this.custoDisponibilidade = Constants.COST_DISP_BIFASICO;
-        }
-    }
+    public void setPotenciaUtilizadaDiariaCC(double potenciaUtilizadaDiariaCC){ this.potenciaUtilizadaDiariaCC = potenciaUtilizadaDiariaCC;}
+    public void setPotenciaUtilizadaDiariaCA(double potenciaUtilizadaDiariaCA){ this.potenciaUtilizadaDiariaCA = potenciaUtilizadaDiariaCA;}
 
     //idModuloEscolhido - Inteiro que representa um modelo de módulo escolhido pelo usuário. Se for -1, escolhe o melhor
     public void setIdModuloEscolhido(int novoIdModuloEscolhido) { this.idModuloEscolhido = novoIdModuloEscolhido; }
     //idInversoreEscolhido - Inteiro que representa um modelo de inversor escolhido pelo usuário. Se for -1, escolhe o melhor
     public void setIdInversorEscolhido(int novoIdInversorEscolhido) { this.idInversorEscolhido = novoIdInversorEscolhido; }
+    //idModuloEscolhido - Inteiro que representa um modelo de módulo escolhido pelo usuário. Se for -1, escolhe o melhor
+    public void setIdControladorEscolhido(int novoIdControladorEscolhido) { this.idControladorEscolhido = novoIdControladorEscolhido; }
+    //idInversoreEscolhido - Inteiro que representa um modelo de inversor escolhido pelo usuário. Se for -1, escolhe o melhor
+    public void setIdBateriaEscolhido(int novoIdBateriaEscolhida) { this.idBateriaEscolhida = novoIdBateriaEscolhida; }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////        Função Principal       /////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public void Calcular(Context MyContext){
+
+    }
 }

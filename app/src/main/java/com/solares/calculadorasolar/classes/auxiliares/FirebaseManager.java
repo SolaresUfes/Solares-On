@@ -19,6 +19,7 @@ import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
 import com.solares.calculadorasolar.classes.entidades.Bateria_OffGrid;
 import com.solares.calculadorasolar.classes.entidades.Controlador_OffGrid;
 import com.solares.calculadorasolar.classes.entidades.Empresa;
+import com.solares.calculadorasolar.classes.entidades.Equipamentos_OffGrid;
 import com.solares.calculadorasolar.classes.entidades.Inversor;
 import com.solares.calculadorasolar.classes.entidades.Inversor_OffGrid;
 import com.solares.calculadorasolar.classes.entidades.Painel;
@@ -162,7 +163,7 @@ public class FirebaseManager {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 paineis.clear();
                 //Pega os paineis e os coloca em uma lista
-                Log.d("firebase", "Buscando painéis no firebase...");
+                Log.d("firebase", "Buscando painéis off grid no firebase...");
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Painel_OffGrid painel = snapshot.getValue(Painel_OffGrid.class);
                     if(painel != null && !painel.getCodigo().equals("")){
@@ -216,7 +217,7 @@ public class FirebaseManager {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 inversores.clear();
                 //Pega os paineis e os coloca em uma lista
-                Log.d("firebase", "Buscando inversores no firebase...");
+                Log.d("firebase", "Buscando inversores off grid no firebase...");
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Inversor_OffGrid inversor = snapshot.getValue(Inversor_OffGrid.class);
                     if(inversor != null && !inversor.getMarca().equals("")){
@@ -269,7 +270,7 @@ public class FirebaseManager {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 controladores.clear();
                 //Pega os paineis e os coloca em uma lista
-                Log.d("firebase", "Buscando inversores no firebase...");
+                Log.d("firebase", "Buscando controladores no firebase...");
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Controlador_OffGrid controlador = snapshot.getValue(Controlador_OffGrid.class);
                     if(controlador != null && !controlador.getMarca().equals("")){
@@ -322,11 +323,11 @@ public class FirebaseManager {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 baterias.clear();
                 //Pega os paineis e os coloca em uma lista
-                Log.d("firebase", "Buscando inversores no firebase...");
+                Log.d("firebase", "Buscando baterias no firebase...");
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Bateria_OffGrid bateria = snapshot.getValue(Bateria_OffGrid.class);
                     if(bateria != null && !bateria.getMarca().equals("")){
-                        Log.d("firebase", "Controlador Off Grid: " + bateria.getMarca());
+                        Log.d("firebase", "Bateria Off Grid: " + bateria.getMarca());
                         baterias.add(bateria);
                     }
                 }
@@ -349,6 +350,59 @@ public class FirebaseManager {
             }
         });
         return baterias;
+    }
+
+    public static LinkedList<Equipamentos_OffGrid> fbBuscaListaEquipamentoOffGrid(Context context, SharedPreferences sharedPref){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        LinkedList<Equipamentos_OffGrid> equipamentos = new LinkedList<>();
+
+        //Verify Connection
+        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
+        if(!isConnected){
+            Log.d("firebase", "Sem internet!");
+            //
+            //
+            //  --- --- --- Fazer Funcao para ler off line
+            //
+            //
+        }
+
+        DatabaseReference dbReference = database.getReference("equipamentos_off_grid");
+        //Cria um listener que vai chamar o onDataChange sempre que os dados mudarem no banco de dados e quando ele for criado
+        dbReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                equipamentos.clear();
+                //Pega os paineis e os coloca em uma lista
+                Log.d("firebase", "Buscando equipamentos no firebase...");
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Equipamentos_OffGrid equipamento = snapshot.getValue(Equipamentos_OffGrid.class);
+                    if(equipamento != null && !equipamento.getNome().equals("")){
+                        Log.d("firebase", "Controlador Off Grid: " + equipamento.getNome());
+                        equipamentos.add(equipamento);
+                    }
+                }
+
+                //Salva os inversores no banco de dados na shared pref
+                /*if(inversores.size() > 0) {
+                    SharedPreferences.Editor prefsEditor = sharedPref.edit();
+                    Gson gson = new Gson();
+                    String json = gson.toJson(inversores.toArray());
+                    prefsEditor.putString("inversores_off_grid", json);
+                    prefsEditor.apply();
+                }*/
+            }
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Failed to read value
+                Log.d("firebase", "Failed to read value." + error.toException());
+            }
+        });
+        return equipamentos;
     }
 
 

@@ -1,9 +1,12 @@
 package com.solares.calculadorasolar.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.media.audiofx.Visualizer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +29,7 @@ import com.solares.calculadorasolar.classes.entidades.Inversor;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Random;
 
@@ -56,9 +60,7 @@ public class AdicionarEquipamentosActivity extends AppCompatActivity {
             this.mViewHolder.buttonContinuar = findViewById(R.id.button_continuar);
             AutoSizeText.AutoSizeButton(this.mViewHolder.buttonContinuar, MainActivity.alturaTela, MainActivity.larguraTela, 2f);
 
-            this.mViewHolder.spinnerCategoria = findViewById(R.id.spinner_categoria_equipamento);
-
-            this.mViewHolder.spinnerEquipamento = findViewById(R.id.spinner_escolher_equipamento);
+            Spinner spinnerEquipamentos = findViewById(R.id.spinner_escolher_equipamento);
 
             this.mViewHolder.editTextQuantidade = findViewById(R.id.editText_quantidade);
             AutoSizeText.AutoSizeEditText(this.mViewHolder.editTextQuantidade, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
@@ -96,55 +98,26 @@ public class AdicionarEquipamentosActivity extends AppCompatActivity {
             });
 
             //Aqui, coloca o vetor de strings que será exibido no spinner
-           /* ArrayAdapter<CharSequence> adapterC = ArrayAdapter.createFromResource(this, R.array.Categorias, R.layout.spinner_item);
-            this.mViewHolder.spinnerCategoria.setAdapter(adapterC);
+            ArrayAdapter<String> adapterS =new ArrayAdapter<String>(this, R.layout.spinner_item, calculadora.pegaNomesEquipamentosOffGrid());
+            spinnerEquipamentos.setAdapter(adapterS);
 
-            ArrayAdapter<CharSequence> adapterE = ArrayAdapter.createFromResource(this, R.array.CategoriaNull, R.layout.spinner_item);
-            adapterE.setDropDownViewResource(R.layout.spinner_item);
-            this.mViewHolder.spinnerEquipamento.setAdapter(adapterE);
 
-            this.mViewHolder.spinnerCategoria.setSelection(0);
-            this.mViewHolder.spinnerEquipamento.setSelection(0);
-
-            //Se o spinner de categorias for selecionado, muda o spinner de equipamentos de acordo
-            this.mViewHolder.spinnerCategoria.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            spinnerEquipamentos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    //Muda o spinner de equipamenros para a categoria correspondente
-                    ChangeSpinner(position);
-                    posicao = position;
-                }
-
-                //O ide reclama se eu tirar esse metodo, então deixei ele aí, mas sem nada
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {}
-            });*/
-
-            /*this.mViewHolder.spinnerEquipamento.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    InputStream is = SelectContext(posicao);
                     System.out.println("Position: " + position);
-                    String[] vetorEquipamento;
-
-                    //Pega os nomes dos inversores
-                    int cont=0;
-                    vetorEquipamento = new String[calculadora.pegaE.size()];
-                    for (Inversor inversorAtual : this.pegaListaInversores()) {
-                        nomesInversores[cont] = inversorAtual.getMarca() + " " + inversorAtual.getCodigo() + " - " + String.format(Locale.ITALY, "%.1f", inversorAtual.getPotencia()/1000f) + "kW";
-                        cont++;
-                    }
+                    Equipamentos_OffGrid Equipamento = calculadora.pegaVetorEquipamentos().get(position);
 
                     // Caso o spinner selecionado é algum diferente do settado
-                    if(vetorEquipamento!=null){
+                    if(Equipamento!=null){
                         mViewHolder.editTextQuantidade.setText("1");
-                        mViewHolder.editTextPotencia.setText(vetorEquipamento[Constants.iEQUI_POT]);
+                        mViewHolder.editTextPotencia.setText(String.valueOf(Equipamento.getPotencia()));
                         mViewHolder.editTextPeriodoUso.setText("1");
                         mViewHolder.editTextWhdia.setText("1");
-                        nome = mViewHolder.spinnerEquipamento.getSelectedItem().toString();
+                        nome = spinnerEquipamentos.getSelectedItem().toString();
 
                         //Saber se o equipamento eh de Corrente Contínua ou Não
-                        if(vetorEquipamento[Constants.iEQUI_CC].equals("1"))
+                        if(Equipamento.getCC())
                             correnteContinua = true;
                         else
                             correnteContinua = false;
@@ -164,16 +137,16 @@ public class AdicionarEquipamentosActivity extends AppCompatActivity {
                 }
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {}
-            });*/
+            });
 
             this.mViewHolder.buttonContinuar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     try {
-                        double quantidade = Integer.parseInt( mViewHolder.editTextQuantidade.getText().toString() );
-                        double potencia = Integer.parseInt( mViewHolder.editTextPotencia.getText().toString() );
-                        double periodoUso = Integer.parseInt( mViewHolder.editTextPeriodoUso.getText().toString() );
-                        double diasUtilizado = Math.round(Integer.parseInt(mViewHolder.editTextWhdia.getText().toString()));//potencia / Integer.parseInt( mViewHolder.editTextWhdia.getText().toString()
+                        double quantidade = Double.parseDouble( mViewHolder.editTextQuantidade.getText().toString() );
+                        double potencia = Double.parseDouble( mViewHolder.editTextPotencia.getText().toString() );
+                        double periodoUso = Double.parseDouble( mViewHolder.editTextPeriodoUso.getText().toString() );
+                        double diasUtilizado = Math.round(Double.parseDouble(mViewHolder.editTextWhdia.getText().toString()));//potencia / Integer.parseInt( mViewHolder.editTextWhdia.getText().toString()
 
                         // Adicionando as características para o equipamento
                         meuEquipamento.setNome(nome);
@@ -197,6 +170,12 @@ public class AdicionarEquipamentosActivity extends AppCompatActivity {
 
                         System.out.println("Equipamento possui corrente contrinua?(1=sim): "+correnteContinua);
 
+
+                        //calculadora.setEquipamentosSelecionados(meuEquipamento);
+                        Intent intent = new Intent(getApplicationContext(), VizualizarEquipamentosActivity.class);
+                        //intent.putExtra("equipamento", calculadora);
+                        intent.putExtra(Constants.EXTRA_EQUIPAMENTO, meuEquipamento);
+                        setResult(Activity.RESULT_OK, intent);
                         finish(); // encerrar activity
                     }catch (Exception e){
                         try {
@@ -240,8 +219,6 @@ public class AdicionarEquipamentosActivity extends AppCompatActivity {
 
     public static class ViewHolder{
         Button buttonContinuar;
-        Spinner spinnerCategoria;
-        Spinner spinnerEquipamento;
         EditText editTextQuantidade;
         EditText editTextPotencia;
         EditText editTextPeriodoUso;

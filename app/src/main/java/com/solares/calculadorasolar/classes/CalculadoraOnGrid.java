@@ -30,14 +30,6 @@ public class CalculadoraOnGrid implements Serializable {
     String[] nomesPaineis;
     LinkedList<Inversor> listaInversores;
     String[] nomesInversores;
-    LinkedList<Painel_OffGrid> listaPaineis_off_grid;
-    String[] nomesPaineis_off_grid;
-    LinkedList<Inversor_OffGrid> listaInversores_off_grid;
-    String[] nomesInversores_off_grid;
-    LinkedList<Controlador_OffGrid> listaControladores_off_grid;
-    String[] nomesControladores_off_grid;
-    LinkedList<Bateria_OffGrid> listaBaterias_off_grid;
-    String[] nomesBaterias_off_grid;
     String nomeCidade;
     Painel placaEscolhida;
     double custoReais;
@@ -88,14 +80,6 @@ public class CalculadoraOnGrid implements Serializable {
     public String[] pegaNomesPaineis() { return nomesPaineis; }
     public LinkedList<Inversor> pegaListaInversores() { return listaInversores; }
     public String[] pegaNomesInversores() { return nomesInversores; }
-    public LinkedList<Painel_OffGrid> pegaListaPaineisOffGrid() { return listaPaineis_off_grid; }
-    public String[] pegaNomesPaineisOffGrid() { return nomesPaineis_off_grid; }
-    public LinkedList<Inversor_OffGrid> pegaListaInversoresOffGrid() { return listaInversores_off_grid; }
-    public String[] pegaNomesInversoresOffGrid() { return nomesInversores_off_grid; }
-    public LinkedList<Controlador_OffGrid> pegaListaControladoresOffGrid() { return listaControladores_off_grid; }
-    public String[] pegaNomesControladoresOffGrid() { return nomesControladores_off_grid; }
-    public LinkedList<Bateria_OffGrid> pegaListaBateriasOffGrid() { return listaBaterias_off_grid; }
-    public String[] pegaNomesBateriasOffGrid() { return nomesBaterias_off_grid; }
     public String pegaNomeCidade(){ return nomeCidade; }
     public Painel pegaPlacaEscolhida(){ return placaEscolhida; }
     public double pegaCustoReais(){ return custoReais; }
@@ -129,10 +113,6 @@ public class CalculadoraOnGrid implements Serializable {
     public void setListaPaineis(LinkedList<Painel> listaPaineis) { this.listaPaineis = listaPaineis; }
     public void setListaInversores(LinkedList<Inversor> listaInversores) { this.listaInversores = listaInversores; }
     public void setListaEmpresas(LinkedList<Empresa> listaEmpresas) { this.listaEmpresas = listaEmpresas; }
-    public void setListaPaineisOffGrid(LinkedList<Painel_OffGrid> listaPaineis_off_grid) { this.listaPaineis_off_grid = listaPaineis_off_grid; }
-    public void setListaInversoresOffGrid(LinkedList<Inversor_OffGrid> listaInversores_off_grid) { this.listaInversores_off_grid = listaInversores_off_grid; }
-    public void setListaControladoresOffGrid(LinkedList<Controlador_OffGrid> listaControladores_off_grid) { this.listaControladores_off_grid = listaControladores_off_grid; }
-    public void setListaBateriasOffGrid(LinkedList<Bateria_OffGrid> listaBateriasOffGrid) { this.listaBaterias_off_grid = listaBaterias_off_grid; }
     public void setTarifaMensal(double tarifa){
         this.tarifaMensal = tarifa;
     }

@@ -12,6 +12,9 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
+            android:name=".activity.ResultadoOffGridActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.AdicionarEquipamentosActivity"
             android:exported="false"
             android:parentActivityName=".activity.VizualizarEquipamentosActivity"

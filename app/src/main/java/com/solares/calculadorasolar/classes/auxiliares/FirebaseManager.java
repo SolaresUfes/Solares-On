@@ -380,7 +380,7 @@ public class FirebaseManager {
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Equipamentos_OffGrid equipamento = snapshot.getValue(Equipamentos_OffGrid.class);
                     if(equipamento != null && !equipamento.getNome().equals("")){
-                        Log.d("firebase", "Controlador Off Grid: " + equipamento.getNome());
+                        Log.d("firebase", "Equipamentos eletrônicos: " + equipamento.getNome());
                         equipamentos.add(equipamento);
                     }
                 }

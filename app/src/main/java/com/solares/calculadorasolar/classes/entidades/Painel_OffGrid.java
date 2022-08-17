@@ -10,7 +10,7 @@ public class Painel_OffGrid implements Serializable {
     private float Icc;
     private String Marca;
     private float NOCT;
-    private String nome;
+    private String Nome;
     private float Potencia;
     private float Preco;
     private float Vca;
@@ -98,7 +98,14 @@ public class Painel_OffGrid implements Serializable {
 
     public void getVca(float Vca){ this.Vca = Vca; }
 
-    public String getNome() { return nome;}
+    public String getNome() {
+        if(Nome == null){
+            return "";
+        }
+        return Marca;
+    }
 
-    public void setNome(String nome){ this.nome = nome; }
+    public void setNome(String nome) {
+        Nome = nome;
+    }
 }

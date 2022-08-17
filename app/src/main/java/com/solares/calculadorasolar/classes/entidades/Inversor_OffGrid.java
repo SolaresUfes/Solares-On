@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class Inversor_OffGrid implements Serializable {
     private String Codigo;
     private String Marca;
+    private String Nome;
     private float Potencia;
     private float Preco;
     private float RendimentoMaximo;
@@ -56,6 +57,17 @@ public class Inversor_OffGrid implements Serializable {
 
     public void setMarca(String marca) {
         Marca = marca;
+    }
+
+    public String getNome() {
+        if(Nome == null){
+            return "";
+        }
+        return Nome;
+    }
+
+    public void setNome(String nome) {
+        Nome = nome;
     }
 
     public int getQtd() {

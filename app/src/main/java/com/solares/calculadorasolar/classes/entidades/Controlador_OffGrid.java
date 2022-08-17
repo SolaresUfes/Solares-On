@@ -6,6 +6,7 @@ public class Controlador_OffGrid implements Serializable {
     private float Area;
     private float Corrente_carga;
     private String Marca;
+    private String Nome;
     private float Preco;
     private float Tensao_bateria;
     private float Tensao_max_sistema;
@@ -53,6 +54,17 @@ public class Controlador_OffGrid implements Serializable {
 
     public void setMarca(String marca) {
         Marca = marca;
+    }
+
+    public String getNome() {
+        if(Nome == null){
+            return "";
+        }
+        return Nome;
+    }
+
+    public void setNome(String nome) {
+        Nome = nome;
     }
 
     public int getQtd() {

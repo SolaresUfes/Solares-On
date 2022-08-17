@@ -12,6 +12,15 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
+            android:name=".activity.GeracaoOggGridActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.EconomicoOffGridActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.EquipamentosOffGridActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.ResultadoOffGridActivity"
             android:exported="false" />
         <activity

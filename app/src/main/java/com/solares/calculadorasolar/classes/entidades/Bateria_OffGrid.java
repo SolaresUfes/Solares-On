@@ -7,9 +7,13 @@ public class Bateria_OffGrid implements Serializable {
     private float C20;
     private float Capacidade;
     private String Marca;
+    private String Nome;
     private float Preco;
+    private float Vnom;
     private int Qtd;
     private float PrecoTotal;
+    private int nSerie;
+    private int nParalel;
 
     public Bateria_OffGrid(){/* Construtor Vazio */}
 
@@ -43,11 +47,26 @@ public class Bateria_OffGrid implements Serializable {
         this.Capacidade = Capacidade;
     }
 
+    public float getVnom() {return Vnom;}
+
+    public void setVnom(float Vnom) {this.Vnom = Vnom; }
+
     public String getMarca() {
         if(Marca == null){
             return "";
         }
         return Marca;
+    }
+
+    public String getNome() {
+        if(Nome == null){
+            return "";
+        }
+        return Nome;
+    }
+
+    public void setNome(String nome) {
+        Nome = nome;
     }
 
     public void setMarca(String marca) {
@@ -69,4 +88,12 @@ public class Bateria_OffGrid implements Serializable {
     public void setPrecoTotal(float precoTotal) {
         PrecoTotal = precoTotal;
     }
+
+    public int getnSerie(){ return nSerie; }
+
+    public void setnSerie(int nserie){ nSerie = nserie;}
+
+    public int getnParalel(){ return nParalel; }
+
+    public void setnParalel(int nparalel){ nParalel = nparalel;}
 }

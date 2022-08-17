@@ -87,7 +87,7 @@ public class DetalhesActivity extends AppCompatActivity {
 
         //Pega o view do botão pra recalcular e ajusta o tamanho da fonte
         Button buttonConfirm = findViewById(R.id.ADE_button_recalcular_tarifa);
-        AutoSizeText.AutoSizeButton(buttonConfirm, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
+        AutoSizeText.AutoSizeButton(buttonConfirm, MainActivity.alturaTela, MainActivity.larguraTela, 3f);
 
         //Pega o view do botão pra recalcular e ajusta o tamanho da fonte
         Button buttonChangeMode = findViewById(R.id.TARIFA_button_change_mode);

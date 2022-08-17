@@ -248,6 +248,42 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.5" />
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline57"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.28" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline55"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.75" />
+
+            <ImageView
+                android:id="@+id/inst_image_info"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/descricao_botao_detalhes"
+                android:cropToPadding="false"
+                android:padding="6dp"
+                android:src="@drawable/clique_na_informacao"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@+id/guideline55"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/guideline57" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
@@ -260,46 +296,6 @@
         android:orientation="horizontal"
         android:clickable="true"
         android:focusable="true" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline57"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.28" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline55"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.75" />
-
-        <ImageView
-            android:id="@+id/inst_image_info"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/descricao_botao_detalhes"
-            android:cropToPadding="false"
-            android:padding="6dp"
-            android:src="@drawable/clique_na_informacao"
-            android:visibility="gone"
-            app:layout_constraintEnd_toStartOf="@+id/guideline55"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline57" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

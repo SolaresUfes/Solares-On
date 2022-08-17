@@ -1,6 +1,7 @@
 package com.solares.calculadorasolar.classes;
 
-import static com.solares.calculadorasolar.classes.CalculadoraOnGrid.DefineArea;
+import static com.solares.calculadorasolar.classes.CalculadoraOnGrid.GetNumberOfDays;
+import static com.solares.calculadorasolar.classes.CalculadoraOnGrid.ValueWithTaxes;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,12 +9,11 @@ import android.util.Log;
 
 import com.solares.calculadorasolar.activity.ResultadoOffGridActivity;
 import com.solares.calculadorasolar.classes.auxiliares.Constants;
+import com.solares.calculadorasolar.classes.auxiliares.IRR;
 import com.solares.calculadorasolar.classes.entidades.Bateria_OffGrid;
 import com.solares.calculadorasolar.classes.entidades.Controlador_OffGrid;
 import com.solares.calculadorasolar.classes.entidades.Equipamentos_OffGrid;
-import com.solares.calculadorasolar.classes.entidades.Inversor;
 import com.solares.calculadorasolar.classes.entidades.Inversor_OffGrid;
-import com.solares.calculadorasolar.classes.entidades.Painel;
 import com.solares.calculadorasolar.classes.entidades.Painel_OffGrid;
 
 import java.io.InputStream;
@@ -39,7 +39,7 @@ public class CalculadoraOffGrid implements Serializable {
     ArrayList<Equipamentos_OffGrid> vetorEquipamentos;
     ArrayList<Equipamentos_OffGrid> EquipamentosSelecionados;
     String nomeCidade;
-    Painel_OffGrid placaEscolhida;
+    Painel_OffGrid painelEscolhido;
     Inversor_OffGrid inversorEscolhido;
     Bateria_OffGrid bateriaEscolhida;
     Controlador_OffGrid controladorEscolhido;
@@ -113,12 +113,16 @@ public class CalculadoraOffGrid implements Serializable {
     public String[] pegaVetorEstado(){ return vetorEstado; }
     public LinkedList<Painel_OffGrid> pegaListaPaineisOffGrid() { return listaPaineis_off_grid; }
     public String[] pegaNomesPaineisOffGrid() { return nomesPaineis_off_grid; }
+    public Painel_OffGrid pegaPlacaEscolhidaOffGrid(){ return painelEscolhido;}
     public LinkedList<Inversor_OffGrid> pegaListaInversoresOffGrid() { return listaInversores_off_grid; }
     public String[] pegaNomesInversoresOffGrid() { return nomesInversores_off_grid; }
+    public Inversor_OffGrid pegaInversorEscolhidaOffGrid(){ return inversorEscolhido;}
     public LinkedList<Controlador_OffGrid> pegaListaControladoresOffGrid() { return listaControladores_off_grid; }
     public String[] pegaNomesControladoresOffGrid() { return nomesControladores_off_grid; }
+    public Controlador_OffGrid pegaControladorEscolhidaOffGrid(){ return controladorEscolhido;}
     public LinkedList<Bateria_OffGrid> pegaListaBateriasOffGrid() { return listaBaterias_off_grid; }
     public String[] pegaNomesBateriasOffGrid() { return nomesBaterias_off_grid; }
+    public Bateria_OffGrid pegaBateriaEscolhidaOffGrid(){ return bateriaEscolhida;}
     public LinkedList<Equipamentos_OffGrid> pegaListaEquipamentosOffGrid() { return listaEquipamentos_off_grid; }
     public String[] pegaNomesEquipamentosOffGrid() { return nomesEquipamentos_off_grid; }
     public ArrayList<Equipamentos_OffGrid> pegaVetorEquipamentos(){ return vetorEquipamentos; }
@@ -154,7 +158,7 @@ public class CalculadoraOffGrid implements Serializable {
     public void setListaPaineisOffGrid(LinkedList<Painel_OffGrid> listaPaineis_off_grid) { this.listaPaineis_off_grid = listaPaineis_off_grid; }
     public void setListaInversoresOffGrid(LinkedList<Inversor_OffGrid> listaInversores_off_grid) { this.listaInversores_off_grid = listaInversores_off_grid; }
     public void setListaControladoresOffGrid(LinkedList<Controlador_OffGrid> listaControladores_off_grid) { this.listaControladores_off_grid = listaControladores_off_grid; }
-    public void setListaBateriasOffGrid(LinkedList<Bateria_OffGrid> listaBateriasOffGrid) { this.listaBaterias_off_grid = listaBaterias_off_grid; }
+    public void setListaBateriasOffGrid(LinkedList<Bateria_OffGrid> listaBaterias_off_grid) { this.listaBaterias_off_grid = listaBaterias_off_grid; }
     public void setListaEquipamentosOffGrid(LinkedList<Equipamentos_OffGrid> listaEquipamentosOffGrid) { this.listaEquipamentos_off_grid = listaEquipamentosOffGrid; }
     public void setEquipamentosSelecionados(Equipamentos_OffGrid equipamento){        this.EquipamentosSelecionados.add(equipamento); }
     public void setTarifaMensal(double tarifa){
@@ -221,46 +225,18 @@ public class CalculadoraOffGrid implements Serializable {
             // Calculo do CBI_C20
             this.CBI_C20 = (Constants.fatorSeguranca * this.energiaAtivaDia * this.autonomia) / (Constants.Pd * this.Vsist);
 
-            /*// Definindo as Placas  ---- isso eh para nao esquecer - lembre de criar  uma funcao parecida em CSVRead
-            is = MyContext.getResources().openRawResource(R.raw.banco_paineis_offgrid);
-            placaEscolhida = CSVRead.DefineSolarPanel(is, this.minPotencia, this.areaAlvo, this.idModuloEscolhido); // this.minPotencia
-            area = calculadoraOnGrid.DefineArea(placaEscolhida);
-            System.out.println("------ Módulo: "+placaEscolhida[Constants.iPANEL_NOME]);
-            // Calcular Voc_corrigida
-            double voc = Double.parseDouble(placaEscolhida[Constants.iPANEL_Voc]);
-            placaEscolhida[Constants.iPANEL_Voc] = Double.toString(voc * (1 + ((temperaturaMedia - 25) * coeficienteVariacao)/100));
-            // Definindo o Controlador de Carga is,this.Vsist, 1, Integer.parseInt(placaEscolhida[Constants.iPANELOFF_QTD]), this.minPotencia, Integer.parseInt(placaEscolhida[Constants.iPANELOFF_POTENCIA]), this.idControladorEscolhido
-            is = MyContext.getResources().openRawResource(R.raw.banco_controladores);
-            controladorEscolhido = CSVRead.DefineChargeController(is, this.Vsist, this.placaEscolhida, this.minPotencia, this.idControladorEscolhido); // P_pv talvez seja a potencia da placa multiplicado pela quantidade de placas
-            System.out.println("------ Controlador: "+controladorEscolhido[Constants.iCON_NOME]);
-            // Definindo Quantidade de Placas em Série e Paralelo
-           // this.placaSerie = numModulosSerie(Integer.parseInt(controladorEscolhido[Constants.iCON_V_MAX_SISTEMA]), 1);// Descobrir como ter a Tensão de Máxima Potência de Temp. Máx.
-           // this.placaParalelo = numModulosParalelo(this.minPotencia, this.placaSerie,Integer.parseInt(this.placaEscolhida[Constants.iPANELOFF_POTENCIA])); // Descobrir como ter a Corrente de Máxima Potência
-            // Definindo o Banco de Baterias
-            is = MyContext.getResources().openRawResource(R.raw.banco_baterias);
-            bateriaEscolhida = CSVRead.DefineBattery(is, this.CBI_C20, this.Vsist, this.idBateriaEscolhida, this.autonomia);
-            // Definindo os Inversores
-            if(this.potenciaUtilizadaDiariaCA != 0){
-                this.potenciaAparente = this.potenciaUtilizadaDiariaCA / this.fatorPotencia;
-                is = MyContext.getResources().openRawResource(R.raw.banco_inversores_off);
-                inversorEscolhido = CSVRead.DefineInvertorOffGrid(is, this.placaEscolhida ,this.potenciaAparente, this.Vsist, idInversorEscolhido);
-                System.out.println("-------- Inversor: "+inversorEscolhido[Constants.iINVOFF_NOME]);
-            }
-            else inversorEscolhido= new String[]{"0"};*/
-
-
-            //Acha a potêcia necessária
             int idMelhorModulo=-1;
             int cont=0;
             double melhorLucro=0.0;
             this.nomesPaineis_off_grid = new String[this.pegaListaPaineisOffGrid().size()];
             if(this.idModuloEscolhido == -1){
-                for (Painel_OffGrid painelAtual : this.pegaListaPaineisOffGrid()) {
-                    this.nomesPaineis_off_grid[cont] = painelAtual.getMarca() + " " + painelAtual.getCodigo() + " " +  String.format(Locale.ITALY, "%.0f", painelAtual.getPotencia())+ "W";
+                for (Painel_OffGrid painelAtual : listaPaineis_off_grid) {
                     calculaResultadosPlaca(MyContext, painelAtual);
+                    this.nomesPaineis_off_grid[cont] = painelAtual.getMarca() + " " + painelAtual.getCodigo() + " " +  String.format(Locale.ITALY, "%.0f", painelAtual.getPotencia())+ "W";
                     if (cont == 0) {
                         idMelhorModulo = cont;
                         melhorLucro = this.pegaLucro();
+
                     }
                     if (this.pegaLucro() > melhorLucro) { // Definir melhor placa em relação à anterior
                         idMelhorModulo = cont;
@@ -272,42 +248,14 @@ public class CalculadoraOffGrid implements Serializable {
 
                 calculaResultadosPlaca(MyContext, listaPaineis_off_grid.get(idMelhorModulo));
             }else{
-                for (Painel painelAtual : this.listaPaineis_off_grid()) {
-                    nomesPaineis_off_grid[cont] = painelAtual.getMarca() + " " + painelAtual.getCodigo() + " " +painelAtual.getPotencia() + "W";
-                    cont++;
-                }
+                iniciarNomesDosModulos();
                 calculaResultadosPlaca(MyContext, listaPaineis_off_grid.get(this.idModuloEscolhido));
             }
 
-
-
-
-
-
-            int cont=0, idMelhorModulo=-1;
-            double menorCusto=0.0;
-            if(this.idModuloEscolhido == -1){
-                idMelhorModulo = cont;
-                menorCusto = this.pegaLucro();
-                while (!calculaResultadosPlaca(MyContext, cont)) {
-                    if (custoTotal < menorCusto) { // Definir melhor placa em relação à anterior
-                        idMelhorModulo = cont;
-                        menorCusto = custoTotal;
-                    }
-
-                    cont++;
-                }
-                calculaResultadosPlaca(MyContext, idMelhorModulo);
-            }else{
-                calculaResultadosPlaca(MyContext, this.idModuloEscolhido);
-            }
-            System.out.println("IDDD: "+idMelhorModulo);
-
-
-
-            // Por algum motivo nao esta funcionando            variavelGlobal.setPlaca(placaEscolhida);
-            //Preparação para mudar para próxima activity
             Intent intent = new Intent(MyContext, ResultadoOffGridActivity.class);
+
+
+            //Log.d("placa escolhida", "Plcaca: "+painelEscolhido.getNome());
 
             //Fechar o InputStream
             try {
@@ -327,33 +275,149 @@ public class CalculadoraOffGrid implements Serializable {
 
     }
 
+    public void GetEconomicInformation(){
+        int year;
+        double geracaoComDepreciacao, consumoMedioAnual=consumokWh*12, geracaoTotalVidaUtil=0.0;
+        double creditoCincoAnos=0, consumoAcimaDaGeracao=0, valorAPagar=0;
+        double gastosTotais, ConsumoAPagarNoAno; //Quanto tem que pagar no ano
+        double custoComImposto, custoAtualComImposto, diferencaDeCusto, custoInversor=0.0, custoManutEInstal=0.0;
+        double[] creditoAnual = new double[30], cashFlow=new double[25];
+        double cashFlowCurrentCurrency=0, payback = 0.0, tariff;
+        double LCOEcost, LCOEGeneration, LCOEDivisor;
+        double LCOESumCost=0.0, LCOESumGeneration=0.0;
+        tempoRetorno = 30;
+
+        for(year = 0; year < 25; year++) { //Até 25 anos, que é a estimativa da vida útil dos paineis
+            //Atualiza a tarifa com uma estimativa anual de incremento de preço (inflação tarifária)
+            tariff = tarifaMensal*Math.pow(1 + Constants.TARIFF_CHANGE/100.0, year);
+
+            //Um ajuste do Custo nivelado de energia
+            //LCOEDivisor = Math.pow(1 + Constants.SELIC, year);
+
+            //Depreciação do painel a cada ano (diminuição de rendimento)
+            geracaoComDepreciacao = this.geracaoAnual * (1 - (Constants.DEPREC_PANELS) * (1 - inversorEscolhido.getRendimentoMaximo()) * year);
+            //Acha o valor em reais que ele pagará para a concessionária no ano
+            valorAPagar = geracaoComDepreciacao * tariff;
+            //Coloca os  impostos
+            custoComImposto = ValueWithTaxes(valorAPagar);
+            //Quanto ele pagaria sem o sistema fotovoltaico, também com roubo (imposto)
+            custoAtualComImposto = ValueWithTaxes((12.0 * consumokWh)*tariff);
+            //Acha a diferença que o sistema causou no custo (isso será o lucro ou a economia do ano)
+            diferencaDeCusto = custoAtualComImposto - custoComImposto;
+            if(year == 0){
+                economiaMensal = diferencaDeCusto/12;
+            }
+
+            //Verifica se nesse ano deve-se trocar o inversor (de 10 em 10 anos)
+            if (year % Constants.INVERTOR_TIME == 0 && year > 0) {
+                custoInversor = inversorEscolhido.getPrecoTotal() * Math.pow(1 + Constants.IPCA, year);
+            } else {
+                custoInversor = 0;
+            }
+
+            //Considerando que os custos de manutenção são relativos ao investimento inicial, que esses custos sobem em 2 vezes a inflação
+            // e que o custo de instalação do inversor é um décimo de seu preço
+            custoManutEInstal = (custoTotal * Constants.MAINTENANCE_COST) * Math.pow(1 + (2 * Constants.IPCA), year) + custoInversor * 0.1;
+            gastosTotais = custoManutEInstal + custoInversor;
+            //Esses são os custos coniderados no LCOE, os custos de energia (da concessionária) não entram no cálculo
+            //LCOEcost = gastosTotais/LCOEDivisor;
+            LCOESumCost += gastosTotais;
+
+
+            if (year == 0) { //Se for o primeiro ano, considera os custos de instalação
+                //A economia (ou lucro) do sistema no ano foi:
+                cashFlow[year] = custoTotal + diferencaDeCusto - gastosTotais;
+            } else {
+                //Lembrando que a diferença de custo é o quanto o usuário economiza com a concessionária depois de instalar o sistema
+                cashFlow[year] = diferencaDeCusto - gastosTotais;
+            }
+
+            //Diminui o valor economizado, trazendo para valores atuais
+            cashFlowCurrentCurrency = cashFlow[year] / Math.pow(1 + Constants.SELIC, year);
+            //O payback, que inicialmente é zero, armazena isso
+            payback+=cashFlowCurrentCurrency;
+
+            //Se ainda não foi definido tempo de retorno, e o payback for maior que zero, quer dizer que o investimento foi pago nesse ano
+            if(tempoRetorno == 30 && payback>=0){
+                //Como year é um índice de um vetor, temos que adicionar 1 para se ter o valor correto
+                tempoRetorno = year+1;
+            }
+        }
+        //Colocando os valores encontrados em variáveis públicas
+        this.lucro = payback;
+
+        //Se quiser o indice de lucratividade
+        //double indiceDeLucratividade = (payback+custoTotalInstal)/custoTotalInstal;
+
+        //Usei uma função que achei na internet para calcular o irr. Não tenho ideia de como funciona, mas funciona
+        double internalRateOfReturn = IRR.getIRR(cashFlow);
+        //Se o payback for negativo, o irr dá um valor extremamente alto, então eu boto zero
+        if(internalRateOfReturn > 1000000.0){
+            this.taxaInternaRetorno = 0.0;
+        } else {
+            this.taxaInternaRetorno = internalRateOfReturn;
+        }
+
+        /* CÁLCULO DO LCOE NO MÉTODO MAIS COMPLEXO (NÃO USADO PELO MERCADO DE ENERGIA SOLAR)
+        /////////////Bora calcular o LCOE!!
+        //Achar o capacity factor da usina (porcentagem de energia real gerada em relação à produção nominal da usina)
+        //Geração real dividido pela geração máxima (capacidade * horas em um dia * dias em um ano * anos de operação)
+        double capacityFactor = geracaoTotalVidaUtil * 1000 /(potenciaInstalada * 24 * 365 * Constants.PANEL_LIFE);
+        //Encontrar o Overnight Capital Cost (R$/kW) o investimento inicial por kW
+        double overnightCapitalCost = this.custoTotal * 1000 / (potenciaInstalada); //Multiplicando por 1000 para encontrar por kW, em vez de por W
+        //Encontrar o CRF (Capital Recovery Factor)
+        double numerador = (Constants.COST_OF_CAPITAL * Math.pow(1 + Constants.COST_OF_CAPITAL, Constants.PANEL_LIFE));
+        double denominador = (Math.pow(1 + Constants.COST_OF_CAPITAL, Constants.PANEL_LIFE) - 1);
+        double LCOEcrf = numerador / denominador;
+
+        //Encontrar o custo de manutenção por kW
+        double fixedOnM = LCOESumCost * 1000 / (potenciaInstalada * Constants.PANEL_LIFE); //Multiplicando por 1000 para encontrar por kW-ano, em vez de por W-ano
+
+        //Faz o cálculo do LCOE de acordo com a referência (Documentação deste método)
+        LCOE = (overnightCapitalCost*LCOEcrf + fixedOnM) /
+                (24*365*capacityFactor);
+         */
+
+        //Cálculo do LCOE feito no mercado atualmente
+        LCOE = (LCOESumCost + this.custoTotal) / LCOESumGeneration;
+    }
+
+
+
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////        Funções Auxiliares       ////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    public void calculaResultadosPlaca(Context MyContext, Painel placaEscolhida){
+    public void calculaResultadosPlaca(Context MyContext, Painel_OffGrid placaEscolhida){
         //Definindo oas placas
         if(this.areaAlvo < 0){
-            placaEscolhida.setQtd((int) Math.floor(this.potenciaNecessaria / placaEscolhida.getPotencia())); // arredondar para baixo
+            placaEscolhida.setQtd((int) Math.floor(this.minPotencia / placaEscolhida.getPotencia())); // arredondar para baixo
         } else {
             placaEscolhida.setQtd((int)Math.floor(this.areaAlvo / placaEscolhida.getArea())); // arredondar para baixo
         }
         placaEscolhida.setCustoTotal(placaEscolhida.getQtd() * placaEscolhida.getPreco());
 
 
-        this.placaEscolhida = placaEscolhida;
+        this.painelEscolhido = placaEscolhida;
 
         area = DefineArea(placaEscolhida);
 
         //Encontrando a potenciaInstalada
         this.potenciaInstalada = placaEscolhida.getPotencia() * placaEscolhida.getQtd();
 
-        //Definindo os inversores
+        //Definindo o inversor
         inversorEscolhido = DefineInvertor();
 
+        //Definido o controlador
+        controladorEscolhido = DefineController(this.painelEscolhido);
+
+        //Definindo a bateria
+        bateriaEscolhida = DefineBattery();
+
         //Definindo os custos
-        double[] custos = this.DefineCosts(placaEscolhida, inversor);
+        double[] custos = this.DefineCosts(placaEscolhida, inversorEscolhido, controladorEscolhido, bateriaEscolhida);
         custoParcial = custos[Constants.iCOSTS_PARCIAL];
         custoTotal = custos[Constants.iCOSTS_TOTAL];
 
@@ -366,29 +430,195 @@ public class CalculadoraOffGrid implements Serializable {
     public Inversor_OffGrid DefineInvertor(){
         Inversor_OffGrid inversorBarato = null;
 
-        if(idInversorEscolhido != -1){
-            inversorBarato = listaInversores_off_grid.get(idInversorEscolhido);
-            inversorBarato.setQtd((int)Math.ceil((0.8*this.pegaPlacaEscolhida().getQtd()*this.pegaPlacaEscolhida().getPotencia())/
-                    inversorBarato.getPotencia()));
-            inversorBarato.setPrecoTotal(inversorBarato.getQtd() * inversorBarato.getPreco());
-            return inversorBarato;
-        }
+        if (potenciaUtilizadaDiariaCA != 0){
+            if(idInversorEscolhido != -1){
+                inversorBarato = listaInversores_off_grid.get(idInversorEscolhido);
+                inversorBarato.setQtd((int)Math.ceil((0.8*this.pegaPlacaEscolhidaOffGrid().getQtd()*this.pegaPlacaEscolhidaOffGrid().getPotencia())/
+                        inversorBarato.getPotencia()));
+                inversorBarato.setPrecoTotal(inversorBarato.getQtd() * inversorBarato.getPreco());
+                return inversorBarato;
+            }
 
-        for (Inversor_OffGrid inversor : listaInversores_off_grid){
-            inversor.setQtd((int)Math.ceil((0.8*this.pegaPlacaEscolhida().getQtd()*this.pegaPlacaEscolhida().getPotencia())/
-                    inversor.getPotencia()));
-            inversor.setPrecoTotal(inversor.getQtd() * inversor.getPreco());
-            if(inversorBarato == null){
-                inversorBarato = inversor;
-            } else {
-                if(inversor.getPrecoTotal() < inversorBarato.getPrecoTotal()){
+            for (Inversor_OffGrid inversor : listaInversores_off_grid){
+                inversor.setQtd((int)Math.ceil((0.8*this.pegaPlacaEscolhidaOffGrid().getQtd()*this.pegaPlacaEscolhidaOffGrid().getPotencia())/
+                        inversor.getPotencia()));
+                inversor.setPrecoTotal(inversor.getQtd() * inversor.getPreco());
+                if(inversorBarato == null){
                     inversorBarato = inversor;
+                } else {
+                    if(inversor.getPrecoTotal() < inversorBarato.getPrecoTotal()){
+                        inversorBarato = inversor;
+                    }
                 }
             }
         }
 
         return inversorBarato;
     }
+
+    public Controlador_OffGrid DefineController(Painel_OffGrid painelEscolhido){
+        Controlador_OffGrid controladorBarato = null;
+        float Ic;
+        int modParal, modSerie;
+
+        int qtdController;
+        float totalCostController;
+
+        if(idControladorEscolhido != -1){
+            controladorBarato = listaControladores_off_grid.get(idControladorEscolhido);
+
+            modSerie = numModulosSerie(controladorBarato.getTensao_max_sistema(), painelEscolhido.getVca());
+            modParal = numModulosParalelo(this.minPotencia, modSerie, painelEscolhido.getPotencia());
+
+            Ic = (float) (1.25 * modParal * painelEscolhido.getIcc());
+
+            qtdController = (int)Math.ceil(Ic/controladorBarato.getCorrente_carga());
+            totalCostController = qtdController * controladorBarato.getPreco();
+
+            controladorBarato.setQtd(qtdController);
+            controladorBarato.setPrecoTotal(totalCostController);
+            return controladorBarato;
+
+        }
+
+        if (listaControladores_off_grid.size()!=0){
+            for (Controlador_OffGrid controlador : listaControladores_off_grid){
+                modSerie = numModulosSerie(controlador.getTensao_max_sistema(), painelEscolhido.getVca());
+                modParal = numModulosParalelo(this.minPotencia, modSerie, painelEscolhido.getPotencia());
+
+                Ic = (float) (1.25 * modParal * painelEscolhido.getIcc());
+
+                qtdController = (int)Math.ceil(Ic/controlador.getCorrente_carga());
+                totalCostController = qtdController * controlador.getPreco();
+
+                controlador.setQtd(qtdController);
+                controlador.setPrecoTotal(totalCostController);
+
+                if(controladorBarato == null){
+                    controladorBarato=controlador;
+                }
+                else{
+                    if(controlador.getTensao_bateria() >= this.Vsist && controladorBarato.getPrecoTotal() > totalCostController) {//  &&  currentPowerSistController > Voc*modSerie --> devo colocar, entretanto está sempre retornando Falso
+                        controladorBarato = controlador;
+                    }
+                }
+
+            }
+        }
+
+       return controladorBarato;
+   }
+
+    public Bateria_OffGrid DefineBattery(){
+        Bateria_OffGrid bateriaBarato = null;
+
+        if (idBateriaEscolhida != -1){
+            bateriaBarato = listaBaterias_off_grid.get(idBateriaEscolhida);
+
+            nBatSerie = (int)Math.ceil(Vsist/bateriaBarato.getVnom());
+            nBatParalelo = (int)Math.ceil(CBI_C20/bateriaBarato.getC20());
+            qntBat = nBatParalelo * nBatSerie;
+
+            bateriaBarato.setPrecoTotal(bateriaBarato.getPreco()*qntBat);
+            bateriaBarato.setnSerie(nBatSerie);
+            bateriaBarato.setnParalel(nBatParalelo);
+
+            return bateriaBarato;
+        }
+
+
+        if (listaBaterias_off_grid.size()!=0){
+            for (Bateria_OffGrid bateria : listaBaterias_off_grid){
+                nBatSerie = (int)Math.ceil(Vsist/bateria.getVnom());
+                nBatParalelo = (int)Math.ceil(CBI_C20/bateria.getC20());
+                qntBat = nBatParalelo * nBatSerie;
+
+                bateria.setPrecoTotal(bateria.getPreco()*qntBat);
+                bateria.setnSerie(nBatSerie);
+                bateria.setnParalel(nBatParalelo);
+
+                if(bateriaBarato == null) bateriaBarato=bateria;
+                else{
+                    if (bateria.getPrecoTotal() < bateriaBarato.getPrecoTotal()){
+                        bateriaBarato = bateria;
+                    }
+                }
+            }
+        }
+
+        return bateriaBarato;
+    }
+
+    public static double DefineArea(Painel_OffGrid solarPanel){
+        return solarPanel.getQtd() * solarPanel.getArea();
+    }
+
+    public double EstimateAnualGeneration(){
+        //Calculos retirados do manual de engenharia FV p. 149 a 153
+        double anualGeneration=0.0, dailyGen, monthlyGen;
+        int month;
+        double tempAboveLimit;
+        double correctionTemp;
+        double efficiency, irradiance = 1000.0, ambientTemp;
+
+        double Kt;
+        double Tmod;
+        double Eficiencia;
+        double ProdMensal;
+
+        for(month=1; month<=12; month++){
+            //Pega a temperatura média do estado no mês
+            ambientTemp = Double.parseDouble(vetorEstado[month]);
+
+            //Cálculo do coeficiente térmico para o módulo
+            Kt = (painelEscolhido.getNOCT() - 20)/800;
+            //Cálculo da temperatura de operação estimada do módulo
+            Tmod = ambientTemp + Kt*1000;
+            //Cálculo da eficiência dos módulos, relativa à sua potência nominal
+            Eficiencia = (Tmod - 25) * painelEscolhido.getCoefTempPot();
+            //Cáculo da produção de energia para cada mês
+            ProdMensal = (1+Eficiencia) * painelEscolhido.getPotencia() * painelEscolhido.getQtd() * HSP * 30 / 1000;
+
+            anualGeneration += ProdMensal;
+        }
+        //Considera perdas por sujeira
+        anualGeneration = anualGeneration * (1 - Constants.LOSS_DIRT);
+        //Considera perdas com o inversor
+        anualGeneration = anualGeneration * inversorEscolhido.getRendimentoMaximo();
+
+        return anualGeneration;
+    }
+
+    public double[] DefineCosts(Painel_OffGrid solarPanel, Inversor_OffGrid invertor, Controlador_OffGrid controlador, Bateria_OffGrid bateria){
+        double[] costs = {0.0, 0.0};
+        double porcentagemCustosIntegrador;
+
+        //Definido custo parcial
+        costs[Constants.iCOSTS_PARCIAL] = bateria.getPrecoTotal()+ invertor.getPrecoTotal() + solarPanel.getCustoTotal();//  + controlador.getPrecoTotal()
+        ////Definindo o custo total
+        //Porcentagem do custo parcial para custos com mão de obra, outros componentes etc... Segundo Estudo estratégico da Greener de 2020
+        //Nesse estudo, chegamos na equação y = 1.65-0.032x para descrever a porcentagem do custo do kit que representa o custo final para o consumidor
+        //Isso desde 1kWp até 8kWp, além desses limites, usamos o valor do limite
+        if(this.pegaPotenciaInstalada() < 1000){
+            porcentagemCustosIntegrador = 1.65 - 0.032*1;
+        } else if(this.pegaPotenciaInstalada() > 8000) {
+            porcentagemCustosIntegrador = 1.65 - 0.032 * 8;
+        } else {
+            porcentagemCustosIntegrador = 1.65 - 0.032*this.pegaPotenciaInstalada()/1000; // /1000 para ter a potencia em kWp
+        }
+
+
+        costs[Constants.iCOSTS_TOTAL] = costs[Constants.iCOSTS_PARCIAL] * porcentagemCustosIntegrador;
+
+        return costs;
+    }
+
+
+
+
+
+
+
 
 
     public double Meantemperature(String[] vetorEstado){
@@ -468,97 +698,18 @@ public class CalculadoraOffGrid implements Serializable {
         return 48;
     }
 
-    public int numModulosSerie(int Vcontrolador, double Voc_corrigida){ ;
+    public int numModulosSerie(float Vcontrolador, double Voc_corrigida){ ;
         int mSerie = (int)Math.round((Vcontrolador * 1.2) / Voc_corrigida);
         return mSerie;
     }
 
-    public int numModulosParalelo(double P_pv, int qntPlacasSerie, int P_mod){
+    public int numModulosParalelo(double P_pv, int qntPlacasSerie, float P_mod){
         return (int) Math.round(P_pv / (qntPlacasSerie * P_mod));
     }
 
-    public boolean calculaResultadosPlaca(Context MyContext, int idModuloEscolhido){
-        InputStream is;
-        //Definindo as placas
-        is = MyContext.getResources().openRawResource(R.raw.banco_paineis_offgrid);
-        placaEscolhida = CSVRead.DefineSolarPanel(is, minPotencia, this.areaAlvo, idModuloEscolhido);
-
-        if(placaEscolhida==null) return true; // Quando terminar de varrer as linhas deverá sair do while
-
-        area = DefineArea(placaEscolhida);
-
-        //Encontrando a potenciaInstalada
-        this.potenciaInstalada = Double.parseDouble(placaEscolhida[Constants.iPANEL_POTENCIA]) * Double.parseDouble(placaEscolhida[Constants.iPANEL_QTD]);
-
-        // Calcular Voc_corrigida
-        double voc = Double.parseDouble(placaEscolhida[Constants.iPANEL_Voc]);
-        placaEscolhida[Constants.iPANEL_Voc] = Double.toString(voc * (1 + ((temperaturaMedia - 25) * coeficienteVariacao)/100));
-
-        // Definindo o Controlador de Carga
-        is = MyContext.getResources().openRawResource(R.raw.banco_controladores);
-        controladorEscolhido = CSVRead.DefineChargeController(is, this.Vsist, this.placaEscolhida, this.minPotencia, this.idControladorEscolhido); // P_pv talvez seja a potencia da placa multiplicado pela quantidade de placas
-        System.out.println("------ Controlador: "+controladorEscolhido[Constants.iCON_NOME]);
-
-        // Definindo o Banco de Baterias
-        is = MyContext.getResources().openRawResource(R.raw.banco_baterias);
-        bateriaEscolhida = CSVRead.DefineBattery(is, this.CBI_C20, this.Vsist, this.idBateriaEscolhida, this.autonomia);
-        System.out.println("-------- Bateria: "+bateriaEscolhida[Constants.iBAT_NOME]);
-
-        // Definindo os Inversores
-        System.out.println(potenciaUtilizadaDiariaCA);
-        if(this.potenciaUtilizadaDiariaCA != 0){
-            this.potenciaAparente = this.potenciaUtilizadaDiariaCA / this.fatorPotencia;
-            is = MyContext.getResources().openRawResource(R.raw.banco_inversores_off);
-            inversorEscolhido = CSVRead.DefineInvertorOffGrid(is, this.placaEscolhida ,this.potenciaAparente, this.Vsist, idInversorEscolhido);
-            System.out.println("-------- Inversor: "+inversorEscolhido[Constants.iINVOFF_NOME]);
-        }
-        else inversorEscolhido= new String[]{"0","0", "0", "0", "0", "0", "0", "0", "0","0"};
-
-        //Definindo os custos
-        double[] custos = this.DefineCosts(placaEscolhida, inversorEscolhido, controladorEscolhido, bateriaEscolhida);
-        custoParcial = custos[Constants.iCOSTS_PARCIAL];
-        custoTotal = custos[Constants.iCOSTS_TOTAL];
-
-        //Calculo da energia produzida em um ano
-        //geracaoAnual = EstimateAnualGeneration();
-
-        System.out.println("Preco Modulo: "+placaEscolhida[Constants.iPANEL_CUSTO_TOTAL]);
-        System.out.println("Preco inv: "+inversorEscolhido[Constants.iINVOFF_PRECO_TOTAL]);
-        System.out.println("Preco c: "+controladorEscolhido[Constants.iCON_PRECO_TOTAL]);
-        System.out.println("Preco b: "+bateriaEscolhida[Constants.iBAT_PRECO_TOTAL]);
-
-        return false;
-    }
-
-    public double[] DefineCosts(String[] solarPanel, String[] invertor, String[] controlador, String[] bateria){
-        double[] costs = {0.0, 0.0};
-        double porcentagemCustosIntegrador;
-
-        //Definido custo parcial
-        costs[Constants.iCOSTS_PARCIAL] = Double.parseDouble(invertor[Constants.iINVOFF_PRECO_TOTAL]) +
-                Double.parseDouble(solarPanel[Constants.iPANEL_CUSTO_TOTAL]) + Double.parseDouble(controlador[Constants.iCON_PRECO_TOTAL]) +
-                Double.parseDouble(bateria[Constants.iBAT_PRECO_TOTAL]);
-        ////Definindo o custo total
-        //Porcentagem do custo parcial para custos com mão de obra, outros componentes etc... Segundo Estudo estratégico da Greener de 2020
-        //Nesse estudo, chegamos na equação y = 1.65-0.032x para descrever a porcentagem do custo do kit que representa o custo final para o consumidor
-        //Isso desde 1kWp até 8kWp, além desses limites, usamos o valor do limite
-        if(this.potenciaInstalada < 1000){
-            porcentagemCustosIntegrador = 1.65 - 0.032*1;
-        } else if(this.potenciaInstalada > 8000) {
-            porcentagemCustosIntegrador = 1.65 - 0.032 * 8;
-        } else {
-            porcentagemCustosIntegrador = 1.65 - 0.032*this.potenciaInstalada/1000; // /1000 para ter a potencia em kWp
-        }
-
-
-        costs[Constants.iCOSTS_TOTAL] = costs[Constants.iCOSTS_PARCIAL]*porcentagemCustosIntegrador;
-
-        return costs;
-    }
-
     public void iniciarNomesDosElementos(){
-        //Pega os nomes dos inversores
-        System.out.println("Iniciou elementos");
+        //Pega os nomes dos equipamentos eletronicos
+        System.out.println("Iniciou elementos eletronicos");
         int cont=0;
         nomesEquipamentos_off_grid = new String[this.pegaListaEquipamentosOffGrid().size()];
         EquipamentosSelecionados = new ArrayList<Equipamentos_OffGrid>();
@@ -567,6 +718,54 @@ public class CalculadoraOffGrid implements Serializable {
             Log.d("calculadora_off", "Equipamentos encontrado: " + equipamentoAtual.getNome());
             vetorEquipamentos.add(equipamentoAtual);
             nomesEquipamentos_off_grid[cont] = equipamentoAtual.getNome();
+            cont++;
+        }
+    }
+
+    public void iniciarNomesDosModulos(){
+        //Pega os nomes dos equipamentos eletronicos
+        System.out.println("Iniciou Modulos");
+        int cont=0;
+        nomesControladores_off_grid = new String[this.pegaListaControladoresOffGrid().size()];
+        for (Painel_OffGrid painelAtual : this.listaPaineis_off_grid) {
+            nomesPaineis_off_grid[cont] = painelAtual.getMarca() + " " + painelAtual.getCodigo() + " " +painelAtual.getPotencia() + "W";
+            listaPaineis_off_grid.get(cont).setNome(nomesPaineis_off_grid[cont]);
+            cont++;
+        }
+    }
+
+    public void iniciarNomesDosControladores(){
+        //Pega os nomes dos equipamentos eletronicos
+        System.out.println("Iniciou Controladores");
+        int cont=0;
+        nomesControladores_off_grid = new String[this.pegaListaControladoresOffGrid().size()];
+        for (Controlador_OffGrid controlador : this.pegaListaControladoresOffGrid()) {
+            Log.d("calculadora_off", "Controlador encontrado: " + controlador.getNome());
+            nomesControladores_off_grid[cont] = controlador.getNome();
+            cont++;
+        }
+    }
+
+    public void iniciarNomesDosInversores(){
+        //Pega os nomes dos equipamentos eletronicos
+        System.out.println("Iniciou Inversores");
+        int cont=0;
+        nomesInversores_off_grid = new String[this.pegaListaInversoresOffGrid().size()];
+        for (Inversor_OffGrid inversor_offGrid : this.pegaListaInversoresOffGrid()) {
+            Log.d("calculadora_off", "inversor_offGrid encontrado: " + inversor_offGrid.getNome());
+            nomesControladores_off_grid[cont] = inversor_offGrid.getNome();
+            cont++;
+        }
+    }
+
+    public void iniciarNomesDasBaterias(){
+        //Pega os nomes dos equipamentos eletronicos
+        System.out.println("Iniciou Baterias");
+        int cont=0;
+        nomesBaterias_off_grid = new String[this.pegaListaBateriasOffGrid().size()];
+        for (Bateria_OffGrid bateria_offGrid : this.pegaListaBateriasOffGrid()) {
+            Log.d("calculadora_off", "bateria_offGrid encontrado: " + bateria_offGrid.getNome());
+            nomesControladores_off_grid[cont] = bateria_offGrid.getNome();
             cont++;
         }
     }

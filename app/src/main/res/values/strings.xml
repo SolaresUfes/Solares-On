@@ -72,6 +72,7 @@
     <string name="sistema_de_placas_escolhido">Sistema de placas escolhido</string>
     <string name="area_necessaria_para_inst">Área necessária para a instalação</string>
     <string name="sistema_de_inversores_escolhido">Sistema de inversores escolhido</string>
+    <string name="sistema_de_controladores_escolhido">Sistema de controladores escolhido</string>
     <string name="consumo_atual">Consumo calculado:</string>
     <string name="novo_consumo">Consumo:</string>
     <string name="recalcular">Recalcular</string>
@@ -80,6 +81,7 @@
     <string name="consumo">Consumo</string>
     <string name="titulo_escolher_modulo">Escolher Módulo</string>
     <string name="titulo_escolher_inversor">Escolher Inversor</string>
+    <string name="titulo_escolher_controlador">Escolher Controlador</string>
     <string name="continuar">Continuar</string>
     <string name="empresas">Empresas</string>
     <string name="adicionar_item">Adicionar Item</string>
@@ -88,6 +90,11 @@
     <string name="potencia">Potência</string>
     <string name="periodo_uso">Período de Uso</string>
     <string name="wh_dia">Wh/dia</string>
+    <string name="showEquipamentos">Equipamentos</string>
+    <string name="economico">Econômico</string>
+    <string name="bateria">Bateria</string>
+    <string name="geracao">Geração</string>
+    <string name="equipamentos">Equipamentos</string>
 
     <string-array name="Modulos">
         <item>335PHK-36 POLI 335W - BYD Solar</item>

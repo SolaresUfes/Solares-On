@@ -21,10 +21,8 @@ import android.widget.TextView;
 import com.solares.calculadorasolar.R;
 import com.solares.calculadorasolar.classes.auxiliares.AutoSizeText;
 import com.solares.calculadorasolar.classes.CalculadoraOffGrid;
-import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
 import com.solares.calculadorasolar.classes.auxiliares.Constants;
 
-import java.util.ArrayList;
 import java.util.Locale;
 
 public class EquipamentosOffGridActivity extends AppCompatActivity {
@@ -44,7 +42,7 @@ public class EquipamentosOffGridActivity extends AppCompatActivity {
         GetPhoneDimensions(this);
 
         TextView textEquipamentos = findViewById(R.id.text_titulo_lista_equipamentos);
-        AutoSizeText.AutoSizeTextView(textEquipamentos, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
+        AutoSizeText.AutoSizeTextView(textEquipamentos, MainActivity.alturaTela, MainActivity.larguraTela, 3.6f);
 
         TextView textPlacaEstatic = findViewById(R.id.text_placa);
         AutoSizeText.AutoSizeTextView(textPlacaEstatic, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
@@ -56,7 +54,7 @@ public class EquipamentosOffGridActivity extends AppCompatActivity {
         TextView textPlaca = findViewById(R.id.text_placa1);
         AutoSizeText.AutoSizeTextView(textPlaca, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
         TextView textControlador = findViewById(R.id.text_controlador1);
-        AutoSizeText.AutoSizeTextView(textControlador, MainActivity.alturaTela, MainActivity.larguraTela, 2.0f);
+        AutoSizeText.AutoSizeTextView(textControlador, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
         TextView textInversor = findViewById(R.id.text_inversor1);
         AutoSizeText.AutoSizeTextView(textInversor, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
@@ -67,22 +65,17 @@ public class EquipamentosOffGridActivity extends AppCompatActivity {
 
             //Inicializando os nomes no array
             calculadora.iniciarNomesDosControladores();
-            //calculadora.iniciarNomesDosInversores();
+            calculadora.iniciarNomesDosInversores();
 
 
             textPlaca.setText(String.format(Locale.ITALY, "%d %s de %.0f Wp",
                     calculadora.pegaPlacaEscolhidaOffGrid().getQtd(), "Placa", calculadora.pegaPlacaEscolhidaOffGrid().getPotencia()));
 
-            textControlador.setText(String.format(Locale.ITALY, "%d %s de I máx do sistema %.0f A",
-                    calculadora.pegaControladorEscolhidaOffGrid().getQtd(), "Controlador", calculadora.pegaControladorEscolhidaOffGrid().getCorrente_carga()));
+            textControlador.setText(String.format(Locale.ITALY, "%d de I máx do sistema %.0f A",
+                    calculadora.pegaControladorEscolhidaOffGrid().getQtd(), calculadora.pegaControladorEscolhidaOffGrid().getCorrente_carga()));
 
-            if(calculadora.pegaInversorEscolhidaOffGrid()!=null) {
-                textInversor.setText(String.format(Locale.ITALY, "%d %s de %.2f kW",
+            textInversor.setText(String.format(Locale.ITALY, "%d %s de %.2f kW",
                         calculadora.pegaInversorEscolhidaOffGrid().getQtd(), "Inversor", (calculadora.pegaInversorEscolhidaOffGrid().getPotencia()/ 1000) * 0.8));
-            }
-            else{
-                textInversor.setText(String.format(Locale.ITALY,  "Não há necessidade de inversor!"));
-            }
 
             //Definição do layout para escurecer a tela
             blackener = findViewById(R.id.blackener);
@@ -202,11 +195,11 @@ public class EquipamentosOffGridActivity extends AppCompatActivity {
         tituloPopup.setText(R.string.titulo_escolher_controlador);
 
         //Criação do Spinner
-        AppCompatSpinner spinnerInversores = rootView.findViewById(R.id.spinner_modulos_inversores);
+        AppCompatSpinner spinnerControlador = rootView.findViewById(R.id.spinner_modulos_inversores);
         //Aqui, coloca o vetor de strings que será exibido no spinner
         ArrayAdapter<String> adapterS = new ArrayAdapter<String>(rootView.getContext(), R.layout.spinner_item, calculadora.pegaNomesControladoresOffGrid());
-        spinnerInversores.setAdapter(adapterS);
-        spinnerInversores.setSelection(calculadora.pegaListaInversoresOffGrid().indexOf(calculadora.pegaInversorEscolhidaOffGrid()));
+        spinnerControlador.setAdapter(adapterS);
+        spinnerControlador.setSelection(calculadora.pegaListaControladoresOffGrid().indexOf(calculadora.pegaControladorEscolhidaOffGrid()));
 
         //Criação do botão
         Button buttonRecalc = rootView.findViewById(R.id.button_recalc_modulos_inversores);
@@ -215,8 +208,8 @@ public class EquipamentosOffGridActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Acha o spinner
-                AppCompatSpinner spinnerInversores = rootView.findViewById(R.id.spinner_modulos_inversores);
-                calculadora.setIdInversorEscolhido(spinnerInversores.getSelectedItemPosition());
+                AppCompatSpinner spinnerControlador = rootView.findViewById(R.id.spinner_modulos_inversores);
+                calculadora.setIdControladorEscolhido(spinnerControlador.getSelectedItemPosition());
                 //Refaz o cálculo
                 calculadora.Calcular(EquipamentosOffGridActivity.this);
             }

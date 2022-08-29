@@ -14,7 +14,7 @@
             android:layout_height="0dp"
             android:background="@drawable/background_resultado_text"
             android:gravity="center"
-            android:text="Econômico"
+            android:text="@string/economico"
             android:textColor="@color/colorSolaresBlue"
             app:layout_constraintBottom_toTopOf="@+id/guideline29"
             app:layout_constraintEnd_toStartOf="@+id/guideline7"
@@ -23,7 +23,7 @@
 
 
         <TextView
-            android:id="@+id/text_placa"
+            android:id="@+id/text_preco_equipamento"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -31,7 +31,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:padding="0dp"
-            android:text="Preço dos Equipamentos"
+            android:text="@string/preco_equipamentos"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guideline30" />
@@ -47,7 +47,7 @@
             android:textColor="@color/colorSolaresBlue"
             app:layout_constraintEnd_toStartOf="@+id/guideline24"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_placa"/>
+            app:layout_constraintTop_toBottomOf="@+id/text_preco_equipamento"/>
 
         <TextView
             android:id="@+id/text_preco_placa"
@@ -60,7 +60,7 @@
             android:textColor="@color/colorSolaresBlue"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline24"
-            app:layout_constraintTop_toBottomOf="@+id/text_placa" />
+            app:layout_constraintTop_toBottomOf="@+id/text_preco_equipamento" />
 
         <TextView
             android:id="@+id/text_nome_controlador"
@@ -115,6 +115,60 @@
             app:layout_constraintTop_toBottomOf="@+id/text_preco_controlador" />
 
     <TextView
+        android:id="@+id/text_nome_bateria"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="10dp"
+        android:text=""
+        android:textColor="@color/colorSolaresBlue"
+        app:layout_constraintEnd_toStartOf="@+id/guideline24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_nome_inversor" />
+
+    <TextView
+        android:id="@+id/text_preco_bateria"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="10dp"
+        android:text=""
+        android:textColor="@color/colorSolaresBlue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline24"
+        app:layout_constraintTop_toBottomOf="@+id/text_preco_inversor" />
+
+    <TextView
+        android:id="@+id/text_total_a_pagar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:paddingRight="20dp"
+        android:text="@string/custo_total"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_nome_bateria" />
+
+    <TextView
+        android:id="@+id/valor_total_a_pagar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:textColor="@color/colorSolaresBlue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_total_a_pagar" />
+
+    <TextView
         android:id="@+id/text_lucro_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -127,7 +181,7 @@
         android:text="@string/economia_em_25_anos_valor_presente"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_nome_inversor" />
+        app:layout_constraintTop_toBottomOf="@+id/valor_total_a_pagar" />
 
         <TextView
             android:id="@+id/text_lucro"

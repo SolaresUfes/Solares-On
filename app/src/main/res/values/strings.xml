@@ -82,6 +82,7 @@
     <string name="titulo_escolher_modulo">Escolher Módulo</string>
     <string name="titulo_escolher_inversor">Escolher Inversor</string>
     <string name="titulo_escolher_controlador">Escolher Controlador</string>
+    <string name="titulo_escolher_bateria">Escolher Bateria</string>
     <string name="continuar">Continuar</string>
     <string name="empresas">Empresas</string>
     <string name="adicionar_item">Adicionar Item</string>
@@ -92,9 +93,16 @@
     <string name="wh_dia">Wh/dia</string>
     <string name="showEquipamentos">Equipamentos</string>
     <string name="economico">Econômico</string>
+    <string name="preco_equipamentos">Preço dos Equipamentos</string>
     <string name="bateria">Bateria</string>
     <string name="geracao">Geração</string>
     <string name="equipamentos">Equipamentos</string>
+    <string name="energia_diaria">Energia Diária</string>
+    <string name="autonomia_media">Autonomia Média</string>
+    <string name="quatidade_baterias">Quantidade total de baterias</string>
+    <string name="serie">Baterias a ser ligadas em série</string>
+    <string name="paralelo">Baterias a ser ligadas em paralelo</string>
+    <string name="preco_baterias">Preco total das baterias</string>
 
     <string-array name="Modulos">
         <item>335PHK-36 POLI 335W - BYD Solar</item>

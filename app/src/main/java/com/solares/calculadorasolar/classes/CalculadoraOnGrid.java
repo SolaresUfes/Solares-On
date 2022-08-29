@@ -285,7 +285,7 @@ Thomas T.D. Tran, Amanda D. Smith
             //LCOEDivisor = Math.pow(1 + Constants.SELIC, year);
 
             //Depreciação do painel a cada ano (diminuição de rendimento)
-            geracaoComDepreciacao = this.geracaoAnual * (1 - (Constants.DEPREC_PANELS) * year);
+            geracaoComDepreciacao = this.geracaoAnual * (1 - (Constants.DEPREC_PANELS) * (year+1));
             //Somando o total de energia produzida para calcular o custo de cada KWh
             //LCOEGeneration = geracaoComDepreciacao/LCOEDivisor; //CÁLCULO DO OUTRO LCOE
             LCOEGeneration = geracaoComDepreciacao; //Cálculo mais simples do custo da energia

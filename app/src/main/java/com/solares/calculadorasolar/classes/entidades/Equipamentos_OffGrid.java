@@ -10,23 +10,7 @@ public class Equipamentos_OffGrid implements Serializable {
     double diasUtilizados;
     boolean CC;
 
-    public Equipamentos_OffGrid(){
-        setNome(null);
-        setQuantidade(0);
-        setPotencia(0);
-        setHorasPorDia(0);
-        setDiasUtilizados(0);
-        setCC(false);
-    }
-
-    public Equipamentos_OffGrid(String nome, int quantidade, int horasPorDia, int diasUtilizados, double potencia, boolean CC) {
-        setNome(nome);
-        setQuantidade(quantidade);
-        setHorasPorDia(horasPorDia);
-        setDiasUtilizados(diasUtilizados);
-        setPotencia(potencia);
-        setCC(CC);
-    }
+    public Equipamentos_OffGrid(){ }
 
     public void setNome(String nome){ this.nome=nome;}
     public void setQuantidade(double quantidade){ this.quantidade=quantidade;}

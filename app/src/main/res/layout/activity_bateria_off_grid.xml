@@ -9,65 +9,27 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mais_de_uma_bateria"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >
-        <Button
-            android:id="@+id/button_trocar_modulo"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:adjustViewBounds="true"
-            android:background="@drawable/round_blue_button"
-            android:ellipsize="none"
-            app:layout_constraintBottom_toBottomOf="@+id/text_placa1"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.1"
-            app:layout_constraintStart_toEndOf="@+id/text_placa1"
-            app:layout_constraintTop_toTopOf="@+id/text_placa1"/>
-         <Button
-             android:id="@+id/button_trocar_controlador"
-             android:layout_width="0dp"
-             android:layout_height="0dp"
-             android:adjustViewBounds="true"
-             android:background="@drawable/round_blue_button"
-             android:ellipsize="none"
-             app:layout_constraintBottom_toBottomOf="@+id/text_controlador1"
-             app:layout_constraintDimensionRatio="1:1"
-             app:layout_constraintEnd_toEndOf="parent"
-             app:layout_constraintHorizontal_bias="0.1"
-             app:layout_constraintStart_toEndOf="@+id/text_controlador1"
-             app:layout_constraintTop_toTopOf="@+id/text_controlador1" />
-         <Button
-             android:id="@+id/button_trocar_inversor"
-             android:layout_width="0dp"
-             android:layout_height="0dp"
-             android:adjustViewBounds="true"
-             android:background="@drawable/round_blue_button"
-             android:ellipsize="none"
-             app:layout_constraintBottom_toBottomOf="@+id/text_inversor1"
-             app:layout_constraintDimensionRatio="1:1"
-             app:layout_constraintEnd_toEndOf="parent"
-             app:layout_constraintHorizontal_bias="0.1"
-             app:layout_constraintStart_toEndOf="@+id/text_inversor1"
-             app:layout_constraintTop_toTopOf="@+id/text_inversor1" />
+        tools:layout_editor_absoluteX="-47dp"
+        tools:layout_editor_absoluteY="82dp">
 
         <TextView
-            android:id="@+id/text_titulo_lista_equipamentos"
+            android:id="@+id/text_titulo_bateria"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@drawable/background_resultado_text"
             android:gravity="center"
-            android:text="@string/equipamentos"
+            android:text="@string/bateria"
             android:textColor="@color/colorSolaresBlue"
             app:layout_constraintBottom_toTopOf="@+id/guideline29"
             app:layout_constraintEnd_toStartOf="@+id/guideline7"
             app:layout_constraintStart_toStartOf="@+id/guideline6"
             app:layout_constraintTop_toTopOf="@+id/guideline11" />
 
-
         <TextView
-            android:id="@+id/text_placa"
+            android:id="@+id/text_qtd_serie"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -75,72 +37,181 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:padding="0dp"
-            android:text="@string/sistema_de_placas_escolhido"
+            android:text="@string/serie"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guideline30" />
 
         <TextView
-            android:id="@+id/text_placa1"
+            android:id="@+id/valor_qtd_serie"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:text=""
             android:textColor="@color/colorSolaresBlue"
-            app:layout_constraintEnd_toStartOf="@+id/guideline7"
+            app:layout_constraintEnd_toStartOf="@+id/guideline20"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_placa" />
+            app:layout_constraintTop_toBottomOf="@+id/text_qtd_serie" />
 
         <TextView
-            android:id="@+id/text_inversor"
+            android:id="@+id/text_qtd_paralelo"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:text="@string/sistema_de_inversores_escolhido"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline23" />
-
-        <TextView
-            android:id="@+id/text_inversor1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:text=""
-            android:textColor="@color/colorSolaresBlue"
-            app:layout_constraintEnd_toStartOf="@+id/guideline7"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_inversor" />
-
-        <TextView
-            android:id="@+id/text_controlador"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:text="@string/sistema_de_controladores_escolhido"
+            android:text="@string/paralelo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guideline22" />
 
         <TextView
-            android:id="@+id/text_controlador1"
+            android:id="@+id/valor_qtd_paralelo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:text=""
             android:textColor="@color/colorSolaresBlue"
-            app:layout_constraintEnd_toStartOf="@+id/guideline7"
+            app:layout_constraintEnd_toStartOf="@+id/guideline20"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_controlador" />
+            app:layout_constraintTop_toBottomOf="@+id/text_qtd_paralelo" />
+
+        <TextView
+            android:id="@+id/text_quantidade_baterias"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="@string/quatidade_baterias"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline23" />
+
+        <TextView
+            android:id="@+id/valor_quantidade_baterias"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:text=""
+            android:textColor="@color/colorSolaresBlue"
+            app:layout_constraintEnd_toStartOf="@+id/guideline20"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_quantidade_baterias" />
+
+        <TextView
+            android:id="@+id/text_preco_baterias"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="@string/preco_baterias"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline24" />
+
+        <TextView
+            android:id="@+id/valor_preco_baterias"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:text=""
+            android:textColor="@color/colorSolaresBlue"
+            app:layout_constraintEnd_toStartOf="@+id/guideline20"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_preco_baterias" />
+
+        <TextView
+            android:id="@+id/text_quantidade_baterias_qtd1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="@string/quatidade_baterias"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline30" />
+
+        <TextView
+            android:id="@+id/valor_quantidade_baterias_qtd1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:text=""
+            android:textColor="@color/colorSolaresBlue"
+            android:visibility="gone"
+            app:layout_constraintEnd_toStartOf="@+id/guideline20"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_quantidade_baterias_qtd1" />
+
+        <TextView
+            android:id="@+id/text_preco_baterias_qtd1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="@string/preco_baterias"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline22" />
+
+        <TextView
+            android:id="@+id/valor_preco_baterias_qtd1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:text=""
+            android:textColor="@color/colorSolaresBlue"
+            android:visibility="gone"
+            app:layout_constraintEnd_toStartOf="@+id/guideline20"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_preco_baterias_qtd1" />
+
+        <Button
+            android:id="@+id/button_trocar_bateria"
+            android:visibility="gone"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:adjustViewBounds="true"
+            android:background="@drawable/round_blue_button"
+            android:ellipsize="none"
+            app:layout_constraintBottom_toBottomOf="@+id/valor_quantidade_baterias"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/guideline7"
+            app:layout_constraintTop_toTopOf="@+id/valor_quantidade_baterias" />
+
+        <Button
+            android:id="@+id/button_trocar_bateria_1qtd"
+            android:visibility="gone"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:adjustViewBounds="true"
+            android:background="@drawable/round_blue_button"
+            android:ellipsize="none"
+            app:layout_constraintBottom_toBottomOf="@+id/valor_quantidade_baterias_qtd1"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.1"
+            app:layout_constraintStart_toStartOf="@+id/guideline7"
+            app:layout_constraintTop_toTopOf="@+id/valor_quantidade_baterias_qtd1"/>
 
         <Button
             android:id="@+id/button_voltar"
@@ -230,49 +301,42 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.38667" />
+            app:layout_constraintGuide_percent="0.35" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline23"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.53334" />
+            app:layout_constraintGuide_percent="0.46" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline24"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.29667" />
+            app:layout_constraintGuide_percent="0.57" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline25"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.44001" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline26"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.58668" />
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.75" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     <LinearLayout
-    android:id="@+id/blackener"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorBlack"
-    android:alpha="0.2"
-    android:visibility="gone"
-    android:orientation="horizontal"
-    android:clickable="true"
-    android:focusable="true" />
+        android:id="@+id/blackener"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorBlack"
+        android:alpha="0.2"
+        android:visibility="gone"
+        android:orientation="horizontal"
+        android:clickable="true"
+        android:focusable="true" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

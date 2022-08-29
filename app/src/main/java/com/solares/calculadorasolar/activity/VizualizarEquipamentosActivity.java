@@ -26,7 +26,7 @@ import java.util.ArrayList;
 
 public class VizualizarEquipamentosActivity extends AppCompatActivity {
 
-    public static float porcent = 3f;
+    public static float porcent = 2.5f;
 
 
     ArrayList<Equipamentos_OffGrid> todosMeusEquipamentos = new ArrayList<>();
@@ -52,11 +52,11 @@ public class VizualizarEquipamentosActivity extends AppCompatActivity {
 
         //Pega o view do texo pra recalcular e ajusta o tamanho da fonte
         textSemEquipamentos = findViewById(R.id.text_sem_equipamentos);
-        AutoSizeText.AutoSizeTextView(textSemEquipamentos, MainActivity.alturaTela, MainActivity.larguraTela, 2f);
+        AutoSizeText.AutoSizeTextView(textSemEquipamentos, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
         //Pega o view do texto pra recalcular e ajusta o tamanho da fonte
         TextView textListaEquipamentos = findViewById(R.id.text_titulo_lista_equipamentos);
-        AutoSizeText.AutoSizeTextView(textListaEquipamentos, MainActivity.alturaTela, MainActivity.larguraTela, 2f);
+        AutoSizeText.AutoSizeTextView(textListaEquipamentos, MainActivity.alturaTela, MainActivity.larguraTela, 2.6f);
 
         //Pega o view do botão pra recalcular e ajusta o tamanho da fonte
         this.mViewHolder.buttonAdicionar = findViewById(R.id.button_adicionar);
@@ -64,7 +64,7 @@ public class VizualizarEquipamentosActivity extends AppCompatActivity {
 
         //Pega o view do botão pra recalcular e ajusta o tamanho da fonte
         this.mViewHolder.buttonResultado = findViewById(R.id.button_resultados);
-        AutoSizeText.AutoSizeButton(this.mViewHolder.buttonResultado, MainActivity.alturaTela, MainActivity.larguraTela, 2f);
+        AutoSizeText.AutoSizeButton(this.mViewHolder.buttonResultado, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
         linearLayout = findViewById(R.id.layoutTest);
 
@@ -90,7 +90,7 @@ public class VizualizarEquipamentosActivity extends AppCompatActivity {
                     try {
                         if (todosMeusEquipamentos.size()==0) todosMeusEquipamentos.get(0);
                         for (Equipamentos_OffGrid equipamentos_offGrid:todosMeusEquipamentos){
-                            System.out.println("Euqipamento: "+equipamentos_offGrid.getNome()+" , corrente continua: "+equipamentos_offGrid.getCC());
+                            System.out.println("Euqipamento: "+equipamentos_offGrid.getNome()+" , corrente continua: "+equipamentos_offGrid.getCC()+" , cons: "+equipamentos_offGrid.getHorasPorDia());
                             if (equipamentos_offGrid.getCC()){
                                 potenciaUtilizadaCC += demandaEnergiaAtivaDiariaCC(equipamentos_offGrid);
                             }
@@ -193,8 +193,8 @@ public class VizualizarEquipamentosActivity extends AppCompatActivity {
         else textSemEquipamentos.setVisibility(View.VISIBLE);
 
         // Adicionando as características para o equipamento
-        Equipamentos_OffGrid meuEquipamento = new Equipamentos_OffGrid("Equipamento 1 - Alternada", 1, 3, 4, 15.0, false);
-        Equipamentos_OffGrid meuEquipamento2 = new Equipamentos_OffGrid("Equipamento 2 - Contínua", 1, 2, 2, 60.0, true);
+        //Equipamentos_OffGrid meuEquipamento = new Equipamentos_OffGrid("Equipamento 1 - Alternada", 1, 3, 4, 15.0, false);
+        //Equipamentos_OffGrid meuEquipamento2 = new Equipamentos_OffGrid("Equipamento 2 - Contínua", 1, 2, 2, 60.0, true);
         //todosMeusEquipamentos.add(meuEquipamento);
         //todosMeusEquipamentos.add(meuEquipamento2);
 

@@ -12,6 +12,9 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
+            android:name=".activity.BateriaOffGridActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.GeracaoOggGridActivity"
             android:exported="false" />
         <activity

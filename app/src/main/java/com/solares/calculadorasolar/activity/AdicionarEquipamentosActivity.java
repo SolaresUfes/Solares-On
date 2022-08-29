@@ -113,7 +113,7 @@ public class AdicionarEquipamentosActivity extends AppCompatActivity {
                         mViewHolder.editTextQuantidade.setText("1");
                         mViewHolder.editTextPotencia.setText(String.valueOf(Equipamento.getPotencia()));
                         mViewHolder.editTextPeriodoUso.setText("1");
-                        mViewHolder.editTextWhdia.setText("1");
+                        mViewHolder.editTextWhdia.setText(String.valueOf(Equipamento.getDiasUtilizados()));
                         nome = spinnerEquipamentos.getSelectedItem().toString();
 
                         //Saber se o equipamento eh de Corrente Contínua ou Não
@@ -148,6 +148,8 @@ public class AdicionarEquipamentosActivity extends AppCompatActivity {
                         double periodoUso = Double.parseDouble( mViewHolder.editTextPeriodoUso.getText().toString() );
                         double diasUtilizado = Math.round(Double.parseDouble(mViewHolder.editTextWhdia.getText().toString()));//potencia / Integer.parseInt( mViewHolder.editTextWhdia.getText().toString()
 
+                        System.out.println("Horas: "+ periodoUso);
+
                         // Adicionando as características para o equipamento
                         meuEquipamento.setNome(nome);
                         meuEquipamento.setQuantidade(quantidade);
@@ -155,18 +157,6 @@ public class AdicionarEquipamentosActivity extends AppCompatActivity {
                         meuEquipamento.setHorasPorDia(periodoUso);
                         meuEquipamento.setDiasUtilizados(diasUtilizado);
                         meuEquipamento.setCC(correnteContinua);
-
-                        //Usuário clicou para editar um equipamento posteriormente selecionado
-                        /*if(getIntent().hasExtra("posVariavelGlobal")){
-                            Bundle bundle = getIntent().getExtras();
-                            int posVariavelGlobal = bundle.getInt("posVariavelGlobal");
-                            variavelGlobal.alterarEquipamento(posVariavelGlobal, meuEquipamento);
-                            variavelGlobal.setRemoverTodasViews(true);
-                            finish();
-                        }else
-                            variavelGlobal.adicionarElemento(meuEquipamento);*/
-
-
 
                         System.out.println("Equipamento possui corrente contrinua?(1=sim): "+correnteContinua);
 

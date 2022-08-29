@@ -30,7 +30,6 @@ public class ResultadoOffGridActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         final CalculadoraOffGrid calculadora = (CalculadoraOffGrid) intent.getSerializableExtra(Constants.EXTRA_CALCULADORAOFF);
-        System.out.println("Calculadora Placa: "+calculadora.pegaListaControladoresOffGrid());
 
         GetPhoneDimensions(this);
 
@@ -51,7 +50,7 @@ public class ResultadoOffGridActivity extends AppCompatActivity {
             AutoSizeText.AutoSizeButton(this.mViewHolder.buttonFinalizar, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 
             TextView textResult = findViewById(R.id.text_titulo_resultado);
-            AutoSizeText.AutoSizeTextView(textResult, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
+            AutoSizeText.AutoSizeTextView(textResult, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
 
             this.mViewHolder.buttonEquipamento.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -72,7 +71,7 @@ public class ResultadoOffGridActivity extends AppCompatActivity {
                 }
             });
 
-            /*this.mViewHolder.buttonBateria.setOnClickListener(new View.OnClickListener() {
+            this.mViewHolder.buttonBateria.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
@@ -81,7 +80,7 @@ public class ResultadoOffGridActivity extends AppCompatActivity {
                     startActivity(intent);
 
                 }
-            });*/
+            });
 
             this.mViewHolder.buttonGeracao.setOnClickListener(new View.OnClickListener() {
                 @Override

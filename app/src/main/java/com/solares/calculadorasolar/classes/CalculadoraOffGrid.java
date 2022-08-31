@@ -297,7 +297,7 @@ public class CalculadoraOffGrid implements Serializable {
             //LCOEDivisor = Math.pow(1 + Constants.SELIC, year);
 
             //Depreciação do painel a cada ano (diminuição de rendimento)
-            geracaoComDepreciacao = (this.geracaoAnual) * (1 - (Constants.DEPREC_PANELS * (year+1)) * (1 - inversorEscolhido.getRendimentoMaximo()) );
+            geracaoComDepreciacao = (this.geracaoAnual) * (1 - (Constants.DEPREC_PANELS) * (year+1) * (1 - inversorEscolhido.getRendimentoMaximo()) );
             //Somando o total de energia produzida para calcular o custo de cada KWh
             //LCOEGeneration = geracaoComDepreciacao/LCOEDivisor; //CÁLCULO DO OUTRO LCOE
             LCOEGeneration = geracaoComDepreciacao; //Cálculo mais simples do custo da energia
@@ -313,6 +313,7 @@ public class CalculadoraOffGrid implements Serializable {
             custoAtualComImposto = ValueWithTaxes((12*this.minPotencia)*tariff);
             //Acha a diferença que o sistema causou no custo (isso será o lucro ou a economia do ano)
             diferencaDeCusto = custoAtualComImposto - custoComImposto;
+            System.out.println("Diferenca: "+diferencaDeCusto);
             if(year == 0){
                 economiaMensal = diferencaDeCusto/12;
             }
@@ -330,7 +331,7 @@ public class CalculadoraOffGrid implements Serializable {
 
             //Considerando que os custos de manutenção são relativos ao investimento inicial, que esses custos sobem em 2 vezes a inflação
             // e que o custo de instalação do inversor é um décimo de seu preço
-            custoManutEInstal = (custoTotal * Constants.MAINTENANCE_COST) * Math.pow(1 + (2 * Constants.IPCA), year) + custoInversor * 0.1;
+            custoManutEInstal = (custoTotal * Constants.MAINTENANCE_COST) * Math.pow(1 + (2 * 0.1), year) + custoInversor * 0.1;// ipca = 10%
             gastosTotais = custoManutEInstal + custoInversor;
             //Esses são os custos coniderados no LCOE, os custos de energia (da concessionária) não entram no cálculo
             //LCOEcost = gastosTotais/LCOEDivisor;

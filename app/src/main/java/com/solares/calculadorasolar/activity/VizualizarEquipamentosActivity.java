@@ -88,7 +88,7 @@ public class VizualizarEquipamentosActivity extends AppCompatActivity {
                     potenciaUtilizadaCA=0;
 
                     try {
-                        if (todosMeusEquipamentos.size()==0) todosMeusEquipamentos.get(0);
+                        /*if (todosMeusEquipamentos.size()==0) todosMeusEquipamentos.get(0);
                         for (Equipamentos_OffGrid equipamentos_offGrid:todosMeusEquipamentos){
                             System.out.println("Euqipamento: "+equipamentos_offGrid.getNome()+" , corrente continua: "+equipamentos_offGrid.getCC()+" , cons: "+equipamentos_offGrid.getHorasPorDia());
                             if (equipamentos_offGrid.getCC()){
@@ -97,14 +97,14 @@ public class VizualizarEquipamentosActivity extends AppCompatActivity {
                             else{
                                 potenciaUtilizadaCA += demandaEnergiaAtivaDiariaCA(equipamentos_offGrid);
                             }
-                        }
+                        }*/
 
                         System.out.println("\n------ Potencia CC: " + potenciaUtilizadaCC + " ------------------");
                         System.out.println("------ Potencia CA: " + potenciaUtilizadaCA + " ------------------");
 
                         // Insere a potencia
                         calculadora.setPotenciaUtilizadaDiariaCC(potenciaUtilizadaCC);
-                        calculadora.setPotenciaUtilizadaDiariaCA(potenciaUtilizadaCA);
+                        calculadora.setPotenciaUtilizadaDiariaCA(800);
                         // Calcular
                         calculadora.Calcular(VizualizarEquipamentosActivity.this);
                     } catch (Exception e) {

@@ -313,7 +313,6 @@ public class CalculadoraOffGrid implements Serializable {
             custoAtualComImposto = ValueWithTaxes((12*this.minPotencia)*tariff);
             //Acha a diferença que o sistema causou no custo (isso será o lucro ou a economia do ano)
             diferencaDeCusto = custoAtualComImposto - custoComImposto;
-            System.out.println("Diferenca: "+diferencaDeCusto);
             if(year == 0){
                 economiaMensal = diferencaDeCusto/12;
             }
@@ -407,9 +406,18 @@ public class CalculadoraOffGrid implements Serializable {
     public void calculaResultadosPlaca(Context MyContext, Painel_OffGrid placaEscolhida){
         //Definindo oas placas
         if(this.areaAlvo < 0){
-            placaEscolhida.setQtd((int) Math.floor(this.minPotencia / placaEscolhida.getPotencia())); // arredondar para baixo
+            if((int)Math.floor(this.minPotencia/placaEscolhida.getPotencia()) > 0){
+                placaEscolhida.setQtd((int) Math.floor(this.minPotencia / placaEscolhida.getPotencia())); // arredondar para baixo
+            }else{
+                placaEscolhida.setQtd(1);
+            }
         } else {
-            placaEscolhida.setQtd((int)Math.floor(this.areaAlvo / placaEscolhida.getArea())); // arredondar para baixo
+            if((int)Math.floor(this.areaAlvo/placaEscolhida.getArea()) > 0){
+                placaEscolhida.setQtd((int)Math.floor(this.areaAlvo/placaEscolhida.getArea())); // arredondar para baixo
+            }else{
+                placaEscolhida.setQtd(1);
+            }
+
         }
         placaEscolhida.setCustoTotal(placaEscolhida.getQtd() * placaEscolhida.getPreco());
 

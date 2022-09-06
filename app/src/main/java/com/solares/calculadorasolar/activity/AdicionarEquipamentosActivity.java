@@ -47,13 +47,14 @@ public class AdicionarEquipamentosActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_adicionar_equipamentos);
-        Log.d("Activity", "Entrou na VizualizarEquipamentos");
+        Log.d("Activity", "Entrou na AdicionarEquipamentos");
 
-        //pegar os intents
-        Intent intent = getIntent();
-        final CalculadoraOffGrid calculadora = (CalculadoraOffGrid) intent.getSerializableExtra(Constants.EXTRA_CALCULADORAOFF);
+
 
         try{
+            //pegar os intents
+            Intent intent = getIntent();
+            final CalculadoraOffGrid calculadora = (CalculadoraOffGrid) intent.getSerializableExtra(Constants.EXTRA_CALCULADORAOFF);
             meuEquipamento = new Equipamentos_OffGrid();
 
             //Identificando os componentes do layout

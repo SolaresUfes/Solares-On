@@ -149,8 +149,6 @@ public class AdicionarEquipamentosActivity extends AppCompatActivity {
                         double periodoUso = Double.parseDouble( mViewHolder.editTextPeriodoUso.getText().toString() );
                         double diasUtilizado = Math.round(Double.parseDouble(mViewHolder.editTextWhdia.getText().toString()));//potencia / Integer.parseInt( mViewHolder.editTextWhdia.getText().toString()
 
-                        System.out.println("Horas: "+ periodoUso);
-
                         // Adicionando as características para o equipamento
                         meuEquipamento.setNome(nome);
                         meuEquipamento.setQuantidade(quantidade);
@@ -158,9 +156,6 @@ public class AdicionarEquipamentosActivity extends AppCompatActivity {
                         meuEquipamento.setHorasPorDia(periodoUso);
                         meuEquipamento.setDiasUtilizados(diasUtilizado);
                         meuEquipamento.setCC(correnteContinua);
-
-                        System.out.println("Equipamento possui corrente contrinua?(1=sim): "+correnteContinua);
-
 
                         //calculadora.setEquipamentosSelecionados(meuEquipamento);
                         Intent intent = new Intent(getApplicationContext(), VizualizarEquipamentosActivity.class);

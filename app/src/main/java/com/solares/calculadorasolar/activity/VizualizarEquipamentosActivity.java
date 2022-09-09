@@ -13,6 +13,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.solares.calculadorasolar.R;
@@ -75,9 +79,13 @@ public class VizualizarEquipamentosActivity extends AppCompatActivity {
                 intent.putExtra(Constants.EXTRA_CALCULADORAOFF, calculadora);
                 //startActivity(intent);
                 //Intent intent = new Intent(getApplicationContext(), AdicionarEquipamentosActivity.class);
-                startActivityForResult(intent, 0);
+                //startActivityForResult(intent, 1);
+                startActivityIntent.launch(intent);
+
             }
         });
+
+
 
         try{
             this.mViewHolder.buttonResultado.setOnClickListener(new View.OnClickListener() {
@@ -90,7 +98,7 @@ public class VizualizarEquipamentosActivity extends AppCompatActivity {
                     try {
                         if (todosMeusEquipamentos.size()==0) todosMeusEquipamentos.get(0);
                         for (Equipamentos_OffGrid equipamentos_offGrid:todosMeusEquipamentos){
-                            System.out.println("Euqipamento: "+equipamentos_offGrid.getNome()+" , corrente continua: "+equipamentos_offGrid.getCC()+" , cons: "+equipamentos_offGrid.getHorasPorDia());
+                            //System.out.println("Euqipamento: "+equipamentos_offGrid.getNome()+" , corrente continua: "+equipamentos_offGrid.getCC()+" , cons: "+equipamentos_offGrid.getHorasPorDia());
                             if (equipamentos_offGrid.getCC()){
                                 potenciaUtilizadaCC += demandaEnergiaAtivaDiariaCC(equipamentos_offGrid);
                             }
@@ -99,8 +107,8 @@ public class VizualizarEquipamentosActivity extends AppCompatActivity {
                             }
                         }
 
-                        System.out.println("\n------ Potencia CC: " + potenciaUtilizadaCC + " ------------------");
-                        System.out.println("------ Potencia CA: " + potenciaUtilizadaCA + " ------------------");
+                        //System.out.println("\n------ Potencia CC: " + potenciaUtilizadaCC + " ------------------");
+                        //System.out.println("------ Potencia CA: " + potenciaUtilizadaCA + " ------------------");
 
                         // Insere a potencia
                         calculadora.setPotenciaUtilizadaDiariaCC(potenciaUtilizadaCC);
@@ -119,23 +127,6 @@ public class VizualizarEquipamentosActivity extends AppCompatActivity {
         }catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public double demandaEnergiaAtivaDiaria(ArrayList<Equipamentos_OffGrid> todosMeusEquipamentos, boolean continua){
-        double potenciaTotal=0;
-        if(continua){
-            for(int a=0; a<todosMeusEquipamentos.size(); a++){
-                if(todosMeusEquipamentos.get(a).getCC())
-                    potenciaTotal +=demandaEnergiaAtivaDiariaCC(todosMeusEquipamentos.get(a));
-            }
-            return potenciaTotal;
-        }
-
-        for(int a=0; a<todosMeusEquipamentos.size(); a++){
-            if (!todosMeusEquipamentos.get(a).getCC())
-                potenciaTotal +=demandaEnergiaAtivaDiariaCA(todosMeusEquipamentos.get(a));
-        }
-        return potenciaTotal;
     }
 
     public double demandaEnergiaAtivaDiariaCA(Equipamentos_OffGrid equipamentos_offGrid){
@@ -158,27 +149,27 @@ public class VizualizarEquipamentosActivity extends AppCompatActivity {
     // Ao voltar da Activity AdicionarEquipametos, aqui irá criar dinâmicamente objetos na tela
     //
     //
+    ActivityResultLauncher<Intent> startActivityIntent = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        Bundle bundle = data.getExtras();
+                        if (bundle != null) {
+                            Equipamentos_OffGrid meuEquipamento = (Equipamentos_OffGrid) bundle.get(Constants.EXTRA_EQUIPAMENTO);
+                            todosMeusEquipamentos.add(meuEquipamento);
+                            haEquipamentosSelecisonados();
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        // check that it is the SecondActivity with an OK result
-        if (requestCode == 0) {
-            if (resultCode == RESULT_OK) { // Activity.RESULT_OK
-                Bundle bundle = data.getExtras();
-                if (bundle != null){
-                    Equipamentos_OffGrid meuEquipamento = (Equipamentos_OffGrid) bundle.get(Constants.EXTRA_EQUIPAMENTO);
-                    todosMeusEquipamentos.add(meuEquipamento);
-
-                    while( i < todosMeusEquipamentos.size()){
-                        addView();
-                        i++;
+                            while (i < todosMeusEquipamentos.size()) {
+                                addView();
+                                i++;
+                            }
+                        }
                     }
                 }
-            }
-        }
-    }
+            });
 
     @Override
     protected void onStart() {
@@ -193,8 +184,7 @@ public class VizualizarEquipamentosActivity extends AppCompatActivity {
         //todosMeusEquipamentos.add(meuEquipamento);
         //todosMeusEquipamentos.add(meuEquipamento2);
 
-        if (todosMeusEquipamentos.size()!=0) textSemEquipamentos.setVisibility(View.GONE);
-        else textSemEquipamentos.setVisibility(View.VISIBLE);
+        haEquipamentosSelecisonados();
 
     }
 
@@ -239,6 +229,11 @@ public class VizualizarEquipamentosActivity extends AppCompatActivity {
     }
 
     public void removerView(View view){ linearLayout.removeView(view); }
+
+    private void haEquipamentosSelecisonados(){
+        if (todosMeusEquipamentos.size()!=0) textSemEquipamentos.setVisibility(View.GONE);
+        else textSemEquipamentos.setVisibility(View.VISIBLE);
+    }
 
     public static class ViewHolder{
     Button buttonAdicionar;

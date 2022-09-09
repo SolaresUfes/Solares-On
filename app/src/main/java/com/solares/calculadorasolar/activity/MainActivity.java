@@ -209,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
         AutoSizeText.AutoSizeTextView(textNovidade, MainActivity.alturaTela, MainActivity.larguraTela, 3f);
         ImageView b_sair = findViewById(R.id.button_xclose);
 
-        String text = "Pensando sempre em melhorar o Solares On, temos uma super novidade para você. \nGostaria de fazer parte do nosso aplicativo com mais de 20 mil downloads? \nEntre em contato pelo link!";
+        String text = "Pensando sempre em melhorar o Solares On, temos uma super novidade para você. \nGostaria de fazer parte do nosso aplicativo com mais de 13 mil downloads? \nEntre em contato pelo link!";
         SpannableString ss = new SpannableString(text);
 
         //Mostra a explicação
@@ -223,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
                 //String mensagem = "Olá,+vi+no+SolaresOn+que+existe+uma+possibilidade+da+minha+empresa+aparecer+no+aplicativo.%0D%0DPode+me+passar+mais+informações";
                 String mensagem = "Olá, vi no Solares On que existe uma chance da minha empresa aparecer no aplicativo.\n" +
                         "\n" +
-                        "Pode me passar mais informações?";
+                        "Pode me passar mais informações";
                 String link = "https://api.whatsapp.com/send?phone="+numTelefone+"&text="+mensagem+"?&app_absent=0";
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
                 startActivity(intent);

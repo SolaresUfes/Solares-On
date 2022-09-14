@@ -36,11 +36,11 @@ public class VizualizarEquipamentosActivity extends AppCompatActivity {
     ArrayList<Equipamentos_OffGrid> todosMeusEquipamentos = new ArrayList<>();
     public ViewHolder mViewHolder = new ViewHolder();
     private LinearLayout linearLayout;
-    int i = 0;
     double potenciaUtilizadaCC=0;
     double potenciaUtilizadaCA=0;
 
     TextView textSemEquipamentos;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,8 +85,6 @@ public class VizualizarEquipamentosActivity extends AppCompatActivity {
             }
         });
 
-
-
         try{
             this.mViewHolder.buttonResultado.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -107,8 +105,8 @@ public class VizualizarEquipamentosActivity extends AppCompatActivity {
                             }
                         }
 
-                        //System.out.println("\n------ Potencia CC: " + potenciaUtilizadaCC + " ------------------");
-                        //System.out.println("------ Potencia CA: " + potenciaUtilizadaCA + " ------------------");
+                        System.out.println("\n------ Potencia CC: " + potenciaUtilizadaCC + " ------------------");
+                        System.out.println("------ Potencia CA: " + potenciaUtilizadaCA + " ------------------");
 
                         // Insere a potencia
                         calculadora.setPotenciaUtilizadaDiariaCC(potenciaUtilizadaCC);
@@ -144,11 +142,11 @@ public class VizualizarEquipamentosActivity extends AppCompatActivity {
     }
 
 
-    //
-    //
-    // Ao voltar da Activity AdicionarEquipametos, aqui irá criar dinâmicamente objetos na tela
-    //
-    //
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    // Ao voltar da Activity AdicionarEquipametos, aqui irá criar dinâmicamente objetos na tela //
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////
     ActivityResultLauncher<Intent> startActivityIntent = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
@@ -162,40 +160,39 @@ public class VizualizarEquipamentosActivity extends AppCompatActivity {
                             todosMeusEquipamentos.add(meuEquipamento);
                             haEquipamentosSelecisonados();
 
-                            while (i < todosMeusEquipamentos.size()) {
-                                addView();
-                                i++;
+                            removerTodasViews();
+                            int index=0;
+                            while (index < todosMeusEquipamentos.size()) {
+                                addView(index);
+                                index++;
                             }
+                            System.out.println("Quantidade de elementos no vetor: "+todosMeusEquipamentos.size());
                         }
                     }
                 }
             });
 
+
     @Override
     protected void onStart() {
         super.onStart();
-
-        if (todosMeusEquipamentos.size()!=0) textSemEquipamentos.setVisibility(View.GONE);
-        else textSemEquipamentos.setVisibility(View.VISIBLE);
-
         // Adicionando as características para o equipamento
         //Equipamentos_OffGrid meuEquipamento = new Equipamentos_OffGrid("Equipamento 1 - Alternada", 1, 3, 4, 15.0, false);
         //Equipamentos_OffGrid meuEquipamento2 = new Equipamentos_OffGrid("Equipamento 2 - Contínua", 1, 2, 2, 60.0, true);
         //todosMeusEquipamentos.add(meuEquipamento);
         //todosMeusEquipamentos.add(meuEquipamento2);
-
         haEquipamentosSelecisonados();
 
     }
 
-    public void addView(){
+    public void addView(int index){
         final View EquipamentosView = getLayoutInflater().inflate(R.layout.linha_add_equipamentos, null, false);
         final TextView textViewNomeE = (TextView)EquipamentosView.findViewById(R.id.nome_equipamento);
         final TextView textViewQntE = (TextView)EquipamentosView.findViewById(R.id.quantidade_equipamento);
         ImageView imageApagar = (ImageView)EquipamentosView.findViewById(R.id.apagar_equipamento);
 
-        textViewNomeE.setText(todosMeusEquipamentos.get(i).getNome());
-        textViewQntE.setText("Quantidade: "+todosMeusEquipamentos.get(i).getQuantidade());
+        textViewNomeE.setText(todosMeusEquipamentos.get(index).getNome());
+        textViewQntE.setText("Quantidade: "+todosMeusEquipamentos.get(index).getQuantidade());
 
         imageApagar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -212,7 +209,6 @@ public class VizualizarEquipamentosActivity extends AppCompatActivity {
                     if(nomeEquipamentoSelecionado.equals(todosMeusEquipamentos.get(j).getNome()) && quantidade.equals(qntEquipamentoSelecionado)) break;
                     j++;
                 }
-                i--;
                 todosMeusEquipamentos.remove(j);
                 // ----
 
@@ -220,15 +216,14 @@ public class VizualizarEquipamentosActivity extends AppCompatActivity {
 
                 System.out.println("Quantidade de elementos no vetor: "+todosMeusEquipamentos.size());
 
-                if (todosMeusEquipamentos.size()!=0) textSemEquipamentos.setVisibility(View.GONE);
-                else textSemEquipamentos.setVisibility(View.VISIBLE);
             }
         });
 
         linearLayout.addView(EquipamentosView);
     }
 
-    public void removerView(View view){ linearLayout.removeView(view); }
+    public void removerView(View view){ linearLayout.removeView(view);}
+    public void removerTodasViews(){linearLayout.removeAllViews();}
 
     private void haEquipamentosSelecisonados(){
         if (todosMeusEquipamentos.size()!=0) textSemEquipamentos.setVisibility(View.GONE);

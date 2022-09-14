@@ -62,6 +62,7 @@ public class AdicionarEquipamentosActivity extends AppCompatActivity {
             AutoSizeText.AutoSizeButton(this.mViewHolder.buttonContinuar, MainActivity.alturaTela, MainActivity.larguraTela, 2f);
 
             Spinner spinnerEquipamentos = findViewById(R.id.spinner_escolher_equipamento);
+            Spinner spinnerCategorias = findViewById(R.id.spinner_categoria_equipamento);
 
             this.mViewHolder.editTextQuantidade = findViewById(R.id.editText_quantidade);
             AutoSizeText.AutoSizeEditText(this.mViewHolder.editTextQuantidade, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
@@ -98,15 +99,16 @@ public class AdicionarEquipamentosActivity extends AppCompatActivity {
                 }
             });
 
-            //Aqui, coloca o vetor de strings que será exibido no spinner
+            // Aqui, coloca o vetor de strings que será exibido no spinner de categorias
+            ArrayAdapter<String> adapterC =new ArrayAdapter<String>(this, R.layout.spinner_item, calculadora.pegaNomesEquipamentosOffGrid());
+            spinnerCategorias.setAdapter(adapterC);
+
+            // Aqui, coloca o vetor de strings que será exibido no spinner de equipamentos
             ArrayAdapter<String> adapterS =new ArrayAdapter<String>(this, R.layout.spinner_item, calculadora.pegaNomesEquipamentosOffGrid());
             spinnerEquipamentos.setAdapter(adapterS);
-
-
             spinnerEquipamentos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    System.out.println("Position: " + position);
                     Equipamentos_OffGrid Equipamento = calculadora.pegaVetorEquipamentos().get(position);
 
                     // Caso o spinner selecionado é algum diferente do settado
@@ -137,7 +139,36 @@ public class AdicionarEquipamentosActivity extends AppCompatActivity {
                     }
                 }
                 @Override
-                public void onNothingSelected(AdapterView<?> parent) {}
+                public void onNothingSelected(AdapterView<?> parent) {
+                    Equipamentos_OffGrid Equipamento = calculadora.pegaVetorEquipamentos().get(0);
+
+                    // Caso o spinner selecionado é algum diferente do settado
+                    if(Equipamento!=null){
+                        mViewHolder.editTextQuantidade.setText("1");
+                        mViewHolder.editTextPotencia.setText(String.valueOf(Equipamento.getPotencia()));
+                        mViewHolder.editTextPeriodoUso.setText("1");
+                        mViewHolder.editTextWhdia.setText(String.valueOf(Equipamento.getDiasUtilizados()));
+                        nome = spinnerEquipamentos.getSelectedItem().toString();
+
+                        //Saber se o equipamento eh de Corrente Contínua ou Não
+                        if(Equipamento.getCC())
+                            correnteContinua = true;
+                        else
+                            correnteContinua = false;
+
+                    }else{
+                        // Limpar o text que está settado
+                        mViewHolder.editTextQuantidade.getText().clear();
+                        mViewHolder.editTextPotencia.getText().clear();
+                        mViewHolder.editTextPeriodoUso.getText().clear();
+                        mViewHolder.editTextWhdia.getText().clear();
+
+                        mViewHolder.editTextQuantidade.setHint("-");
+                        mViewHolder.editTextPotencia.setHint("-");
+                        mViewHolder.editTextPeriodoUso.setHint("-");
+                        mViewHolder.editTextWhdia.setHint("-");
+                    }
+                }
             });
 
             this.mViewHolder.buttonContinuar.setOnClickListener(new View.OnClickListener() {
@@ -213,5 +244,6 @@ public class AdicionarEquipamentosActivity extends AppCompatActivity {
         TextView textPotencia;
         TextView textPeriodoUso;
         TextView textWhdia;
+        Spinner spinnerEquipamentos;
     }
 }

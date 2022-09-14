@@ -103,6 +103,7 @@
     <string name="serie">Baterias a ser ligadas em série</string>
     <string name="paralelo">Baterias a ser ligadas em paralelo</string>
     <string name="preco_baterias">Preco total das baterias</string>
+    <string name="adicionar">Adicionar</string>
 
     <string-array name="Modulos">
         <item>335PHK-36 POLI 335W - BYD Solar</item>

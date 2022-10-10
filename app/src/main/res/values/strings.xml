@@ -101,8 +101,8 @@
     <string name="autonomia_media">Autonomia Média</string>
     <string name="quatidade_baterias">Quantidade total de baterias</string>
     <string name="serie">Baterias a ser ligadas em série</string>
-    <string name="paralelo">Baterias a ser ligadas em paralelo</string>
-    <string name="preco_baterias">Preco total das baterias</string>
+    <string name="paralelo">Baterias a serem ligadas em paralelo</string>
+    <string name="preco_baterias">Preço total das baterias</string>
     <string name="adicionar">Adicionar</string>
 
     <string-array name="Modulos">

@@ -110,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
         calculadoraOffGrid.setListaControladoresOffGrid(FirebaseManager.fbBuscaListaControladorOffGrid(MainActivity.this, sharedPref));
         calculadoraOffGrid.setListaBateriasOffGrid(FirebaseManager.fbBuscaListaBateriaOffGrid(MainActivity.this, sharedPref));
         calculadoraOffGrid.setListaEquipamentosOffGrid(FirebaseManager.fbBuscaListaEquipamentoOffGrid(MainActivity.this, sharedPref));
+        //calculadoraOffGrid.setListaCategortias(FirebaseManager.fbBuscaListaCategorias(MainActivity.this, sharedPref));
 
         //Se o spinner de estado for selecionado, muda o spinner de cidades de acordo
         this.mViewHolder.spinnerStates.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

@@ -100,8 +100,8 @@ public class AdicionarEquipamentosActivity extends AppCompatActivity {
             });
 
             // Aqui, coloca o vetor de strings que será exibido no spinner de categorias
-            ArrayAdapter<String> adapterC =new ArrayAdapter<String>(this, R.layout.spinner_item, calculadora.pegaNomesEquipamentosOffGrid());
-            spinnerCategorias.setAdapter(adapterC);
+            //ArrayAdapter<String> adapterC =new ArrayAdapter<String>(this, R.layout.spinner_item, calculadora.pegaNomesCategoriasEquipamentos());
+            //spinnerCategorias.setAdapter(adapterC);
 
             // Aqui, coloca o vetor de strings que será exibido no spinner de equipamentos
             ArrayAdapter<String> adapterS =new ArrayAdapter<String>(this, R.layout.spinner_item, calculadora.pegaNomesEquipamentosOffGrid());

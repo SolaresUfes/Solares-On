@@ -38,6 +38,10 @@ public class CalculadoraOffGrid implements Serializable {
     String[] nomesEquipamentos_off_grid;
     ArrayList<Equipamentos_OffGrid> vetorEquipamentos;
     ArrayList<Equipamentos_OffGrid> EquipamentosSelecionados;
+    LinkedList<String> categoriasEquipamentos;
+    ArrayList<String> vetorCategorias;
+    ArrayList<String> CategoriasSelecionadas;
+    String[] nomesCategoriasEquipamentos;
     String nomeCidade;
     Painel_OffGrid painelEscolhido;
     Inversor_OffGrid inversorEscolhido;
@@ -126,6 +130,8 @@ public class CalculadoraOffGrid implements Serializable {
     public Bateria_OffGrid pegaBateriaEscolhidaOffGrid(){ return bateriaEscolhida;}
     public LinkedList<Equipamentos_OffGrid> pegaListaEquipamentosOffGrid() { return listaEquipamentos_off_grid; }
     public String[] pegaNomesEquipamentosOffGrid() { return nomesEquipamentos_off_grid; }
+    public LinkedList<String> pegaListaCategorias() { return categoriasEquipamentos; }
+    public String[] pegaNomesCategoriasEquipamentos() { return nomesCategoriasEquipamentos; }
     public ArrayList<Equipamentos_OffGrid> pegaVetorEquipamentos(){ return vetorEquipamentos; }
     public int pegaAutonomia() { return this.autonomia; }
     public String pegaNomeCidade(){ return nomeCidade; }
@@ -162,6 +168,7 @@ public class CalculadoraOffGrid implements Serializable {
     public void setListaControladoresOffGrid(LinkedList<Controlador_OffGrid> listaControladores_off_grid) { this.listaControladores_off_grid = listaControladores_off_grid; }
     public void setListaBateriasOffGrid(LinkedList<Bateria_OffGrid> listaBaterias_off_grid) { this.listaBaterias_off_grid = listaBaterias_off_grid; }
     public void setListaEquipamentosOffGrid(LinkedList<Equipamentos_OffGrid> listaEquipamentosOffGrid) { this.listaEquipamentos_off_grid = listaEquipamentosOffGrid; }
+    public void setListaCategortias(LinkedList<String> categoriasEquipamentos) { this.categoriasEquipamentos = categoriasEquipamentos; }
     public void setEquipamentosSelecionados(Equipamentos_OffGrid equipamento){        this.EquipamentosSelecionados.add(equipamento); }
     public void setTarifaMensal(double tarifa){
         this.tarifaMensal = tarifa;
@@ -371,7 +378,7 @@ public class CalculadoraOffGrid implements Serializable {
             this.taxaInternaRetorno = internalRateOfReturn;
         }
 
-        /* CÁLCULO DO LCOE NO MÉTODO MAIS COMPLEXO (NÃO USADO PELO MERCADO DE ENERGIA SOLAR)
+        /* //CÁLCULO DO LCOE NO MÉTODO MAIS COMPLEXO (NÃO USADO PELO MERCADO DE ENERGIA SOLAR)
         /////////////Bora calcular o LCOE!!
         //Achar o capacity factor da usina (porcentagem de energia real gerada em relação à produção nominal da usina)
         //Geração real dividido pela geração máxima (capacidade * horas em um dia * dias em um ano * anos de operação)
@@ -388,8 +395,8 @@ public class CalculadoraOffGrid implements Serializable {
 
         //Faz o cálculo do LCOE de acordo com a referência (Documentação deste método)
         LCOE = (overnightCapitalCost*LCOEcrf + fixedOnM) /
-                (24*365*capacityFactor);
-         */
+                (24*365*capacityFactor);*/
+
 
         //Cálculo do LCOE feito no mercado atualmente
         LCOE = (LCOESumCost + this.custoTotal) / LCOESumGeneration;
@@ -739,6 +746,20 @@ public class CalculadoraOffGrid implements Serializable {
             Log.d("calculadora_off", "Equipamentos encontrado: " + equipamentoAtual.getNome());
             vetorEquipamentos.add(equipamentoAtual);
             nomesEquipamentos_off_grid[cont] = equipamentoAtual.getNome();
+            cont++;
+        }
+    }
+    public void iniciarNomesDasCategorias(){
+        //Pega os nomes dos equipamentos eletronicos
+        System.out.println("Iniciou categorias");
+        int cont=0;
+        nomesCategoriasEquipamentos = new String[this.pegaListaCategorias().size()];
+        CategoriasSelecionadas = new ArrayList<String>();
+        vetorCategorias = new ArrayList<String>();
+        for (String categoria : this.pegaListaCategorias()) {
+            Log.d("calculadora_off", "Categorias encontrado: " + categoria);
+            vetorCategorias.add(categoria);
+            nomesCategoriasEquipamentos[cont] = categoria;
             cont++;
         }
     }

@@ -50,6 +50,7 @@ public class VizualizarEquipamentosActivity extends AppCompatActivity {
         //pegar os intents
         Intent intent = getIntent();
         final CalculadoraOffGrid calculadora = (CalculadoraOffGrid) intent.getSerializableExtra(Constants.EXTRA_CALCULADORAOFF);
+        //calculadora.iniciarNomesDasCategorias();
         calculadora.iniciarNomesDosElementos();
 
         GetPhoneDimensions(this);
@@ -60,7 +61,7 @@ public class VizualizarEquipamentosActivity extends AppCompatActivity {
 
         //Pega o view do texto pra recalcular e ajusta o tamanho da fonte
         TextView textListaEquipamentos = findViewById(R.id.text_titulo_lista_equipamentos);
-        AutoSizeText.AutoSizeTextView(textListaEquipamentos, MainActivity.alturaTela, MainActivity.larguraTela, 2.6f);
+        AutoSizeText.AutoSizeTextView(textListaEquipamentos, MainActivity.alturaTela, MainActivity.larguraTela, 2.2f);
 
         //Pega o view do botão pra recalcular e ajusta o tamanho da fonte
         this.mViewHolder.buttonAdicionar = findViewById(R.id.button_adicionar);

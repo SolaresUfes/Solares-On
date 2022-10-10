@@ -405,68 +405,58 @@ public class FirebaseManager {
         return equipamentos;
     }
 
-    public static LinkedList<Empresa> GetCategopriasFirebase(CalculadoraOnGrid calculadora, Context context){
+    public static LinkedList<String> fbBuscaListaCategorias(Context context, SharedPreferences sharedPref){
         Log.d("firebase", "Firebase Database inicializado");
-        // Get the reference to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        LinkedList<Empresa> empresas = new LinkedList<>();
+        LinkedList<String> categorias = new LinkedList<>();
 
-        // Read the companies from the city
-        DatabaseReference dbReferenceCidade = database.getReference("categorias_equipamentos");
-        dbReferenceCidade.addValueEventListener(new ValueEventListener() {
+        //Verify Connection
+        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
+        if(!isConnected){
+            Log.d("firebase", "Sem internet!");
+            //
+            //
+            //  --- --- --- Fazer Funcao para ler off line
+            //
+            //
+        }
+
+        DatabaseReference dbReference = database.getReference("categorias_equipamentos");
+        //Cria um listener que vai chamar o onDataChange sempre que os dados mudarem no banco de dados e quando ele for criado
+        dbReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                empresas.clear();
-
-                //Get the names of the companies that work in the city
+                categorias.clear();
+                //Pega os paineis e os coloca em uma lista
+                Log.d("firebase", "Buscando equipamentos no firebase...");
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    String nome = snapshot.getValue(String.class);
-                    if(nome != null){
-                        empresas.add(new Empresa(nome));
+                    String categoria = snapshot.getValue(String.class);
+                    if(categoria != null){
+                        Log.d("firebase", "Categorias: " + categoria);
+                        categorias.add(categoria);
                     }
                 }
 
-                ////////////////////////
-                //Get the companies info
-                DatabaseReference dbReferenceEmpresas = database.getReference("empresas");
-                // Read from the empresas database
-                dbReferenceEmpresas.addValueEventListener(new ValueEventListener() {
-                    // This method is called once with the initial value and again
-                    // whenever data at this location is updated.
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for(Empresa empresa : empresas) {
-                            Empresa empresaAtual = dataSnapshot.child(empresa.getNome()).getValue(Empresa.class);
-                            if(empresaAtual != null){
-                                Log.d("firebase", "Teste empresa" + empresaAtual.getTelefone());
-                                empresa.CopyFrom(empresaAtual);
-                            }
-                        }
-
-                        Log.d("firebase", "Empresas disponíveis em " + calculadora.pegaNomeCidade() + ", " + calculadora.pegaVetorEstado()[Constants.iEST_SIGLA]);
-                        if(empresas.size() != 0){
-                            for(Empresa empresa : empresas){
-                                Log.d("firebase", empresa.getNome()+" - Telefone: " + empresa.getTelefone() + " Site: "+empresa.getSite());
-                            }
-                        }
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        // Failed to read value
-                        Log.d("firebase", "Failed to read value." + error.toException());
-                    }
-                });
+                //Salva os inversores no banco de dados na shared pref
+                /*if(inversores.size() > 0) {
+                    SharedPreferences.Editor prefsEditor = sharedPref.edit();
+                    Gson gson = new Gson();
+                    String json = gson.toJson(inversores.toArray());
+                    prefsEditor.putString("inversores_off_grid", json);
+                    prefsEditor.apply();
+                }*/
             }
+
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // Failed to read value
                 Log.d("firebase", "Failed to read value." + error.toException());
             }
         });
-
-        return empresas;
+        return categorias;
     }
 
 

@@ -40,7 +40,7 @@ public class GeracaoOggGridActivity extends AppCompatActivity {
             TextView textEnergiaDiaria = findViewById(R.id.text_energia_diaria);
             AutoSizeText.AutoSizeTextView(textEnergiaDiaria, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
             TextView textEnergiaDiariaValor = findViewById(R.id.text_energia_diaria_valor);
-            textEnergiaDiariaValor.setText(String.format(Locale.ITALY,"%.2f kWh", calculadora.pegaGeracaoDiario()));
+            textEnergiaDiariaValor.setText(String.format(Locale.ITALY,"%.2f kWh", calculadora.pegaGeracaoDiaria()));
             AutoSizeText.AutoSizeTextView(textEnergiaDiariaValor, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
             // ## Autonomia média ##
             TextView textAutonomia = findViewById(R.id.text_autonomia);
@@ -65,7 +65,6 @@ public class GeracaoOggGridActivity extends AppCompatActivity {
                     ShowHint(findViewById(R.id.blackener), findViewById(R.id.inst_image_info));
                 }
             });
-
             //Clicar nas informações para explicação
             textEnergiaDiaria.setOnClickListener(new View.OnClickListener() {
                 @Override

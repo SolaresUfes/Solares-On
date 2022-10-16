@@ -30,8 +30,7 @@ import java.util.ArrayList;
 
 public class VizualizarEquipamentosActivity extends AppCompatActivity {
 
-    public static float porcent = 2.5f;
-
+    public static float porcent = 2f;
 
     ArrayList<Equipamentos_OffGrid> todosMeusEquipamentos = new ArrayList<>();
     public ViewHolder mViewHolder = new ViewHolder();
@@ -57,17 +56,17 @@ public class VizualizarEquipamentosActivity extends AppCompatActivity {
 
         //Pega o view do texo pra recalcular e ajusta o tamanho da fonte
         textSemEquipamentos = findViewById(R.id.text_sem_equipamentos);
-        AutoSizeText.AutoSizeTextView(textSemEquipamentos, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
+        AutoSizeText.AutoSizeTextView(textSemEquipamentos, MainActivity.alturaTela, MainActivity.larguraTela, 2.5f);
 
         //Pega o view do texto pra recalcular e ajusta o tamanho da fonte
         TextView textListaEquipamentos = findViewById(R.id.text_titulo_lista_equipamentos);
         AutoSizeText.AutoSizeTextView(textListaEquipamentos, MainActivity.alturaTela, MainActivity.larguraTela, 2.2f);
 
-        //Pega o view do botão pra recalcular e ajusta o tamanho da fonte
+        //Pega o view do botão pra adcionar e ajusta o tamanho da fonte
         this.mViewHolder.buttonAdicionar = findViewById(R.id.button_adicionar);
-        AutoSizeText.AutoSizeButton(this.mViewHolder.buttonAdicionar, MainActivity.alturaTela, MainActivity.larguraTela, 2f);
+        AutoSizeText.AutoSizeButton(this.mViewHolder.buttonAdicionar, MainActivity.alturaTela, MainActivity.larguraTela, 1.8f);
 
-        //Pega o view do botão pra recalcular e ajusta o tamanho da fonte
+        //Pega o view do botão do resultado e ajusta o tamanho da fonte
         this.mViewHolder.buttonResultado = findViewById(R.id.button_resultados);
         AutoSizeText.AutoSizeButton(this.mViewHolder.buttonResultado, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
 

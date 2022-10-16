@@ -54,7 +54,7 @@ public class CalculadoraOffGrid implements Serializable {
     double area;
     double custoParcial;
     double custoTotal;
-    double geracaoDiario;
+    double geracaoDiaria;
     double geracaoAnual;
     double lucro;
     double taxaInternaRetorno;
@@ -142,7 +142,7 @@ public class CalculadoraOffGrid implements Serializable {
     public double pegaArea(){ return area; }
     public double pegaCustoParcial(){ return custoParcial; }
     public double pegaCustoTotal(){ return custoTotal; }
-    public double pegaGeracaoDiario(){ return geracaoDiario; }
+    public double pegaGeracaoDiaria(){ return geracaoDiaria; }
     public double pegaLucro(){ return lucro; }
     public double pegaTaxaInternaRetorno(){ return taxaInternaRetorno; }
     public double pegaEconomiaMensal(){ return economiaMensal; }
@@ -300,11 +300,8 @@ public class CalculadoraOffGrid implements Serializable {
             //Atualiza a tarifa com uma estimativa anual de incremento de preço (inflação tarifária)
             tariff = 0.61*Math.pow(1 + Constants.TARIFF_CHANGE/100.0, year); //0.61 tarifa da energia - tornar possiver ajustar essa tarifa
 
-            //Um ajuste do Custo nivelado de energia
-            //LCOEDivisor = Math.pow(1 + Constants.SELIC, year);
-
             //Depreciação do painel a cada ano (diminuição de rendimento)
-            geracaoComDepreciacao = (this.geracaoAnual) * (1 - (Constants.DEPREC_PANELS) * (year+1) * (1 - inversorEscolhido.getRendimentoMaximo()) );
+            geracaoComDepreciacao = (this.geracaoAnual) * ( (Constants.DEPREC_PANELS) * (year+1) * (inversorEscolhido.getRendimentoMaximo() * Constants.DEPREC_PANELS) );
             //Somando o total de energia produzida para calcular o custo de cada KWh
             //LCOEGeneration = geracaoComDepreciacao/LCOEDivisor; //CÁLCULO DO OUTRO LCOE
             LCOEGeneration = geracaoComDepreciacao; //Cálculo mais simples do custo da energia
@@ -314,9 +311,9 @@ public class CalculadoraOffGrid implements Serializable {
 
             //Acha o valor em reais que ele deixará de pagar por ano
             valorAPagar = geracaoComDepreciacao * tariff;
-            //Coloca os roubos... Quero dizer, impostos
+            //Aplica impostos
             custoComImposto = ValueWithTaxes(valorAPagar);
-            //Quanto ele pagaria sem o sistema fotovoltaico, também com roubo (imposto)
+            //Quanto ele pagaria sem o sistema fotovoltaico, também com imposto
             custoAtualComImposto = ValueWithTaxes((12*this.minPotencia)*tariff);
             //Acha a diferença que o sistema causou no custo (isso será o lucro ou a economia do ano)
             diferencaDeCusto = custoAtualComImposto - custoComImposto;
@@ -353,7 +350,7 @@ public class CalculadoraOffGrid implements Serializable {
             }
 
             //Diminui o valor economizado, trazendo para valores atuais
-            cashFlowCurrentCurrency = cashFlow[year] / Math.pow(1 + Constants.SELIC, year);
+            cashFlowCurrentCurrency = cashFlow[year] / (Math.pow(1 + Constants.SELIC, year));
             //O payback, que inicialmente é zero, armazena isso
             payback+=cashFlowCurrentCurrency;
 
@@ -451,7 +448,7 @@ public class CalculadoraOffGrid implements Serializable {
         custoTotal = custos[Constants.iCOSTS_TOTAL];
 
         //Calculo da energia produzida em um ano
-        geracaoDiario = EstimateDailyGeneration();
+        EstimateDailyGeneration();
 
         GetEconomicInformation();
     }
@@ -581,9 +578,9 @@ public class CalculadoraOffGrid implements Serializable {
         return solarPanel.getQtd() * solarPanel.getArea();
     }
 
-    public double EstimateDailyGeneration(){
+    public void EstimateDailyGeneration(){
         //Calculos retirados do manual de engenharia FV p. 149 a 153
-        double monthlyGen, dailyGen=0, cdailyGen;
+        double cdailyGen;
         int month;
         double ambientTemp;
 
@@ -593,25 +590,25 @@ public class CalculadoraOffGrid implements Serializable {
         double ProdMensal;
 
         geracaoAnual = 0;
+        geracaoDiaria = 0;
 
+        //Cálculo do coeficiente térmico para o módulo
+        Kt = (painelEscolhido.getNOCT() - 20)/800;
         for(month=1; month<=12; month++){
             //Pega a temperatura média do estado no mês
             ambientTemp = Double.parseDouble(vetorEstado[month]);
-
-            //Cálculo do coeficiente térmico para o módulo
-            Kt = (painelEscolhido.getNOCT() - 20)/800;
             //Cálculo da temperatura de operação estimada do módulo
             Tmod = ambientTemp + Kt*1000;
             //Cálculo da eficiência dos módulos, relativa à sua potência nominal
-            Eficiencia = (Tmod - 25) * (painelEscolhido.getCoefTempPot()/100);
+            Eficiencia = (Tmod - 25) * (painelEscolhido.getCoefTempPot());
             //Cáculo da produção de energia para cada mês
-            ProdMensal = (1+Eficiencia) * painelEscolhido.getPotencia() * painelEscolhido.getQtd() * HSP * 30 / 1000;
+            ProdMensal = (1+Eficiencia) * painelEscolhido.getPotencia() * painelEscolhido.getQtd() * HSP * GetNumberOfDays(month) / 1000;
 
             geracaoAnual +=ProdMensal;
 
             cdailyGen = ProdMensal/GetNumberOfDays(month);
-            if ((cdailyGen > dailyGen)) {
-                dailyGen = cdailyGen;
+            if ((cdailyGen < geracaoDiaria)) {
+                geracaoDiaria = cdailyGen;
             }
 
         }
@@ -619,10 +616,8 @@ public class CalculadoraOffGrid implements Serializable {
         geracaoAnual = geracaoAnual * (1 - Constants.LOSS_DIRT);
         //Considera perdas com o inversor
         geracaoAnual = geracaoAnual * inversorEscolhido.getRendimentoMaximo();
-
-        monthlyGen = geracaoAnual/12;
-
-        return dailyGen;
+        // Invertendo o valor da geração que está negativo
+        geracaoDiaria = -geracaoDiaria;
     }
 
     public double[] DefineCosts(Painel_OffGrid solarPanel, Inversor_OffGrid invertor, Controlador_OffGrid controlador, Bateria_OffGrid bateria){

@@ -648,7 +648,6 @@ stateVec - Vetor de Strings com as informações do Estado (temperatura); cityVe
             //Eficiencia do sistema (qual a porcentagem de energia captada em 1m²)
             efficiency = (placaEscolhida.getPotencia() + correctionTemp)/
                     (placaEscolhida.getArea()*1000); //O 1000 é a quantidade de W/m² que estamos considerando
-
             //Horas de sol pico do mês * eficiencia * area total
             dailyGen = (Double.parseDouble(vetorCidade[month])/1000.0) * efficiency *
                     placaEscolhida.getArea() * placaEscolhida.getQtd();

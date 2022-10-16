@@ -138,7 +138,7 @@
         android:textColor="@color/colorSolaresBlue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline24"
-        app:layout_constraintTop_toBottomOf="@+id/text_preco_inversor" />
+        app:layout_constraintTop_toBottomOf="@+id/text_nome_inversor" />
 
     <TextView
         android:id="@+id/text_total_a_pagar"

@@ -2,6 +2,8 @@ package com.solares.calculadorasolar.activity;
 
 
 
+import static com.solares.calculadorasolar.classes.auxiliares.ExplicacaoInfos.ShowPopUpInfo;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -81,6 +83,9 @@ public class MainActivity extends AppCompatActivity {
         AutoSizeText.AutoSizeButton(this.mViewHolder.buttonOnGrid, alturaTela, larguraTela, porcent);
         this.mViewHolder.buttonOffGrid = findViewById(R.id.button_off_grid);
         AutoSizeText.AutoSizeButton(this.mViewHolder.buttonOffGrid, alturaTela, larguraTela, porcent);
+        Button buttonEntendaSistema = findViewById(R.id.button_show_sistem_information);
+        AutoSizeText.AutoSizeButton(buttonEntendaSistema, MainActivity.alturaTela, MainActivity.larguraTela, 2f);
+
 
         //Criando spinners (dos estados e das cidades)
         this.mViewHolder.spinnerStates = findViewById(R.id.spinner_states);
@@ -191,6 +196,14 @@ public class MainActivity extends AppCompatActivity {
                         ee.printStackTrace();
                     }
                 }
+            }
+        });
+
+        buttonEntendaSistema.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ShowPopUpInfo(MainActivity.this, findViewById(R.id.blackener), "Sistemas",
+                        "Off Grid: ”Fora da rede”. Sistema fotovoltaico que trabalha de forma autônoma, sem a necessidade de conexão com a rede de distribuição de energia elétrica da sua região. Esse sistema é comumente conectado à baterias.\n\nOn Grid: “Na rede”. Sistema fotovoltaico que necessariamente trabalha conectado na rede de distribuição de energia elétrica da sua região. Esse é o tipo de sistema mais convencional para residências e comércios.");
             }
         });
     }

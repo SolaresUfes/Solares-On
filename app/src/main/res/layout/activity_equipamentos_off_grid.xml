@@ -155,6 +155,48 @@
             app:layout_constraintStart_toStartOf="@+id/guideline6"
             app:layout_constraintTop_toTopOf="@+id/guideline35" />
 
+        <ImageView
+            android:id="@+id/E_inst_button_info"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/descricao_botao_detalhes"
+            android:cropToPadding="false"
+            android:padding="6dp"
+            android:src="@drawable/circulo_interrogacao"
+            app:layout_constraintBottom_toTopOf="@+id/guideline031"
+            app:layout_constraintEnd_toStartOf="@+id/guideline04"
+            app:layout_constraintStart_toStartOf="@+id/guideline033"
+            app:layout_constraintTop_toTopOf="@+id/guideline032" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline04"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.9" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline031"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.12" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline032"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.05" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline033"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.78" />
+
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline6"
             android:layout_width="wrap_content"
@@ -273,6 +315,42 @@
     android:orientation="horizontal"
     android:clickable="true"
     android:focusable="true" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline57"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.22" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline55"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.75" />
+
+        <ImageView
+            android:id="@+id/inst_image_info"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="30dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/descricao_botao_detalhes"
+            android:cropToPadding="false"
+            android:padding="6dp"
+            android:src="@drawable/clique_na_informacao"
+            android:visibility="gone"
+            app:layout_constraintEnd_toStartOf="@+id/guideline55"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline57" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

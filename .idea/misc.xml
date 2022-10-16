@@ -3,12 +3,18 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Filipe/OneDrive/Documentos/GitHub/Solares-On/app/src/main/res/layout/activity_adicionar_equipamentos.xml" value="0.33" />
+        <entry key="..\:/Users/Filipe/OneDrive/Documentos/GitHub/Solares-On/app/src/main/res/layout/activity_analise.xml" value="0.209375" />
+        <entry key="..\:/Users/Filipe/OneDrive/Documentos/GitHub/Solares-On/app/src/main/res/layout/activity_bateria_off_grid.xml" value="0.33" />
         <entry key="..\:/Users/Filipe/OneDrive/Documentos/GitHub/Solares-On/app/src/main/res/layout/activity_credito.xml" value="0.209375" />
         <entry key="..\:/Users/Filipe/OneDrive/Documentos/GitHub/Solares-On/app/src/main/res/layout/activity_dados.xml" value="0.209375" />
         <entry key="..\:/Users/Filipe/OneDrive/Documentos/GitHub/Solares-On/app/src/main/res/layout/activity_detalhes.xml" value="0.209375" />
+        <entry key="..\:/Users/Filipe/OneDrive/Documentos/GitHub/Solares-On/app/src/main/res/layout/activity_economico_off_grid.xml" value="0.33" />
         <entry key="..\:/Users/Filipe/OneDrive/Documentos/GitHub/Solares-On/app/src/main/res/layout/activity_empresas.xml" value="0.33" />
+        <entry key="..\:/Users/Filipe/OneDrive/Documentos/GitHub/Solares-On/app/src/main/res/layout/activity_equipamentos_off_grid.xml" value="0.209375" />
+        <entry key="..\:/Users/Filipe/OneDrive/Documentos/GitHub/Solares-On/app/src/main/res/layout/activity_geracao_ogg_grid.xml" value="0.209375" />
         <entry key="..\:/Users/Filipe/OneDrive/Documentos/GitHub/Solares-On/app/src/main/res/layout/activity_indices_economicos.xml" value="0.209375" />
-        <entry key="..\:/Users/Filipe/OneDrive/Documentos/GitHub/Solares-On/app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="..\:/Users/Filipe/OneDrive/Documentos/GitHub/Solares-On/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/Users/Filipe/OneDrive/Documentos/GitHub/Solares-On/app/src/main/res/layout/activity_resultado.xml" value="0.209375" />
         <entry key="..\:/Users/Filipe/OneDrive/Documentos/GitHub/Solares-On/app/src/main/res/layout/linha_mostrar_empresas.xml" value="0.209375" />
         <entry key="..\:/Users/Filipe/OneDrive/Documentos/GitHub/Solares-On/app/src/main/res/layout/popup_mais_informacoes.xml" value="0.209375" />

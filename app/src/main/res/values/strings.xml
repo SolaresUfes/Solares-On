@@ -69,7 +69,7 @@
     <string name="custo_total">Custo Total (Instalação e equipamentos)</string>
     <string name="estimativa_da_geracao_mensal_de_energia">Estimativa da geração mensal de energia</string>
     <string name="potencia_necessaria">Potência Necessária</string>
-    <string name="sistema_de_placas_escolhido">Sistema de placas escolhido</string>
+    <string name="sistema_de_placas_escolhido">Sistema de painéis escolhido</string>
     <string name="area_necessaria_para_inst">Área necessária para a instalação</string>
     <string name="sistema_de_inversores_escolhido">Sistema de inversores escolhido</string>
     <string name="sistema_de_controladores_escolhido">Sistema de controladores escolhido</string>
@@ -89,8 +89,8 @@
     <string name="lista_equipamento">Lista de Equipamentos</string>
     <string name="quantidade">Quantidade</string>
     <string name="potencia">Potência</string>
-    <string name="periodo_uso">Período de Uso</string>
-    <string name="wh_dia">Wh/dia</string>
+    <string name="periodo_uso"><u>Período de Uso</u></string>
+    <string name="wh_dia"><u>Wh/dia</u></string>
     <string name="showEquipamentos">Equipamentos</string>
     <string name="economico">Econômico</string>
     <string name="preco_equipamentos">Preço dos Equipamentos</string>
@@ -104,6 +104,7 @@
     <string name="paralelo">Baterias a serem ligadas em paralelo</string>
     <string name="preco_baterias">Preço total das baterias</string>
     <string name="adicionar">Adicionar</string>
+    <string name="sistemas"><u>Entenda os sistemas</u></string>
 
     <string-array name="Modulos">
         <item>335PHK-36 POLI 335W - BYD Solar</item>

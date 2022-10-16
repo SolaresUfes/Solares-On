@@ -1,5 +1,8 @@
 package com.solares.calculadorasolar.activity;
 
+import static com.solares.calculadorasolar.classes.auxiliares.ExplicacaoInfos.ShowHint;
+import static com.solares.calculadorasolar.classes.auxiliares.ExplicacaoInfos.ShowPopUpInfo;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -204,6 +207,30 @@ public class AdicionarEquipamentosActivity extends AppCompatActivity {
                 }
             });
 
+
+            //Tutorial sobre as informações extras
+            findViewById(R.id.AE_inst_button_info).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ShowHint(findViewById(R.id.blackener), findViewById(R.id.inst_image_info));
+                }
+            });
+
+            //Clicar nas informações para explicação
+            this.mViewHolder.textPeriodoUso.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ShowPopUpInfo(AdicionarEquipamentosActivity.this, findViewById(R.id.blackener), "Período de Uso",
+                            "Número de horas por dia que os equipamentos serão utilizados em média.");
+                }
+            });
+            this.mViewHolder.textWhdia.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ShowPopUpInfo(AdicionarEquipamentosActivity.this, findViewById(R.id.blackener), "Wh/dia",
+                            "Valor que informa o consumo energético de um equipamento em cada dia média, normalmente fornecido pelo fabricante.");
+                }
+            });
 
         }catch (Exception e){
             e.printStackTrace();

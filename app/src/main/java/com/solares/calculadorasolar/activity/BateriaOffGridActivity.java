@@ -1,6 +1,8 @@
 package com.solares.calculadorasolar.activity;
 
 import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensions;
+import static com.solares.calculadorasolar.classes.auxiliares.ExplicacaoInfos.ShowHint;
+import static com.solares.calculadorasolar.classes.auxiliares.ExplicacaoInfos.ShowPopUpInfo;
 
 import android.content.Context;
 import android.content.Intent;
@@ -160,6 +162,17 @@ public class BateriaOffGridActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     finish();
+                }
+            });
+
+
+            //Tutorial sobre as informações extras
+            findViewById(R.id.B_inst_button_info).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ShowPopUpInfo(BateriaOffGridActivity.this, findViewById(R.id.blackener), "Bateria",
+                            "A bateria é responsável por todo o armazenamento das cargas elétricas que serão posteriormente consumidas nos períodos noturnos ou em dias cujo sol esteja encoberto.");
+
                 }
             });
 

@@ -1,5 +1,8 @@
 package com.solares.calculadorasolar.activity;
 
+import static com.solares.calculadorasolar.classes.auxiliares.ExplicacaoInfos.ShowHint;
+import static com.solares.calculadorasolar.classes.auxiliares.ExplicacaoInfos.ShowPopUpInfo;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -40,8 +43,8 @@ public class GeracaoOggGridActivity extends AppCompatActivity {
             textEnergiaDiariaValor.setText(String.format(Locale.ITALY,"%.2f kWh", calculadora.pegaGeracaoDiario()));
             AutoSizeText.AutoSizeTextView(textEnergiaDiariaValor, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
             // ## Autonomia média ##
-            TextView textautonomia = findViewById(R.id.text_autonomia);
-            AutoSizeText.AutoSizeTextView(textautonomia, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
+            TextView textAutonomia = findViewById(R.id.text_autonomia);
+            AutoSizeText.AutoSizeTextView(textAutonomia, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
             TextView textautonomiaValor = findViewById(R.id.text_autonomia_valor);
             textautonomiaValor.setText(String.format(Locale.ITALY,"%d dias", calculadora.pegaAutonomia()));
             AutoSizeText.AutoSizeTextView(textautonomiaValor, MainActivity.alturaTela, MainActivity.larguraTela, porcent);
@@ -54,6 +57,31 @@ public class GeracaoOggGridActivity extends AppCompatActivity {
                     finish();
                 }
             });
+
+            //Tutorial sobre as informações extras
+            findViewById(R.id.G_inst_button_info).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ShowHint(findViewById(R.id.blackener), findViewById(R.id.inst_image_info));
+                }
+            });
+
+            //Clicar nas informações para explicação
+            textEnergiaDiaria.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ShowPopUpInfo(GeracaoOggGridActivity.this, findViewById(R.id.blackener), "Economia Diária",
+                            "Esta é a energia que o seu sistema gera automaticamente por dia.");
+                }
+            });
+            textAutonomia.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ShowPopUpInfo(GeracaoOggGridActivity.this, findViewById(R.id.blackener), "Autonomia Média",
+                            "É o período que o seu aparelho pode ficar ligado com a quantidade de energia armazenada.");
+                }
+            });
+
         }catch (Exception e){
             e.printStackTrace();
         }

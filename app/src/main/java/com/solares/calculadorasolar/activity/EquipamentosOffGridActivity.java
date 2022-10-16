@@ -2,6 +2,8 @@
 package com.solares.calculadorasolar.activity;
 
 import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensions;
+import static com.solares.calculadorasolar.classes.auxiliares.ExplicacaoInfos.ShowHint;
+import static com.solares.calculadorasolar.classes.auxiliares.ExplicacaoInfos.ShowPopUpInfo;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatSpinner;
@@ -111,6 +113,38 @@ public class EquipamentosOffGridActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     finish();
+                }
+            });
+
+
+            //Tutorial sobre as informações extras
+            findViewById(R.id.E_inst_button_info).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ShowHint(findViewById(R.id.blackener), findViewById(R.id.inst_image_info));
+                }
+            });
+
+            //Clicar nas informações para explicação
+            textPlacaEstatic.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ShowPopUpInfo(EquipamentosOffGridActivity.this, findViewById(R.id.blackener), "Painel",
+                            "Composto por placas solares, é o principal equipamento do sistema fotovoltaico e o responsável por converter a luz solar em energia elétrica.");
+                }
+            });
+            textControladorEstatic.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ShowPopUpInfo(EquipamentosOffGridActivity.this, findViewById(R.id.blackener), "Controlador de Carga",
+                            "Componente necessário para preservar e monitorar o funcionamento das baterias, assim eles trabalham para manter a carga das baterias em níveis seguros. Também potencializam ao máximo o sistema fotovoltaico.");
+                }
+            });
+            textInversorEstatic.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ShowPopUpInfo(EquipamentosOffGridActivity.this, findViewById(R.id.blackener), "Inversor",
+                            "A função do inversor é inverter a energia elétrica gerada pelos painéis, de corrente contínua (CC) para corrente alternada (CA). Seu papel secundário é garantir a segurança do sistema e medir a energia produzida pelos painéis solares.");
                 }
             });
 

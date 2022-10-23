@@ -301,7 +301,7 @@ public class CalculadoraOffGrid implements Serializable {
             tariff = 0.61*Math.pow(1 + Constants.TARIFF_CHANGE/100.0, year); //0.61 tarifa da energia - tornar possiver ajustar essa tarifa
 
             //Depreciação do painel a cada ano (diminuição de rendimento)
-            geracaoComDepreciacao = (this.geracaoAnual) * ( (Constants.DEPREC_PANELS) * (year+1) * (inversorEscolhido.getRendimentoMaximo() * Constants.DEPREC_PANELS) );
+            geracaoComDepreciacao = (this.geracaoAnual) * ( (Constants.DEPREC_PANELS) * (year+1) * (inversorEscolhido.getRendimentoMaximo()) );
             //Somando o total de energia produzida para calcular o custo de cada KWh
             //LCOEGeneration = geracaoComDepreciacao/LCOEDivisor; //CÁLCULO DO OUTRO LCOE
             LCOEGeneration = geracaoComDepreciacao; //Cálculo mais simples do custo da energia
@@ -580,8 +580,7 @@ public class CalculadoraOffGrid implements Serializable {
 
     public void EstimateDailyGeneration(){
         //Calculos retirados do manual de engenharia FV p. 149 a 153
-        double cdailyGen;
-        int month;
+       int month;
         double ambientTemp;
 
         double Kt;
@@ -600,24 +599,22 @@ public class CalculadoraOffGrid implements Serializable {
             //Cálculo da temperatura de operação estimada do módulo
             Tmod = ambientTemp + Kt*1000;
             //Cálculo da eficiência dos módulos, relativa à sua potência nominal
-            Eficiencia = (Tmod - 25) * (painelEscolhido.getCoefTempPot());
+            Eficiencia = (Tmod - 25) * (painelEscolhido.getCoefTempPot())/100;
+            System.out.println(Eficiencia);
             //Cáculo da produção de energia para cada mês
             ProdMensal = (1+Eficiencia) * painelEscolhido.getPotencia() * painelEscolhido.getQtd() * HSP * GetNumberOfDays(month) / 1000;
 
             geracaoAnual +=ProdMensal;
-
-            cdailyGen = ProdMensal/GetNumberOfDays(month);
-            if ((cdailyGen < geracaoDiaria)) {
-                geracaoDiaria = cdailyGen;
-            }
-
+            geracaoDiaria += ProdMensal/GetNumberOfDays(month);
         }
+        geracaoDiaria = geracaoDiaria/12;
         //Considera perdas por sujeira
         geracaoAnual = geracaoAnual * (1 - Constants.LOSS_DIRT);
         //Considera perdas com o inversor
         geracaoAnual = geracaoAnual * inversorEscolhido.getRendimentoMaximo();
         // Invertendo o valor da geração que está negativo
-        geracaoDiaria = -geracaoDiaria;
+        //geracaoDiaria = -geracaoDiaria;
+
     }
 
     public double[] DefineCosts(Painel_OffGrid solarPanel, Inversor_OffGrid invertor, Controlador_OffGrid controlador, Bateria_OffGrid bateria){
@@ -631,7 +628,7 @@ public class CalculadoraOffGrid implements Serializable {
         //Nesse estudo, chegamos na equação y = 1.65-0.032x para descrever a porcentagem do custo do kit que representa o custo final para o consumidor
         //Isso desde 1kWp até 8kWp, além desses limites, usamos o valor do limite
         if(this.pegaPotenciaInstalada() < 1000){
-            porcentagemCustosIntegrador = 1.65 - 0.032*1;
+            porcentagemCustosIntegrador = 1.65 - 0.032 * 1;
         } else if(this.pegaPotenciaInstalada() > 8000) {
             porcentagemCustosIntegrador = 1.65 - 0.032 * 8;
         } else {

@@ -105,6 +105,7 @@
     <string name="preco_baterias">Preço total das baterias</string>
     <string name="adicionar">Adicionar</string>
     <string name="sistemas"><u>Entenda os sistemas</u></string>
+    <string name="text_afirmacao_excluir_equipamento">Deseja mesmo excluir esse equipamento da sua lista?</string>
 
     <string-array name="Modulos">
         <item>335PHK-36 POLI 335W - BYD Solar</item>

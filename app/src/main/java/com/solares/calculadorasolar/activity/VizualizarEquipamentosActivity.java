@@ -18,6 +18,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.solares.calculadorasolar.R;
 import com.solares.calculadorasolar.classes.CalculadoraOffGrid;
@@ -221,7 +222,6 @@ public class VizualizarEquipamentosActivity extends AppCompatActivity {
 
         linearLayout.addView(EquipamentosView);
     }
-
     public void removerView(View view){ linearLayout.removeView(view);}
     public void removerTodasViews(){linearLayout.removeAllViews();}
 

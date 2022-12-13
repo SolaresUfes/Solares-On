@@ -46,6 +46,7 @@ import com.solares.calculadorasolar.classes.entidades.Empresa;
 import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -216,15 +217,22 @@ public class MainActivity extends AppCompatActivity {
         darkenerMain.setVisibility(View.VISIBLE);
         layoutNovidade.setVisibility(View.VISIBLE);
 
+        //Vetor com os números de celular de quem receberá as mensagens
+        String[] numsTel = {"5527997874247", "5527998976736", "5527999999999", "552799999999", "5527999999999"};
+
+        //Escolher um dos números de celular
+        Random randNum = new Random();
+        String numTelefone = numsTel[randNum.nextInt(numsTel.length)];
+
         ClickableSpan clickableLink = new ClickableSpan() {
             @Override
             public void onClick(@NonNull View view) {
-                String numTelefone = "5527997874247";
                 //String mensagem = "Olá,+vi+no+SolaresOn+que+existe+uma+possibilidade+da+minha+empresa+aparecer+no+aplicativo.%0D%0DPode+me+passar+mais+informações";
                 String mensagem = "Olá, vi no Solares On que existe uma chance da minha empresa aparecer no aplicativo.\n" +
                         "\n" +
                         "Pode me passar mais informações";
                 String link = "https://api.whatsapp.com/send?phone="+numTelefone+"&text="+mensagem+"?&app_absent=0";
+                Log.d("Numero",numsTel[randNum.nextInt(numsTel.length)]);
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
                 startActivity(intent);
             }

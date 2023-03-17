@@ -375,26 +375,6 @@ public class CalculadoraOffGrid implements Serializable {
             this.taxaInternaRetorno = internalRateOfReturn;
         }
 
-        /* //CÁLCULO DO LCOE NO MÉTODO MAIS COMPLEXO (NÃO USADO PELO MERCADO DE ENERGIA SOLAR)
-        /////////////Bora calcular o LCOE!!
-        //Achar o capacity factor da usina (porcentagem de energia real gerada em relação à produção nominal da usina)
-        //Geração real dividido pela geração máxima (capacidade * horas em um dia * dias em um ano * anos de operação)
-        double capacityFactor = geracaoTotalVidaUtil * 1000 /(potenciaInstalada * 24 * 365 * Constants.PANEL_LIFE);
-        //Encontrar o Overnight Capital Cost (R$/kW) o investimento inicial por kW
-        double overnightCapitalCost = this.custoTotal * 1000 / (potenciaInstalada); //Multiplicando por 1000 para encontrar por kW, em vez de por W
-        //Encontrar o CRF (Capital Recovery Factor)
-        double numerador = (Constants.COST_OF_CAPITAL * Math.pow(1 + Constants.COST_OF_CAPITAL, Constants.PANEL_LIFE));
-        double denominador = (Math.pow(1 + Constants.COST_OF_CAPITAL, Constants.PANEL_LIFE) - 1);
-        double LCOEcrf = numerador / denominador;
-
-        //Encontrar o custo de manutenção por kW
-        double fixedOnM = LCOESumCost * 1000 / (potenciaInstalada * Constants.PANEL_LIFE); //Multiplicando por 1000 para encontrar por kW-ano, em vez de por W-ano
-
-        //Faz o cálculo do LCOE de acordo com a referência (Documentação deste método)
-        LCOE = (overnightCapitalCost*LCOEcrf + fixedOnM) /
-                (24*365*capacityFactor);*/
-
-
         //Cálculo do LCOE feito no mercado atualmente
         LCOE = (LCOESumCost + this.custoTotal) / LCOESumGeneration;
     }

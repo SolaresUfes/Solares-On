@@ -9,9 +9,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import com.solares.calculadorasolar.R;
-import com.solares.calculadorasolar.classes.AutoSizeText;
+import com.solares.calculadorasolar.classes.auxiliares.AutoSizeText;
 import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
-import com.solares.calculadorasolar.classes.Constants;
+import com.solares.calculadorasolar.classes.auxiliares.Constants;
+import com.solares.calculadorasolar.classes.auxiliares.ExplicacaoInfos;
 
 import java.util.Locale;
 
@@ -81,6 +82,45 @@ public class DadosActivity extends AppCompatActivity {
         ////////////Configurar o botão de voltar////////////////
         Button buttonVoltar = findViewById(R.id.button_voltar);
         AutoSizeText.AutoSizeButton(buttonVoltar, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
+
+        //Tutorial sobre as informações extras
+        findViewById(R.id.inst_button_info).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExplicacaoInfos.ShowHint(findViewById(R.id.blackener), findViewById(R.id.inst_image_info));
+            }
+        });
+
+
+        //Clicar nas informações para explicação
+        textCustoReais.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExplicacaoInfos.ShowPopUpInfo(DadosActivity.this, findViewById(R.id.blackener), "Consumo Mensal R$",
+                        "A média do valor total pago numa conta de luz, já incluindo impostos e o valor da tarifa. Como é algo menos previsível, as bandeiras tarifárias não são consideradas.");
+            }
+        });
+        textConsumoEnergia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExplicacaoInfos.ShowPopUpInfo(DadosActivity.this, findViewById(R.id.blackener), "Consumo Mensal kWh",
+                        "A média mensal de consumo de energia do seu imóvel. Se esse valor foi calculado a partir do consumo em reais, podem haver pequenos erros devido a variações do cálculo em cada município ou a bandeiras tarifárias.");
+            }
+        });
+        textHoraSolar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExplicacaoInfos.ShowPopUpInfo(DadosActivity.this, findViewById(R.id.blackener), "Horas de Sol Pleno",
+                        "Conceito que indica numericamente a energia gerada pelo sol em kWh/m²dia (Energia solar diária por metro quadrado). O Valor fornecido é referente a média das HSP da cidade preenchida anteriormente.");
+            }
+        });
+        textTarifa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExplicacaoInfos.ShowPopUpInfo(DadosActivity.this, findViewById(R.id.blackener), "Tarifa de energia",
+                        "Valor cobrado por sua companhia de energia por cada kWh consumido em sua cidade (sem impostos). O cálculo não considera possíveis bandeiras tarifárias.");
+            }
+        });
 
 
 

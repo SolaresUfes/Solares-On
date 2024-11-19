@@ -1,18 +1,73 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Filipe/OneDrive/Documentos/GitHub/Solares-On/app/src/main/res/layout/activity_adicionar_equipamentos.xml" value="0.33" />
+        <entry key="..\:/Users/Filipe/OneDrive/Documentos/GitHub/Solares-On/app/src/main/res/layout/activity_analise.xml" value="0.209375" />
+        <entry key="..\:/Users/Filipe/OneDrive/Documentos/GitHub/Solares-On/app/src/main/res/layout/activity_bateria_off_grid.xml" value="0.33" />
+        <entry key="..\:/Users/Filipe/OneDrive/Documentos/GitHub/Solares-On/app/src/main/res/layout/activity_credito.xml" value="0.209375" />
+        <entry key="..\:/Users/Filipe/OneDrive/Documentos/GitHub/Solares-On/app/src/main/res/layout/activity_dados.xml" value="0.209375" />
+        <entry key="..\:/Users/Filipe/OneDrive/Documentos/GitHub/Solares-On/app/src/main/res/layout/activity_detalhes.xml" value="0.209375" />
+        <entry key="..\:/Users/Filipe/OneDrive/Documentos/GitHub/Solares-On/app/src/main/res/layout/activity_economico_off_grid.xml" value="0.33" />
+        <entry key="..\:/Users/Filipe/OneDrive/Documentos/GitHub/Solares-On/app/src/main/res/layout/activity_empresas.xml" value="0.33" />
+        <entry key="..\:/Users/Filipe/OneDrive/Documentos/GitHub/Solares-On/app/src/main/res/layout/activity_equipamentos_off_grid.xml" value="0.209375" />
+        <entry key="..\:/Users/Filipe/OneDrive/Documentos/GitHub/Solares-On/app/src/main/res/layout/activity_geracao_ogg_grid.xml" value="0.209375" />
+        <entry key="..\:/Users/Filipe/OneDrive/Documentos/GitHub/Solares-On/app/src/main/res/layout/activity_indices_economicos.xml" value="0.209375" />
+        <entry key="..\:/Users/Filipe/OneDrive/Documentos/GitHub/Solares-On/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/Users/Filipe/OneDrive/Documentos/GitHub/Solares-On/app/src/main/res/layout/activity_resultado.xml" value="0.209375" />
+        <entry key="..\:/Users/Filipe/OneDrive/Documentos/GitHub/Solares-On/app/src/main/res/layout/activity_vizualizar_equipamentos.xml" value="0.209375" />
+        <entry key="..\:/Users/Filipe/OneDrive/Documentos/GitHub/Solares-On/app/src/main/res/layout/linha_mostrar_empresas.xml" value="0.209375" />
+        <entry key="..\:/Users/Filipe/OneDrive/Documentos/GitHub/Solares-On/app/src/main/res/layout/popup_mais_informacoes.xml" value="0.209375" />
+        <entry key="..\:/Users/Filipe/OneDrive/Documentos/GitHub/Solares-On/app/src/main/res/layout/popup_modulos_inversores.xml" value="0.209375" />
+        <entry key="..\:/Users/Guilherme/Desktop/TI/Solares/Solares On/Solares-On/app/src/main/res/layout/activity_analise.xml" value="0.5" />
+        <entry key="..\:/Users/Guilherme/Desktop/TI/Solares/Solares On/Solares-On/app/src/main/res/layout/activity_area.xml" value="0.17831813576494426" />
+        <entry key="..\:/Users/Guilherme/Desktop/TI/Solares/Solares On/Solares-On/app/src/main/res/layout/activity_consumo.xml" value="0.33" />
         <entry key="..\:/Users/Guilherme/Desktop/TI/Solares/Solares On/Solares-On/app/src/main/res/layout/activity_credito.xml" value="0.33" />
         <entry key="..\:/Users/Guilherme/Desktop/TI/Solares/Solares On/Solares-On/app/src/main/res/layout/activity_dados.xml" value="0.33" />
-        <entry key="..\:/Users/Guilherme/Desktop/TI/Solares/Solares On/Solares-On/app/src/main/res/layout/activity_detalhes.xml" value="0.17037037037037037" />
+        <entry key="..\:/Users/Guilherme/Desktop/TI/Solares/Solares On/Solares-On/app/src/main/res/layout/activity_detalhes.xml" value="0.5" />
+        <entry key="..\:/Users/Guilherme/Desktop/TI/Solares/Solares On/Solares-On/app/src/main/res/layout/activity_indices_economicos.xml" value="0.17831813576494426" />
         <entry key="..\:/Users/Guilherme/Desktop/TI/Solares/Solares On/Solares-On/app/src/main/res/layout/activity_instalacao.xml" value="0.5" />
         <entry key="..\:/Users/Guilherme/Desktop/TI/Solares/Solares On/Solares-On/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/Users/Guilherme/Desktop/TI/Solares/Solares On/Solares-On/app/src/main/res/layout/activity_resultado.xml" value="0.17831813576494426" />
+        <entry key="..\:/Users/Guilherme/Desktop/TI/Solares/Solares On/Solares-On/app/src/main/res/layout/activity_tarifa.xml" value="0.17831813576494426" />
+        <entry key="..\:/Users/Guilherme/Desktop/TI/Solares/Solares On/Solares-On/app/src/main/res/layout/popup_mais_informacoes.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Guilherme/Desktop/TI/Solares/Solares On/Solares-On/app/src/main/res/layout/popup_modulos_inversores.xml" value="0.17831813576494426" />
         <entry key="..\:/Users/Guilherme/Desktop/TI/Solares/Solares On/Solares-On/app/src/main/res/layout/spinner_item.xml" value="0.17831813576494426" />
+        <entry key="..\:/Users/Renato/Documents/GitHub/Solares-On/app/src/main/res/drawable-nodpi/background_edit_text_grande.xml" value="0.31" />
+        <entry key="..\:/Users/Renato/Documents/GitHub/Solares-On/app/src/main/res/drawable/adicionar_equpimentos_background.xml" value="0.509" />
+        <entry key="..\:/Users/Renato/Documents/GitHub/Solares-On/app/src/main/res/drawable/background_button_information.xml" value="0.509" />
+        <entry key="..\:/Users/Renato/Documents/GitHub/Solares-On/app/src/main/res/drawable/background_edit_text_gray.xml" value="0.509" />
+        <entry key="..\:/Users/Renato/Documents/GitHub/Solares-On/app/src/main/res/drawable/button_adicionar.xml" value="0.311" />
+        <entry key="..\:/Users/Renato/Documents/GitHub/Solares-On/app/src/main/res/drawable/quadrado_image_view.xml" value="0.509" />
+        <entry key="..\:/Users/Renato/Documents/GitHub/Solares-On/app/src/main/res/drawable/rounded_corner.xml" value="0.311" />
+        <entry key="..\:/Users/Renato/Documents/GitHub/Solares-On/app/src/main/res/drawable/spinner_bg.xml" value="0.3105" />
+        <entry key="..\:/Users/Renato/Documents/GitHub/Solares-On/app/src/main/res/layout/activity_adicionar_equipamentos.xml" value="0.3078125" />
+        <entry key="..\:/Users/Renato/Documents/GitHub/Solares-On/app/src/main/res/layout/activity_bateria_off_grid.xml" value="0.3078125" />
+        <entry key="..\:/Users/Renato/Documents/GitHub/Solares-On/app/src/main/res/layout/activity_detalhes.xml" value="0.3078125" />
+        <entry key="..\:/Users/Renato/Documents/GitHub/Solares-On/app/src/main/res/layout/activity_economico_off_grid.xml" value="0.3078125" />
+        <entry key="..\:/Users/Renato/Documents/GitHub/Solares-On/app/src/main/res/layout/activity_empresas.xml" value="0.3078125" />
+        <entry key="..\:/Users/Renato/Documents/GitHub/Solares-On/app/src/main/res/layout/activity_equipamentos_off_grid.xml" value="0.3078125" />
+        <entry key="..\:/Users/Renato/Documents/GitHub/Solares-On/app/src/main/res/layout/activity_geracao_ogg_grid.xml" value="0.33" />
+        <entry key="..\:/Users/Renato/Documents/GitHub/Solares-On/app/src/main/res/layout/activity_indices_economicos.xml" value="0.3078125" />
+        <entry key="..\:/Users/Renato/Documents/GitHub/Solares-On/app/src/main/res/layout/activity_instalacao.xml" value="0.3078125" />
+        <entry key="..\:/Users/Renato/Documents/GitHub/Solares-On/app/src/main/res/layout/activity_main.xml" value="0.3109375" />
+        <entry key="..\:/Users/Renato/Documents/GitHub/Solares-On/app/src/main/res/layout/activity_resultado.xml" value="0.3109375" />
+        <entry key="..\:/Users/Renato/Documents/GitHub/Solares-On/app/src/main/res/layout/activity_resultado_off_grid.xml" value="0.3078125" />
+        <entry key="..\:/Users/Renato/Documents/GitHub/Solares-On/app/src/main/res/layout/activity_tarifa.xml" value="0.3078125" />
+        <entry key="..\:/Users/Renato/Documents/GitHub/Solares-On/app/src/main/res/layout/activity_vizualizar_equipamentos.xml" value="0.3078125" />
+        <entry key="..\:/Users/Renato/Documents/GitHub/Solares-On/app/src/main/res/layout/linha_add_equipamentos.xml" value="0.3078125" />
+        <entry key="..\:/Users/Renato/Documents/GitHub/Solares-On/app/src/main/res/layout/linha_mostrar_empresas.xml" value="0.3078125" />
+        <entry key="..\:/Users/Renato/Documents/GitHub/Solares-On/app/src/main/res/layout/popup_mais_informacoes.xml" value="0.3078125" />
+        <entry key="..\:/Users/Renato/Documents/GitHub/Solares-On/app/src/main/res/layout/popup_modulos_inversores.xml" value="0.3078125" />
+        <entry key="..\:/Users/Renato/Documents/GitHub/Solares-On/app/src/main/res/layout/spinner_equipamentos_eletronicos.xml" value="0.5442708333333334" />
+        <entry key="..\:/Users/Renato/Documents/GitHub/Solares-On/app/src/main/res/layout/spinner_item.xml" value="0.3078125" />
+        <entry key="..\:/Users/TI/Documents/GitHub/Solares-On/app/src/main/res/drawable-nodpi/background_resultado_text.xml" value="0.3828125" />
+        <entry key="..\:/Users/TI/Documents/GitHub/Solares-On/app/src/main/res/layout/activity_resultado.xml" value="0.36666666666666664" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="jbr-17" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

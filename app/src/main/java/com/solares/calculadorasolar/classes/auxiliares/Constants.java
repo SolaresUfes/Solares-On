@@ -1,4 +1,4 @@
-package com.solares.calculadorasolar.classes;
+package com.solares.calculadorasolar.classes.auxiliares;
 
 public class Constants {
 
@@ -24,8 +24,14 @@ public class Constants {
     public static double TARIFF_CHANGE = 6;
     public static double PANEL_LIFE = 25;
 
+    // Constantes para o calculo das baterias - off grid
+    public static double fatorSeguranca = 1.25;
+    public static double Pd = 0.8;
+
     // Strings para passagem de parâmetros para outras activities
     public static final String EXTRA_CALCULADORAON = "com.solares.com.solares.calculadorasolar.EXTRA_CALCULADORAON";
+    public static final String EXTRA_CALCULADORAOFF = "com.solares.com.solares.calculadorasolar.EXTRA_CALCULADORAOFF";
+    public static final String EXTRA_EQUIPAMENTO = "com.solares.calculadorasolar.classes.entidades.Equipamentos_OffGrid";
     public static final String EXTRA_CUSTO_REAIS = "com.solares.com.solares.calculadorasolar.EXTRA_CUSTO_REAIS";
     public static final String EXTRA_CONSUMO = "com.solares.com.solares.calculadorasolar.EXTRA_CONSUMO";
     public static final String EXTRA_POTENCIA = "com.solares.com.solares.calculadorasolar.EXTRA_POTENCIA";
@@ -48,33 +54,34 @@ public class Constants {
     public static final String EXTRA_ECONOMIA_MENSAL = "com.solares.com.solares.calculadorasolar.EXTRA_ECONOMIA_MENSAL";
 
     //Indices Paineis
-    public static final int iPANEL_NOME = 0;
-    public static final int iPANEL_MARCA = 1;
-    public static final int iPANEL_POTENCIA = 2;
-    public static final int iPANEL_PRECO = 3;
-    public static final int iPANEL_AREA = 4;
-    public static final int iPANEL_QTD = 5;
-    public static final int iPANEL_CUSTO_TOTAL = 6;
-    public static final int iPANEL_COEFTEMP = 7;
-    public static final int iPANEL_NOCT = 8;
-    public static final int iPANEL_I = 9;
-
+    public static final int iPANEL_CODIGO = 1;
+    public static final int iPANEL_MARCA = 2;
+    public static final int iPANEL_POTENCIA = 3;
+    public static final int iPANEL_PRECO = 4;
+    public static final int iPANEL_AREA = 5;
+    public static final int iPANEL_COEFTEMP = 6;
+    public static final int iPANEL_NOCT = 7;
 
 
     //Indices Inversores
-    public static final int iINV_NOME = 0;
-    public static final int iINV_MARCA = 1;
-    public static final int iINV_POTENCIA = 2;
-    public static final int iINV_PRECO = 3;
-    public static final int iINV_RENDIMENTO_MAXIMO = 4;
-    public static final int iINV_QTD = 5;
-    public static final int iINV_PRECO_TOTAL = 6;
-    public static final int iINV_ID = 7;
+    public static final int iINV_CODIGO = 1;
+    public static final int iINV_MARCA = 2;
+    public static final int iINV_POTENCIA = 3;
+    public static final int iINV_PRECO = 4;
+    public static final int iINV_RENDIMENTO_MAXIMO = 5;
+
+
+    //Indices Equipamentos
+    public static final int iEQUI_NOME = 2;
+    public static final int iEQUI_POT = 0;
+    public static final int iEQUI_CC = 1;
+    public static final int iEQUI_ID = 3;
 
 
     //Indices Cidades
     public static final int iCID_ESTADO = 0;
     //Indices Estados
+    public static final int iEST_SIGLA = 0;
     public static final int iEST_TARIFA = 13;
 
     //Indices costs[]

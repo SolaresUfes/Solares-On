@@ -1,4 +1,4 @@
-package com.solares.calculadorasolar.classes;
+package com.solares.calculadorasolar.classes.auxiliares;
 
 
 public class IRR {

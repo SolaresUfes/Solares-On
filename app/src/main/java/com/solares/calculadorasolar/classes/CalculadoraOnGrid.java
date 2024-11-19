@@ -1,29 +1,43 @@
 package com.solares.calculadorasolar.classes;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.solares.calculadorasolar.R;
 import com.solares.calculadorasolar.activity.ResultadoActivity;
+import com.solares.calculadorasolar.classes.auxiliares.Constants;
+import com.solares.calculadorasolar.classes.auxiliares.IRR;
+import com.solares.calculadorasolar.classes.entidades.Bateria_OffGrid;
+import com.solares.calculadorasolar.classes.entidades.Controlador_OffGrid;
+import com.solares.calculadorasolar.classes.entidades.Empresa;
+import com.solares.calculadorasolar.classes.entidades.Inversor;
+import com.solares.calculadorasolar.classes.entidades.Inversor_OffGrid;
+import com.solares.calculadorasolar.classes.entidades.Painel;
+import com.solares.calculadorasolar.classes.entidades.Painel_OffGrid;
 
 import java.io.InputStream;
 import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.Locale;
 
 public class CalculadoraOnGrid implements Serializable {
     //Variáveis da Classe
+    LinkedList<Empresa> listaEmpresas;
     String[] vetorCidade;
     String[] vetorEstado;
+    LinkedList<Painel> listaPaineis;
+    String[] nomesPaineis;
+    LinkedList<Inversor> listaInversores;
+    String[] nomesInversores;
     String nomeCidade;
-    String[] placaEscolhida;
+    Painel placaEscolhida;
     double custoReais;
     double consumokWh;
     double potenciaNecessaria;
     double potenciaInstalada; //nPaineis * potenciaPainel
     double area;
-    String[] inversor;
+    Inversor inversor;
     double custoParcial;
     double custoTotal;
     double geracaoAnual;
@@ -61,14 +75,19 @@ public class CalculadoraOnGrid implements Serializable {
     //////////////////////////
     public String[] pegaVetorCidade(){ return vetorCidade; }
     public String[] pegaVetorEstado(){ return vetorEstado; }
+    public LinkedList<Empresa> pegaListaEmpresa() { return listaEmpresas; }
+    public LinkedList<Painel> pegaListaPaineis() { return listaPaineis; }
+    public String[] pegaNomesPaineis() { return nomesPaineis; }
+    public LinkedList<Inversor> pegaListaInversores() { return listaInversores; }
+    public String[] pegaNomesInversores() { return nomesInversores; }
     public String pegaNomeCidade(){ return nomeCidade; }
-    public String[] pegaPlacaEscolhida(){ return placaEscolhida; }
+    public Painel pegaPlacaEscolhida(){ return placaEscolhida; }
     public double pegaCustoReais(){ return custoReais; }
     public double pegaConsumokWhs(){ return consumokWh; }
     public double pegaPotenciaNecessaria(){ return potenciaNecessaria; }
     public double pegaPotenciaInstalada(){ return potenciaInstalada; }
     public double pegaArea(){ return area; }
-    public String[] pegaInversor(){ return inversor; }
+    public Inversor pegaInversor(){ return inversor; }
     public double pegaCustoParcial(){ return custoParcial; }
     public double pegaCustoTotal(){ return custoTotal; }
     public double pegaGeracaoAnual(){ return geracaoAnual; }
@@ -91,6 +110,9 @@ public class CalculadoraOnGrid implements Serializable {
     public void setVetorEstado(String[] vetorEstado){
         this.vetorEstado = vetorEstado;
     }
+    public void setListaPaineis(LinkedList<Painel> listaPaineis) { this.listaPaineis = listaPaineis; }
+    public void setListaInversores(LinkedList<Inversor> listaInversores) { this.listaInversores = listaInversores; }
+    public void setListaEmpresas(LinkedList<Empresa> listaEmpresas) { this.listaEmpresas = listaEmpresas; }
     public void setTarifaMensal(double tarifa){
         this.tarifaMensal = tarifa;
     }
@@ -141,6 +163,13 @@ public class CalculadoraOnGrid implements Serializable {
     public void Calcular(Context MyContext) {
         InputStream is=null;
 
+        if(this.pegaListaInversores().size() <= 0){
+            Log.i("Calculate", "Falha na busca por inversores");
+        }
+        if(this.pegaListaPaineis().size() <= 0){
+            Log.i("Calculate", "Falha na busca por paineis");
+        }
+
         try {
             //Calcula os consumos em kWh e em reais
             if(modoCalculoPorDinheiro){
@@ -158,14 +187,24 @@ public class CalculadoraOnGrid implements Serializable {
             //Calcula a média anual da hora solar da cidade escolhida
             horasDeSolPleno = MeanSolarHour(vetorCidade);
 
+            //Pega os nomes dos inversores
+            int cont=0;
+            nomesInversores = new String[this.pegaListaInversores().size()];
+            for (Inversor inversorAtual : this.pegaListaInversores()) {
+                nomesInversores[cont] = inversorAtual.getMarca() + " " + inversorAtual.getCodigo() + " - " + String.format(Locale.ITALY, "%.1f", inversorAtual.getPotencia()/1000f) + "kW";
+                cont++;
+            }
+
             //Acha a potêcia necessária
             potenciaNecessaria = FindTargetCapacity(consumokWh, horasDeSolPleno);
-            //Acha a potêcia necessária
-            potenciaNecessaria = FindTargetCapacity(consumokWh, horasDeSolPleno);
-            int cont=0, idMelhorModulo=-1;
+            int idMelhorModulo=-1;
+            cont=0;
             double melhorLucro=0.0;
+            nomesPaineis = new String[this.pegaListaPaineis().size()];
             if(this.idModuloEscolhido == -1){
-                while (!calculaResultadosPlaca(MyContext, cont)) {
+                for (Painel painelAtual : this.pegaListaPaineis()) {
+                    nomesPaineis[cont] = painelAtual.getMarca() + " " + painelAtual.getCodigo() + " " +  String.format(Locale.ITALY, "%.0f", painelAtual.getPotencia())+ "W";
+                    calculaResultadosPlaca(MyContext, painelAtual);
                     if (cont == 0) {
                         idMelhorModulo = cont;
                         melhorLucro = this.pegaLucro();
@@ -177,12 +216,15 @@ public class CalculadoraOnGrid implements Serializable {
 
                     cont++;
                 }
-                calculaResultadosPlaca(MyContext, idMelhorModulo);
+
+                calculaResultadosPlaca(MyContext, listaPaineis.get(idMelhorModulo));
             }else{
-                calculaResultadosPlaca(MyContext, this.idModuloEscolhido);
+                for (Painel painelAtual : this.pegaListaPaineis()) {
+                    nomesPaineis[cont] = painelAtual.getMarca() + " " + painelAtual.getCodigo() + " " +painelAtual.getPotencia() + "W";
+                    cont++;
+                }
+                calculaResultadosPlaca(MyContext, listaPaineis.get(this.idModuloEscolhido));
             }
-
-
 
             //Preparação para mudar para próxima activity
             Intent intent = new Intent(MyContext, ResultadoActivity.class);
@@ -200,17 +242,8 @@ public class CalculadoraOnGrid implements Serializable {
             //Mudar de activity
             MyContext.startActivity(intent);
         } catch (Exception e){
-            Log.i("Calculate", "Erro no Cálculo");
-            //Se algum erro ocorrer, pede para o usuário informar um número real
-            try {
-                if(!((Activity) MyContext).isFinishing())
-                {
-                    Toast.makeText(MyContext, R.string.informe_um_numero, Toast.LENGTH_LONG).show();
-                }
-            } catch (Exception ee){
-                ee.printStackTrace();
-            }
             e.printStackTrace();
+            Log.i("Calculate", "Erro no Cálculo");
         } finally {
             //Fechar o InputStream, se ocorreu algum erro
             try {
@@ -252,7 +285,7 @@ Thomas T.D. Tran, Amanda D. Smith
             //LCOEDivisor = Math.pow(1 + Constants.SELIC, year);
 
             //Depreciação do painel a cada ano (diminuição de rendimento)
-            geracaoComDepreciacao = this.geracaoAnual * (1 - (Constants.DEPREC_PANELS) * year);
+            geracaoComDepreciacao = this.geracaoAnual * (1 - (Constants.DEPREC_PANELS) * (year+1));
             //Somando o total de energia produzida para calcular o custo de cada KWh
             //LCOEGeneration = geracaoComDepreciacao/LCOEDivisor; //CÁLCULO DO OUTRO LCOE
             LCOEGeneration = geracaoComDepreciacao; //Cálculo mais simples do custo da energia
@@ -316,8 +349,7 @@ Thomas T.D. Tran, Amanda D. Smith
 
             //Verifica se nesse ano deve-se trocar o inversor (de 10 em 10 anos)
             if (year % Constants.INVERTOR_TIME == 0 && year > 0) {
-                custoInversor = Double.parseDouble(inversor[Constants.iINV_PRECO]) *
-                        Math.pow(1 + Constants.IPCA, year) * Double.parseDouble(inversor[Constants.iINV_QTD]);
+                custoInversor = inversor.getPrecoTotal() * Math.pow(1 + Constants.IPCA, year);
             } else {
                 custoInversor = 0;
             }
@@ -399,27 +431,30 @@ Thomas T.D. Tran, Amanda D. Smith
     /* Descrição: Calcula os resultados do dimensionamento para o modelo de módulo fotovoltaico escolhido por idModuloEscolhido,
      *              retornando true se a placa não existir no banco de dados
      * Parâmetros de Entrada: MyContext - Contexto de execução da função para criar os inputStreams //
-     *                        idModuloEscolhido - Inteiro representando o módulo no arquivo do banco de dados. 0 representa o primeiro módulo, 1 o segundo, e assim por diante
-     * Saída: Um booleano que representa se é ou não para finalizar o while na função calcular
-     * Pré Condições: MyContext é válido // idModuloEscolhido é não negativo [0, infinity)
+     *                        placaEscolhida - painel para se calcular os resultados econômicos
+     * Saída: -;
+     * Pré Condições: MyContext é válido // placaEscolhida é diferente de NULL
      * Pós Condições: Altera as informações econômicas e do sistema no objeto this
      */
-    public boolean calculaResultadosPlaca(Context MyContext, int idModuloEscolhido){
-        InputStream is;
-        //Definindo as placas
-        is = MyContext.getResources().openRawResource(R.raw.banco_paineis);
-        placaEscolhida = CSVRead.DefineSolarPanel(is, potenciaNecessaria, this.areaAlvo, idModuloEscolhido);
+    public void calculaResultadosPlaca(Context MyContext, Painel placaEscolhida){
+        //Definindo oas placas
+        if(this.areaAlvo < 0){
+            placaEscolhida.setQtd((int) Math.floor(this.potenciaNecessaria / placaEscolhida.getPotencia())); // arredondar para baixo
+        } else {
+            placaEscolhida.setQtd((int)Math.floor(this.areaAlvo / placaEscolhida.getArea())); // arredondar para baixo
+        }
+        placaEscolhida.setCustoTotal(placaEscolhida.getQtd() * placaEscolhida.getPreco());
 
-        if(placaEscolhida==null) return true; // Quando terminar de varrer as linhas deverá sair do while
+
+        this.placaEscolhida = placaEscolhida;
 
         area = DefineArea(placaEscolhida);
 
         //Encontrando a potenciaInstalada
-        this.potenciaInstalada = Double.parseDouble(placaEscolhida[Constants.iPANEL_POTENCIA]) * Double.parseDouble(placaEscolhida[Constants.iPANEL_QTD]);
+        this.potenciaInstalada = placaEscolhida.getPotencia() * placaEscolhida.getQtd();
 
         //Definindo os inversores
-        is = MyContext.getResources().openRawResource(R.raw.banco_inversores);
-        inversor = CSVRead.DefineInvertor(is, placaEscolhida, this.idInversorEscolhido);
+        inversor = DefineInvertor();
 
         //Definindo os custos
         double[] custos = this.DefineCosts(placaEscolhida, inversor);
@@ -430,8 +465,6 @@ Thomas T.D. Tran, Amanda D. Smith
         geracaoAnual = EstimateAnualGeneration();
 
         GetEconomicInformation();
-
-        return false;
     }
 
     /* Descrição: Recebe a conta de energia em reais e retorna o valor, também em reais, retirando os impostos
@@ -491,6 +524,39 @@ tarifaMensal - valor da tarifa de energia
         return solarHour;
     }
 
+    /* Descrição: Escolhe o arranjo de inversores mais barato com base no arranjo de paineis escolhido ou o inversor com índice idInversorEscolhido
+     * Parâmetros de Entrada: -;
+     * Saída: Arranjo do inversor de menor custo total, ou modelo escolhido
+     * Pré Condições: O arranjo de paineis já foi escolhido. idInversorEsoclhido pode ser -1 para pegar o mais barato ou o índice do modelo
+     * Pós Condições: Os inversores têm seus valores de quantidade e preço total atualizados (A não ser que idInversorEscolhido seja diferente de -1);
+     */
+    public Inversor DefineInvertor(){
+        Inversor inversorBarato = null;
+
+        if(idInversorEscolhido != -1){
+            inversorBarato = listaInversores.get(idInversorEscolhido);
+            inversorBarato.setQtd((int)Math.ceil((0.8*this.pegaPlacaEscolhida().getQtd()*this.pegaPlacaEscolhida().getPotencia())/
+                    inversorBarato.getPotencia()));
+            inversorBarato.setPrecoTotal(inversorBarato.getQtd() * inversorBarato.getPreco());
+            return inversorBarato;
+        }
+
+        for (Inversor inversor : listaInversores){
+            inversor.setQtd((int)Math.ceil((0.8*this.pegaPlacaEscolhida().getQtd()*this.pegaPlacaEscolhida().getPotencia())/
+                    inversor.getPotencia()));
+            inversor.setPrecoTotal(inversor.getQtd() * inversor.getPreco());
+            if(inversorBarato == null){
+                inversorBarato = inversor;
+            } else {
+                if(inversor.getPrecoTotal() < inversorBarato.getPrecoTotal()){
+                    inversorBarato = inversor;
+                }
+            }
+        }
+
+        return inversorBarato;
+    }
+
 
     /* Descrição: Encontra a potência necessária do sistema de módulos fotovoltaicos. Essa potência será o alvo para o dimensionamento dos módulos.
      * Parâmetros de Entrada: energyConsumed - O consumo mensal de energia elétrica (kWh); solarHour - Horas de sol pleno média da cidade escolhida (horas ou kWh/m²dia)
@@ -500,7 +566,7 @@ solarHour - Está em horas (maior que zero)
      * Pós Condições: Retorna o valor da potência necessária em Wp
      */
     public double FindTargetCapacity(double energyConsumed, double solarHour){
-        energyConsumed -= this.pegaCustoDisponibilidade(); //O Custo de disponibilidade é o mínimo que alguém pode pagar
+        //energyConsumed -= this.pegaCustoDisponibilidade(); //O Custo de disponibilidade é o mínimo que alguém pode pagar
         // Ou seja, se a pessoa consumir 400KWh, e produzir 375KWh, ela irá pagar 50KWh à concessionária, se esse for o custo de disponibilidade.
         if(energyConsumed < 0.0){ //Verifica se o consumo é menor que o custo de disponibilidade
             return 0;
@@ -517,26 +583,26 @@ solarHour - Está em horas (maior que zero)
      * Pré Condições: solarPanel - Vetor não nulo com as informações do sistema
      * Pós Condições: Retorna o valor da área
      */
-    public static double DefineArea(String[] solarPanel){
-        return Integer.parseInt(solarPanel[Constants.iPANEL_QTD]) * Double.parseDouble(solarPanel[Constants.iPANEL_AREA]);
+    public static double DefineArea(Painel solarPanel){
+        return solarPanel.getQtd() * solarPanel.getArea();
     }
 
 
     /* Descrição: Retorna os custos (vetor de double) do sistema dimensionado, tanto o custo parcial quanto o custo total.
      * Parâmetros de Entrada: solarPanel - Vetor de Strings com as informações do sistema de módulos dimensionado.
-invertor - Vetor de Strings com as informações do sistema de inversores dimensionado
+invertor - Inversor com as informações do sistema de inversores dimensionado
      * Saída: Vetor de double de duas posições com os custos (Índice Custo parcial: 0, Índice Custo total: 1).
 O custo parcial é apenas o custos dos módulos e dos inversores. O custo total leva em conta custos com projeto, mão de obra, proteção, fiação, estrutura, entre outros.
      * Pré Condições: solarPanel e invertor - Vetores não nulos com as informações do sistema
      * Pós Condições: Retorna o vetor de custos
      */
-    public double[] DefineCosts(String[] solarPanel, String[] invertor){
+    public double[] DefineCosts(Painel solarPanel, Inversor invertor){
         double[] costs = {0.0, 0.0};
         double porcentagemCustosIntegrador;
 
         //Definido custo parcial
-        costs[Constants.iCOSTS_PARCIAL] = Double.parseDouble(invertor[Constants.iINV_PRECO_TOTAL]) +
-                Double.parseDouble(solarPanel[Constants.iPANEL_CUSTO_TOTAL]);
+        costs[Constants.iCOSTS_PARCIAL] = invertor.getPrecoTotal() +
+                solarPanel.getCustoTotal();
         ////Definindo o custo total
         //Porcentagem do custo parcial para custos com mão de obra, outros componentes etc... Segundo Estudo estratégico da Greener de 2020
         //Nesse estudo, chegamos na equação y = 1.65-0.032x para descrever a porcentagem do custo do kit que representa o custo final para o consumidor
@@ -550,7 +616,7 @@ O custo parcial é apenas o custos dos módulos e dos inversores. O custo total 
         }
 
 
-        costs[Constants.iCOSTS_TOTAL] = costs[Constants.iCOSTS_PARCIAL]*porcentagemCustosIntegrador;
+        costs[Constants.iCOSTS_TOTAL] = costs[Constants.iCOSTS_PARCIAL] * porcentagemCustosIntegrador;
 
         return costs;
     }
@@ -575,24 +641,23 @@ stateVec - Vetor de Strings com as informações do Estado (temperatura); cityVe
             //Pega a temperatura média do estado no mês
             ambientTemp = Double.parseDouble(vetorEstado[month]);
             //Temperatura estimada do módulo acima de 25°C (se a temperatura do módulo for 50°C, tempAboveLimit será 25)
-            tempAboveLimit = ambientTemp + ((Integer.parseInt(placaEscolhida[Constants.iPANEL_NOCT]) - 20)*0.00125*irradiance) - 25;
+            tempAboveLimit = ambientTemp + ((placaEscolhida.getNOCT() - 20)*0.00125*irradiance) - 25;
             //Esse valor será negativo devido ao coeficiente de temperatura
-            correctionTemp = (tempAboveLimit * Double.parseDouble(placaEscolhida[Constants.iPANEL_COEFTEMP]) *
-                    Double.parseDouble(placaEscolhida[Constants.iPANEL_POTENCIA])) / 100;
+            correctionTemp = (tempAboveLimit * placaEscolhida.getCoefTempPot() *
+                    placaEscolhida.getPotencia()) / 100;
             //Eficiencia do sistema (qual a porcentagem de energia captada em 1m²)
-            efficiency = (Double.parseDouble(placaEscolhida[Constants.iPANEL_POTENCIA]) + correctionTemp)/
-                    (Double.parseDouble(placaEscolhida[Constants.iPANEL_AREA])*1000); //O 1000 é a quantidade de W/m² que estamos considerando
-
+            efficiency = (placaEscolhida.getPotencia() + correctionTemp)/
+                    (placaEscolhida.getArea()*1000); //O 1000 é a quantidade de W/m² que estamos considerando
             //Horas de sol pico do mês * eficiencia * area total
             dailyGen = (Double.parseDouble(vetorCidade[month])/1000.0) * efficiency *
-                    Double.parseDouble(placaEscolhida[Constants.iPANEL_AREA]) * Double.parseDouble(placaEscolhida[Constants.iPANEL_QTD]);
+                    placaEscolhida.getArea() * placaEscolhida.getQtd();
             monthlyGen = dailyGen * GetNumberOfDays(month);
             anualGeneration += monthlyGen;
         }
         //Considera perdas por sujeira
         anualGeneration = anualGeneration * (1 - Constants.LOSS_DIRT);
         //Considera perdas com o inversor
-        anualGeneration = anualGeneration * Double.parseDouble(inversor[Constants.iINV_RENDIMENTO_MAXIMO]);
+        anualGeneration = anualGeneration * inversor.getRendimentoMaximo();
 
         return anualGeneration;
     }

@@ -11,181 +11,278 @@
     android:id="@+id/ADE_layout_tarifa"
     >
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="-149dp"
+        tools:layout_editor_absoluteY="-16dp">
 
-    <TextView
-        android:id="@+id/ADE_text_numero_fases"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/numero_de_fases"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline94" />
-
-    <TextView
-        android:id="@+id/ADE_text_titulo_tarifa"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/background_resultado_text"
-        android:gravity="center"
-        android:text="@string/detalhes"
-        android:textColor="@color/colorSolaresBlue"
-        app:layout_constraintBottom_toTopOf="@+id/guideline2"
-        app:layout_constraintEnd_toStartOf="@+id/guideline91"
-        app:layout_constraintStart_toStartOf="@+id/guideline90"
-        app:layout_constraintTop_toTopOf="@+id/guideline18" />
+        <TextView
+            android:id="@+id/ADE_text_numero_fases"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/numero_de_fases"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline94" />
 
 
-    <TextView
-        android:id="@+id/ADE_text_explicacao_tarifa"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:text="@string/explicacao_tarifa"
-        app:layout_constraintBottom_toTopOf="@+id/guideline95"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline19" />
+        <TextView
+            android:id="@+id/ADE_text_titulo_tarifa"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/background_resultado_text"
+            android:gravity="center"
+            android:text="@string/detalhes"
+            android:textColor="@color/colorSolaresBlue"
+            app:layout_constraintBottom_toTopOf="@+id/guideline2"
+            app:layout_constraintEnd_toStartOf="@+id/guideline91"
+            app:layout_constraintStart_toStartOf="@+id/guideline90"
+            app:layout_constraintTop_toTopOf="@+id/guideline18" />
+
+        <ImageView
+            android:id="@+id/ADE_inst_button_info"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/descricao_botao_detalhes"
+            android:cropToPadding="false"
+            android:padding="6dp"
+            android:src="@drawable/circulo_interrogacao"
+            app:layout_constraintBottom_toBottomOf="@+id/ADE_text_titulo_tarifa"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ADE_text_titulo_tarifa"
+            app:layout_constraintTop_toTopOf="@+id/ADE_text_titulo_tarifa" />
 
 
-    <TextView
-        android:id="@+id/ADE_text_nova_tarifa"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/nova_tarifa"
-        app:layout_constraintBottom_toTopOf="@+id/guideline94"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline95" />
-
-    <EditText
-        style="@style/MyEditTextStyleArea"
-        android:id="@+id/ADE_editText_tarifa"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:ems="10"
-        android:inputType="numberDecimal"
-        android:text=""
-        android:textCursorDrawable="@null"
-        app:layout_constraintBottom_toTopOf="@+id/guideline94"
-        app:layout_constraintEnd_toStartOf="@+id/ADE_text_unidade_tarifa"
-        app:layout_constraintStart_toEndOf="@+id/ADE_text_nova_tarifa"
-        app:layout_constraintTop_toTopOf="@+id/guideline95" />
-
-    <TextView
-        android:id="@+id/ADE_text_unidade_tarifa"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/kwh"
-        app:layout_constraintBottom_toTopOf="@+id/guideline94"
-        app:layout_constraintStart_toStartOf="@+id/guideline91"
-        app:layout_constraintTop_toTopOf="@+id/guideline95" />
+        <TextView
+            android:id="@+id/ADE_text_explicacao_tarifa"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginRight="32dp"
+            android:text="@string/explicacao_tarifa"
+            app:layout_constraintBottom_toTopOf="@+id/guideline95"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline19" />
 
 
-    <Spinner
-        android:id="@+id/ADE_spinner_numero_fases"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/colorSuperWhite"
-        android:spinnerMode="dropdown"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@+id/ADE_text_numero_fases"
-        app:layout_constraintEnd_toStartOf="@+id/guideline91"
-        app:layout_constraintStart_toStartOf="@+id/guideline90"
-        app:layout_constraintTop_toTopOf="@+id/ADE_text_numero_fases" />
+        <TextView
+            android:id="@+id/ADE_text_nova_tarifa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/nova_tarifa"
+            app:layout_constraintBottom_toTopOf="@+id/guideline94"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline95" />
+
+        <EditText
+            android:id="@+id/ADE_editText_tarifa"
+            style="@style/MyEditTextStyleArea"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:ems="10"
+            android:inputType="numberDecimal"
+            android:text=""
+            android:textCursorDrawable="@null"
+            app:layout_constraintBottom_toTopOf="@+id/guideline94"
+            app:layout_constraintEnd_toStartOf="@+id/ADE_text_unidade_tarifa"
+            app:layout_constraintStart_toEndOf="@+id/ADE_text_nova_tarifa"
+            app:layout_constraintTop_toTopOf="@+id/guideline95" />
+
+        <TextView
+            android:id="@+id/ADE_text_unidade_tarifa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/kwh"
+            app:layout_constraintBottom_toTopOf="@+id/guideline94"
+            app:layout_constraintStart_toStartOf="@+id/guideline91"
+            app:layout_constraintTop_toTopOf="@+id/guideline95" />
 
 
-    <Button
-        android:id="@+id/ADE_button_recalcular_tarifa"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/background_button_resultado_center"
-        android:gravity="center"
-        android:text="Confirmar"
-        android:textAllCaps="false"
-        android:textColor="@color/colorWhite"
-        app:layout_constraintBottom_toTopOf="@+id/guideline89"
-        app:layout_constraintEnd_toStartOf="@+id/guideline91"
-        app:layout_constraintStart_toStartOf="@+id/guideline90"
-        app:layout_constraintTop_toTopOf="@+id/guideline88" />
+        <Spinner
+            android:id="@+id/ADE_spinner_numero_fases"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/colorSuperWhite"
+            android:spinnerMode="dropdown"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/ADE_text_numero_fases"
+            app:layout_constraintEnd_toStartOf="@+id/guideline91"
+            app:layout_constraintStart_toStartOf="@+id/guideline90"
+            app:layout_constraintTop_toTopOf="@+id/ADE_text_numero_fases" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline94"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+
+        <Button
+            android:id="@+id/ADE_button_recalcular_tarifa"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/background_button_resultado_center"
+            android:gravity="center"
+            android:text="Confirmar"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite"
+            app:layout_constraintBottom_toTopOf="@+id/guideline89"
+            app:layout_constraintEnd_toStartOf="@+id/guideline91"
+            app:layout_constraintStart_toStartOf="@+id/guideline90"
+            app:layout_constraintTop_toTopOf="@+id/guideline88" />
+
+        <EditText
+            android:id="@+id/edit_cost_1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/background_edit_text_grande"
+            android:hint="@string/valor_conta_de_luz"
+            android:inputType="numberDecimal"
+            android:paddingStart="20dp"
+            android:paddingLeft="20dp"
+            android:text=""
+            android:textColor="@color/colorSolaresBlue"
+            android:textColorHint="@color/colorLightBlue"
+            android:textCursorDrawable="@null"
+            app:layout_constraintBottom_toTopOf="@+id/guideline102"
+            app:layout_constraintEnd_toStartOf="@+id/guideline101"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/guideline100"
+            app:layout_constraintTop_toTopOf="@+id/guideline103"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <Button
+            android:id="@+id/TARIFA_button_change_mode"
+            style="?android:attr/borderlessButtonStyle"
+            android:focusable="false"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:text="@string/inserir_o_consumo_em_kwh"
+            android:textAllCaps="false"
+            android:textColor="@color/colorSolaresBlue"
+            app:layout_constraintEnd_toStartOf="@+id/guideline101"
+            app:layout_constraintStart_toStartOf="@+id/guideline100"
+            app:layout_constraintTop_toBottomOf="@+id/edit_cost_1" />
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline94"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline95"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.41" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline88"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.85" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline89"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.92" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline90"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.25" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline91"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.75" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.12" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.05" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline19"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.22" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline100"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.2" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline101"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.8" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline102"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.73" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline103"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.65" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/blackener"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorBlack"
+        android:alpha="0.2"
+        android:visibility="gone"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline95"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.41" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline88"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.85" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline89"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.92" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline90"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.25" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline91"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.75" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.12" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline18"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.05" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline19"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.22" />
+        android:clickable="true"
+        android:focusable="true" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

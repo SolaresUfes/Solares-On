@@ -16,12 +16,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.solares.calculadorasolar.R;
-import com.solares.calculadorasolar.classes.AutoSizeText;
-import com.solares.calculadorasolar.classes.CSVRead;
+import com.solares.calculadorasolar.classes.auxiliares.AutoSizeText;
 import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
-import com.solares.calculadorasolar.classes.Constants;
+import com.solares.calculadorasolar.classes.auxiliares.Constants;
+import com.solares.calculadorasolar.classes.auxiliares.ExplicacaoInfos;
 
-import java.io.InputStream;
 import java.util.Locale;
 
 import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensions;
@@ -66,6 +65,16 @@ public class AreaActivity extends AppCompatActivity {
         final CalculadoraOnGrid calculadora = (CalculadoraOnGrid) intent.getSerializableExtra(Constants.EXTRA_CALCULADORAON);
 
         textAreaAtual.setText(String.format(Locale.ITALY, "Área Atual: %.2f m²", calculadora.pegaArea()));
+
+
+        //Tutorial sobre as informações
+        findViewById(R.id.inst_button_info).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExplicacaoInfos.ShowPopUpInfo(AreaActivity.this, findViewById(R.id.blackener), "Dúvidas",
+                        "Selecione uma nova área, em m2, de telhado ou de solo sem sombreamento conforme o espaço que deseja que o sistema ocupe. Pode inserir uma área menor que a recomendada caso não tenha esse espaço disponível ou queira um sistema menor. Ou também pode aumentar a área ocupada pelo sistema e ver os impactos nos aspectos financeiros.");
+            }
+        });
 
         buttonRecalcArea.setOnClickListener(new View.OnClickListener() {
             @Override

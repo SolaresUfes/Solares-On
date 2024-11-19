@@ -3,7 +3,8 @@
     <string name="informe_a_sua_conta_de_energia_em_reais">Informe a sua conta de energia em reais</string>
     <string name="kwh_consumido">Consumo mensal de energia</string>
     <string name="pot_necessaria">Potência Necessária</string>
-    <string name="button_calc">Calcular</string>
+    <string name="button_on_grid">ON-GRID</string>
+    <string name="button_off_grid">OFF-GRID</string>
     <string name="informe_um_numero">Informe um número real com um ponto\nseparando a parte inteira da real.</string>
     <string name="placa_solar_escolhida">Placas Solares Escolhidas</string>
     <string name="paineis">Painéis Solares</string>
@@ -68,9 +69,10 @@
     <string name="custo_total">Custo Total (Instalação e equipamentos)</string>
     <string name="estimativa_da_geracao_mensal_de_energia">Estimativa da geração mensal de energia</string>
     <string name="potencia_necessaria">Potência Necessária</string>
-    <string name="sistema_de_placas_escolhido">Sistema de placas escolhido</string>
+    <string name="sistema_de_placas_escolhido">Sistema de painéis escolhido</string>
     <string name="area_necessaria_para_inst">Área necessária para a instalação</string>
     <string name="sistema_de_inversores_escolhido">Sistema de inversores escolhido</string>
+    <string name="sistema_de_controladores_escolhido">Sistema de controladores escolhido</string>
     <string name="consumo_atual">Consumo calculado:</string>
     <string name="novo_consumo">Consumo:</string>
     <string name="recalcular">Recalcular</string>
@@ -79,6 +81,31 @@
     <string name="consumo">Consumo</string>
     <string name="titulo_escolher_modulo">Escolher Módulo</string>
     <string name="titulo_escolher_inversor">Escolher Inversor</string>
+    <string name="titulo_escolher_controlador">Escolher Controlador</string>
+    <string name="titulo_escolher_bateria">Escolher Bateria</string>
+    <string name="continuar">Continuar</string>
+    <string name="empresas">Empresas</string>
+    <string name="adicionar_item">Adicionar Item</string>
+    <string name="lista_equipamento">Lista de Equipamentos</string>
+    <string name="quantidade">Quantidade</string>
+    <string name="potencia">Potência</string>
+    <string name="periodo_uso"><u>Período de Uso</u></string>
+    <string name="wh_dia"><u>Wh/dia</u></string>
+    <string name="showEquipamentos">Equipamentos</string>
+    <string name="economico">Econômico</string>
+    <string name="preco_equipamentos">Preço dos Equipamentos</string>
+    <string name="bateria">Bateria</string>
+    <string name="geracao">Geração</string>
+    <string name="equipamentos">Equipamentos</string>
+    <string name="energia_diaria">Energia Diária</string>
+    <string name="autonomia_media">Autonomia Média</string>
+    <string name="quatidade_baterias">Quantidade total de baterias</string>
+    <string name="serie">Baterias a ser ligadas em série</string>
+    <string name="paralelo">Baterias a serem ligadas em paralelo</string>
+    <string name="preco_baterias">Preço total das baterias</string>
+    <string name="adicionar">Adicionar</string>
+    <string name="sistemas"><u>Entenda os sistemas</u></string>
+    <string name="text_afirmacao_excluir_equipamento">Deseja mesmo excluir esse equipamento da sua lista?</string>
 
     <string-array name="Modulos">
         <item>335PHK-36 POLI 335W - BYD Solar</item>

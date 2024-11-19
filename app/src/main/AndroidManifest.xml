@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.solares.calculadorasolar">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <application
         android:allowBackup="true"
@@ -12,57 +11,98 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
+            android:name=".activity.BateriaOffGridActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.GeracaoOggGridActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.EconomicoOffGridActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.EquipamentosOffGridActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.ResultadoOffGridActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.AdicionarEquipamentosActivity"
+            android:exported="false"
+            android:parentActivityName=".activity.VizualizarEquipamentosActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".activity.EmpresasActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.ConsumoActivity"
+            android:exported="false"
             android:parentActivityName=".activity.DadosActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".activity.CreditoActivity"
+            android:exported="false"
             android:parentActivityName=".activity.ResultadoActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".activity.TarifaActivity"
+            android:exported="false"
             android:parentActivityName=".activity.DadosActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".activity.AreaActivity"
+            android:exported="false"
             android:parentActivityName=".activity.ResultadoActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".activity.AnaliseActivity"
+            android:exported="false"
             android:parentActivityName=".activity.ResultadoActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".activity.InstalacaoActivity"
+            android:exported="false"
             android:parentActivityName=".activity.ResultadoActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".activity.DadosActivity"
+            android:exported="false"
             android:parentActivityName=".activity.ResultadoActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".activity.IndicesEconomicosActivity"
+            android:exported="false"
             android:parentActivityName=".activity.ResultadoActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".activity.ResultadoActivity"
+            android:exported="false"
             android:parentActivityName=".activity.MainActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".activity.DetalhesActivity"
+            android:exported="false"
+            android:parentActivityName=".activity.MainActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".activity.VizualizarEquipamentosActivity"
+            android:exported="false"
             android:parentActivityName=".activity.MainActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".activity.MainActivity"
+            android:exported="true"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden"
             tools:ignore="LockedOrientationActivity">

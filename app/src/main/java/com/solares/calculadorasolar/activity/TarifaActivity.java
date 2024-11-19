@@ -4,21 +4,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.solares.calculadorasolar.R;
-import com.solares.calculadorasolar.classes.AutoSizeText;
+import com.solares.calculadorasolar.classes.auxiliares.AutoSizeText;
 import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
-import com.solares.calculadorasolar.classes.Constants;
+import com.solares.calculadorasolar.classes.auxiliares.Constants;
+import com.solares.calculadorasolar.classes.auxiliares.ExplicacaoInfos;
+import com.solares.calculadorasolar.classes.auxiliares.FirebaseManager;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.InputStream;
 import java.util.Locale;
 
 import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensions;
@@ -69,9 +72,18 @@ public class TarifaActivity extends AppCompatActivity {
         Intent intent = getIntent();
         final CalculadoraOnGrid calculadora = (CalculadoraOnGrid) intent.getSerializableExtra(Constants.EXTRA_CALCULADORAON);
 
-
         //MOstrar a tarifa atual como padrão
         editTarifa.setText(String.format(Locale.ENGLISH, "%.2f", calculadora.pegaTarifaMensal()));
+
+
+        //Tutorial sobre as informações
+        findViewById(R.id.inst_button_info).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExplicacaoInfos.ShowPopUpInfo(TarifaActivity.this, findViewById(R.id.blackener), "Dúvidas",
+                        "Altere o valor da tarifa de energia usado nos cálculos. O valor da tarifa deve ser inserido sem impostos e seu valor pode ser encontrado na sua conta de luz ou no site da distribuidora de energia que atende ao seu imóvel.");
+            }
+        });
 
         //Listener do botão de recalcular
         buttonRecalcTarifa.setOnClickListener(new View.OnClickListener() {
@@ -80,7 +92,6 @@ public class TarifaActivity extends AppCompatActivity {
                 AtualizarTarifa(calculadora, editTarifa);
             }
         });
-
 
         //Listener do fundo do layout, se o usuário clicar nele, esconde o teclado
         layout.setOnClickListener(new View.OnClickListener() {

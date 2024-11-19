@@ -9,9 +9,10 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.solares.calculadorasolar.R;
-import com.solares.calculadorasolar.classes.AutoSizeText;
+import com.solares.calculadorasolar.classes.auxiliares.AutoSizeText;
 import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
-import com.solares.calculadorasolar.classes.Constants;
+import com.solares.calculadorasolar.classes.auxiliares.Constants;
+import com.solares.calculadorasolar.classes.auxiliares.ExplicacaoInfos;
 
 import java.util.Locale;
 
@@ -69,6 +70,53 @@ public class IndicesEconomicosActivity extends AppCompatActivity {
         } else {
             textTempo.setText(String.format(Locale.ITALY, "%d anos", calculadora.pegaTempoRetorno()));
         }
+
+
+        //Tutorial sobre as informações extras
+        findViewById(R.id.inst_button_info).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExplicacaoInfos.ShowHint(findViewById(R.id.blackener), findViewById(R.id.inst_image_info));
+            }
+        });
+
+
+        //Clicar nas informações para explicação
+        textLucro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExplicacaoInfos.ShowPopUpInfo(IndicesEconomicosActivity.this, findViewById(R.id.blackener), "Economia em 25 anos",
+                        "Valor presente estimado de economia gerada em 25 anos após a instalação do sistema On Grid. Este é o lucro do investimento, ou seja, já foram removidos os investimentos iniciais e custos com manutenção durante a vida do sistema. Esse valor é trazido para o presente considerando uma estimativa da inflação e um juros de 6,5% ao ano.");
+            }
+        });
+        textTaxaRetorno.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExplicacaoInfos.ShowPopUpInfo(IndicesEconomicosActivity.this, findViewById(R.id.blackener), "Taxa Interna de Retorno",
+                        "Valor que aproxima qual foi o rendimento obtido em comparação com outros investimentos que poderiam ser opção de aplicação financeira. Quanto maior o seu valor, mais vantajoso torna-se investir no sistema fotovoltaico.");
+            }
+        });
+        textEconomiaMensal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExplicacaoInfos.ShowPopUpInfo(IndicesEconomicosActivity.this, findViewById(R.id.blackener), "Economia Mensal",
+                        "Valor aproximado que pode-se economizar mensalmente ao utilizar o sistema On Grid recomendado. Não é possível zerar sua conta de energia devido a taxas mínimas e a contribuição para iluminação pública, que acabam determinando um valor mínimo que a conta de luz pode ter.");
+            }
+        });
+        textLCOE.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExplicacaoInfos.ShowPopUpInfo(IndicesEconomicosActivity.this, findViewById(R.id.blackener), "Custo da Energia Solar",
+                        "Custo aproximado de cada kWh de energia gerada através do sistema On Grid escolhido ao longo de sua vida útil. Vale ressaltar que neste cálculo são incluídos os possíveis gastos com manutenção e instalação do sistema, assim este valor equivale ao custo total do sistema dividido pela estimativa de produção de energia durante 25 anos.");
+            }
+        });
+        textTempo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExplicacaoInfos.ShowPopUpInfo(IndicesEconomicosActivity.this, findViewById(R.id.blackener), "Retorno do Investimento",
+                        "Tempo necessário para que o dinheiro investido no sistema seja economizado, pagando o custo inicial completamente. Após esse período, o dinheiro economizado torna-se lucro em consequência da escolha do sistema On Grid.");
+            }
+        });
 
         Button buttonVoltar = findViewById(R.id.button_voltar);
         AutoSizeText.AutoSizeButton(buttonVoltar, MainActivity.alturaTela, MainActivity.larguraTela, 4f);

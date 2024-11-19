@@ -12,9 +12,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.solares.calculadorasolar.R;
-import com.solares.calculadorasolar.classes.AutoSizeText;
+import com.solares.calculadorasolar.classes.auxiliares.AutoSizeText;
 import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
-import com.solares.calculadorasolar.classes.Constants;
+import com.solares.calculadorasolar.classes.auxiliares.Constants;
 
 import static com.solares.calculadorasolar.activity.MainActivity.GetPhoneDimensions;
 
@@ -149,8 +149,8 @@ public class ResultadoActivity extends AppCompatActivity{
         startActivity(intent);
     }
 
-    public void FinalizarCalculo(CalculadoraOnGrid calculadora){
-        Intent intent = new Intent(this, CreditoActivity.class);
+    public void FinalizarCalculo(CalculadoraOnGrid calculadora){ // aqui foi mudado o local do intent
+        Intent intent = new Intent(this, EmpresasActivity.class);
         intent.putExtra(Constants.EXTRA_CALCULADORAON, calculadora);
         startActivity(intent);
     }

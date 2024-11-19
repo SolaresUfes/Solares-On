@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -13,12 +14,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.solares.calculadorasolar.R;
-import com.solares.calculadorasolar.classes.AutoSizeText;
+import com.solares.calculadorasolar.classes.auxiliares.AutoSizeText;
 import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
-import com.solares.calculadorasolar.classes.Constants;
+import com.solares.calculadorasolar.classes.auxiliares.Constants;
+import com.solares.calculadorasolar.classes.auxiliares.ExplicacaoInfos;
+import com.solares.calculadorasolar.classes.auxiliares.FirebaseManager;
+import com.solares.calculadorasolar.classes.entidades.Painel;
 
 import java.util.Locale;
 
@@ -28,10 +33,19 @@ public class DetalhesActivity extends AppCompatActivity {
 
     public static float porcent = 3f;
 
+    //
+    private boolean calcByMoney = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalhes);
+
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+        //pegar os intents
+        Intent intent = getIntent();
+        final CalculadoraOnGrid calculadora = (CalculadoraOnGrid) intent.getSerializableExtra(Constants.EXTRA_CALCULADORAON);
 
         //Pegando informações sobre o dispositivo, para regular o tamanho da letra (fonte)
         //Essa função pega as dimensões e as coloca em váriaveis globais
@@ -39,7 +53,6 @@ public class DetalhesActivity extends AppCompatActivity {
 
         //Pega o layout para poder colocar um listener nele (esconder o teclado)
         ConstraintLayout layout = findViewById(R.id.ADE_layout_tarifa);
-
 
         //Pega o view da explicação e ajusta o tamanho da fonte
         TextView textExplicacaoTarifa = findViewById(R.id.ADE_text_explicacao_tarifa);
@@ -73,23 +86,91 @@ public class DetalhesActivity extends AppCompatActivity {
         spinnerFases.setSelection(1);
 
         //Pega o view do botão pra recalcular e ajusta o tamanho da fonte
-        Button buttonRecalcTarifa = findViewById(R.id.ADE_button_recalcular_tarifa);
-        AutoSizeText.AutoSizeButton(buttonRecalcTarifa, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
+        Button buttonConfirm = findViewById(R.id.ADE_button_recalcular_tarifa);
+        AutoSizeText.AutoSizeButton(buttonConfirm, MainActivity.alturaTela, MainActivity.larguraTela, 3f);
 
+        //Pega o view do botão pra recalcular e ajusta o tamanho da fonte
+        Button buttonChangeMode = findViewById(R.id.TARIFA_button_change_mode);
+        AutoSizeText.AutoSizeButton(buttonChangeMode, MainActivity.alturaTela, MainActivity.larguraTela, 2f);
 
-        //pegar os intents
-        Intent intent = getIntent();
-        final CalculadoraOnGrid calculadora = (CalculadoraOnGrid) intent.getSerializableExtra(Constants.EXTRA_CALCULADORAON);
+        //Pega o view do edit text pra recalcular e ajusta o tamanho da fonte
+        final EditText editCostMonth = findViewById(R.id.edit_cost_1);
+        AutoSizeText.AutoSizeEditText(editCostMonth, MainActivity.alturaTela, MainActivity.larguraTela, 3f);
 
-
-        //MOstrar a tarifa atual como padrão
+        //Mostrar a tarifa atual como padrão
         editTarifa.setText(String.format(Locale.ENGLISH, "%.2f", calculadora.pegaTarifaMensal()));
 
-        //Listener do botão de recalcular
-        buttonRecalcTarifa.setOnClickListener(new View.OnClickListener() {
+        //Tutorial sobre as informações
+        findViewById(R.id.ADE_inst_button_info).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExplicacaoInfos.ShowPopUpInfo(DetalhesActivity.this, findViewById(R.id.blackener), "Dúvidas",
+                        "Altere o valor da tarifa de energia usado nos cálculos. O valor da tarifa deve ser inserido sem impostos e seu valor pode ser encontrado na sua conta de luz ou no site da distribuidora de energia que atende ao seu imóvel. O número de fases também pode ser facilmente encontrado na conta de luz e interfere no valor mínimo que pode ser pago no seu imóvel.");
+            }
+        });
+
+
+        if(calcByMoney){
+            buttonChangeMode.setText(R.string.inserir_o_consumo_em_kwh);
+            editCostMonth.setHint(R.string.valor_conta_de_luz);
+        } else {
+            buttonChangeMode.setText(R.string.inserir_o_consumo_em_reais);
+            editCostMonth.setHint(R.string.consumo_conta_de_luz);
+        }
+
+        //Se o usuário clicar no fundo do app, o teclado se fecha
+       /* this.mViewHolder.layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideKeyboard(mViewHolder.editCostMonth);
+            }
+        });*/
+
+        buttonChangeMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                calcByMoney = !calcByMoney;
+                if(calcByMoney){
+                    buttonChangeMode.setText(R.string.inserir_o_consumo_em_kwh);
+                    editCostMonth.setHint(R.string.valor_conta_de_luz);
+                } else {
+                    buttonChangeMode.setText(R.string.inserir_o_consumo_em_reais);
+                    editCostMonth.setHint(R.string.consumo_conta_de_luz);
+                }
+            }
+        });
+
+
+        //Listener do botão de confirmar
+        buttonConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RealizaCalculos(calculadora, editTarifa, spinnerFases);
+                Log.d("firebase", "Placas:");
+                for (Painel painel : calculadora.pegaListaPaineis() ) {
+                    Log.d("firebase", painel.getMarca() + " " + painel.getCodigo() + " " + painel.getPotencia() + " " + painel.getArea() + " " + painel.getNOCT() + " " + painel.getCoefTempPot() + " " + painel.getPreco());
+                }
+                //Verifica se o valor inserido é válido
+                try{
+                    //Fecha teclado
+                    editCostMonth.onEditorAction(EditorInfo.IME_ACTION_DONE);
+                    /////Pega as informações inseridas pelo usuário
+                    //Guarda o custo mensal inserido pelo usuário
+                    final double consumo = Double.parseDouble(editCostMonth.getText().toString() );
+
+                    // Insere as informações que já temos no objeto
+                    calculadora.setConsumo(consumo);
+                    calculadora.setModoCalculoPorDinheiro(calcByMoney);
+
+                    RealizaCalculos(calculadora, editTarifa, spinnerFases);
+
+                } catch (Exception e){
+                    try {
+                        e.printStackTrace();
+                        Toast.makeText(DetalhesActivity.this, "Insira um número positivo!", Toast.LENGTH_LONG).show();
+                    } catch (Exception ee){
+                        ee.printStackTrace();
+                    }
+                }
             }
         });
 
@@ -132,15 +213,7 @@ public class DetalhesActivity extends AppCompatActivity {
                 //Seleciona o número de fases
                 calculadora.setNumeroDeFases((int)spinnerFases.getSelectedItemPosition());
 
-
-                //Refaz o cálculo com a nova tarifa e inicia a ResultadoActivity
-                //Criar uma thread para fazer o cálculo pois é um processamento demorado
-                Thread thread = new Thread(){
-                    public void run(){
-                        calculadora.Calcular(DetalhesActivity.this);
-                    }
-                };
-                thread.start();
+                calculadora.Calcular(DetalhesActivity.this);
 
             }
         } catch (Exception e){

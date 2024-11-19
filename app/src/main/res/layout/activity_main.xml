@@ -69,49 +69,13 @@
             app:layout_constraintStart_toStartOf="@+id/guideline3"
             app:layout_constraintTop_toTopOf="@+id/guideline12" />
 
-
-
-        <EditText
-            android:id="@+id/edit_cost"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@drawable/background_edit_text_grande"
-            android:hint="@string/valor_conta_de_luz"
-            android:textColorHint="@color/colorLightBlue"
-            android:inputType="numberDecimal"
-            android:paddingLeft="20dp"
-            android:paddingStart="20dp"
-            android:text=""
-            android:textColor="@color/colorSolaresBlue"
-            android:textCursorDrawable="@null"
-            app:layout_constraintBottom_toTopOf="@+id/guideline14"
-            app:layout_constraintEnd_toStartOf="@+id/guideline4"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toTopOf="@+id/guideline15" />
-
         <Button
-            android:id="@+id/MAIN_button_change_mode"
-            style="?android:attr/borderlessButtonStyle"
-            android:focusable="false"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text="@string/inserir_o_consumo_em_kwh"
-            android:textAllCaps="false"
-            android:textColor="@color/colorSolaresBlue"
-            app:layout_constraintEnd_toStartOf="@+id/guideline4"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toBottomOf="@+id/edit_cost" />
-
-        <Button
-            android:id="@+id/button_calc"
+            android:id="@+id/button_off_grid"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_centerHorizontal="true"
             android:background="@drawable/background_button_resultado_center"
-            android:text="@string/button_calc"
+            android:text="@string/button_off_grid"
             android:textColor="@color/colorWhite"
             android:textAllCaps="false"
             app:layout_constraintBottom_toTopOf="@+id/guideline10"
@@ -119,7 +83,34 @@
             app:layout_constraintStart_toStartOf="@+id/guideline3"
             app:layout_constraintTop_toTopOf="@+id/guideline5" />
 
+        <Button
+            android:id="@+id/button_on_grid"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/background_button_resultado_center"
+            android:text="@string/button_on_grid"
+            android:textColor="@color/colorWhite"
+            android:textAllCaps="false"
+            app:layout_constraintBottom_toTopOf="@+id/guideline14"
+            app:layout_constraintEnd_toStartOf="@+id/guideline4"
+            app:layout_constraintStart_toStartOf="@+id/guideline3"
+            app:layout_constraintTop_toTopOf="@+id/guideline15" />
 
+        <Button
+            android:id="@+id/button_show_sistem_information"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:text="@string/sistemas"
+            android:textAllCaps="false"
+            android:textColor="@color/colorSolaresBlue"
+            app:layout_constraintEnd_toStartOf="@+id/guideline4"
+            app:layout_constraintStart_toStartOf="@+id/guideline3"
+            app:layout_constraintTop_toBottomOf="@+id/button_off_grid" />
 
 
 
@@ -142,7 +133,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.85" />
+            app:layout_constraintGuide_percent="0.80" />
 
 
         <androidx.constraintlayout.widget.Guideline
@@ -150,35 +141,35 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.53" />
+            app:layout_constraintGuide_percent="0.55" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.92" />
+            app:layout_constraintGuide_percent="0.87" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.73" />
+            app:layout_constraintGuide_percent="0.75" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline15"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.65" />
+            app:layout_constraintGuide_percent="0.68" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline17"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.6" />
+            app:layout_constraintGuide_percent="0.63" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineBaixoText"
@@ -192,10 +183,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.46" />
+            app:layout_constraintGuide_percent="0.48" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.9" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     <LinearLayout
         android:id="@+id/blackener"
@@ -207,66 +204,5 @@
         android:orientation="horizontal"
         android:clickable="true"
         android:focusable="true" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/background_buttons_popup_valorbaixo"
-        android:focusable="true"
-        android:clickable="true"
-        android:id="@+id/MAIN_popUP_Novidade"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:visibility="visible">
-
-        <TextView
-            android:id="@+id/pInfo_titulo_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Novidade"
-            android:textColor="@color/colorWhite"
-            android:textSize="30sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/button_xclose"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/descricao_botao_x_fechar"
-            android:cropToPadding="false"
-            android:padding="12dp"
-            android:src="@drawable/circulo_x_fechar"
-            app:layout_constraintBottom_toBottomOf="@+id/pInfo_titulo_info"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/pInfo_texto_novidade"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:background="@color/colorSuperWhite"
-            android:padding="16dp"
-            android:text="Pensando sempre em melhorar o SolaresOn, temos uma super novidade para você. \nGostaria de fazer parte do nosso aplicativo com mais de 20 mil downloads? \nEntre em contato pelo link!"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pInfo_titulo_info"
-            app:layout_constraintVertical_bias="0.12" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

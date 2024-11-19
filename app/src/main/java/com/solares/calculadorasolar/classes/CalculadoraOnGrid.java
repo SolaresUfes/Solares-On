@@ -8,9 +8,13 @@ import com.solares.calculadorasolar.R;
 import com.solares.calculadorasolar.activity.ResultadoActivity;
 import com.solares.calculadorasolar.classes.auxiliares.Constants;
 import com.solares.calculadorasolar.classes.auxiliares.IRR;
+import com.solares.calculadorasolar.classes.entidades.Bateria_OffGrid;
+import com.solares.calculadorasolar.classes.entidades.Controlador_OffGrid;
 import com.solares.calculadorasolar.classes.entidades.Empresa;
 import com.solares.calculadorasolar.classes.entidades.Inversor;
+import com.solares.calculadorasolar.classes.entidades.Inversor_OffGrid;
 import com.solares.calculadorasolar.classes.entidades.Painel;
+import com.solares.calculadorasolar.classes.entidades.Painel_OffGrid;
 
 import java.io.InputStream;
 import java.io.Serializable;
@@ -281,7 +285,7 @@ Thomas T.D. Tran, Amanda D. Smith
             //LCOEDivisor = Math.pow(1 + Constants.SELIC, year);
 
             //Depreciação do painel a cada ano (diminuição de rendimento)
-            geracaoComDepreciacao = this.geracaoAnual * (1 - (Constants.DEPREC_PANELS) * year);
+            geracaoComDepreciacao = this.geracaoAnual * (1 - (Constants.DEPREC_PANELS) * (year+1));
             //Somando o total de energia produzida para calcular o custo de cada KWh
             //LCOEGeneration = geracaoComDepreciacao/LCOEDivisor; //CÁLCULO DO OUTRO LCOE
             LCOEGeneration = geracaoComDepreciacao; //Cálculo mais simples do custo da energia
@@ -644,7 +648,6 @@ stateVec - Vetor de Strings com as informações do Estado (temperatura); cityVe
             //Eficiencia do sistema (qual a porcentagem de energia captada em 1m²)
             efficiency = (placaEscolhida.getPotencia() + correctionTemp)/
                     (placaEscolhida.getArea()*1000); //O 1000 é a quantidade de W/m² que estamos considerando
-
             //Horas de sol pico do mês * eficiencia * area total
             dailyGen = (Double.parseDouble(vetorCidade[month])/1000.0) * efficiency *
                     placaEscolhida.getArea() * placaEscolhida.getQtd();

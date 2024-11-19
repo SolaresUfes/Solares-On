@@ -16,9 +16,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
+import com.solares.calculadorasolar.classes.entidades.Bateria_OffGrid;
+import com.solares.calculadorasolar.classes.entidades.Controlador_OffGrid;
 import com.solares.calculadorasolar.classes.entidades.Empresa;
+import com.solares.calculadorasolar.classes.entidades.Equipamentos_OffGrid;
 import com.solares.calculadorasolar.classes.entidades.Inversor;
+import com.solares.calculadorasolar.classes.entidades.Inversor_OffGrid;
 import com.solares.calculadorasolar.classes.entidades.Painel;
+import com.solares.calculadorasolar.classes.entidades.Painel_OffGrid;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -41,7 +46,6 @@ public class FirebaseManager {
         }
 
 
-        // Read the companies from the city
         DatabaseReference dbReference = database.getReference("paineis");
         //Cria um listener que vai chamar o onDataChange sempre que os dados mudarem no banco de dados e quando ele for criado
         dbReference.addValueEventListener(new ValueEventListener() {
@@ -93,7 +97,6 @@ public class FirebaseManager {
         }
 
 
-        // Read the companies from the city
         DatabaseReference dbReference = database.getReference("inversores");
         //Cria um listener que vai chamar o onDataChange sempre que os dados mudarem no banco de dados e quando ele for criado
         dbReference.addValueEventListener(new ValueEventListener() {
@@ -129,7 +132,333 @@ public class FirebaseManager {
         });
         return inversores;
     }
-    
+
+    //
+    //
+    // Recuperar Dados para Sistema Off Grid
+    //
+    //
+    public static LinkedList<Painel_OffGrid> fbBuscaListaPaineisOffGrid(Context context, SharedPreferences sharedPref){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        LinkedList<Painel_OffGrid> paineis = new LinkedList<>();
+
+        //Verify Connection
+        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
+        if(!isConnected){
+            Log.d("firebase", "Sem internet!");
+            //
+            //
+            //  --- --- --- Fazer Funcao para ler off line
+            //
+            //
+        }
+
+
+        DatabaseReference dbReference = database.getReference("paineis_off_grid");
+        //Cria um listener que vai chamar o onDataChange sempre que os dados mudarem no banco de dados e quando ele for criado
+        dbReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                paineis.clear();
+                //Pega os paineis e os coloca em uma lista
+                Log.d("firebase", "Buscando painéis off grid no firebase...");
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Painel_OffGrid painel = snapshot.getValue(Painel_OffGrid.class);
+                    if(painel != null && !painel.getCodigo().equals("")){
+                        Log.d("firebase", "Painel Off Grid: " + painel.getCodigo());
+                        paineis.add(painel);
+                    }
+                }
+
+                //Salva os inversores no banco de dados na shared pref
+               /* if(paineis.size() > 0){
+                    SharedPreferences.Editor prefsEditor = sharedPref.edit();
+                    Gson gson = new Gson();
+                    String json = gson.toJson(paineis.toArray());
+                    prefsEditor.putString("paineis_off_grid", json);
+                    prefsEditor.apply();
+                }*/
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Failed to read value
+                Log.d("firebase", "Failed to read value." + error.toException());
+            }
+        });
+
+        return paineis;
+    }
+
+    public static LinkedList<Inversor_OffGrid> fbBuscaListaInversoresOffGrid(Context context, SharedPreferences sharedPref){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        LinkedList<Inversor_OffGrid> inversores = new LinkedList<>();
+
+        //Verify Connection
+        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
+        if(!isConnected){
+            Log.d("firebase", "Sem internet!");
+            //
+            //
+            //  --- --- --- Fazer Funcao para ler off line
+            //
+            //
+        }
+
+
+        DatabaseReference dbReference = database.getReference("inversores_off_grid");
+        //Cria um listener que vai chamar o onDataChange sempre que os dados mudarem no banco de dados e quando ele for criado
+        dbReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                inversores.clear();
+                //Pega os paineis e os coloca em uma lista
+                Log.d("firebase", "Buscando inversores off grid no firebase...");
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Inversor_OffGrid inversor = snapshot.getValue(Inversor_OffGrid.class);
+                    if(inversor != null && !inversor.getMarca().equals("")){
+                        Log.d("firebase", "Inversor Off Grid: " + inversor.getMarca() + " " + inversor.getPotencia());
+                        inversores.add(inversor);
+                    }
+                }
+
+                //Salva os inversores no banco de dados na shared pref
+                /*if(inversores.size() > 0) {
+                    SharedPreferences.Editor prefsEditor = sharedPref.edit();
+                    Gson gson = new Gson();
+                    String json = gson.toJson(inversores.toArray());
+                    prefsEditor.putString("inversores_off_grid", json);
+                    prefsEditor.apply();
+                }*/
+            }
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Failed to read value
+                Log.d("firebase", "Failed to read value." + error.toException());
+            }
+        });
+        return inversores;
+    }
+
+    public static LinkedList<Controlador_OffGrid> fbBuscaListaControladorOffGrid(Context context, SharedPreferences sharedPref){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        LinkedList<Controlador_OffGrid> controladores = new LinkedList<>();
+
+        //Verify Connection
+        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
+        if(!isConnected){
+            Log.d("firebase", "Sem internet!");
+            //
+            //
+            //  --- --- --- Fazer Funcao para ler off line
+            //
+            //
+        }
+
+        DatabaseReference dbReference = database.getReference("controladores");
+        //Cria um listener que vai chamar o onDataChange sempre que os dados mudarem no banco de dados e quando ele for criado
+        dbReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                controladores.clear();
+                //Pega os paineis e os coloca em uma lista
+                Log.d("firebase", "Buscando controladores no firebase...");
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Controlador_OffGrid controlador = snapshot.getValue(Controlador_OffGrid.class);
+                    if(controlador != null && !controlador.getMarca().equals("")){
+                        Log.d("firebase", "Controlador Off Grid: " + controlador.getMarca());
+                        controladores.add(controlador);
+                    }
+                }
+
+                //Salva os inversores no banco de dados na shared pref
+                /*if(inversores.size() > 0) {
+                    SharedPreferences.Editor prefsEditor = sharedPref.edit();
+                    Gson gson = new Gson();
+                    String json = gson.toJson(inversores.toArray());
+                    prefsEditor.putString("inversores_off_grid", json);
+                    prefsEditor.apply();
+                }*/
+            }
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Failed to read value
+                Log.d("firebase", "Failed to read value." + error.toException());
+            }
+        });
+        return controladores;
+    }
+
+    public static LinkedList<Bateria_OffGrid> fbBuscaListaBateriaOffGrid(Context context, SharedPreferences sharedPref){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        LinkedList<Bateria_OffGrid> baterias = new LinkedList<>();
+
+        //Verify Connection
+        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
+        if(!isConnected){
+            Log.d("firebase", "Sem internet!");
+            //
+            //
+            //  --- --- --- Fazer Funcao para ler off line
+            //
+            //
+        }
+
+        DatabaseReference dbReference = database.getReference("baterias");
+        //Cria um listener que vai chamar o onDataChange sempre que os dados mudarem no banco de dados e quando ele for criado
+        dbReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                baterias.clear();
+                //Pega os paineis e os coloca em uma lista
+                Log.d("firebase", "Buscando baterias no firebase...");
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Bateria_OffGrid bateria = snapshot.getValue(Bateria_OffGrid.class);
+                    if(bateria != null && !bateria.getMarca().equals("")){
+                        Log.d("firebase", "Bateria Off Grid: " + bateria.getMarca());
+                        baterias.add(bateria);
+                    }
+                }
+
+                //Salva os inversores no banco de dados na shared pref
+                /*if(inversores.size() > 0) {
+                    SharedPreferences.Editor prefsEditor = sharedPref.edit();
+                    Gson gson = new Gson();
+                    String json = gson.toJson(inversores.toArray());
+                    prefsEditor.putString("inversores_off_grid", json);
+                    prefsEditor.apply();
+                }*/
+            }
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Failed to read value
+                Log.d("firebase", "Failed to read value." + error.toException());
+            }
+        });
+        return baterias;
+    }
+
+    public static LinkedList<Equipamentos_OffGrid> fbBuscaListaEquipamentoOffGrid(Context context, SharedPreferences sharedPref){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        LinkedList<Equipamentos_OffGrid> equipamentos = new LinkedList<>();
+
+        //Verify Connection
+        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
+        if(!isConnected){
+            Log.d("firebase", "Sem internet!");
+            //
+            //
+            //  --- --- --- Fazer Funcao para ler off line
+            //
+            //
+        }
+
+        DatabaseReference dbReference = database.getReference("equipamentos_off_grid");
+        //Cria um listener que vai chamar o onDataChange sempre que os dados mudarem no banco de dados e quando ele for criado
+        dbReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                equipamentos.clear();
+                //Pega os paineis e os coloca em uma lista
+                Log.d("firebase", "Buscando equipamentos no firebase...");
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Equipamentos_OffGrid equipamento = snapshot.getValue(Equipamentos_OffGrid.class);
+                    if(equipamento != null && !equipamento.getNome().equals("")){
+                        Log.d("firebase", "Equipamentos eletrônicos: " + equipamento.getNome());
+                        equipamentos.add(equipamento);
+                    }
+                }
+
+                //Salva os inversores no banco de dados na shared pref
+                /*if(inversores.size() > 0) {
+                    SharedPreferences.Editor prefsEditor = sharedPref.edit();
+                    Gson gson = new Gson();
+                    String json = gson.toJson(inversores.toArray());
+                    prefsEditor.putString("inversores_off_grid", json);
+                    prefsEditor.apply();
+                }*/
+            }
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Failed to read value
+                Log.d("firebase", "Failed to read value." + error.toException());
+            }
+        });
+        return equipamentos;
+    }
+
+    public static LinkedList<String> fbBuscaListaCategorias(Context context, SharedPreferences sharedPref){
+        Log.d("firebase", "Firebase Database inicializado");
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        LinkedList<String> categorias = new LinkedList<>();
+
+        //Verify Connection
+        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
+        if(!isConnected){
+            Log.d("firebase", "Sem internet!");
+            //
+            //
+            //  --- --- --- Fazer Funcao para ler off line
+            //
+            //
+        }
+
+        DatabaseReference dbReference = database.getReference("categorias_equipamentos");
+        //Cria um listener que vai chamar o onDataChange sempre que os dados mudarem no banco de dados e quando ele for criado
+        dbReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                categorias.clear();
+                //Pega os paineis e os coloca em uma lista
+                Log.d("firebase", "Buscando equipamentos no firebase...");
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    String categoria = snapshot.getValue(String.class);
+                    if(categoria != null){
+                        Log.d("firebase", "Categorias: " + categoria);
+                        categorias.add(categoria);
+                    }
+                }
+
+                //Salva os inversores no banco de dados na shared pref
+                /*if(inversores.size() > 0) {
+                    SharedPreferences.Editor prefsEditor = sharedPref.edit();
+                    Gson gson = new Gson();
+                    String json = gson.toJson(inversores.toArray());
+                    prefsEditor.putString("inversores_off_grid", json);
+                    prefsEditor.apply();
+                }*/
+            }
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Failed to read value
+                Log.d("firebase", "Failed to read value." + error.toException());
+            }
+        });
+        return categorias;
+    }
+
     public static LinkedList<Empresa> GetEmpresasFirebase(CalculadoraOnGrid calculadora, Context context){
         Log.d("firebase", "Firebase Database inicializado");
         // Get the reference to the database

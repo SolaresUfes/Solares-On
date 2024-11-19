@@ -8,14 +8,17 @@ import com.solares.calculadorasolar.classes.auxiliares.AutoSizeText;
 import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
 import com.solares.calculadorasolar.classes.auxiliares.Constants;
 import com.solares.calculadorasolar.classes.auxiliares.ExplicacaoInfos;
+import com.solares.calculadorasolar.classes.auxiliares.FirebaseManager;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -82,8 +85,6 @@ public class TarifaActivity extends AppCompatActivity {
             }
         });
 
-
-
         //Listener do botão de recalcular
         buttonRecalcTarifa.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,7 +92,6 @@ public class TarifaActivity extends AppCompatActivity {
                 AtualizarTarifa(calculadora, editTarifa);
             }
         });
-
 
         //Listener do fundo do layout, se o usuário clicar nele, esconde o teclado
         layout.setOnClickListener(new View.OnClickListener() {

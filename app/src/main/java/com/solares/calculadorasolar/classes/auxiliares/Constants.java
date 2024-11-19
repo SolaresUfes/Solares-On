@@ -24,8 +24,14 @@ public class Constants {
     public static double TARIFF_CHANGE = 6;
     public static double PANEL_LIFE = 25;
 
+    // Constantes para o calculo das baterias - off grid
+    public static double fatorSeguranca = 1.25;
+    public static double Pd = 0.8;
+
     // Strings para passagem de parâmetros para outras activities
     public static final String EXTRA_CALCULADORAON = "com.solares.com.solares.calculadorasolar.EXTRA_CALCULADORAON";
+    public static final String EXTRA_CALCULADORAOFF = "com.solares.com.solares.calculadorasolar.EXTRA_CALCULADORAOFF";
+    public static final String EXTRA_EQUIPAMENTO = "com.solares.calculadorasolar.classes.entidades.Equipamentos_OffGrid";
     public static final String EXTRA_CUSTO_REAIS = "com.solares.com.solares.calculadorasolar.EXTRA_CUSTO_REAIS";
     public static final String EXTRA_CONSUMO = "com.solares.com.solares.calculadorasolar.EXTRA_CONSUMO";
     public static final String EXTRA_POTENCIA = "com.solares.com.solares.calculadorasolar.EXTRA_POTENCIA";
@@ -63,6 +69,13 @@ public class Constants {
     public static final int iINV_POTENCIA = 3;
     public static final int iINV_PRECO = 4;
     public static final int iINV_RENDIMENTO_MAXIMO = 5;
+
+
+    //Indices Equipamentos
+    public static final int iEQUI_NOME = 2;
+    public static final int iEQUI_POT = 0;
+    public static final int iEQUI_CC = 1;
+    public static final int iEQUI_ID = 3;
 
 
     //Indices Cidades

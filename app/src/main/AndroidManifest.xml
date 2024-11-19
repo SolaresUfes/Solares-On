@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.solares.calculadorasolar">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <application
         android:allowBackup="true"
@@ -11,6 +10,27 @@
         android:supportsRtl="false"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity
+            android:name=".activity.BateriaOffGridActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.GeracaoOggGridActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.EconomicoOffGridActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.EquipamentosOffGridActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.ResultadoOffGridActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.AdicionarEquipamentosActivity"
+            android:exported="false"
+            android:parentActivityName=".activity.VizualizarEquipamentosActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".activity.EmpresasActivity"
             android:exported="false" />
@@ -70,6 +90,12 @@
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".activity.DetalhesActivity"
+            android:exported="false"
+            android:parentActivityName=".activity.MainActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".activity.VizualizarEquipamentosActivity"
             android:exported="false"
             android:parentActivityName=".activity.MainActivity"
             android:screenOrientation="portrait"

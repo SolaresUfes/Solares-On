@@ -144,6 +144,42 @@
             app:layout_constraintStart_toStartOf="@+id/guideline90"
             app:layout_constraintTop_toTopOf="@+id/guideline88" />
 
+        <EditText
+            android:id="@+id/edit_cost_1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/background_edit_text_grande"
+            android:hint="@string/valor_conta_de_luz"
+            android:inputType="numberDecimal"
+            android:paddingStart="20dp"
+            android:paddingLeft="20dp"
+            android:text=""
+            android:textColor="@color/colorSolaresBlue"
+            android:textColorHint="@color/colorLightBlue"
+            android:textCursorDrawable="@null"
+            app:layout_constraintBottom_toTopOf="@+id/guideline102"
+            app:layout_constraintEnd_toStartOf="@+id/guideline101"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/guideline100"
+            app:layout_constraintTop_toTopOf="@+id/guideline103"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <Button
+            android:id="@+id/TARIFA_button_change_mode"
+            style="?android:attr/borderlessButtonStyle"
+            android:focusable="false"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:text="@string/inserir_o_consumo_em_kwh"
+            android:textAllCaps="false"
+            android:textColor="@color/colorSolaresBlue"
+            app:layout_constraintEnd_toStartOf="@+id/guideline101"
+            app:layout_constraintStart_toStartOf="@+id/guideline100"
+            app:layout_constraintTop_toBottomOf="@+id/edit_cost_1" />
+
+
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline94"
             android:layout_width="wrap_content"
@@ -206,6 +242,34 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.22" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline100"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.2" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline101"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.8" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline102"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.73" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline103"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.65" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

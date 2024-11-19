@@ -2,6 +2,8 @@ package com.solares.calculadorasolar.activity;
 
 
 
+import static com.solares.calculadorasolar.classes.auxiliares.ExplicacaoInfos.ShowPopUpInfo;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -35,6 +37,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.solares.calculadorasolar.R;
+import com.solares.calculadorasolar.classes.CalculadoraOffGrid;
 import com.solares.calculadorasolar.classes.auxiliares.AutoSizeText;
 import com.solares.calculadorasolar.classes.auxiliares.CSVManager;
 import com.solares.calculadorasolar.classes.CalculadoraOnGrid;
@@ -46,7 +49,6 @@ import com.solares.calculadorasolar.classes.entidades.Empresa;
 import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -56,10 +58,10 @@ public class MainActivity extends AppCompatActivity {
     /////
     public static int larguraTela;
     public static int alturaTela;
-    public float porcent = 4f;
+    public float porcent = 3f;
 
     //
-    private boolean calcByMoney = true;
+    //private boolean calcByMoney = true;
 
 
     @Override
@@ -77,20 +79,12 @@ public class MainActivity extends AppCompatActivity {
         //Identificando os componentes do layout
         this.mViewHolder.textSimulacao = findViewById(R.id.text_simulacao);
         AutoSizeText.AutoSizeTextView(this.mViewHolder.textSimulacao, alturaTela, larguraTela, 3f);
-        this.mViewHolder.buttonCalc = findViewById(R.id.button_calc);
-        AutoSizeText.AutoSizeButton(this.mViewHolder.buttonCalc, alturaTela, larguraTela, porcent);
-        this.mViewHolder.editCostMonth = findViewById(R.id.edit_cost);
-        AutoSizeText.AutoSizeEditText(this.mViewHolder.editCostMonth, alturaTela, larguraTela, 3f);
-        this.mViewHolder.buttonChangeMode = findViewById(R.id.MAIN_button_change_mode);
-        AutoSizeText.AutoSizeButton(this.mViewHolder.buttonChangeMode, alturaTela, larguraTela, 2f);
-
-        if(calcByMoney){
-            this.mViewHolder.buttonChangeMode.setText(R.string.inserir_o_consumo_em_kwh);
-            this.mViewHolder.editCostMonth.setHint(R.string.valor_conta_de_luz);
-        } else {
-            this.mViewHolder.buttonChangeMode.setText(R.string.inserir_o_consumo_em_reais);
-            this.mViewHolder.editCostMonth.setHint(R.string.consumo_conta_de_luz);
-        }
+        this.mViewHolder.buttonOnGrid = findViewById(R.id.button_on_grid);
+        AutoSizeText.AutoSizeButton(this.mViewHolder.buttonOnGrid, alturaTela, larguraTela, porcent);
+        this.mViewHolder.buttonOffGrid = findViewById(R.id.button_off_grid);
+        AutoSizeText.AutoSizeButton(this.mViewHolder.buttonOffGrid, alturaTela, larguraTela, porcent);
+        Button buttonEntendaSistema = findViewById(R.id.button_show_sistem_information);
+        AutoSizeText.AutoSizeButton(buttonEntendaSistema, MainActivity.alturaTela, MainActivity.larguraTela, 2f);
 
 
         //Criando spinners (dos estados e das cidades)
@@ -107,14 +101,21 @@ public class MainActivity extends AppCompatActivity {
 
         this.mViewHolder.layout = findViewById(R.id.layout_calculo);
 
-
-        //////////// Inicia Calculadora
-        CalculadoraOnGrid calculadora = new CalculadoraOnGrid();
-        // Cria os vetores de Paineis e de Inversores
         SharedPreferences sharedPref = getPreferences(MODE_PRIVATE);
+        //////////// Inicia Calculadora On-Grid
+        CalculadoraOnGrid calculadora = new CalculadoraOnGrid();
+        // Cria os vetores de Paineis e de Inversores - Sistema On Grid
         calculadora.setListaPaineis(FirebaseManager.fbBuscaListaPaineis(MainActivity.this, sharedPref));
         calculadora.setListaInversores(FirebaseManager.fbBuscaListaInversores(MainActivity.this, sharedPref));
-
+        //////////// Inicia Calculadora Off-Grid
+        CalculadoraOffGrid calculadoraOffGrid = new CalculadoraOffGrid();
+        // Cria os vetores de Paineis, Inversores, Baterias, Controladores e Equipamentos - Sistema Off Grid
+        calculadoraOffGrid.setListaPaineisOffGrid(FirebaseManager.fbBuscaListaPaineisOffGrid(MainActivity.this, sharedPref));
+        calculadoraOffGrid.setListaInversoresOffGrid(FirebaseManager.fbBuscaListaInversoresOffGrid(MainActivity.this, sharedPref));
+        calculadoraOffGrid.setListaControladoresOffGrid(FirebaseManager.fbBuscaListaControladorOffGrid(MainActivity.this, sharedPref));
+        calculadoraOffGrid.setListaBateriasOffGrid(FirebaseManager.fbBuscaListaBateriaOffGrid(MainActivity.this, sharedPref));
+        calculadoraOffGrid.setListaEquipamentosOffGrid(FirebaseManager.fbBuscaListaEquipamentoOffGrid(MainActivity.this, sharedPref));
+        //calculadoraOffGrid.setListaCategortias(FirebaseManager.fbBuscaListaCategorias(MainActivity.this, sharedPref));
 
         //Se o spinner de estado for selecionado, muda o spinner de cidades de acordo
         this.mViewHolder.spinnerStates.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -129,48 +130,22 @@ public class MainActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {}
         });
 
-        //Se o usuário clicar no fundo do app, o teclado se fecha
-        this.mViewHolder.layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hideKeyboard(mViewHolder.editCostMonth);
-            }
-        });
-
-        this.mViewHolder.buttonChangeMode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                calcByMoney = !calcByMoney;
-                if(calcByMoney){
-                    mViewHolder.buttonChangeMode.setText(R.string.inserir_o_consumo_em_kwh);
-                    mViewHolder.editCostMonth.setHint(R.string.valor_conta_de_luz);
-                } else {
-                    mViewHolder.buttonChangeMode.setText(R.string.inserir_o_consumo_em_reais);
-                    mViewHolder.editCostMonth.setHint(R.string.consumo_conta_de_luz);
-                }
-            }
-        });
-
-        //Se o usuário clicar no botão calcular, o cálculo é feito e muda-se para a próxima activity
-        this.mViewHolder.buttonCalc.setOnClickListener(new View.OnClickListener() {
+        //
+        //Se o usuário clicar no botão On-Grid, é salvo o estado e cidade e muda-se para a próxima activity
+        this.mViewHolder.buttonOnGrid.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Verifica se o valor inserido é válido
                 try{
-                    //Fecha teclado
-                    mViewHolder.editCostMonth.onEditorAction(EditorInfo.IME_ACTION_DONE);
                     /////Pega as informações inseridas pelo usuário
                     //Identifica a cidade escolhida e pega suas informações
                     final String stateName = mViewHolder.spinnerStates.getSelectedItem().toString();
                     final int idCity = mViewHolder.spinnerCities.getSelectedItemPosition();
                     final String cityName = mViewHolder.spinnerCities.getItemAtPosition(idCity).toString();
                     //Guarda o custo mensal inserido pelo usuário
-                    final double consumo = Double.parseDouble( mViewHolder.editCostMonth.getText().toString() );
 
                     // Insere as informações que já temos no objeto
                     calculadora.setNomeCidade(cityName);
-                    calculadora.setConsumo(consumo);
-                    calculadora.setModoCalculoPorDinheiro(calcByMoney);
                     // Cria os vetores de Cidade e Estado
                     calculadora.setVetorCidade(CreateVetorCidade(idCity, stateName));
                     calculadora.setVetorEstado(CreateVetorEstado(calculadora.pegaVetorCidade()));
@@ -178,91 +153,57 @@ public class MainActivity extends AppCompatActivity {
                     calculadora.setTarifaMensal(Double.parseDouble(calculadora.pegaVetorEstado()[Constants.iEST_TARIFA]));
 
                     // Criar Lista de Empresas
-                    //calculadora.setListaEmpresas(FirebaseManager.fbBuscaListaEmpresasPorEstado(MainActivity.this, calculadora.pegaVetorEstado()[Constants.iEST_SIGLA]));
-                    //calculadora.setListaEmpresas(FirebaseManager.fbBuscaTodasEmpresas(MainActivity.this));
                     calculadora.setListaEmpresas(FirebaseManager.GetEmpresasFirebase(calculadora, MainActivity.this));
 
                     AbrirActivityDetalhes(calculadora);
                 } catch (Exception e){
+                    Toast.makeText(MainActivity.this, "Erro", Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        //Se o usuário clicar no botão Off-Grid, é salvo o estado e cidade e muda-se para a próxima activity
+        this.mViewHolder.buttonOffGrid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Verifica se o valor inserido é válido
+                try{
+                    /////Pega as informações inseridas pelo usuário
+                    //Identifica a cidade escolhida e pega suas informações
+                    final String stateName = mViewHolder.spinnerStates.getSelectedItem().toString();
+                    final int idCity = mViewHolder.spinnerCities.getSelectedItemPosition();
+                    final String cityName = mViewHolder.spinnerCities.getItemAtPosition(idCity).toString();
+                    //Guarda o custo mensal inserido pelo usuário
+
+                    // Insere as informações que já temos no objeto
+                    calculadoraOffGrid.setNomeCidade(cityName);
+                    // Cria os vetores de Cidade e Estado
+                    calculadoraOffGrid.setVetorCidade(CreateVetorCidade(idCity, stateName));
+                    calculadoraOffGrid.setVetorEstado(CreateVetorEstado(calculadoraOffGrid.pegaVetorCidade()));
+
+
+                    Intent intent = new Intent(MainActivity.this, VizualizarEquipamentosActivity.class);
+                    intent.putExtra(Constants.EXTRA_CALCULADORAOFF, calculadoraOffGrid);
+                    startActivity(intent);
+
+                    //AbrirActivityVizualizarEquipamentos(calculadoraOffGrid);
+                } catch (Exception e){
                     try {
                         e.printStackTrace();
-                        Toast.makeText(MainActivity.this, "Insira um número positivo!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this, "Erro", Toast.LENGTH_LONG).show();
                     } catch (Exception ee){
                         ee.printStackTrace();
                     }
                 }
             }
         });
-    }
 
-    //
-    // Ao entrar na Activity irá aparecer o Pop-up
-    //
-    @Override
-    protected void onStart() {
-        super.onStart();
-        final ConstraintLayout layoutNovidade = findViewById(R.id.MAIN_popUP_Novidade);
-        final LinearLayout darkenerMain = findViewById(R.id.blackener);
-
-        TextView texttitulo = findViewById(R.id.pInfo_titulo_info);
-        AutoSizeText.AutoSizeTextView(texttitulo, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
-        TextView textNovidade = findViewById(R.id.pInfo_texto_novidade);
-        AutoSizeText.AutoSizeTextView(textNovidade, MainActivity.alturaTela, MainActivity.larguraTela, 3f);
-        ImageView b_sair = findViewById(R.id.button_xclose);
-
-        String text = "Pensando sempre em melhorar o Solares On, temos uma super novidade para você. \nGostaria de fazer parte do nosso aplicativo com mais de 13 mil downloads? \nEntre em contato pelo link!";
-        SpannableString ss = new SpannableString(text);
-
-        //Mostra a explicação
-        darkenerMain.setVisibility(View.VISIBLE);
-        layoutNovidade.setVisibility(View.VISIBLE);
-
-        //Vetor com os números de celular de quem receberá as mensagens
-        String[] numsTel = {"5527997874247", "5527998976736", "5527999999999", "552799999999", "5527999999999"};
-
-        //Escolher um dos números de celular
-        Random randNum = new Random();
-        String numTelefone = numsTel[randNum.nextInt(numsTel.length)];
-
-        ClickableSpan clickableLink = new ClickableSpan() {
-            @Override
-            public void onClick(@NonNull View view) {
-                //String mensagem = "Olá,+vi+no+SolaresOn+que+existe+uma+possibilidade+da+minha+empresa+aparecer+no+aplicativo.%0D%0DPode+me+passar+mais+informações";
-                String mensagem = "Olá, vi no Solares On que existe uma chance da minha empresa aparecer no aplicativo.\n" +
-                        "\n" +
-                        "Pode me passar mais informações";
-                String link = "https://api.whatsapp.com/send?phone="+numTelefone+"&text="+mensagem+"?&app_absent=0";
-                Log.d("Numero",numsTel[randNum.nextInt(numsTel.length)]);
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
-                startActivity(intent);
-            }
-
-            @Override
-            public void updateDrawState(@NonNull TextPaint ds) {
-                super.updateDrawState(ds);
-                ds.setFakeBoldText(true);
-                //ds.setColor(Color.BLACK);
-            }
-        };
-
-        ss.setSpan(clickableLink, 176, 180, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        textNovidade.setText(ss);
-        textNovidade.setMovementMethod(LinkMovementMethod.getInstance());
-
-        b_sair.setOnClickListener(new View.OnClickListener() {
+        buttonEntendaSistema.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                layoutNovidade.setVisibility(View.GONE);
-                darkenerMain.setVisibility(View.GONE);
-            }
-        });
-        //Define um onclick listener no fundo preto pra sair desse aviso
-        darkenerMain.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                layoutNovidade.setVisibility(View.GONE);
-                darkenerMain.setVisibility(View.GONE);
+                ShowPopUpInfo(MainActivity.this, findViewById(R.id.blackener), "Sistemas",
+                        "Off Grid: ”Fora da rede”. Sistema fotovoltaico que trabalha de forma autônoma, sem a necessidade de conexão com a rede de distribuição de energia elétrica da sua região. Esse sistema é comumente conectado à baterias.\n\nOn Grid: “Na rede”. Sistema fotovoltaico que necessariamente trabalha conectado na rede de distribuição de energia elétrica da sua região. Esse é o tipo de sistema mais convencional para residências e comércios.");
             }
         });
     }
@@ -319,6 +260,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void AbrirActivityVizualizarEquipamentos(CalculadoraOffGrid calculadora){
+        Intent intent = new Intent(this, VizualizarEquipamentosActivity.class);
+        intent.putExtra(Constants.EXTRA_CALCULADORAOFF, calculadora);
+        startActivity(intent);
+    }
+
 
 
     ///////////////////// Funções de utilidade para a Main Activity
@@ -360,9 +307,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static class ViewHolder{
         TextView textSimulacao;
-        EditText editCostMonth;
-        Button buttonCalc;
-        Button buttonChangeMode;
+        Button buttonOnGrid;
+        Button buttonOffGrid;
         Spinner spinnerCities;
         Spinner spinnerStates;
         ConstraintLayout layout;

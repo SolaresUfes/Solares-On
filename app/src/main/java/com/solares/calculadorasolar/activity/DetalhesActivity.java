@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.solares.calculadorasolar.R;
@@ -31,10 +33,19 @@ public class DetalhesActivity extends AppCompatActivity {
 
     public static float porcent = 3f;
 
+    //
+    private boolean calcByMoney = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalhes);
+
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+        //pegar os intents
+        Intent intent = getIntent();
+        final CalculadoraOnGrid calculadora = (CalculadoraOnGrid) intent.getSerializableExtra(Constants.EXTRA_CALCULADORAON);
 
         //Pegando informações sobre o dispositivo, para regular o tamanho da letra (fonte)
         //Essa função pega as dimensões e as coloca em váriaveis globais
@@ -42,7 +53,6 @@ public class DetalhesActivity extends AppCompatActivity {
 
         //Pega o layout para poder colocar um listener nele (esconder o teclado)
         ConstraintLayout layout = findViewById(R.id.ADE_layout_tarifa);
-
 
         //Pega o view da explicação e ajusta o tamanho da fonte
         TextView textExplicacaoTarifa = findViewById(R.id.ADE_text_explicacao_tarifa);
@@ -77,13 +87,15 @@ public class DetalhesActivity extends AppCompatActivity {
 
         //Pega o view do botão pra recalcular e ajusta o tamanho da fonte
         Button buttonConfirm = findViewById(R.id.ADE_button_recalcular_tarifa);
-        AutoSizeText.AutoSizeButton(buttonConfirm, MainActivity.alturaTela, MainActivity.larguraTela, 4f);
+        AutoSizeText.AutoSizeButton(buttonConfirm, MainActivity.alturaTela, MainActivity.larguraTela, 3f);
 
+        //Pega o view do botão pra recalcular e ajusta o tamanho da fonte
+        Button buttonChangeMode = findViewById(R.id.TARIFA_button_change_mode);
+        AutoSizeText.AutoSizeButton(buttonChangeMode, MainActivity.alturaTela, MainActivity.larguraTela, 2f);
 
-        //pegar os intents
-        Intent intent = getIntent();
-        final CalculadoraOnGrid calculadora = (CalculadoraOnGrid) intent.getSerializableExtra(Constants.EXTRA_CALCULADORAON);
-
+        //Pega o view do edit text pra recalcular e ajusta o tamanho da fonte
+        final EditText editCostMonth = findViewById(R.id.edit_cost_1);
+        AutoSizeText.AutoSizeEditText(editCostMonth, MainActivity.alturaTela, MainActivity.larguraTela, 3f);
 
         //Mostrar a tarifa atual como padrão
         editTarifa.setText(String.format(Locale.ENGLISH, "%.2f", calculadora.pegaTarifaMensal()));
@@ -98,6 +110,37 @@ public class DetalhesActivity extends AppCompatActivity {
         });
 
 
+        if(calcByMoney){
+            buttonChangeMode.setText(R.string.inserir_o_consumo_em_kwh);
+            editCostMonth.setHint(R.string.valor_conta_de_luz);
+        } else {
+            buttonChangeMode.setText(R.string.inserir_o_consumo_em_reais);
+            editCostMonth.setHint(R.string.consumo_conta_de_luz);
+        }
+
+        //Se o usuário clicar no fundo do app, o teclado se fecha
+       /* this.mViewHolder.layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideKeyboard(mViewHolder.editCostMonth);
+            }
+        });*/
+
+        buttonChangeMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                calcByMoney = !calcByMoney;
+                if(calcByMoney){
+                    buttonChangeMode.setText(R.string.inserir_o_consumo_em_kwh);
+                    editCostMonth.setHint(R.string.valor_conta_de_luz);
+                } else {
+                    buttonChangeMode.setText(R.string.inserir_o_consumo_em_reais);
+                    editCostMonth.setHint(R.string.consumo_conta_de_luz);
+                }
+            }
+        });
+
+
         //Listener do botão de confirmar
         buttonConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,7 +149,28 @@ public class DetalhesActivity extends AppCompatActivity {
                 for (Painel painel : calculadora.pegaListaPaineis() ) {
                     Log.d("firebase", painel.getMarca() + " " + painel.getCodigo() + " " + painel.getPotencia() + " " + painel.getArea() + " " + painel.getNOCT() + " " + painel.getCoefTempPot() + " " + painel.getPreco());
                 }
-                RealizaCalculos(calculadora, editTarifa, spinnerFases);
+                //Verifica se o valor inserido é válido
+                try{
+                    //Fecha teclado
+                    editCostMonth.onEditorAction(EditorInfo.IME_ACTION_DONE);
+                    /////Pega as informações inseridas pelo usuário
+                    //Guarda o custo mensal inserido pelo usuário
+                    final double consumo = Double.parseDouble(editCostMonth.getText().toString() );
+
+                    // Insere as informações que já temos no objeto
+                    calculadora.setConsumo(consumo);
+                    calculadora.setModoCalculoPorDinheiro(calcByMoney);
+
+                    RealizaCalculos(calculadora, editTarifa, spinnerFases);
+
+                } catch (Exception e){
+                    try {
+                        e.printStackTrace();
+                        Toast.makeText(DetalhesActivity.this, "Insira um número positivo!", Toast.LENGTH_LONG).show();
+                    } catch (Exception ee){
+                        ee.printStackTrace();
+                    }
+                }
             }
         });
 

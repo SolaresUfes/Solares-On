@@ -9,8 +9,9 @@
         android:id="@+id/searchEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Search items..."
+        android:hint="@string/search_items"
         android:inputType="text"
+        android:textSize="18sp"
         android:maxLines="1" />
 
     <ListView

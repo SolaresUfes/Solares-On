@@ -166,6 +166,7 @@
     <string name="taxa_interna_de_retorno">Taxa Interna de Retorno</string>
     <string name="inserir_o_consumo_em_kwh"><u>Inserir o consumo em kWh</u></string>
     <string name="inserir_o_consumo_em_reais"><u>Inserir o valor da conta de luz (R$)</u></string>
+    <string name="search_items">Buscar</string>
 
     <string-array name="Fases">
         <item>Monofásico</item>

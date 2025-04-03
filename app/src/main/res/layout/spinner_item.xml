@@ -4,9 +4,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textSize="16sp"
+    android:textSize="18sp"
     android:gravity="start"
     android:textColor="@color/colorBlack"
     android:fontFamily="@font/roboto_regular"
     android:background="@color/colorSuperWhite"
-    android:padding="5dip" />
+    android:padding="8dp" />

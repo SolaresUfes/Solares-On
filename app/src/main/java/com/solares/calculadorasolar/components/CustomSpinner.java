@@ -5,12 +5,10 @@ import android.content.Context;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -21,7 +19,7 @@ import java.util.List;
 public class CustomSpinner {
     private Context context;
     private View rootView;
-    private Button spinnerButton;
+    private TextView spinnerText;
     private AlertDialog currentDialog; // Track the current dialog
 
     private List<String> items;
@@ -41,13 +39,8 @@ public class CustomSpinner {
     }
 
     private void initializeViews() {
-        spinnerButton = rootView.findViewById(R.id.spinnerButton);
-
-        if (spinnerButton != null) {
-            spinnerButton.setOnClickListener(v -> showSpinnerDialog());
-        } else {
-            Log.e("CustomSpinner", "Spinner button not found in layout");
-        }
+        spinnerText = rootView.findViewById(R.id.spinnerText);
+        rootView.setOnClickListener(v -> showSpinnerDialog());
     }
 
     public View getView() {
@@ -68,7 +61,7 @@ public class CustomSpinner {
 
     public void setSelectedItem(String item) {
         this.selectedItem = item;
-        spinnerButton.setText(item);
+        spinnerText.setText(item);
     }
 
     public String getSelectedItem() {
@@ -127,7 +120,7 @@ public class CustomSpinner {
 
                     String selected = dialogAdapter.getItem(position);
                     selectedItem = selected;
-                    spinnerButton.setText(selected);
+                    spinnerText.setText(selected);
 
                     if (listener != null) {
                         listener.onItemSelected(selected);

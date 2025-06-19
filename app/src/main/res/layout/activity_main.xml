@@ -12,8 +12,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/text_simulacao"
@@ -43,64 +42,59 @@
             app:layout_constraintStart_toStartOf="@+id/guideline3"
             app:layout_constraintTop_toTopOf="parent" />
 
-
-        <Spinner
-            android:id="@+id/spinner_states"
-            android:layout_width="0dp"
+        <FrameLayout
+            android:id="@+id/states_spinner_container"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorSuperWhite"
-            android:spinnerMode="dropdown"
-            android:visibility="visible"
-            app:layout_constraintBottom_toTopOf="@+id/guideline12"
-            app:layout_constraintEnd_toStartOf="@+id/guideline4"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toBottomOf="@+id/text_simulacao" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_simulacao"
+            android:layout_marginHorizontal="82dp"/>
 
-
-        <Spinner
-            android:id="@+id/spinner_cities"
-            android:layout_width="0dp"
+        <FrameLayout
+            android:id="@+id/cities_spinner_container"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorSuperWhite"
-            android:spinnerMode="dropdown"
-            android:visibility="visible"
-            app:layout_constraintBottom_toTopOf="@+id/guideline17"
-            app:layout_constraintEnd_toStartOf="@+id/guideline4"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toTopOf="@+id/guideline12" />
-
-        <Button
-            android:id="@+id/button_off_grid"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/background_button_resultado_center"
-            android:text="@string/button_off_grid"
-            android:textColor="@color/colorWhite"
-            android:textAllCaps="false"
-            app:layout_constraintBottom_toTopOf="@+id/guideline10"
-            app:layout_constraintEnd_toStartOf="@+id/guideline4"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toTopOf="@+id/guideline5" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/states_spinner_container"
+            android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="82dp"/>
 
         <Button
             android:id="@+id/button_on_grid"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:background="@drawable/background_button_resultado_center"
             android:text="@string/button_on_grid"
             android:textColor="@color/colorWhite"
             android:textAllCaps="false"
-            app:layout_constraintBottom_toTopOf="@+id/guideline14"
-            app:layout_constraintEnd_toStartOf="@+id/guideline4"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toTopOf="@+id/guideline15" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cities_spinner_container"
+            android:layout_marginHorizontal="82dp"
+            android:layout_marginTop="18dp"/>
+
+        <Button
+            android:id="@+id/button_off_grid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/background_button_resultado_center"
+            android:text="@string/button_off_grid"
+            android:textColor="@color/colorWhite"
+            android:textAllCaps="false"
+            android:layout_marginHorizontal="82dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/button_on_grid"/>
 
         <Button
             android:id="@+id/button_show_sistem_information"
             style="?android:attr/borderlessButtonStyle"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:focusable="false"
             android:paddingLeft="20dp"
@@ -108,10 +102,9 @@
             android:text="@string/sistemas"
             android:textAllCaps="false"
             android:textColor="@color/colorSolaresBlue"
-            app:layout_constraintEnd_toStartOf="@+id/guideline4"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toBottomOf="@+id/button_off_grid" />
-
+            app:layout_constraintTop_toBottomOf="@id/button_off_grid"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
 
         <androidx.constraintlayout.widget.Guideline
@@ -129,49 +122,6 @@
             app:layout_constraintGuide_percent="0.8" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.80" />
-
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline12"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.55" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline10"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.87" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline14"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.75" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline15"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.68" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline17"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.63" />
-
-        <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineBaixoText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -184,13 +134,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.48" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline20"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.9" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

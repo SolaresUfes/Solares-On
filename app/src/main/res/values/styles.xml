@@ -29,5 +29,8 @@
         <item name="android:textColor">@color/colorTextDefault</item>
     </style>
 
+    <style name="SpinnerItemStyle" parent="Widget.AppCompat.TextView">
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+    </style>
 
 </resources>

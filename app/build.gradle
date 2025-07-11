@@ -4,11 +4,11 @@ apply plugin: 'com.google.firebase.crashlytics'
 
 
 android {
-    compileSdk 33
+    compileSdk 35
     defaultConfig {
         applicationId "com.solares.calculadorasolar"
-        minSdkVersion 16
-        targetSdkVersion 33
+        minSdkVersion 17
+        targetSdkVersion 35
         versionCode 54
         versionName "1.5.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

@@ -57,23 +57,33 @@ public class ResultadoActivity extends AppCompatActivity{
 
             //Verifica se a potencia necessária é baixa:
             if (calculadora.pegaPotenciaNecessaria() < 200) {
-                // Make the explanation layout visible
                 layoutExplicacaoValor.setVisibility(View.VISIBLE);
 
-                // Apply window insets handling
                 ViewCompat.setOnApplyWindowInsetsListener(layoutExplicacaoValor, (v, windowInsets) -> {
                     Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
 
-                    // Adjust the bottom guideline to account for navigation bar
+                    // Check gesture navigation
+                    boolean isGestureNavigation =
+                            windowInsets.getInsets(WindowInsetsCompat.Type.systemGestures()).bottom > 0 &&
+                                    windowInsets.getInsets(WindowInsetsCompat.Type.tappableElement()).bottom < insets.bottom;
+
                     Guideline guideline45 = findViewById(R.id.guideline45);
                     ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) guideline45.getLayoutParams();
-                    params.guidePercent = 0.92f - (insets.bottom / (float) getResources().getDisplayMetrics().heightPixels);
-                    guideline45.setLayoutParams(params);
 
+                    if (isGestureNavigation) {
+                        // GESTURE NAVIGATION → Full screen
+                        params.guidePercent = 0.92f;
+                    } else {
+                        // BUTTON NAVIGATION → Position above the nav bar
+                        ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) layoutExplicacaoValor.getLayoutParams();
+                        layoutParams.bottomMargin = insets.bottom; 
+                        layoutExplicacaoValor.setLayoutParams(layoutParams);
+                    }
+
+                    guideline45.setLayoutParams(params);
                     return WindowInsetsCompat.CONSUMED;
                 });
 
-                // Set up click listeners
                 darkenerResultado.setOnClickListener(view -> layoutExplicacaoValor.setVisibility(View.GONE));
 
                 Button verResultados = findViewById(R.id.RESbutton_ver_resultados);
